@@ -1,0 +1,6 @@
+@import '../../../_settings/_variables.css';
+
+.row {
+  width:100%;
+  display:flex;
+}

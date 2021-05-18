@@ -1,0 +1,8 @@
+@import '../../../_settings/_variables.css';
+
+.block-list{
+    display:flex;
+    &>div{
+        flex-grow: 1;
+    }
+}

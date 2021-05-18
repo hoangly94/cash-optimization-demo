@@ -1,0 +1,25 @@
+@import '../../../_settings/_variables.css';
+
+.white-theme{
+  color: var(--white-theme-text-color);
+  &>li::marker {
+    color: var(--white-theme-text-color);
+  }
+}
+
+.dark-theme{
+  color: var(--dark-theme-text-color);
+  &>li::marker{
+    color: var(--dark-theme-text-color);
+  }
+}
+
+.select {
+  padding: 8px 12px;
+    font-size: 14px;
+    width: 200px;
+}
+
+.option{
+  
+}

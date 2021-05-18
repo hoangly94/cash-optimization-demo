@@ -1,0 +1,9 @@
+@import '../../../_settings/_variables.css';
+
+.table {
+  width:100%;
+  margin: auto;
+  & > div{
+    margin: auto;
+  }
+}

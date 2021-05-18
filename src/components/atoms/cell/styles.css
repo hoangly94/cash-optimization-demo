@@ -1,0 +1,11 @@
+@import '../../../_settings/_variables.css';
+
+.cell {
+  &{
+    flex-grow: 1;
+  }
+  &-title{
+    flex-grow: 1;
+    font-weight:bold;
+  }
+}

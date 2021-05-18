@@ -1,0 +1,37 @@
+@import '../../../_settings/_variables.css';
+
+.white-theme{
+  color: var(--white-theme-text-color);
+}
+
+.dark-theme{
+  color: var(--dark-theme-text-color);
+}
+
+.text {
+  margin: 0px;
+}
+
+
+/* Size */
+.s2 {
+  font-size:5px;
+}
+.s1 {
+  font-size:8px;
+}
+.s {
+  font-size:10px;
+}
+.m {
+  font-size:14px;
+}
+.l {
+  font-size:18px;
+}
+.l1 {
+  font-size:22px;
+}
+.l2 {
+  font-size:25px;
+}

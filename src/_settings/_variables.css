@@ -1,0 +1,42 @@
+:root {
+    /*
+    * Colors
+    */
+    --success: #2a7e2e;
+    --atenttion: #2196f3;
+    --wait: #fff8dd;
+    --error: #d92525;
+  
+    /*
+    * Fonts
+    */
+    --base-font-family: sans-serif;
+    --headers-font-family: serif;
+    --base-font-lineheight: 1.5em;
+  
+    /*
+    * Html
+    */
+    --body-color: #383838;
+    
+    /*
+    * Header
+    */
+    --header-background-color: #cdcdcd;
+    --slider-dot-color: #000000C8;
+
+    
+    /*
+    * theme
+    */
+    
+    --white-theme-text-color: #383838;
+    --white-theme-background-color: #ffffff;
+    --white-theme-border-color: #383838;
+    
+    --dark-theme-text-color: #ffffff;
+    --dark-theme-background-color: #000000;
+    --dark-theme-border-color: #ffffff;
+  }
+  
+  

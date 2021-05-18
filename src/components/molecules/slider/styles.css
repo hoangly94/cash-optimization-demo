@@ -1,0 +1,66 @@
+@import '../../../_settings/_variables.css';
+
+.slider{
+    &{
+        position: relative;
+        width: 100%;
+        box-sizing: border-box;
+        overflow:hidden;
+        /* text-align:center; */
+    }
+
+    & .prev{
+        position: absolute;
+        top:50%;
+        transform:translateY(-50%);
+        left:0;
+        cursor: pointer;
+    }
+    
+    & .next{
+        position: absolute;
+        top:50%;
+        transform:translateY(-50%);
+        right:0;
+        cursor: pointer;
+    }
+    & > .slider-inner{
+        text-align:center;
+        position:relative;
+    }
+}
+
+/* .slider{
+    text-align:center;
+    position:relative;
+} */
+
+.slider-item{
+    position:absolute;
+    width: 100%;
+    line-height:0;
+}
+
+.dot{
+    &{
+        background-color: var(--slider-dot-color);
+        border-radius: 50%;
+        display: inline-block;
+        margin: 3px;
+        opacity:0.3;
+    }
+    &.active{
+        background-color: var(--slider-dot-color);
+        opacity:1;
+    }
+}
+
+.dot-s{
+    padding: 4px;
+}
+.dot-m{
+    padding: 6px;
+}
+.dot-l{
+    padding: 8px;
+}

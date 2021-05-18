@@ -1,0 +1,13 @@
+@import '../../../_settings/_variables.css';
+
+.title{
+  margin:0;
+}
+
+.white-theme{
+  color: var(--white-theme-text-color);
+}
+
+.dark-theme{
+  color: var(--dark-theme-text-color);
+}

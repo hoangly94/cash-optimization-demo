@@ -1,0 +1,9 @@
+@import '../../../_settings/_variables.css';
+
+.text-section {
+  &{
+    
+  }
+  & > div{
+  };
+}

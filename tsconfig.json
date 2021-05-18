@@ -1,0 +1,71 @@
+{
+  "compilerOptions": {
+    "lib": [
+      "es2017",
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "noEmit": true,
+    "noImplicitAny": false,
+    "jsx": "react",
+    //set absolute path
+    "baseUrl": ".",
+    "paths": {
+      "_/*": [
+        "./src/*"
+      ],
+      "_components/*": [
+        "./src/components/*"
+      ],
+      "_atoms/*": [
+        "./src/components/atoms/*"
+      ],
+      "_molecules/*": [
+        "./src/components/molecules/*"
+      ],
+      "_organisms/*": [
+        "./src/components/organisms/*"
+      ],
+      "_templates/*": [
+        "./src/components/templates/*"
+      ],
+      "_pages/*": [
+        "./src/components/pages/*"
+      ],
+      "_utilities/*": [
+        "./src/utilities/*"
+      ],
+    },
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules",
+        "options": {
+          "classnameTransform": "dashes",
+          "customMatcher": "\\.m\\.css$",
+          "customRenderer": "./myRenderer.js",
+          "dotenvOptions": {},
+          "postCssOptions": {},
+          "rendererOptions": {}
+        }
+      }
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "build"
+  ]
+}
+//typescript-plugin-css-modules
