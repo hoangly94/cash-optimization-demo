@@ -15,7 +15,7 @@ import * as Select from '_atoms/select';
 import * as BannerSection from '_organisms/bannerSection';
 import * as TagListSection from '_organisms/tagListSection';
 
-type Props = Base.Props & {
+export type Props = Base.Props & {
   $header: Header.Props,
   $main: Main.Props & {
     $bannerSection: BannerSection.Props,

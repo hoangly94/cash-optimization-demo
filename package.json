@@ -1,5 +1,5 @@
 {
-  "name": "sezy",
+  "name": "sezy.design",
   "version": "1.0.0",
   "description": "super easy app",
   "main": "server.js",
@@ -10,10 +10,11 @@
     "webpack": "webpack -wd",
     "start2": "nodemon",
     "start": "node ./dist/server.js",
-    "dev": "webpack serve --open --mode development",
+    "dev2": "webpack serve --open --mode development",
     "build": "webpack --mode production",
     "build:server": "webpack --config webpack.config.server.ts",
-    "build:client": "webpack --config webpack.config.client.ts"
+    "build:client": "webpack --config webpack.config.client.ts",
+    "dev": "webpack --config webpack.config.dev.ts"
   },
   "dependencies": {
     "@types/classnames": "^2.2.11",
@@ -57,6 +58,7 @@
     "browserlist": "^1.0.1",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "copy-webpack-plugin": "6.3.2",
+    "cross-spawn": "^7.0.3",
     "css-loader": "^5.0.1",
     "eslint": "^7.18.0",
     "eslint-plugin-react": "^7.22.0",
