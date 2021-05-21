@@ -24,6 +24,9 @@
       "_/*": [
         "./src/*"
       ],
+      "~/*": [
+        "./src/*"
+      ],
       "_components/*": [
         "./src/components/*"
       ],

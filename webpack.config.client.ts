@@ -136,6 +136,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js', '.jsx', ".css"],
     alias: {
       '_': path.resolve(__dirname, 'src/'),
+      '~': path.resolve(__dirname, 'src/'),
       '_components': path.resolve(__dirname, 'src/components/'),
       '_atoms': path.resolve(__dirname, 'src/components/atoms/'),
       '_molecules': path.resolve(__dirname, 'src/components/molecules/'),

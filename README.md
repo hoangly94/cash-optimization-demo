@@ -40,7 +40,7 @@
 
 
 ## Contributors
-[@lthtv8](https://github.com/lthtv8)
+[HoangLy](https://github.com/lthtv8)
 
 ### License
 MIT
