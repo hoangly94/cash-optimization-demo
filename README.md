@@ -4,10 +4,11 @@
 
 | Script | Desc |
 | ---- | ---- |
-|`$ yarn start`| Start a simple webpack server |
-|`$ yarn dev`| Create a server to development at port 5000 |
-|`$ yarn storybook`| Start Storybook with the stories imported |
-|`$ yarn flow`| Validate the flow types |
+|`$ yarn dev`| Create a server to development at port 3000 |
+|`$ yarn build:server`| Build for server|
+|`$ yarn build:client`| Build for client|
+|`$ yarn storybook`| Start Storybook on port 6699|
+|`$ yarn storybook:build`| Build for production |
 
 
 ## Libraries
@@ -40,7 +41,7 @@
 
 
 ## Contributors
-[HoangLy](https://github.com/lthtv8)
+[Hoangly94](https://github.com/hoangly94)
 
 ### License
 MIT

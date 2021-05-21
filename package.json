@@ -4,7 +4,7 @@
   "description": "super easy app",
   "main": "server.js",
   "repository": "https://github.com/lthtv8/sezy.design",
-  "author": "HoangLy <lthtv8@gmail.com>",
+  "author": "HoangLy94 <lthtv8@gmail.com>",
   "license": "MIT",
   "scripts": {
     "webpack": "webpack -wd",
