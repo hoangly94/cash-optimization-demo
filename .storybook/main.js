@@ -2,13 +2,15 @@ const path = require('path');
 
 module.exports = {
   stories: ['../src/components/atoms/*/stories.tsx'],
-  core: {
-    builder: "webpack5",
-  },
+  // core: {
+  //   builder: "webpack5",
+  // },
   addons: [
     '@storybook/addon-actions',
     '@storybook/addon-links',
     '@storybook/addon-knobs',
+    '@storybook/addon-docs',
+    '@storybook/addon-controls',
     {
       name: '@storybook/addon-postcss',
       options: {
@@ -17,12 +19,12 @@ module.exports = {
         },
       },
     },
-    {
-      name: '@storybook/addon-docs',
-      options: {
-        configureJSX: true,
-      },
-    },
+    // {
+    //   name: '@storybook/addon-docs',
+    //   options: {
+    //     configureJSX: true,
+    //   },
+    // },
   ],
   typescript: {
     check: false,
@@ -33,6 +35,9 @@ module.exports = {
       propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
     },
   },
+  propsParser: require("react-docgen-typescript").withCustomConfig(
+    "./tsconfig.json",
+  ).parse,
   webpackFinal: async (config) => {
     config.resolve.extensions.push('.tsx', '.ts', '.js', '.jsx', ".css");
     config.resolve.alias = {

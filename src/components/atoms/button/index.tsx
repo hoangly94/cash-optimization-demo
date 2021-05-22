@@ -25,7 +25,6 @@ export type Props = Base.Props & {
   text?: string,
   disabled?: boolean,
   url?: string,
-
 }
 
 export const Element = (props: Props) => {
@@ -44,11 +43,16 @@ export const Element = (props: Props) => {
     ...Base.mapProps(props, styles, [type, size, theme]),
     onClick: onClick,
   }
+
   const element = url !== ''
     ? <button {...buttonProps}>{text}</button>
-    : /^http.+$/.test(url) || url === '' ? <a {...buttonProps}>{text}</a> : <Link  {...buttonProps} to={url}>{text}</Link>;
+    : /^http.+$/.test(url) || url === '' 
+      ? <a {...buttonProps}>{text}</a>  
+      : <Link  {...buttonProps} to={url}>{text}</Link>;
 
   return (
     element
   )
 }
+
+
