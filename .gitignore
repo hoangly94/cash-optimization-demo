@@ -54,6 +54,7 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
+*.rar
 
 # Yarn Integrity file
 .yarn-integrity
@@ -67,4 +68,4 @@ typings/
 .vscode/
 .idea/
 
-yarn.lock
+yarn.clock

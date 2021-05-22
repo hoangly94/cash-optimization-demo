@@ -13,6 +13,7 @@ import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 
 module.exports = {
   name: "client",
+  mode: 'production',
   entry: {
     // vendor: ["@babel/polyfill", "react"], // Third party libraries
     index: ["./src/entrypoints/index.tsx"],
@@ -30,9 +31,6 @@ module.exports = {
         // Use multi-process parallel running to improve the build speed
         // Default number of concurrent runs: os.cpus().length - 1
         parallel: true,
-        // Enable file caching
-        cache: true,
-        sourceMap: true,
       }),
     ],
     splitChunks: {

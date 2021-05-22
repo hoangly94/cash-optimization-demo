@@ -13,6 +13,7 @@ import CopyPlugin from 'copy-webpack-plugin';
 
 module.exports = {
   name: "server",
+  mode: 'production',
   entry: {
     server: ["./src/server.ts"]
     /// Every pages entry point should be mentioned here
@@ -28,9 +29,6 @@ module.exports = {
         // Use multi-process parallel running to improve the build speed
         // Default number of concurrent runs: os.cpus().length - 1
         parallel: true,
-        // Enable file caching
-        cache: true,
-        sourceMap: true,
       }),
     ],
     splitChunks: {
@@ -145,7 +143,6 @@ module.exports = {
       '_utilities': path.resolve(__dirname, 'src/utilities/'),
     },
   },
-  mode: 'production',
   externals: [NodeExternals()],
   target: 'node',
   node: {
