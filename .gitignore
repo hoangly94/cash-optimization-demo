@@ -68,4 +68,5 @@ typings/
 .vscode/
 .idea/
 
-yarn.clock
+src/components/*/*/__snapshots__/
+

@@ -42,7 +42,6 @@ module.exports = {
     config.resolve.extensions.push('.tsx', '.ts', '.js', '.jsx', ".css");
     config.resolve.alias = {
       '_': path.resolve(__dirname, '../src/'),
-      '~': path.resolve(__dirname, '../src/'),
       '_components': path.resolve(__dirname, '../src/components/'),
       '_atoms': path.resolve(__dirname, '../src/components/atoms/'),
       '_molecules': path.resolve(__dirname, '../src/components/molecules/'),
@@ -50,6 +49,14 @@ module.exports = {
       '_templates': path.resolve(__dirname, '../src/components/templates/'),
       '_pages': path.resolve(__dirname, '../src/components/pages/'),
       '_utilities': path.resolve(__dirname, '../src/utilities/'),
+      '~': path.resolve(__dirname, '../src/'),
+      '~components': path.resolve(__dirname, '../src/components/'),
+      '~atoms': path.resolve(__dirname, '../src/components/atoms/'),
+      '~molecules': path.resolve(__dirname, '../src/components/molecules/'),
+      '~organisms': path.resolve(__dirname, '../src/components/organisms/'),
+      '~templates': path.resolve(__dirname, '../src/components/templates/'),
+      '~pages': path.resolve(__dirname, '../src/components/pages/'),
+      '~utilities': path.resolve(__dirname, '../src/utilities/'),
     };
 
     // config.module.rules.push({

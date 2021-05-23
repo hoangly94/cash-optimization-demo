@@ -13,7 +13,9 @@
     "build:server": "webpack --config webpack.config.server.ts",
     "dev": "webpack --config webpack.config.dev.ts",
     "storybook": "start-storybook -p 6699",
-    "storybook:build": "build-storybook"
+    "storybook:build": "build-storybook",
+    "test": "jest --updateSnapshot",
+    "test:watch": "jest --watch"
   },
   "dependencies": {
     "@types/classnames": "^2.3.1",
@@ -51,7 +53,9 @@
     "@storybook/react": "^6.2.9",
     "@storybook/theming": "^6.2.9",
     "@types/compression": "^1.7.0",
+    "@types/enzyme": "^3.10.8",
     "@types/fork-ts-checker-webpack-plugin": "^0.4.5",
+    "@types/jest": "^26.0.23",
     "@types/node": "^15.6.0",
     "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
@@ -71,12 +75,17 @@
     "copy-webpack-plugin": "^9.0.0",
     "cross-spawn": "^7.0.3",
     "css-loader": "^5.2.5",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^7.27.0",
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "extract-text-webpack-plugin": "^3.0.2",
     "fork-ts-checker-webpack-plugin": "^6.2.10",
     "html-webpack-plugin": "^5.3.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "jest-css-modules-transform": "^4.2.1",
     "mini-css-extract-plugin": "^1.6.0",
     "nodemon": "^2.0.7",
     "open": "^8.0.9",
@@ -92,6 +101,7 @@
     "postcss-preset-env": "^6.7.0",
     "react-docgen-typescript": "^1.22.0",
     "react-docgen-typescript-loader": "^3.7.2",
+    "react-test-renderer": "^17.0.2",
     "style-loader": "^2.0.0",
     "terser-webpack-plugin": "^5.1.2",
     "ts-node": "^9.1.1",
@@ -102,5 +112,32 @@
     "webpack-dev-server": "^3.11.2",
     "webpack-manifest-plugin": "^3.1.1",
     "webpack-node-externals": "^3.0.0"
+  },
+  "jest": {
+    "modulePaths": [
+      "/shared/vendor/modules"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "ts",
+      "tsx"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "bower_components",
+      "shared"
+    ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "jest-css-modules-transform",
+      "\\.(png|gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js",
+      "^~/(.*)$": "<rootDir>/src/$1",
+      "^~components/(.*)$": "<rootDir>/src/$1",
+      "^~atoms/(.*)$": "<rootDir>/src/atoms/$1",
+      "^~molecules/(.*)$": "<rootDir>/molecules//$1",
+      "^~organisms/(.*)$": "<rootDir>/organisms//$1",
+      "^~templates/(.*)$": "<rootDir>/templates//$1",
+      "^~pages/(.*)$": "<rootDir>/src/pages/$1",
+      "^~utilities/(.*)$": "<rootDir>/src/utilities/$1"
+    }
   }
 }

@@ -1,8 +1,8 @@
-import * as React from 'react'
+import * as React from 'react';
 import { Link } from "react-router-dom";
-import Classnames from 'classnames'
-import styles from './styles.css'
-import * as Base from '_/_settings';
+import Classnames from 'classnames';
+import styles from './styles.css';
+import * as Base from '~/_settings';
 
 export enum Type {
   DEFAULT = 'button',

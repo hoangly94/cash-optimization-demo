@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["jest", "node"],
     "lib": [
       "es2017",
       "dom",
@@ -24,9 +25,6 @@
       "_/*": [
         "./src/*"
       ],
-      "~/*": [
-        "./src/*"
-      ],
       "_components/*": [
         "./src/components/*"
       ],
@@ -46,6 +44,30 @@
         "./src/components/pages/*"
       ],
       "_utilities/*": [
+        "./src/utilities/*"
+      ],
+      "~/*": [
+        "./src/*"
+      ],
+      "~components/*": [
+        "./src/components/*"
+      ],
+      "~atoms/*": [
+        "./src/components/atoms/*"
+      ],
+      "~molecules/*": [
+        "./src/components/molecules/*"
+      ],
+      "~organisms/*": [
+        "./src/components/organisms/*"
+      ],
+      "~templates/*": [
+        "./src/components/templates/*"
+      ],
+      "~pages/*": [
+        "./src/components/pages/*"
+      ],
+      "~utilities/*": [
         "./src/utilities/*"
       ],
     },
