@@ -11,6 +11,7 @@ module.exports = {
     '@storybook/addon-knobs',
     '@storybook/addon-docs',
     '@storybook/addon-controls',
+    'storybook-css-modules-preset',
     {
       name: '@storybook/addon-postcss',
       options: {
@@ -61,7 +62,59 @@ module.exports = {
 
     // config.module.rules.push({
     //   test: /\.css$/,
-    //   loaders: ['style-loader', 'css-loader', 'postcss-loader'],
+    //   exclude: /node_modules/,
+    //   use: [
+    //     MiniCssExtractPlugin.loader,
+    //     {
+    //       loader: 'css-loader',
+    //       options: {
+    //         modules: {
+    //           localIdentName: '[local]--[hash:base64:5]',
+    //         },
+    //         importLoaders: 2,
+    //       },
+    //     },
+    //     {
+    //       loader: "postcss-loader",
+    //       options: {
+    //         config: {
+    //           path: path.resolve(__dirname, '../postcss.config.js')
+    //         }
+    //       }
+    //     },
+    //   ],
+    // }),
+
+    config.module.rules.push(
+      {
+      test: /\.css$/,
+      use: ['postcss-loader'],
+      // include: path.resolve(__dirname, '../'),
+    });
+
+    // config.module.rules.push(
+    //   {
+    //   test: /\.css$/,
+    //   use: [
+      
+    //     {
+    //       loader: 'css-loader',
+    //       options: {
+    //         modules: {
+    //           localIdentName: '[local]--[hash:base64:5]',
+    //         },
+    //         importLoaders: 2,
+    //       },
+    //     },
+    //   {
+    //     loader: require.resolve('postcss-loader'),
+    //     options: {
+    //       config: {
+    //         path: path.resolve(__dirname, '../postcss.config.js')
+    //       }
+    //     }
+    //   }
+    // ],
     //   include: path.resolve(__dirname, '../'),
     // });
     

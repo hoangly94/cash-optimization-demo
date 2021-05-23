@@ -43,7 +43,7 @@ export const Element = (props: Props) => {
     ...Base.mapProps(props, styles, [type, size, theme]),
     onClick: onClick,
   }
-
+  
   const element = url !== ''
     ? <button {...buttonProps}>{text}</button>
     : /^http.+$/.test(url) || url === '' 
