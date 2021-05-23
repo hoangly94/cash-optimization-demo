@@ -1,5 +1,7 @@
 // dev.js
 const spawn = require('cross-spawn')
+const { exec } = require("child_process");
+const kill = require('kill-port')
 const path = require('path')
 const webpack = require('webpack')
 const webpackConfigClient = require('./webpack.config.client')
@@ -9,16 +11,12 @@ const compiler = webpack([
   {
     ...webpackConfigClient,
     mode: 'development',
-    devtool: 'source-map',
-    output: {
-      ...webpackConfigClient.output,
-      filename: '[name].js',
-    },
+    devtool: 'eval-source-map',
   },
   {
     ...webpackConfigServer,
     mode: 'development',
-    devtool: 'source-map',
+    devtool: 'eval-source-map',
   },
 ])
 
@@ -40,13 +38,19 @@ compiler.watch({}, (err, stats) => {
   console.log(stats?.toString('minimal'))
   const compiledSuccessfully = !stats?.hasErrors()
   if (compiledSuccessfully && !node) {
-    console.log('Starting Node.js ...')
-    node = spawn(
-      'node',
-      ['--inspect', path.join(__dirname, 'dist/server.js')],
-      {
-        stdio: 'inherit',
-      }
-    )
+    run();
   }
 })
+
+const run = async () => {
+  //kill inspect 
+  await kill('9229');
+  console.log('Starting Node.js ...')
+  node = spawn(
+    'node',
+    ['--inspect', path.join(__dirname, 'dist/server.js')],
+    {
+      stdio: 'inherit',
+    }
+  )
+}

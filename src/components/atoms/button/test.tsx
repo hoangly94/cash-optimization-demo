@@ -6,7 +6,7 @@ describe('Button Component', () => {
     // render the component
     const component = create(<Component.Element />); 
 
-    it('renders with or without a name', () => {
+    it('Test rendering', () => {
         // make assertions on root 
         expect(component.toJSON()).toMatchSnapshot();
 

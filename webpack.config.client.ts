@@ -141,7 +141,7 @@ module.exports = {
       '_templates': path.resolve(__dirname, 'src/components/templates/'),
       '_pages': path.resolve(__dirname, 'src/components/pages/'),
       '_utilities': path.resolve(__dirname, 'src/utilities/'),
-      '~/': path.resolve(__dirname, 'src/'),
+      '~': path.resolve(__dirname, 'src/'),
       '~components': path.resolve(__dirname, 'src/components/'),
       '~atoms': path.resolve(__dirname, 'src/components/atoms/'),
       '~molecules': path.resolve(__dirname, 'src/components/molecules/'),
