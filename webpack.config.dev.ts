@@ -1,6 +1,5 @@
 // dev.js
 const spawn = require('cross-spawn')
-const { exec } = require("child_process");
 const kill = require('kill-port')
 const path = require('path')
 const webpack = require('webpack')
