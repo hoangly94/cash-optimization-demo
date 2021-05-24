@@ -1,7 +1,7 @@
 import * as config from './config';
 import styles from './_base.css';
 import Classnames from 'classnames'
-import {_Object} from '~utilities/util'
+import {_Object} from '@utils'
 
 export enum Theme {
     DEFAULT = 'white-theme',

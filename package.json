@@ -141,7 +141,9 @@
       "^~organisms/(.*)$": "<rootDir>/organisms//$1",
       "^~templates/(.*)$": "<rootDir>/templates//$1",
       "^~pages/(.*)$": "<rootDir>/src/pages/$1",
-      "^~utilities/(.*)$": "<rootDir>/src/utilities/$1"
+      "^~utils/(.*)$": "<rootDir>/src/utils/$1",
+      "^@utils$": "<rootDir>/src/utils/index.ts",
+      "^~svg/(.*)$": "<rootDir>/src/components/atoms/svg/$1"
     }
   }
 }

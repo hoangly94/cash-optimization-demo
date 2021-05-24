@@ -140,7 +140,6 @@ module.exports = {
       '_organisms': path.resolve(__dirname, 'src/components/organisms/'),
       '_templates': path.resolve(__dirname, 'src/components/templates/'),
       '_pages': path.resolve(__dirname, 'src/components/pages/'),
-      '_utilities': path.resolve(__dirname, 'src/utilities/'),
       '~': path.resolve(__dirname, 'src/'),
       '~components': path.resolve(__dirname, 'src/components/'),
       '~atoms': path.resolve(__dirname, 'src/components/atoms/'),
@@ -148,7 +147,9 @@ module.exports = {
       '~organisms': path.resolve(__dirname, 'src/components/organisms/'),
       '~templates': path.resolve(__dirname, 'src/components/templates/'),
       '~pages': path.resolve(__dirname, 'src/components/pages/'),
-      '~utilities': path.resolve(__dirname, 'src/utilities/'),
+      '~utils': path.resolve(__dirname, 'src/utils/'),
+      '@utils': path.resolve(__dirname, 'src/utils/index.ts'),
+      '~svg': path.resolve(__dirname, 'src/components/atoms/svg/'),
     },
   },
   devServer: {

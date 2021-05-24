@@ -40,7 +40,7 @@ export const Element = (props: Props) => {
 
   //create props
   const buttonProps = {
-    ...Base.mapProps(props, styles, [type, size, theme]),
+    ...Base.mapProps(props, styles, [type, size]),
     onClick: onClick,
   }
   

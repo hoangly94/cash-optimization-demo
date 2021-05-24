@@ -43,8 +43,8 @@
       "_pages/*": [
         "./src/components/pages/*"
       ],
-      "_utilities/*": [
-        "./src/utilities/*"
+      "_utils/*": [
+        "src/utils/*"
       ],
       "~/*": [
         "./src/*"
@@ -67,8 +67,14 @@
       "~pages/*": [
         "./src/components/pages/*"
       ],
-      "~utilities/*": [
-        "./src/utilities/*"
+      "~utils/*": [
+        "src/utils/*.tsx"
+      ],
+      "@utils": [
+        "src/utils/index.ts"
+      ],
+      "~svg/*": [
+        "./src/components/atoms/svg/*"
       ],
     },
     "plugins": [
