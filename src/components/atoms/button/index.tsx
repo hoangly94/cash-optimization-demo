@@ -24,7 +24,7 @@ export type Props = Base.Props & {
   onClick?(): void,
   text?: string,
   disabled?: boolean,
-  url?: string,
+  href?: string,
 }
 
 export const Element = (props: Props) => {
@@ -35,7 +35,7 @@ export const Element = (props: Props) => {
     onClick,
     text,
     disabled,
-    url = '',
+    href = '',
   } = props;
 
   //create props
@@ -44,11 +44,11 @@ export const Element = (props: Props) => {
     onClick: onClick,
   }
   
-  const element = url !== ''
+  const element = href !== ''
     ? <button {...buttonProps}>{text}</button>
-    : /^http.+$/.test(url) || url === '' 
+    : /^http.+$/.test(href) || href === '' 
       ? <a {...buttonProps}>{text}</a>  
-      : <Link  {...buttonProps} to={url}>{text}</Link>;
+      : <Link  {...buttonProps} to={href}>{text}</Link>;
 
   return (
     element

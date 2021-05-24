@@ -206,10 +206,6 @@ export const mapProps = (
         classNames,
         style,
     } = props;
-    console.log('------------------------');
-    console.log(backgroundColor);
-    console.log(styles[backgroundColor]);
-    console.log(styles);
     const elementClassNames = elementClasses.map(elementClass => elementStyles[elementClass]);
     const classProps = {
         className: Classnames(
