@@ -4,7 +4,8 @@ import Classnames from 'classnames'
 import {_Object} from '@utils'
 
 export enum Theme {
-    DEFAULT = 'white-theme',
+    DEFAULT = 'light-theme',
+    LIGHT = 'light-theme',
     DARK = 'dark-theme',
 }
 
@@ -228,5 +229,7 @@ export const mapProps = (
     
     return _Object.removeEmptyValue(classProps);;
 }
+
+
 
 export const Config = config;

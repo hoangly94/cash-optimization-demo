@@ -1,7 +1,8 @@
 @import '../../../_settings/_variables.css';
+@import './dark.css';
 
 .button {
-  /* -webkit-appearance: none;
+  -webkit-appearance: none;
   border: 0;
   outline: 0;
   display: block;
@@ -11,9 +12,8 @@
   text-transform: uppercase;
   border-radius: 3px;
   cursor: pointer;
-  position: relative; */
+  position: relative;
 }
-
 
 /* Size */
 .s {
@@ -28,3 +28,40 @@
 
 /* Disabled */
 
+
+.white-theme{
+  color: var(--white-theme-text-color);
+  &>li::marker {
+    color: var(--white-theme-text-color);
+  }
+}
+
+.dark-theme{
+  color: var(--dark-theme-text-color);
+  &>li::marker{
+    color: var(--dark-theme-text-color);
+  }
+}
+
+.list {
+  &-vertical{
+    box-sizing: border-box;
+    padding-inline-start: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    list-style-type: none;
+    &>li{
+
+    }
+  }
+  &-horizontal{
+    box-sizing: border-box;
+    padding-inline-start: 0;
+    margin-block-start: 0;
+    margin-block-end: 0;
+    list-style-type: none;
+    &>li{
+      float: left;
+    }
+  }
+}

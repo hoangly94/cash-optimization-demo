@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import * as HomeTemplate from "_templates/qualityMobile/home";
 import * as Cell from "_atoms/cell";
 import * as Row from "_atoms/row";
 import * as Image from "_atoms/image";
@@ -384,5 +383,6 @@ const homeTemplateProps = {
 }
 
 export default () => (
-  <HomeTemplate.Element {...homeTemplateProps} />
+  // <HomeTemplate.Element {...homeTemplateProps} />
+  <div></div>
 );
