@@ -10,6 +10,7 @@ module.exports = {
     server: ["./src/server.ts"]
   },
   output: {
+    publicPath: "",
     path: path.resolve(__dirname, 'dist'), //destination for bundled output is under ./dist
     filename: "[name].js" // names of the bundled file will be name of the entry files (mentioned above)
   },

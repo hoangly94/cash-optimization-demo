@@ -12,9 +12,10 @@ module.exports = {
     // vendor: ["@babel/polyfill", "react"], // Third party libraries
     index: ["./src/entrypoints/index.tsx"],
     home: ["./src/entrypoints/home.tsx"],
-    // ...mapFilenamesToEntries('./src/components/**/**/*.css'),
   },
+  devtool: 'eval-source-map',
   output: {
+    publicPath: "",
     path: path.resolve(__dirname, 'dist'), //destination for bundled output is under ./dist
     filename: "js/[name].js" // names of the bundled file will be name of the entry files (mentioned above)
   },
@@ -30,10 +31,12 @@ module.exports = {
 
 
 function mapFilenamesToEntries(pattern) {
-  return glob
+  const a =  glob
     .sync(pattern)
-    .reduce((entries, filename) => {
-      const [, name] = filename.match(/^.+(style.*)\.css$/)
-      return { ...entries, [name]: filename }
+    .reduce((entries, filePath) => {
+      const [,filename] = filePath.match(/^.+\/(.*)\.tsx$/);
+      return { ...entries, [filename]: [filePath] }
     }, {})
+    console.log(a);
+    return a;
 }

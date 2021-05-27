@@ -1,18 +1,11 @@
 import path from "path";
 import loaderUtils from "loader-utils"
-import webpack from 'webpack';
-// const webpackMerge = require('webpack-merge');
 import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 
 // const commonPaths = require('./config/paths');
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { CleanWebpackPlugin } from 'clean-webpack-plugin';
-import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
-
-const glob = require('glob')
 
 export default {
   optimization: {
@@ -161,14 +154,3 @@ export default {
   },
 };
 
-
-function mapFilenamesToEntries(pattern) {
-  const a =  glob
-    .sync(pattern)
-    .reduce((entries, filePath) => {
-      const [,filename] = filePath.match(/^.+\/(.*)\.tsx$/);
-      return { ...entries, [filename]: [filePath] }
-    }, {})
-    console.log(a);
-    return a;
-}
