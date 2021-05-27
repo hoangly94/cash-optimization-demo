@@ -1,5 +1,3 @@
-// dev.js
-
 const glob = require('glob')
 const spawn = require('cross-spawn')
 const kill = require('kill-port')
@@ -55,16 +53,3 @@ const run = async () => {
     }
   )
 }
-
-
-
-
-// export function mapFilenamesToEntries(pattern) {
-//   return glob
-//     .sync(pattern)
-//     .reduce((entries, filename) => {
-//       const [, name] = filename.match(/^.+(style.*)\.css$/)
-//       console.log(name);
-//       return { ...entries, [name]: filename }
-//     }, {})
-// }
