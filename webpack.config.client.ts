@@ -10,8 +10,7 @@ module.exports = {
   mode: 'production',
   entry: {
     // vendor: ["@babel/polyfill", "react"], // Third party libraries
-    index: ["./src/entrypoints/index.tsx"],
-    home: ["./src/entrypoints/home.tsx"],
+    ...mapFilenamesToEntries('./src/entrypoints/*.tsx'),
   },
   devtool: 'eval-source-map',
   output: {
@@ -31,12 +30,12 @@ module.exports = {
 
 
 function mapFilenamesToEntries(pattern) {
-  const a =  glob
+  return glob
     .sync(pattern)
     .reduce((entries, filePath) => {
+      console.log(filePath);
       const [,filename] = filePath.match(/^.+\/(.*)\.tsx$/);
       return { ...entries, [filename]: [filePath] }
     }, {})
-    console.log(a);
-    return a;
 }
+
