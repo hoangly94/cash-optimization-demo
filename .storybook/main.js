@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  stories: ['../src/components/atoms/*/stories.tsx'],
+  stories: ['../src/components/atoms/*/_stories.tsx'],
   // core: {
   //   builder: "webpack5",
   // },

@@ -1,10 +1,13 @@
 import * as React from 'react';
+import Classnames from 'classnames';
+import styles from './_styles.css';
 import { Props, Type, Size, Direction } from './index';
 
 export default (props: Props) => {
     const {
         size = Size.M,
         direction = Direction.DOWN,
+        color,
     } = props;
 
     const rotateDegObj = {
@@ -14,12 +17,15 @@ export default (props: Props) => {
         'left': '90',
     };
 
+    //create props for rendering
     const svgProps = {
+        className: Classnames(
+            styles[size],
+        ),
         style: {
-            width: size,
-            height: size,
             transform: `rotate(${rotateDegObj[direction]}deg)`,
             transformOrigin: '50% 50%',
+            fill: color,
         }
     }
 

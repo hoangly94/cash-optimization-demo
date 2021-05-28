@@ -1,4 +1,6 @@
 import * as React from 'react';
+import Classnames from 'classnames';
+import styles from './_styles.css';
 import { Props, Type, Size } from './index';
 
 export default (props: Props) => {
@@ -8,10 +10,12 @@ export default (props: Props) => {
         color,
     } = props;
 
+    //create props for rendering
     const svgProps = {
+        className: Classnames(
+            styles[size],
+        ),
         style: {
-            width: size,
-            height: size,
             fill: color,
         }
     }

@@ -1,16 +1,6 @@
 import path from "path";
-const loaderUtils = require( "loader-utils")
-import webpack from 'webpack';
 import webpackConfig from './webpack.config';
-// const webpackMerge = require('webpack-merge');
-import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import NodeExternals from 'webpack-node-externals';
-import TerserPlugin  from 'terser-webpack-plugin';
-
-// const commonPaths = require('./config/paths');
-import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyPlugin from 'copy-webpack-plugin';
 
 module.exports = {
@@ -18,9 +8,9 @@ module.exports = {
   mode: 'production',
   entry: {
     server: ["./src/server.ts"]
-    /// Every pages entry point should be mentioned here
   },
   output: {
+    publicPath: "",
     path: path.resolve(__dirname, 'dist'), //destination for bundled output is under ./dist
     filename: "[name].js" // names of the bundled file will be name of the entry files (mentioned above)
   },

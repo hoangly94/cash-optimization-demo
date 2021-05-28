@@ -4,14 +4,12 @@
   <head>
     <meta charset="utf-8" />
     <title>React + Node.js App</title>
-    <link href="css/index.css" rel="stylesheet">
-    <link href="css/vendor.css" rel="stylesheet">
+    <link href="<%= assets['index.css'] %>" rel="stylesheet">
+    <link href="<%= assets['vendor.css'] %>" rel="stylesheet">
   </head>
   <body>
     <div id="root"><%- component %></div>
-    <script defer="defer" src="<%= assets['index.js'] %>"></script>
-    <script defer="defer" src="<%= assets['vendor.js'] %>"></script>
-    <script defer="defer" src="js/index.js"></script>
-    <script defer="defer" src="js/vendor.js"></script>
+    <script async src="<%= assets['vendor.js'] %>"></script>
+    <script async src="<%= assets['index.js'] %>"></script>
   </body>
 </html>

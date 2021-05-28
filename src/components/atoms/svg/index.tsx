@@ -16,13 +16,13 @@ export enum Direction {
 }
 
 export enum Size {
-  S2 = '8px',
-  S1 = '12px',
-  S = '15px',
-  M = '18px',
-  L = '22px',
-  L1 = '25px',
-  L2 = '28px',
+  S2 = 's2',
+  S1 = 's1',
+  S = 's',
+  M = 'm',
+  L = 'l',
+  L1 = 'l1',
+  L2 = 'l2',
 }
 
 export type Props = {
