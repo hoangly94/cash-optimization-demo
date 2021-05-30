@@ -21,7 +21,7 @@ export enum Size {
 export type Props = Base.Props & {
   type?: Type,
   size?: Size,
-  onClick?(): void,
+  onClick?: React.MouseEventHandler,
   text?: string,
   disabled?: boolean,
   href?: string,
