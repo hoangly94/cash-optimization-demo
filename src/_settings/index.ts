@@ -230,6 +230,4 @@ export const mapProps = (
     return _Object.removeEmptyValue(classProps);;
 }
 
-
-
 export const Config = config;

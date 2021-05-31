@@ -1,33 +1,35 @@
 import * as React from 'react'
 import Classnames from 'classnames'
-import * as TextBlock from "_molecules/textBlock";
-import * as ImageBlock from "_molecules/imageBlock";
-import * as Block from "_atoms/block";
-import * as Link from "_atoms/link";
-import * as Image from "_atoms/image";
-import * as List from "_atoms/list";
-import * as ListLi from "_atoms/list/li";
-import * as Base from '_/_settings';
+import * as Block from "~atoms/block";
+import * as Link from "~atoms/link";
+import * as Text from "~atoms/text";
+import Caret from "~svg/caret";
+import * as List from "~atoms/list";
+import * as Base from '~/_settings';
 import styles from './styles.css';
 
-enum Type {
+export enum Type {
   DEFAULT = 'dropdown',
+  TEXT_DROPDOWN = 'text-dropdown',
 }
-enum Direction {
+export enum Direction {
   TOP = 'top',
   RIGHT = 'right',
   BOTTOM = 'bottom',
   LEFT = 'left',
 }
 
-type Props = Base.Props & {
+export type Props = Base.Props & {
   type?: Type,
   direction?: Direction,
+  //for TEXT_DROPDOWN
   $link?: Link.Props,
+  //default text
+  $text: Text.Props,
   $subs?: List.Props<Props>,
 }
 
-const Element = (props: Props) => {
+export const Element = (props: Props) => {
   const {
     type = Type.DEFAULT,
     $link,
@@ -35,11 +37,15 @@ const Element = (props: Props) => {
   } = props;
 
   //create props
-  const blockProps = {
+  const blockWrapperProps = {
     ...props,
     classNames: Classnames(
       styles[type],
     ),
+  };
+
+  const blockProps = {
+
   };
 
   const linkProps = {
@@ -49,13 +55,24 @@ const Element = (props: Props) => {
   const subProps = {
     ...$subs,
   };
-  
+
   // const subDropDownElement = $subs?.$lis.map(SubDropDownElementMapping);
+  if (type === Type.TEXT_DROPDOWN) {
+    return (
+      <Block.Element {...blockWrapperProps}>
+        <Link.Element {...linkProps} />
+        <List.Element {...subProps} />
+      </Block.Element>
+    )
+  }
 
   return (
-    <Block.Element {...blockProps}>
-      <Link.Element {...linkProps} />
-      <List.Element {...subProps}/>
+    <Block.Element {...blockWrapperProps}>
+      <Block.Element {...blockProps}>
+        <Link.Element {...linkProps} />
+        <Caret/>
+      </Block.Element>
+      <List.Element {...subProps} />
     </Block.Element>
   )
 }
@@ -67,9 +84,3 @@ const Element = (props: Props) => {
 
 //   return <Element {...$listLi.children} />;
 // };
-
-export {
-  Element,
-  Type,
-  Props,
-};
