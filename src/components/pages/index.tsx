@@ -402,6 +402,6 @@ export default () => (
   <Bars color='red'/>
   <Caret size={Size.S1}/>
   
-  <Button.Element/>
+  <Button.Element text='aaa' onClick={()=>{ console.log('----------');}}/>
   </div>
 );

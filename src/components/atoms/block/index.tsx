@@ -1,12 +1,6 @@
 import * as React  from 'react'
 import styles from './styles.css'
 import * as Base from '_/_settings';
-import styled from 'styled-components';
-
-const Block = styled.div`
-  text-align: center;
-  color: palevioletred;
-`;
 
 export type Props = Base.Props & {
   children?: React.ReactNode,
@@ -22,6 +16,6 @@ export const Element = (props: Props): React.ReactElement => {
   const blockProps = Base.mapProps(props, styles, [ theme]);
 
   return (
-    <Block {...blockProps}>{children}</Block>
+    <div {...blockProps}>{children}</div>
   )
 }
