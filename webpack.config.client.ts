@@ -33,7 +33,6 @@ function mapFilenamesToEntries(pattern) {
   return glob
     .sync(pattern)
     .reduce((entries, filePath) => {
-      console.log(filePath);
       const [,filename] = filePath.match(/^.+\/(.*)\.tsx$/);
       return { ...entries, [filename]: [filePath] }
     }, {})

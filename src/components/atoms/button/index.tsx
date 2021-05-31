@@ -21,7 +21,7 @@ export enum Size {
 export type Props = Base.Props & {
   type?: Type,
   size?: Size,
-  onClick?(): void,
+  onClick?: React.MouseEventHandler,
   text?: string,
   disabled?: boolean,
   href?: string,
@@ -29,7 +29,6 @@ export type Props = Base.Props & {
 
 export const Element = (props: Props) => {
   const {
-    theme,
     type = Type.DEFAULT,
     size = Size.M,
     onClick,
@@ -44,9 +43,9 @@ export const Element = (props: Props) => {
     onClick: onClick,
   }
   
-  const element = href !== ''
+  const element = href === ''
     ? <button {...buttonProps}>{text}</button>
-    : /^http.+$/.test(href) || href === '' 
+    : /^http.+$/.test(href)
       ? <a {...buttonProps}>{text}</a>  
       : <Link  {...buttonProps} to={href}>{text}</Link>;
 
