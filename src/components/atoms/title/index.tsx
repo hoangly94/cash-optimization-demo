@@ -31,18 +31,19 @@ export const Element = (props: Props) => {
     type = Type.DEFAULT,
     text,
     size = Size.MEDIUM,
-    tagType = TagType.H2,
+    tagType = TagType.H3,
     theme = Base.Theme.DEFAULT,
   } = props;
 
   //create props
   const titleProps = Base.mapProps(props, styles, [type, size, theme]);
 
-  if (tagType === TagType.H1) {
+
+  if (tagType === TagType.H3) {
     return (
-      <h1 {...titleProps}>
+      <h3 {...titleProps}>
         {text}
-      </h1>
+      </h3>
     )
   }
 
@@ -54,11 +55,11 @@ export const Element = (props: Props) => {
     )
   }
 
-  if (tagType === TagType.H3) {
+  if (tagType === TagType.H1) {
     return (
-      <h3 {...titleProps}>
+      <h1 {...titleProps}>
         {text}
-      </h3>
+      </h1>
     )
   }
 

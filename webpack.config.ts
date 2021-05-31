@@ -138,6 +138,7 @@ export default {
       '~atoms': path.resolve(__dirname, 'src/components/atoms/'),
       '~molecules': path.resolve(__dirname, 'src/components/molecules/'),
       '~organisms': path.resolve(__dirname, 'src/components/organisms/'),
+      '~organisms.custom': path.resolve(__dirname, 'src/components/organisms.custom/'),
       '~templates': path.resolve(__dirname, 'src/components/templates/'),
       '~pages': path.resolve(__dirname, 'src/components/pages/'),
       '~utils': path.resolve(__dirname, 'src/utils/'),

@@ -3,6 +3,7 @@ import Classnames from 'classnames'
 import styles from './styles.css'
 import * as Base from '_/_settings';
 import * as Li from './li'
+import * as Text from "_atoms/text";
 import * as Link from "_atoms/link";
 import * as Button from "_atoms/button";
 import * as Dropdown from '_molecules/dropdown'
@@ -19,7 +20,7 @@ export type Props<T> = Base.Props & {
   $liList?: Li.Props<T>[],
 }
 
-export const Element = <T extends Link.Props | Button.Props | Dropdown.Props>(props: Props<T>): React.ReactElement => {
+export const Element = <T extends Text.Props | Link.Props | Button.Props | Dropdown.Props>(props: Props<T>): React.ReactElement => {
   const {
     type = Type.HORIZONTAL,
     theme = Base.Theme.DEFAULT,
@@ -36,7 +37,7 @@ export const Element = <T extends Link.Props | Button.Props | Dropdown.Props>(pr
   )
 }
 
-const mapChildrenElement = <T extends Link.Props | Button.Props | Dropdown.Props>($li: Li.Props<T>, index: number) => {
+const mapChildrenElement = <T extends Text.Props | Link.Props | Button.Props | Dropdown.Props>($li: Li.Props<T>, index: number) => {
   const liProps = {
     key: index,
     ...$li,

@@ -1,3 +1,5 @@
+import * as Base from '~/_settings';
+
 export enum Type {
   SOLID = 'solid',
   LIGHT = 'light',
@@ -25,10 +27,10 @@ export enum Size {
   L2 = 'l2',
 }
 
-export type Props = {
+export type Props = Base.Props & {
   type?: Type,
   size?: Size,
-  color?: string,
+  fill?: string,
   direction?: Direction,
   disabled?: boolean,
 }

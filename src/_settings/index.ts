@@ -162,7 +162,7 @@ export enum FontStyle {
     BOLD_ITALIC = 'bold-italic',
 }
 
-export enum BorderStyle {
+export enum Border {
     NONE = '',
     SOLID = 'border-solid',
 }
@@ -179,7 +179,7 @@ export type Props = {
     color?: Color,
     backgroundColor?: BackgroundColor,
     fontStyle?: FontStyle,
-    borderStyle?: BorderStyle,
+    border?: Border,
 
     children?: React.ReactNode,
     classNames?: string,
@@ -202,11 +202,12 @@ export const mapProps = (
         color = Color.NONE,
         backgroundColor = BackgroundColor.NONE,
         fontStyle = FontStyle.NONE,
-        borderStyle = BorderStyle.SOLID,
+        border = Border.NONE,
 
         classNames,
         style,
     } = props;
+    
     const elementClassNames = elementClasses.map(elementClass => elementStyles[elementClass]);
     const classProps = {
         className: Classnames(
@@ -220,7 +221,7 @@ export const mapProps = (
             styles[color],
             styles[backgroundColor],
             styles[fontStyle],
-            styles[borderStyle],
+            styles[border],
             ...elementClassNames,
             classNames,
         ),

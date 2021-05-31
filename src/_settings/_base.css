@@ -376,3 +376,10 @@ body {
   font-weight:bold;
   font-style:italic;
 }
+
+/* border */
+.border{
+  &-solid{
+    border:1px solid #cdcdcd;
+  }
+}

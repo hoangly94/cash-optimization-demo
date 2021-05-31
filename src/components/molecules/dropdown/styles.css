@@ -3,3 +3,9 @@
 .dropdown{
     position:relative;
 }
+.caret{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+}

@@ -146,6 +146,7 @@
       "^~atoms/(.*)$": "<rootDir>/src/atoms/$1",
       "^~molecules/(.*)$": "<rootDir>/molecules//$1",
       "^~organisms/(.*)$": "<rootDir>/organisms//$1",
+      "^~organisms.custom/(.*)$": "<rootDir>/organisms.custom//$1",
       "^~templates/(.*)$": "<rootDir>/templates//$1",
       "^~pages/(.*)$": "<rootDir>/src/pages/$1",
       "^~utils/(.*)$": "<rootDir>/src/utils/$1",

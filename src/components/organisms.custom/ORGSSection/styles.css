@@ -1,4 +1,5 @@
 @import '../../../_settings/_variables.css';
 
-.title{
+.dropdown{
+    position:relative;
 }

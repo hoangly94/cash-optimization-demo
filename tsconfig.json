@@ -61,6 +61,9 @@
       "~organisms/*": [
         "./src/components/organisms/*"
       ],
+      "~organisms.custom/*": [
+        "./src/components/organisms.custom/*"
+      ],
       "~templates/*": [
         "./src/components/templates/*"
       ],

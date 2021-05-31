@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Classnames from 'classnames';
+import * as Base from '_/_settings';
 import styles from './_styles.css';
 import { Props, Type, Size } from './index';
 
@@ -7,16 +7,14 @@ export default (props: Props) => {
     const {
         type = Type.SOLID,
         size = Size.M,
-        color,
+        fill,
     } = props;
 
     //create props for rendering
     const svgProps = {
-        className: Classnames(
-            styles[size],
-        ),
+        ...Base.mapProps(props, styles, [size]),
         style: {
-            fill: color,
+            fill: fill,
         }
     }
 
