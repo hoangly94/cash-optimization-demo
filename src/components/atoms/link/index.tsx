@@ -6,12 +6,12 @@ import {
 import * as Base from '_/_settings';
 import styles from './styles.css'
 
-enum Type {
+export enum Type {
   DEFAULT = 'link',
   EXTERNAL = 'link-external',
 }
 
-enum Size {
+export enum Size {
   S1 = 's1',
   S = 's',
   M = 'm',
@@ -19,14 +19,14 @@ enum Size {
   L1 = 'l1',
 }
 
-type Props = Base.Props & {
+export type Props = Base.Props & {
   type?: Type,
   size?: Size,
   url?: string,
   text?: string,
 }
 
-const Element = (props: Props): React.ReactElement => {
+export const Element = (props: Props): React.ReactElement => {
   const {
     type = Type.DEFAULT,
     theme = Base.Theme.DEFAULT,
@@ -51,10 +51,3 @@ const Element = (props: Props): React.ReactElement => {
     linkElement
   )
 }
-
-export {
-  Element,
-  Type,
-  Size,
-  Props,
-};

@@ -28,6 +28,7 @@ export type Props = Base.Props & {
   //for TEXT_DROPDOWN
   $link?: Link.Props,
   //default text
+  text?: string,
   $list?: List.Props<Text.Props>,
 }
 
@@ -36,8 +37,12 @@ export const Element = (props: Props) => {
     type = Type.DEFAULT,
     $title,
     $link,
+    text = 'aaaaaaa',
     $list,
   } = props;
+
+  const [activeItem, setActiveItem] = React.useState({value: 0, text: text});
+
 
   //create props
   const blockWrapperProps = {
@@ -50,16 +55,20 @@ export const Element = (props: Props) => {
     ),
     border: Base.Border.SOLID,
   };
-
-  const titleProps = {
+  
+  const titleProps:Text.Props = {
     ...$title,
   };
 
-  const linkProps = {
+  const dropdownTextProps: Text.Props = {
+    text:activeItem.text,
+  };
+
+  const linkProps:Link.Props = {
     ...$link,
   };
 
-  const listProps = {
+  const listProps:List.Props<Text.Props> = {
     ...$list,
   };
   // console.log(Classnames(styles['caret']));
@@ -79,11 +88,12 @@ export const Element = (props: Props) => {
   }
 
   if (type === Type.DEFAULT) {
+
     return (
       <Block.Element {...blockWrapperProps}>
         <Text.Element {...titleProps} />
         <Block.Element {...dropdownProps}>
-          {/* <Text.Element {...textProps} /> */}
+          <Text.Element {...dropdownTextProps} />
           <Caret {...caretProps}/>
         </Block.Element>
         <List.Element {...listProps} />

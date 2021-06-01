@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Classnames from 'classnames';
+import * as Base from '_/_settings';
 import styles from './_styles.css';
 import { Props, Type, Size, Direction } from './index';
 
@@ -19,9 +19,7 @@ export default (props: Props) => {
 
     //create props for rendering
     const svgProps = {
-        className: Classnames(
-            styles[size],
-        ),
+        ...Base.mapProps(props, styles, [size]),
         style: {
             transform: `rotate(${rotateDegObj[direction]}deg)`,
             transformOrigin: '50% 50%',

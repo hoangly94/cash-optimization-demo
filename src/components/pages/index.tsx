@@ -25,39 +25,11 @@ import React from "react";
 
 
 import * as Dasboard from "~templates/dashboard";
-import * as DropDown from "~molecules/dropdown";
+import * as DropDownBlock from "~molecules/dropdownBlock";
 import * as Li from "~atoms/list/li";
 
 
-const $ORGS_$managementUnitName_$list_$liList = [
-  {
-    $children: {
-      text: 'name1'
-    },
-  },
-  {
-    $children: {
-      text: 'name2'
-    },
-    active: true,
-  },
-  {
-    $children: {
-      text: 'name3'
-    },
-  },
-];
 const dashboardProps: Dasboard.Props = {
-  $ORGS: {
-    $managementUnitName: {
-      $title: {
-        text: 'Tên đơn vị quản lý',
-      },
-      $list: {
-        $liList: $ORGS_$managementUnitName_$list_$liList,
-      }
-    }
-  }
 }
 
 export default () => (
