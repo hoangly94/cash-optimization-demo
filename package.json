@@ -148,10 +148,15 @@
       "^~molecules/(.*)$": "<rootDir>/molecules//$1",
       "^~organisms/(.*)$": "<rootDir>/organisms//$1",
       "^~organisms.custom/(.*)$": "<rootDir>/organisms.custom//$1",
+      "^~bases/(.*)$": "<rootDir>/src/bases/$1",
+      "^~commons/(.*)$": "<rootDir>/commons//$1",
+      "^~features/(.*)$": "<rootDir>/features//$1",
+      "^~features.custom/(.*)$": "<rootDir>/features.custom//$1",
       "^~templates/(.*)$": "<rootDir>/templates//$1",
       "^~pages/(.*)$": "<rootDir>/src/pages/$1",
       "^~utils/(.*)$": "<rootDir>/src/utils/$1",
       "^@utils$": "<rootDir>/src/utils/index.ts",
+      "^@hocs$": "<rootDir>/src/hocs/index.tsx",
       "^~svg/(.*)$": "<rootDir>/src/components/atoms/svg/$1"
     }
   }

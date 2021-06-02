@@ -1,5 +1,6 @@
 @import '../../../_settings/_variables.css';
 
-.dropdown{
-    position:relative;
+.row {
+  width:100%;
+  display:flex;
 }

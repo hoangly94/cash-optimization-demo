@@ -25,8 +25,6 @@ import React from "react";
 
 
 import * as Dasboard from "~templates/dashboard";
-import * as DropDownBlock from "~molecules/dropdownBlock";
-import * as Li from "~atoms/list/li";
 
 
 const dashboardProps: Dasboard.Props = {

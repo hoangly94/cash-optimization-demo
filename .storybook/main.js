@@ -58,7 +58,7 @@ module.exports = {
       '~templates': path.resolve(__dirname, '../src/components/templates/'),
       '~pages': path.resolve(__dirname, '../src/components/pages/'),
       '~utils': path.resolve(__dirname, '../src/utils/'),
-      '@utils': path.resolve(__dirname, 'src/utils/index.ts'),
+      '@utils': path.resolve(__dirname, 'src/utils/index.tsx'),
       '~svg': path.resolve(__dirname, 'src/components/atoms/svg/'),
     };
 

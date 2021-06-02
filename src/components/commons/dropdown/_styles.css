@@ -1,0 +1,27 @@
+@import '../../../_settings/_variables.css';
+
+.dropdown{
+    position:relative;
+    cursor:pointer;
+}
+.caret{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+}
+.dropdown-selector{
+    position:relative;
+    box-sizing: border-box;
+}
+.dropdown-options{
+    box-sizing: border-box;
+    position:absolute;
+    left:0;
+    top:100%;
+    width:100%;
+    display:none;
+    border:1px solid #cdcdcd;
+    border-top:0;
+    z-index:888;
+}

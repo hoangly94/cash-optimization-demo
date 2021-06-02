@@ -1,0 +1,11 @@
+@import '../../../_settings/_variables.css';
+
+.section {
+    &{
+        box-sizing:border-box;
+        max-width:100%;
+    },
+    &>div{
+        margin:auto;
+    }
+}

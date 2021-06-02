@@ -19,18 +19,38 @@ export enum Width {
     L = 'width-l',
     L1 = 'width-l1',
     L2 = 'width-l2',
+    PX_100 = 'width-100px',
+    PX_150 = 'width-150px',
+    PX_200 = 'width-200px',
+    PX_300 = 'width-300px',
+    PX_400 = 'width-400px',
+    PX_500 = 'width-500px',
+    PX_600 = 'width-600px',
+    PX_700 = 'width-700px',
+    PX_800 = 'width-800px',
+    PX_900 = 'width-900px',
+    PX_1000 = 'width-1000px',
+    PX_1100 = 'width-1100px',
+    PX_1200 = 'width-1200px',
+    PER_20 = 'width-20per',
+    PER_30 = 'width-30per',
+    PER_40 = 'width-40per',
+    PER_50 = 'width-50per',
+    PER_60 = 'width-60per',
+    PER_70 = 'width-70per',
+    PER_80 = 'width-80per',
 }
 
 export enum Height {
     NONE = '',
     FIT_SCREEN = 'height-fit-screen',
-    PX_100 = 'height-100',
-    PX_150 = 'height-150',
-    PX_200 = 'height-200',
-    PX_300 = 'height-300',
-    PX_400 = 'height-400',
-    PX_500 = 'height-500',
-    PX_600 = 'height-600',
+    PX_100 = 'height-100px',
+    PX_150 = 'height-150px',
+    PX_200 = 'height-200px',
+    PX_300 = 'height-300px',
+    PX_400 = 'height-400px',
+    PX_500 = 'height-500px',
+    PX_600 = 'height-600px',
 }
 
 export enum Padding {
@@ -135,6 +155,15 @@ export enum TextAlign {
     RIGHT = 'text-align-right',
 }
 
+export enum LineHeight {
+    NONE = '',
+    S1 = 'lineheight-s1',
+    S = 'lineheight-s',
+    M = 'lineheight-m',
+    L = 'lineheight-l',
+    L1 = 'lineheight-l1',
+}
+
 export enum Color {
     NONE = '',
     WHITE = 'color-white',
@@ -180,10 +209,13 @@ export type Props = {
     backgroundColor?: BackgroundColor,
     fontStyle?: FontStyle,
     border?: Border,
+    lineHeight?: LineHeight,
 
     children?: React.ReactNode,
     classNames?: string,
     style?: { [key: string]: any; },
+
+    refs?:React.MutableRefObject<null>,
 }
 
 export const mapProps = (
@@ -203,6 +235,7 @@ export const mapProps = (
         backgroundColor = BackgroundColor.NONE,
         fontStyle = FontStyle.NONE,
         border = Border.NONE,
+        lineHeight = LineHeight.NONE,
 
         classNames,
         style,
@@ -222,6 +255,7 @@ export const mapProps = (
             styles[backgroundColor],
             styles[fontStyle],
             styles[border],
+            styles[lineHeight],
             ...elementClassNames,
             classNames,
         ),

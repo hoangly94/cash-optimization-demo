@@ -2,6 +2,7 @@
 
 .dropdown{
     position:relative;
+    cursor:pointer;
 }
 .caret{
     position:absolute;
@@ -9,10 +10,18 @@
     top:50%;
     transform:translateY(-50%);
 }
-.dropdown-itemList{
+.dropdown-selector{
+    position:relative;
+    box-sizing: border-box;
+}
+.dropdown-options{
+    box-sizing: border-box;
     position:absolute;
     left:0;
     top:100%;
     width:100%;
-    /* display:none; */
+    display:none;
+    border:1px solid #cdcdcd;
+    border-top:0;
+    z-index:888;
 }

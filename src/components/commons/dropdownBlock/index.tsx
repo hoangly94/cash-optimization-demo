@@ -29,7 +29,7 @@ export const Element = (props: Props) => {
   } = props;
 
   //create props
-  const blockWrapperProps: Props = {
+  const componentWrapperProps: Props = {
     ...props,
     classNames: Classnames(
       styles[type],
@@ -38,7 +38,6 @@ export const Element = (props: Props) => {
 
   const dropdownProps: Dropdown.Props = {
     ...$dropdown,
-    border: Base.Border.SOLID,
   };
 
   const titleProps: Text.Props = {
@@ -46,7 +45,7 @@ export const Element = (props: Props) => {
   };
 
   return (
-    <Block.Element {...blockWrapperProps}>
+    <Block.Element {...componentWrapperProps}>
       <Text.Element {...titleProps} />
       <Dropdown.Element {...dropdownProps} />
     </Block.Element>

@@ -64,6 +64,18 @@
       "~organisms.custom/*": [
         "./src/components/organisms.custom/*"
       ],
+      "~bases/*": [
+        "./src/components/bases/*"
+      ],
+      "~commons/*": [
+        "./src/components/commons/*"
+      ],
+      "~features/*": [
+        "./src/components/features/*"
+      ],
+      "~features.custom/*": [
+        "./src/components/features.custom/*"
+      ],
       "~templates/*": [
         "./src/components/templates/*"
       ],
@@ -75,6 +87,9 @@
       ],
       "@utils": [
         "src/utils/index.ts"
+      ],
+      "@hocs": [
+        "src/hocs/index.tsx"
       ],
       "~svg/*": [
         "./src/components/atoms/svg/*"

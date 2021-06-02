@@ -1,0 +1,11 @@
+@import '../../../_settings/_variables.css';
+
+
+
+.white-theme{
+  color: var(--white-theme-background-color);
+}
+
+.dark-theme{
+  color: var(--dark-theme-background-color);
+}
