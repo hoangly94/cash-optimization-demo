@@ -68,6 +68,7 @@ export enum Padding {
 
 export enum Margin {
     NONE = '',
+    AUTO = 'margin-auto',
     PX_3 = 'margin-3',
     PX_5 = 'margin-5',
     PX_8 = 'margin-8',

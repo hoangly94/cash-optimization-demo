@@ -1,5 +1,7 @@
 @import '../../../_settings/_variables.css';
 
-.orgs-section{
+.component{
     margin:auto;
+    box-sizing:border-box;
+    padding: 18px 18px 18px 268px;
 }

@@ -1,0 +1,10 @@
+@import '../../../_settings/_variables.css';
+
+.dashboardMenu{
+    width:250px;
+    height:100%;
+    position:fixed;
+    left: 0;
+    top:0;
+    background-color: black;
+}

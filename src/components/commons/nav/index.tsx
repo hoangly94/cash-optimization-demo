@@ -1,28 +1,24 @@
-import * as React  from 'react'
-import styles from './styles.css'
-import * as Base from '_/_settings';
+import * as React from 'react'
+import styles from './_styles.css'
+import * as Base from '~/_settings';
 
-type Props = Base.Props & {
+export type Props = Base.Props & {
   children?: React.ReactNode,
 };
 
-const Element = (props: Props): React.ReactElement => {
-  const { 
-    theme = Base.Theme.DEFAULT,
+export const Element = (props: Props): React.ReactElement => {
+  const {
     children,
+    refs,
   } = props;
 
   //create props
-  const navProps = Base.mapProps(props, styles, [ theme]);
+  const blockProps = {
+    ...Base.mapProps(props, styles, []),
+    ref: { refs },
+  };
 
   return (
-    <nav {...navProps} role="navigation">
-      {children}
-    </nav>
+    <nav {...blockProps} ref={refs} role="navigation">{children}</nav>
   )
 }
-
-export {
-  Element,
-  Props,
-};

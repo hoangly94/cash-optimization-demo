@@ -169,6 +169,9 @@ body {
 
 .margin{
   &{
+    &-auto{
+      margin:auto;
+    }
     &-s1{
       margin:3px;
     }
