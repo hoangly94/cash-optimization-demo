@@ -1,10 +1,7 @@
 import * as React from 'react'
-import Classnames from 'classnames'
-import {
-  Link,
-} from "react-router-dom";
-import * as Base from '_/_settings';
-import styles from './styles.css'
+import { Link } from "react-router-dom";
+import * as Base from '~/_settings';
+import styles from './_styles.css'
 
 export enum Type {
   DEFAULT = 'link',
@@ -24,14 +21,15 @@ export type Props = Base.Props & {
   size?: Size,
   url?: string,
   text?: string,
+  isExternalLink?: boolean,
 }
 
 export const Element = (props: Props): React.ReactElement => {
   const {
     type = Type.DEFAULT,
-    theme = Base.Theme.DEFAULT,
     text,
-    url = '',
+    url,
+    isExternalLink = false,
     size = Size.M,
   } = props;
 
@@ -39,14 +37,14 @@ export const Element = (props: Props): React.ReactElement => {
 
   //create props
   const linkProps = {
-    ...Base.mapProps({
-      ...props,
-    }, styles, [type, size, theme]),
+    ...Base.mapProps(props, styles, [type, size]),
     ...href,
   };
 
-  const linkElement = /^http.+$/.test(url) || url === '' ?  <a {...linkProps}>{text}</a> : <Link  {...linkProps} to={url}>{text}</Link>;
-  
+  const linkElement = !isExternalLink && url
+    ? <Link  {...linkProps} to={url}>{text}</Link>
+    : <a {...linkProps}>{text}</a>;
+
   return (
     linkElement
   )

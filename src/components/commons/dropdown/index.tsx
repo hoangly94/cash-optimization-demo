@@ -17,7 +17,7 @@ export type Props = Base.Props & {
   type?: Type,
   $selectorWrapper?: Base.Props & Block.Props & {
     //default text
-    text?: string,
+    defaultText?: string,
   }
   $optionsWrapper?: Base.Props & Block.Props & {
     $options?: Item.Props[],
@@ -33,8 +33,9 @@ export const Element = (props: Props) => {
     disable = false,
   } = props;
 
+  const defaultSelectorText = $selectorWrapper?.defaultText ? {text: $selectorWrapper.defaultText} : null;
   // const [isOpenedDropdown, setIsOpenedDropdown] = useState(false);
-  const [activeItem, setActiveItem] = useState(getActiveItem($optionsWrapper?.$options));
+  const [activeItem, setActiveItem] = useState(defaultSelectorText ?? getActiveItem($optionsWrapper?.$options));
 
   const {
     ref,
@@ -104,7 +105,7 @@ type ActiveItem = {
 type DropdownData = {
   value?: string | number,
   text?: string,
-  activeItemList: ActiveItem[],
+  activeItemList?: ActiveItem[],
 }
 
 const handleDropdownOpenCloseClick = (clickData, setClickData: Function) => {

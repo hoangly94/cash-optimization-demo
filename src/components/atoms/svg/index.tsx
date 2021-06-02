@@ -5,6 +5,13 @@ export enum Type {
   LIGHT = 'light',
 }
 
+export enum Icon {
+  BARS = 'bars',
+  CARET = 'caret',
+  CHEVRON = 'chevron',
+  USER = 'user',
+}
+
 export enum Type {
   DEFAULT = 'svg',
 }

@@ -1,15 +1,29 @@
 @import '../../../_settings/_variables.css';
 
 .button {
-    cursor: pointer;
+    &{
+        cursor: pointer;
+    }
+    &-submit{
+        cursor: pointer;
+        background-color:green;
+        color:white;
+    }
+    &-reset{
+        cursor: pointer;
+        background-color:#cdcdcd;
+    }
 }
 
 /* Size */
-.s {
+.size-s {
+    padding: 5px 8px;
 }
 
-.m {
+.size-m {
+    padding: 8px 18px;
 }
 
-.l {
+.size-l {
+    padding: 12px 28px;
 }

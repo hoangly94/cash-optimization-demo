@@ -66,6 +66,32 @@ export enum Padding {
     PX_38 = 'padding-38',
 }
 
+export enum PaddingV {
+    NONE = '',
+    PX_3 = 'padding-v-3',
+    PX_5 = 'padding-v-5',
+    PX_8 = 'padding-v-8',
+    PX_10 = 'padding-v-10',
+    PX_12 = 'padding-v-12',
+    PX_15 = 'padding-v-15',
+    PX_18 = 'padding-v-18',
+    PX_28 = 'padding-v-28',
+    PX_38 = 'padding-v-38',
+}
+
+export enum PaddingH {
+    NONE = '',
+    PX_3 = 'padding-h-3',
+    PX_5 = 'padding-h-5',
+    PX_8 = 'padding-h-8',
+    PX_10 = 'padding-h-10',
+    PX_12 = 'padding-h-12',
+    PX_15 = 'padding-h-15',
+    PX_18 = 'padding-h-18',
+    PX_28 = 'padding-h-28',
+    PX_38 = 'padding-h-38',
+}
+
 export enum Margin {
     NONE = '',
     AUTO = 'margin-auto',
@@ -141,6 +167,14 @@ export enum Flex {
     AROUND = 'flex-around',
     EVENLY = 'flex-evenly',
 }
+export enum AlignItems {
+    NONE = '',
+    STRETCH = 'align-items-stretch',
+    CENTER = 'align-items-center',
+    START = 'align-items-start',
+    END = 'align-items-end',
+    BASELINE = 'align-items-baseline',
+}
 
 export enum Visibility {
     NONE = '',
@@ -201,9 +235,10 @@ export type Props = {
     theme?: Theme,
     width?: Width,
     height?: Height,
-    padding?: Padding,
+    padding?: Padding | PaddingV | PaddingH,
     margin?: Margin | MarginTop | MarginRight | MarginBottom | MarginLeft,
     flex?: Flex,
+    alignItems?: AlignItems,
     visibility?: Visibility,
     textAlign?: TextAlign,
     color?: Color,
@@ -230,6 +265,7 @@ export const mapProps = (
         padding = Padding.NONE,
         margin = Margin.NONE,
         flex = Flex.NONE,
+        alignItems = AlignItems.NONE,
         visibility = Visibility.NONE,
         textAlign = TextAlign.NONE,
         color = Color.NONE,
@@ -243,6 +279,7 @@ export const mapProps = (
     } = props;
     
     const elementClassNames = elementClasses.map(elementClass => elementStyles[elementClass]);
+    
     const classProps = {
         className: Classnames(
             styles[width],
@@ -250,6 +287,7 @@ export const mapProps = (
             styles[padding],
             styles[margin],
             styles[flex],
+            styles[alignItems],
             styles[visibility],
             styles[textAlign],
             styles[color],

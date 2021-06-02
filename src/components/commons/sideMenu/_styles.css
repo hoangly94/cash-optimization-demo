@@ -1,0 +1,21 @@
+@import '../../../_settings/_variables.css';
+
+.menu{
+  &{
+    display:block;
+  }
+  &>a{
+  }
+}
+
+.size{
+  &-s>a{
+    padding: 3px 18px;
+  }
+  &-m>a{
+    padding: 5px 28px;
+  }
+  &-l>a{
+    padding: 8px 38px;
+  }
+}

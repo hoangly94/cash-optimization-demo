@@ -3,5 +3,6 @@
 .component{
     margin:auto;
     box-sizing:border-box;
-    padding: 18px 18px 18px 268px;
+    padding: 28px 28px 28px 288px;
+    min-width:1100px;
 }

@@ -7,7 +7,7 @@ export default (props: Props) => {
     const {
         size = Size.M,
         direction = Direction.DOWN,
-        color,
+        fill,
     } = props;
 
     const rotateDegObj = {
@@ -23,7 +23,7 @@ export default (props: Props) => {
         style: {
             transform: `rotate(${rotateDegObj[direction]}deg)`,
             transformOrigin: '50% 50%',
-            fill: color,
+            fill: fill,
         }
     }
 

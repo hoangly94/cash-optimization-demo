@@ -6,16 +6,14 @@ import * as Base from '~/_settings';
 
 export enum Type {
   DEFAULT = 'button',
-  RESET = 'reset',
-  SUBMIT = 'submit',
+  RESET = 'button-reset',
+  SUBMIT = 'button-submit',
 }
 
 export enum Size {
-  S1 = 's1',
-  S = 's',
-  M = 'm',
-  L = 'l',
-  L1 = 'l1',
+  S = 'size-s',
+  M = 'size-m',
+  L = 'size-l',
 }
 
 export type Props = Base.Props & {

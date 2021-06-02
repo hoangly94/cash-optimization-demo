@@ -12,17 +12,28 @@ export const Element = (props: Props) => {
     } = props;
 
     const dashboardMenuProps: DashboardMenu.Props = {
+        $menu: {
+            $links: [
+                {
+                    text: 'ATM/CDM',
+                    url: '',
+                },
+                {
+                    text: 'ORGS',
+                    url: '',
+                },
+            ]
+        },
+    };
 
-    }
-    
     const atmCdmProps: ATM_CDM.Props = {
 
-    }
+    };
 
     return (
-        <>  
-            <DashboardMenu.Element {...dashboardMenuProps}/>
-            <ATM_CDM.Element {...atmCdmProps}/>
+        <>
+            <DashboardMenu.Element {...dashboardMenuProps} />
+            <ATM_CDM.Element {...atmCdmProps} />
         </>
     )
 }

@@ -7,4 +7,5 @@
     left: 0;
     top:0;
     background-color: black;
+    box-sizing:border-box;
 }

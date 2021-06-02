@@ -1,20 +1,23 @@
 @import '../../../_settings/_variables.css';
 
 .link {
-  text-decoration:none;
-  font-size:15px;
+  &{
+    text-decoration:none;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    cursor:pointer;
+    transition: background-color 0.5s;
+  }
+  &:hover{
+    background-color: #ffffff33;
+  }
+  &>svg{
+  }
 }
 .link-external {
   text-decoration:none;
   font-size:15px;
-}
-
-.white-theme{
-  color: var(--white-theme-text-color);
-}
-
-.dark-theme{
-  color: var(--dark-theme-text-color);
 }
 
 /* size */

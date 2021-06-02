@@ -5,9 +5,6 @@ import * as Link from "~atoms/link";
 import * as Text from "~atoms/text";
 import * as Title from "~atoms/title";
 import * as Dropdown from "~atoms/dropdown";
-import Caret from "~svg/caret";
-import * as SVG from "~svg/index";
-import * as List from "~atoms/list";
 import * as Base from '~/_settings';
 import styles from './styles.css';
 

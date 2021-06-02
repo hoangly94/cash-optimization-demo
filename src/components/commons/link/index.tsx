@@ -1,10 +1,9 @@
 import * as React from 'react'
-import Classnames from 'classnames'
-import {
-  Link,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as Base from '_/_settings';
 import styles from './styles.css'
+import Caret from "~svg/caret";
+import * as Svg from "~svg/index";
 
 export enum Type {
   DEFAULT = 'link',
@@ -24,15 +23,20 @@ export type Props = Base.Props & {
   size?: Size,
   url?: string,
   text?: string,
+  $icon?: Svg.Props & {
+    name?: Svg.Icon
+  },
+  $caret?: Svg.Props,
 }
 
 export const Element = (props: Props): React.ReactElement => {
   const {
     type = Type.DEFAULT,
-    theme = Base.Theme.DEFAULT,
     text,
     url = '',
     size = Size.M,
+    $icon,
+    $caret,
   } = props;
 
   const href = url ? { href: url } : {};
@@ -41,12 +45,26 @@ export const Element = (props: Props): React.ReactElement => {
   const linkProps = {
     ...Base.mapProps({
       ...props,
-    }, styles, [type, size, theme]),
+    }, styles, [type, size]),
     ...href,
   };
 
-  const linkElement = /^http.+$/.test(url) || url === '' ?  <a {...linkProps}>{text}</a> : <Link  {...linkProps} to={url}>{text}</Link>;
-  
+  const iconProps = {
+    margin: Base.MarginRight.PX_8,
+    fill: 'white',
+    ...$icon,
+  };
+  const caretProps = {
+    ...$caret,
+  };
+
+  const iconName = $icon?.name ?? 'user';
+  const Icon = require('~svg/' + iconName).default;
+  const CaretElement = $caret ? <Caret {...caretProps} /> : '';
+  const child = <>{<Icon {...iconProps} />}{text}{CaretElement}</>
+
+  const linkElement = /^http.+$/.test(url) || url === '' ? <a {...linkProps}>{child}</a> : <Link  {...linkProps} to={url}>{child}</Link>;
+
   return (
     linkElement
   )

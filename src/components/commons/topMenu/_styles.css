@@ -1,0 +1,10 @@
+@import '../../../_settings/_variables.css';
+
+.menu{
+  &{
+    display:block;
+  }
+  &>a{
+    display:block;
+  }
+}
