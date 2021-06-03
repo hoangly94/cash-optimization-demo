@@ -508,7 +508,7 @@ body {
 }
 
 /*BackgroundColor*/
-.background-color{
+.backgroundColor{
   &-white{
     background-color:white;
   }
@@ -526,6 +526,9 @@ body {
   }
   &-red{
     background-color:red;
+  }
+  &-classic-blue{
+    background-color:#34568B;
   }
 }
 
@@ -545,5 +548,42 @@ body {
 .border{
   &-solid{
     border:1px solid #cdcdcd;
+  }
+}
+
+/* border radius*/
+.border-radius{
+  &-px{
+    &-2{
+      border-radius: 2px;
+    }
+    &-3{
+      border-radius: 3px;
+    }
+    &-5{
+      border-radius: 5px;
+    }
+    &-8{
+      border-radius: 8px;
+    }
+    &-100{
+      border-radius: 100px;
+    }
+  }
+  &-per{
+    &-50{
+      border-radius: 50%;
+    }
+  }
+}
+/* white-space */
+.whitespace{
+  &-nowrap{
+    white-space:nowrap;
+  }
+  &-nowrap-ellipsis{
+    white-space:nowrap;
+    text-overflow: ellipsis;
+    overflow:hidden;
   }
 }

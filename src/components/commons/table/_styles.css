@@ -1,0 +1,10 @@
+@import '../../../_settings/_variables.css';
+
+.table {
+  width:100%;
+  display:table;
+  border-collapse: collapse;
+  /* display:flex;
+  justify-content:space-between;
+  align-items: stretch; */
+}

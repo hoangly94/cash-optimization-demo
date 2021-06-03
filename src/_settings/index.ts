@@ -211,12 +211,13 @@ export enum Color {
 
 export enum BackgroundColor {
     NONE = '',
-    WHITE = 'background-color-white',
-    BLACK = 'background-color-black',
-    BLUE = 'background-color-blue',
-    YELLOW = 'background-color-yellow',
-    GREEN = 'background-color-green',
-    RED = 'background-color-red',
+    WHITE = 'backgroundColor-white',
+    BLACK = 'backgroundColor-black',
+    BLUE = 'backgroundColor-blue',
+    YELLOW = 'backgroundColor-yellow',
+    GREEN = 'backgroundColor-green',
+    RED = 'backgroundColor-red',
+    CLASSIC_BLUE = 'backgroundColor-classic-blue',
 }
 
 export enum FontStyle {
@@ -229,6 +230,22 @@ export enum FontStyle {
 export enum Border {
     NONE = '',
     SOLID = 'border-solid',
+}
+
+export enum BorderRadius {
+    NONE = '',
+    PX_2 = 'border-radius-px-2',
+    PX_3 = 'border-radius-px-3',
+    PX_5 = 'border-radius-px-5',
+    PX_8 = 'border-radius-px-8',
+    PX_100 = 'border-radius-px-100',
+    PER_ = 'border-radius-per-50',
+}
+
+export enum WhiteSpace {
+    NONE = '',
+    NOWRAP = 'whitespace-nowrap',
+    NOWRAP_ELLIPSIS = 'whitespace-nowrap-ellipsis',
 }
 
 export type Props = {
@@ -245,7 +262,9 @@ export type Props = {
     backgroundColor?: BackgroundColor,
     fontStyle?: FontStyle,
     border?: Border,
+    borderRadius?:BorderRadius,
     lineHeight?: LineHeight,
+    whiteSpace?: WhiteSpace,
 
     children?: React.ReactNode,
     classNames?: string,
@@ -272,7 +291,9 @@ export const mapProps = (
         backgroundColor = BackgroundColor.NONE,
         fontStyle = FontStyle.NONE,
         border = Border.NONE,
+        borderRadius = BorderRadius.NONE,
         lineHeight = LineHeight.NONE,
+        whiteSpace = WhiteSpace.NONE,
 
         classNames,
         style,
@@ -294,7 +315,9 @@ export const mapProps = (
             styles[backgroundColor],
             styles[fontStyle],
             styles[border],
+            styles[borderRadius],
             styles[lineHeight],
+            styles[whiteSpace],
             ...elementClassNames,
             classNames,
         ),

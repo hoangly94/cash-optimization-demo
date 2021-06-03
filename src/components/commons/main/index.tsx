@@ -8,7 +8,6 @@ export type Props = Base.Props & {
 
 export const Element = (props: Props): React.ReactElement => {
   const { 
-    // theme = Base.Theme.DEFAULT,
     children,
   } = props;
 

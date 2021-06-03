@@ -32,7 +32,6 @@ export const Element = (props: Props) => {
     margin: Base.MarginRight.PX_18,
   };
 
-
   const atmCdmStatusProps: DropDown.Props = {
     $selectorWrapper: {
       defaultText: 'Trạng thái ATM/CDM',
@@ -46,11 +45,13 @@ export const Element = (props: Props) => {
   };
 
   const queryButtonProps:Button.Props = {
-    type: Button.Type.SUBMIT,
     text: 'Query',
     padding: Base.Padding.PX_38,
     width: Base.Width.PX_150,
     margin: Base.MarginRight.PX_38,
+    backgroundColor:Base.BackgroundColor.GREEN,
+    color:Base.Color.WHITE,
+    borderRadius:Base.BorderRadius.PX_100,
   }
 
   return (
@@ -74,8 +75,6 @@ export const Element = (props: Props) => {
     </Block.Element >
   )
 }
-
-
 
 const managementUnitsData = [
   {

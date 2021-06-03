@@ -6,8 +6,6 @@ import * as Base from '~/_settings';
 
 export enum Type {
   DEFAULT = 'button',
-  RESET = 'button-reset',
-  SUBMIT = 'button-submit',
 }
 
 export enum Size {

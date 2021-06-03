@@ -1,0 +1,7 @@
+@import '../../../../_settings/_variables.css';
+
+.row {
+  width:100%;
+  display:table-row;
+  border:1px solid #cdcdcd;
+}
