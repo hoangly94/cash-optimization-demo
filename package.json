@@ -154,6 +154,7 @@
       "^~features.custom/(.*)$": "<rootDir>/features.custom//$1",
       "^~templates/(.*)$": "<rootDir>/templates//$1",
       "^~pages/(.*)$": "<rootDir>/src/pages/$1",
+      "^~stores/(.*)$": "<rootDir>/src/stores/$1",
       "^~utils/(.*)$": "<rootDir>/src/utils/$1",
       "^@utils$": "<rootDir>/src/utils/index.ts",
       "^@hocs$": "<rootDir>/src/hocs/index.tsx",

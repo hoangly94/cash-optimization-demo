@@ -82,6 +82,9 @@
       "~pages/*": [
         "./src/components/pages/*"
       ],
+      "~stores/*": [
+        "src/stores/*.ts"
+      ],
       "~utils/*": [
         "src/utils/*.tsx"
       ],
