@@ -1,13 +1,13 @@
 import * as React from 'react'
-import Classnames from 'classnames'
-import styles from './styles.css'
-import * as Base from '_/_settings';
+import styles from './_styles.css'
+import * as Base from '~/_settings';
 
 export enum Type {
   DEFAULT = 'title',
 }
 
 export enum TagType {
+  DEFAULT = '',
   H1 = 'h1',
   H2 = 'h2',
   H3 = 'h3',
@@ -31,13 +31,11 @@ export const Element = (props: Props) => {
     type = Type.DEFAULT,
     text,
     size = Size.MEDIUM,
-    tagType = TagType.H3,
-    theme = Base.Theme.DEFAULT,
+    tagType = TagType.DEFAULT,
   } = props;
 
   //create props
-  const titleProps = Base.mapProps(props, styles, [type, size, theme]);
-
+  const titleProps = Base.mapProps(props, styles, [type, size]);
 
   if (tagType === TagType.H3) {
     return (

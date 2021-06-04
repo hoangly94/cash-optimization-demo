@@ -26,3 +26,8 @@
 .size-l {
     padding: 12px 28px;
 }
+
+.disabled{
+    background-color:#cdcdcd;
+    color: #888888;
+}

@@ -1,50 +1,25 @@
 @import '../../../_settings/_variables.css';
 
-.button {
-  -webkit-appearance: none;
-  border: 0;
-  outline: 0;
-  display: block;
-  font-family: var(--base-font-family);
-  font-size: 0.9em;
-  font-weight: 600;
-  text-transform: uppercase;
-  border-radius: 3px;
-  cursor: pointer;
-  position: relative;
+.input {
+  
 }
 
 
 /* Size */
-.small {
-  padding: 0.5em 0.6em;
+.size-s1 {
+  padding: 3px
+}
+.size-s {
+  padding: 5px
 }
 
-.medium {
-  padding: 1.1em 1.3em;
+.size-m {
+  padding: 8px;
 }
 
-.large {
-  padding: 1.7em 2.4em;
+.size-l {
+  padding: 18px;
 }
-
-/* Theme */
-.default {
-  color: #fff;
-  
-  
+.size-l1 {
+  padding: 28px;
 }
-
-.rounded {
-  background: #fff;
-  
-  transition: color 0.3s ease, background 0.3s ease;
-
-  &:hover {
-    color: #fff;
-    
-  }
-}
-
-/* Disabled */
-

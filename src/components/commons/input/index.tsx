@@ -1,70 +1,55 @@
-import * as React  from 'react'
+import * as React from 'react'
 import Classnames from 'classnames'
 import styles from './_styles.css'
-// import baseCss from '../../_settings/_base.css'
+import * as Block from "~atoms/block";
+import * as Base from '~/_settings';
 
-const Type = {
-  DEFAULT: 'input',
-  RESET: 'reset',
-  SUBMIT: 'submit',
+export enum Type {
+  DEFAULT = 'input',
 }
 
-const Theme = {
-  DEFAULT: 'default',
+export enum Size {
+  S1 = 'size-s1',
+  S = 'size-s',
+  M = 'size-m',
+  L = 'size-l',
+  L1 = 'size-l1',
 }
 
-const Size = {
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
+export type Props = Base.Props & {
+  type?: string,
+  size?: Size,
+  // onClick?: React.MouseEventHandler,
+  onChange: React.ChangeEventHandler<HTMLInputElement>,
+  placeholder?: string,
+  value?: string,
+  isDisabled?: boolean,
 }
 
-type Props = {
-  type: string,
-  theme: string,
-  size: string,
-  onClick(): void,
-  onChange(): void,
-  placeholder: string,
-  className: string,
-  disabled: boolean,
-}
-
-const Element = (props: Props) => {
-  const { type, onClick, onChange, theme, size, placeholder, className, disabled } = props
+export const Element = (props: Props) => {
+  const {
+    type = Type.DEFAULT,
+    size = Size.M,
+    onChange,
+    placeholder = '',
+    value = '',
+    isDisabled = false,
+  } = props
 
   //create props
-  const classProps: string = Classnames(
-    styles[type],
-    theme ? styles[theme] : '',
-    size ? styles[size] : '',
-    {
-      [styles.disabled]: disabled,
-    },
-    className
-  )
+  const componentProps = {
+    padding:Base.Padding.PX_8,
+    ...Base.mapProps(props, styles, [type, size]),
+    // onClick:onClick,
+    onChange:onChange,
+    placeholder: placeholder,
+    value: value,
+    disabled: isDisabled,
+  };
 
   return (
-    <input onClick={onClick} onChange={onChange} disabled={disabled} placeholder={placeholder} className={classProps}/>
+    <input {...componentProps} />
   )
 }
-
-Element.defaultProps = {
-  type: Type.DEFAULT,
-  theme: Theme.DEFAULT,
-  size: Size.MEDIUM,
-  onClick: null,
-  onChange: null,
-  disabled: false,
-  placeholder: '',
-  className: [],
-}
-
-export {
-  Element as Input,
-  Type as InputType,
-  Theme as InputTheme,
-  Size as InputSize
-};
 
 Element.displayName = 'Input'

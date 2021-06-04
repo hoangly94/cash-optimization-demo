@@ -14,6 +14,30 @@ body {
   /* overflow-x: hidden; */
 }
 
+.position{
+  &-relative{
+    position:relative;
+  }
+  &-absolute{
+    position:absolute;
+  }
+  &-absolute-center{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+  }
+  &-fixed{
+    position:fixed;
+  }
+  &-fixed-center{
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+  }
+}
+
 .width{
   &-default{
     width:auto;
@@ -111,8 +135,17 @@ body {
   &-fit-screen{
     height:100%;
   }
+  &-30px{
+    height:30px;
+  }
+  &-40px{
+    height:40px;
+  }
+  &-50px{
+    height:50px;
+  }
   &-100px{
-    height:150px;
+    height:100px;
   }
   &-150px{
     height:150px;
@@ -166,6 +199,9 @@ body {
     &-38{
       padding:38px 0px;
     }
+    &-638{
+      padding:68px 0px;
+    }
   }
   &-h{
     &{
@@ -198,6 +234,9 @@ body {
     &-38{
       padding:0px 38px;
     }
+    &-68{
+      padding:0px 68px;
+    }
   }
   &{
     padding:8px;
@@ -228,6 +267,9 @@ body {
   }
   &-38{
     padding:38px;
+  }
+  &-68{
+    padding:68px;
   }
 }
 
@@ -529,6 +571,12 @@ body {
   }
   &-classic-blue{
     background-color:#34568B;
+  }
+  &-tigerlily{
+    background-color:#E15D44;
+  }
+  &-ultimate-gray{
+    background-color:#96999b;
   }
 }
 

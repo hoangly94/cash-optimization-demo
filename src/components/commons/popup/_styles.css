@@ -1,0 +1,23 @@
+@import '../../../_settings/_variables.css';
+
+.popup{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+}
+.popup-background{
+    opacity: .38;
+    position:absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+}
+.popup-content{
+    position:absolute;
+    top:40%;
+    left:50%;
+    transform:translate(-50%, -50%);
+}

@@ -8,6 +8,7 @@ export const SHOW_DATA = 'show_data';
 export const SELECT_UNITNAME = 'select_unitname';
 export const SELECT_ATMCDMSTATUS = 'select_atmcdmstatus';
 export const REQUEST_RESET = 'request_reset';
+export const CHANGE_INPUT = 'change_input';
 
 export type State = {
     isLoading: boolean,
@@ -21,6 +22,15 @@ export type State = {
             value: string,
         },
     },
+    selectedItem:{
+        id: any,
+        data: any,
+        editData: any,
+    },
     queryResult: any,
+    creatingPopup: boolean,
+    editingPopup: boolean,
+    historyPopup: boolean,
 }
+
 

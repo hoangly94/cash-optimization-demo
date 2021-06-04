@@ -1,10 +1,18 @@
-import { SUBMIT, RESET, CREATE, EDIT, REQUEST_QUERY, FETCH_DATA, SHOW_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET } from './constants'
+import { SUBMIT, RESET, CREATE, EDIT, REQUEST_QUERY, FETCH_DATA, SHOW_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_INPUT } from './constants'
 import * as Base from '~/_settings';
 
 const initState: State = {
     isLoading: false,
     filters: getDefaultFilters(),
     queryResult: {},
+    selectedItem:{
+        id: '',
+        data: {},
+        editData: {},
+    },
+    creatingPopup: false,
+    editingPopup: false,
+    historyPopup: false,
 }
 
 export default (state: State = initState, action) => {
@@ -56,6 +64,11 @@ export default (state: State = initState, action) => {
                 },
             }
         case REQUEST_RESET:
+            return {
+                ...state,
+                filters: getDefaultFilters(),
+            }
+        case CHANGE_INPUT:
             return {
                 ...state,
                 filters: getDefaultFilters(),

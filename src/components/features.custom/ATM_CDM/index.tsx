@@ -6,6 +6,7 @@ import * as Block from "~commons/block";
 import * as Button from "~commons/button";
 import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
+import * as Actions from "./actions";
 
 export type Props = Base.Props;
 
@@ -27,11 +28,16 @@ export const Element = (props: Props) => {
   const searchDataTableProps = {
     
   };
+  
+  const actionsProps = {
+    
+  };
 
   return (
     <Block.Element {...componentWrapperProps}>
       <SearchFilter.Element {...searchFilterProps}/>
       <SearchDataTable.Element {...searchDataTableProps}/>
+      <Actions.Element {...actionsProps}/>
     </Block.Element >
   )
 }

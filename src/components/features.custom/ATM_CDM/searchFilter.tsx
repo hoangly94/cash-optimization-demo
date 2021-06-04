@@ -53,24 +53,17 @@ export const Element = (props: Props) => {
   };
 
   const queryButtonProps: Button.Props = {
+    ...buttonProps,
     text: 'Query',
     isLoading: isLoading,
-    padding: Base.Padding.PX_38,
-    width: Base.Width.PX_150,
-    margin: Base.MarginRight.PX_18,
     backgroundColor: Base.BackgroundColor.GREEN,
-    color: Base.Color.WHITE,
-    borderRadius: Base.BorderRadius.PX_100,
     onClick: ()=> dispatch({ type: REQUEST_QUERY }),
   }
 
   const resetButtonProps: Button.Props = {
+    ...buttonProps,
     text: 'Reset',
-    padding: Base.Padding.PX_38,
-    width: Base.Width.PX_150,
-    backgroundColor: Base.BackgroundColor.BLACK,
-    color: Base.Color.WHITE,
-    borderRadius: Base.BorderRadius.PX_100,
+    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
     onClick: ()=> dispatch({ type: REQUEST_RESET }),
   }
 
@@ -94,6 +87,14 @@ export const Element = (props: Props) => {
         </Block.Element> */}
     </Block.Element >
   )
+}
+
+const buttonProps: Button.Props = {
+  padding: Base.Padding.PX_38,
+  width: Base.Width.PX_150,
+  color: Base.Color.WHITE,
+  borderRadius: Base.BorderRadius.PX_3,
+  margin: Base.MarginRight.PX_8,
 }
 
 const managementUnitsData = [

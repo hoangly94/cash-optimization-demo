@@ -9,6 +9,15 @@ export enum Theme {
     DARK = 'dark-theme',
 }
 
+export enum Position {
+    NONE = '',
+    RELATIVE = 'position-relative',
+    ABSOLUTE = 'position-absolute',
+    ABSOLUTE_CENTER = 'position-absolute-center',
+    FIXED_CENTER = 'position-fixed-center',
+}
+
+
 export enum Width {
     NONE = '',
     FULL = 'width-full',
@@ -44,6 +53,9 @@ export enum Width {
 export enum Height {
     NONE = '',
     FIT_SCREEN = 'height-fit-screen',
+    PX_30 = 'height-30px',
+    PX_40 = 'height-40px',
+    PX_50 = 'height-50px',
     PX_100 = 'height-100px',
     PX_150 = 'height-150px',
     PX_200 = 'height-200px',
@@ -64,6 +76,7 @@ export enum Padding {
     PX_18 = 'padding-18',
     PX_28 = 'padding-28',
     PX_38 = 'padding-38',
+    PX_68 = 'padding-68',
 }
 
 export enum PaddingV {
@@ -218,6 +231,8 @@ export enum BackgroundColor {
     GREEN = 'backgroundColor-green',
     RED = 'backgroundColor-red',
     CLASSIC_BLUE = 'backgroundColor-classic-blue',
+    TIGERLILY = 'backgroundColor-tigerlily',
+    ULTIMATE_GRAY = 'backgroundColor-ultimate-gray',
 }
 
 export enum FontStyle {
@@ -250,6 +265,7 @@ export enum WhiteSpace {
 
 export type Props = {
     theme?: Theme,
+    position?: Position,
     width?: Width,
     height?: Height,
     padding?: Padding | PaddingV | PaddingH,
@@ -279,6 +295,7 @@ export const mapProps = (
     elementClasses: string[] = [],
 ) => {
     const {
+        position = Position.NONE,
         width = Width.NONE,
         height = Height.NONE,
         padding = Padding.NONE,
@@ -303,6 +320,7 @@ export const mapProps = (
     
     const classProps = {
         className: Classnames(
+            styles[position],
             styles[width],
             styles[height],
             styles[padding],

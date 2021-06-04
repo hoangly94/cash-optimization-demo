@@ -12,12 +12,13 @@ import * as Table from "~commons/table";
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  console.log('=======================searchDataTable');
   const queryResult = useSelector(state => state['atmCdmSearch'].queryResult);
   //create props
   const componentWrapperProps = {
     margin:Base.MarginTop.PX_28,
-    height: Base.Height.PX_300,
+    style:{
+      maxHeight: '500px',
+    },
     ...props,
   };
 

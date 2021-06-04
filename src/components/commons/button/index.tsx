@@ -21,9 +21,10 @@ export type Props = Base.Props & {
   size?: Size,
   onClick?: React.MouseEventHandler,
   text?: string,
-  disabled?: boolean,
+  isDisabled?: boolean,
   href?: string,
   isLoading?: boolean,
+  children?: React.ReactNode,
 }
 
 export const Element = (props: Props) => {
@@ -32,9 +33,9 @@ export const Element = (props: Props) => {
     size = Size.M,
     onClick,
     text,
-    disabled,
-    href = '',
     isLoading = false,
+    isDisabled = false,
+    href = '',
   } = props;
 
   const newProps = {
@@ -44,28 +45,31 @@ export const Element = (props: Props) => {
     ...props,
   }
 
-  const onClickWithLoading = (e)=>{
-    if(!isLoading && onClick)
-      onClick(e);
-  }
 
-  const child = isLoading ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff'/> : text;
+  const child = isLoading ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff' /> : text;
+
+  const disabled = isDisabled ? 'disabled' : '';
 
   //create props
   const buttonProps = {
-    onClick: onClickWithLoading,
-    ...Base.mapProps(newProps, styles, [type, size]),
+    onClick: onClickWithLoading(isDisabled, isLoading, onClick),
+    ...Base.mapProps(newProps, styles, [type, size, disabled]),
   }
-  
+
   const element = href === ''
     ? <button {...buttonProps}>{child}</button>
     : /^http.+$/.test(href)
-      ? <a {...buttonProps}>{child}</a>  
+      ? <a {...buttonProps}>{child}</a>
       : <Link  {...buttonProps} to={href}>{child}</Link>;
 
   return (
     element
   )
+}
+
+const onClickWithLoading = (isDisabled: boolean, isLoading: boolean, onClick?: React.MouseEventHandler) => (e) => {
+  if (!isDisabled && !isLoading && onClick)
+    onClick(e);
 }
 
 Element.displayName = 'Button'
