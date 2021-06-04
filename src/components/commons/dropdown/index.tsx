@@ -72,7 +72,7 @@ export const Element = (props: Props) => {
       styles['dropdown-options'],
     ),
     backgroundColor: Base.BackgroundColor.WHITE,
-    padding: Base.Padding.PX_8,
+    // padding: Base.PaddingV.PX_5,
     style: {
       ...display,
     },
@@ -140,7 +140,7 @@ const itemClickedFunction = (setActiveItem: Function, clickData, setClickData: F
 const getActiveItem = ($itemList?: Item.Props[]): DropdownData => {
   const activeItems = $itemList?.filter($item => $item.active);
 
-  const activeItem = activeItems
+  const activeItem = activeItems?.length
     ? { value: activeItems[0].value, text: activeItems[0].$children?.text }
     : { value: '0', text: 'Default Text' };
 
@@ -153,11 +153,15 @@ const getActiveItem = ($itemList?: Item.Props[]): DropdownData => {
 
 const mapPropsToItemElement = (handleItemClick?: any) =>
   ($item?: Item.Props) => {
-    const onClick = handleItemClick ? { onClick: handleItemClick($item ?? {}) } : {};
     const itemProps = {
-      ...$item,
       key: $item?.value,
-      ...onClick,
+      padding: Base.Padding.PX_8,
+      ...$item,
+      onClick: (e)=>{
+        handleItemClick($item ?? {})(e);
+        if($item?.onClick)
+          $item.onClick(e);
+      },
     }
     return <Item.Element {...itemProps} />
   }

@@ -1,16 +1,22 @@
-import { SUBMIT, RESET, CREATE, EDIT, REQUEST_QUERY, FETCH_DATA, SHOW_DATA } from './constants'
+import { SUBMIT, RESET, CREATE, EDIT, REQUEST_QUERY,   FETCH_DATA, SHOW_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State } from './constants'
 import * as Base from '~/_settings';
 
-const initState = {
+const initState: State = {
     isLoading: false,
     filters: {
-        managementUnitName: '',
-        atmCdmStatus: '',
+        managementUnitName: {
+            text: 'Tên đơn vị quản lý',
+            value: '',
+        },
+        atmCdmStatus: {
+            text: 'Trạng thái ATM/CDM',
+            value: '',
+        },
     },
-    queryResult: { ...testData() },
+    queryResult: {},
 }
 
-export default (state = initState, action) => {
+export default (state: State = initState, action) => {
     switch (action.type) {
         case SUBMIT:
             return {
@@ -34,93 +40,31 @@ export default (state = initState, action) => {
                 isLoading: true,
             }
         case REQUEST_QUERY:
-            return {
-                ...state,
-                filters: {
-                    managementUnitName: action.filters.managementUnitName,
-                    atmCdmStatus: action.filters.atmCdmStatus,
-                },
-            }
+            return state
         case SHOW_DATA:
             return {
                 ...state,
                 isLoading: true,
                 queryResult: { ...action.queryResult },
             }
+        case SELECT_UNITNAME:
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    managementUnitName: action.filter,
+                },
+                managementUnitName: action.filter.text,
+            }
+        case SELECT_ATMCDMSTATUS:
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    atmCdmStatus: action.filter,
+                },
+            }
         default:
             return state
-    }
-}
-
-const tableData_$rows_$cells_title = {
-    whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
-}
-function testData() {
-    return {
-        $rows: [
-            {
-                backgroundColor: Base.BackgroundColor.CLASSIC_BLUE,
-                color: Base.Color.WHITE,
-                $cells: [
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'STT',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Mã ATM/CDM',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Tên ATM/CDM',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Loại máy ATM/CDM',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Địa chỉ ATM/CDM',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Trạng thái ATM/CDM',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Mã DVQL',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Tên DVQL',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Ngày đăng ký',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'NV đăng ký',
-                    },
-                    {
-                        ...tableData_$rows_$cells_title,
-                        children: 'Datelastmaint',
-                    },
-                ],
-            },
-            {
-                $cells: [
-                    {
-                        children: 'bbbb1',
-                    },
-                    {
-                        children: 'bbbb2',
-                    },
-                    {
-                        children: 'bbbb3',
-                    }
-                ],
-            },
-        ],
     }
 }

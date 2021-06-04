@@ -20,7 +20,7 @@ export const Element = (props: Props) => {
     type = Type.DEFAULT,
     $rows = [],
   } = props
-  console.log(styles[type]);
+
   //create props
   const componentProps = Base.mapProps(props, styles, [type]);
   // toTable($rows)

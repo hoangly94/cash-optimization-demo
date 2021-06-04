@@ -1,6 +1,9 @@
 import * as React from 'react'
 import Classnames from 'classnames'
 import styles from './_styles.css';
+import { createSelector } from 'reselect';
+import { useDispatch, useSelector } from 'react-redux';
+import { State, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, REQUEST_QUERY } from '~stores/atmCdm/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Button from "~commons/button";
@@ -9,23 +12,27 @@ import * as DropDown from "~commons/dropdown";
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
+  console.log('=======================searchFilter');
   //create props
   const componentWrapperProps = {
     flex: Base.Flex.START,
     alignItems: Base.AlignItems.STRETCH,
     ...props,
   };
+  const filters = useSelector((state: State) => state['atmCdmSearch'].filters);
+  const dispatch = useDispatch();
 
-  const searchFilterLeftProps = {
-    width: Base.Width.PER_60,
+  const handleOptionClick = (type, filter) => () => {
+    dispatch({ type: type, filter: filter })
   }
+
 
   const managementUnitsProps: DropDown.Props = {
     $selectorWrapper: {
-      defaultText: 'Tên đơn vị quản lý',
+      defaultText: filters.managementUnitName.text,
     },
     $optionsWrapper: {
-      $options: managementUnitsData,
+      $options: managementUnitsData.map(item => ({ ...item, onClick: handleOptionClick(SELECT_UNITNAME, item.$children) })),
       lineHeight: Base.LineHeight.L1,
     },
     width: Base.Width.PER_30,
@@ -34,24 +41,25 @@ export const Element = (props: Props) => {
 
   const atmCdmStatusProps: DropDown.Props = {
     $selectorWrapper: {
-      defaultText: 'Trạng thái ATM/CDM',
+      defaultText: filters.atmCdmStatus.text,
     },
     $optionsWrapper: {
-      $options: atmCdmStatusData,
+      $options: atmCdmStatusData.map(item => ({ ...item, onClick: handleOptionClick(SELECT_ATMCDMSTATUS, item.$children) })),
       lineHeight: Base.LineHeight.L1,
     },
     width: Base.Width.PER_30,
     margin: Base.MarginRight.PX_18,
   };
 
-  const queryButtonProps:Button.Props = {
+  const queryButtonProps: Button.Props = {
     text: 'Query',
     padding: Base.Padding.PX_38,
     width: Base.Width.PX_150,
     margin: Base.MarginRight.PX_38,
-    backgroundColor:Base.BackgroundColor.GREEN,
-    color:Base.Color.WHITE,
-    borderRadius:Base.BorderRadius.PX_100,
+    backgroundColor: Base.BackgroundColor.GREEN,
+    color: Base.Color.WHITE,
+    borderRadius: Base.BorderRadius.PX_100,
+    onClick: ()=> dispatch({ type: REQUEST_QUERY }),
   }
 
   return (
@@ -81,19 +89,22 @@ const managementUnitsData = [
     value: 1,
     $children: {
       text: 'name1',
+      value: 'name1',
     },
+
   },
   {
     value: 2,
     $children: {
       text: 'name2',
+      value: 'name2',
     },
-    active: true,
   },
   {
     value: 3,
     $children: {
       text: 'name3',
+      value: 'name3',
     },
   },
 ];
@@ -104,19 +115,21 @@ const atmCdmStatusData = [
     value: 1,
     $children: {
       text: 'atm1',
+      value: 'atm1',
     },
   },
   {
     value: 2,
     $children: {
       text: 'atm2',
+      value: 'atm2',
     },
-    active: true,
   },
   {
     value: 3,
     $children: {
-      text: 'atm3',
+      text: 'atm2',
+      value: 'atm3',
     },
   },
 ];

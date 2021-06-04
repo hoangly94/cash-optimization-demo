@@ -83,7 +83,7 @@
         "./src/components/pages/*"
       ],
       "~stores/*": [
-        "src/stores/*.ts"
+        "src/stores/*"
       ],
       "~utils/*": [
         "src/utils/*.tsx"

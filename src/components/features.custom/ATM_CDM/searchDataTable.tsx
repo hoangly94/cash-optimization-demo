@@ -1,5 +1,7 @@
 import * as React from 'react'
 import Classnames from 'classnames'
+import { useDispatch, useSelector } from 'react-redux';
+// import { State, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, REQUEST_QUERY } from '~stores/atmCdm/constants';
 import styles from './_styles.css';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
@@ -10,6 +12,8 @@ import * as Table from "~commons/table";
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
+  console.log('=======================searchDataTable');
+  const queryResult = useSelector(state => state['atmCdmSearch'].queryResult);
   //create props
   const componentWrapperProps = {
     margin:Base.MarginTop.PX_28,
@@ -18,7 +22,7 @@ export const Element = (props: Props) => {
   };
 
   const tableProps: Table.Props = {
-    ...tableData,
+    ...tableData(queryResult),
     // height: Base.Height.PX_300,
     backgroundColor: Base.BackgroundColor.WHITE,
     style:{
@@ -34,7 +38,7 @@ export const Element = (props: Props) => {
 const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
-const tableData:Table.Props = {
+const tableData = (queryResult):Table.Props => ({
   $rows:[
     {
       backgroundColor:Base.BackgroundColor.CLASSIC_BLUE,
@@ -86,19 +90,7 @@ const tableData:Table.Props = {
         },
       ],
     },
-    {
-      $cells:[
-        {
-          children: 'bbbb1',
-        },
-        {
-          children: 'bbbb2',
-        },
-        {
-          children: 'bbbb3',
-        }
-      ],
-    },
+    {...queryResult},
   ],
-}
+})
 

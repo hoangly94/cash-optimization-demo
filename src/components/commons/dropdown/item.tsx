@@ -22,7 +22,6 @@ export const Element = (props: Props) => {
     type = Type.DEFAULT,
     $children,
     active = false,
-    onClick,
   } = props;
 
   //create props

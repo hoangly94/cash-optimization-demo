@@ -25,3 +25,9 @@
     border-top:0;
     z-index:888;
 }
+.dropdown-options>div{
+    transition: background-color 0.5s,
+}
+.dropdown-options>div:hover{
+    background-color: #00000018;
+}
