@@ -26,3 +26,5 @@ export const Element = (props: Props): React.ReactElement => {
     <div {...componentProps}>{children}</div>
   )
 }
+
+Element.displayName = 'Row'

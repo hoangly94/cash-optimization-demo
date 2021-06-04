@@ -18,3 +18,5 @@ export const Element = (props: Props): React.ReactElement => {
     <main {...mainProps}>{children}</main>
   )
 }
+
+Element.displayName = 'Main'

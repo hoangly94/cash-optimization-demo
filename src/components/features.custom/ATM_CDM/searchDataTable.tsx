@@ -94,3 +94,5 @@ const tableData = (queryResult):Table.Props => ({
   ],
 })
 
+Element.displayName = 'SearchDataTable'
+

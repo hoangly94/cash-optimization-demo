@@ -1,13 +1,13 @@
 import * as React from 'react';
 import * as Base from '_/_settings';
 import styles from './_styles.css';
-import { Props, Type, Size, Direction } from './index';
+import { Props, Type, Size, Direction } from './';
 
 export default (props: Props) => {
     const {
         size = Size.M,
         direction = Direction.DOWN,
-        color,
+        fill,
     } = props;
 
     const rotateDegObj = {
@@ -23,7 +23,7 @@ export default (props: Props) => {
         style: {
             transform: `rotate(${rotateDegObj[direction]}deg)`,
             transformOrigin: '50% 50%',
-            fill: color,
+            fill: fill,
         }
     }
 

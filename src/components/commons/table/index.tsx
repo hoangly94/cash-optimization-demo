@@ -56,6 +56,8 @@ const toCell = ($cell: Cell.Props, index) => {
   return (<Cell.Element {...cellProps} />);
 }
 
+Element.displayName = 'Table'
+
 // const toTable = ($rows: Row.Props[]) => {
 //   const newTableData:any[][] = [...new Array($rows[0].$cells?.length)].map(()=> [] as Row.Props[]);
   

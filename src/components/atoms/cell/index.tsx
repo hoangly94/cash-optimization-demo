@@ -36,3 +36,5 @@ export {
   Type,
   Props,
 };
+
+Element.displayName = 'DashboardMenu'

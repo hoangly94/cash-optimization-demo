@@ -59,3 +59,5 @@ export {
   Type as CheckBoxType,
   Size as CheckBoxSize
 };
+
+Element.displayName = 'Checkbox'

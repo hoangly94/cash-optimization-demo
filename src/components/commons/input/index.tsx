@@ -1,6 +1,6 @@
 import * as React  from 'react'
 import Classnames from 'classnames'
-import styles from './styles.css'
+import styles from './_styles.css'
 // import baseCss from '../../_settings/_base.css'
 
 const Type = {
@@ -66,3 +66,5 @@ export {
   Theme as InputTheme,
   Size as InputSize
 };
+
+Element.displayName = 'Input'

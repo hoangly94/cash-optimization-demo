@@ -3,10 +3,14 @@
 .button {
     &{
         cursor: pointer;
-        transition: opacity 0.5s;
+        transition: opacity 0.5s, border 0.3s;
+        box-sizing:border-box;
     }
     &:active{
         opacity:0.5;
+    }
+    &:hover{
+        border:3px solid #45a1ff88;
     }
 }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Base from '_/_settings';
 import styles from './_styles.css';
-import { Props, Type, Size } from './index';
+import { Props, Type, Size } from './';
 
 export default (props: Props) => {
     const {

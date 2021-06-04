@@ -46,3 +46,5 @@ const mapChildrenElement = <T extends Text.Props | Link.Props | Button.Props | D
 }
 
 export const ItemChildrenType = Li.ChildrenType;
+
+Element.displayName = 'List'

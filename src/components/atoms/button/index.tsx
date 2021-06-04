@@ -54,6 +54,7 @@ export const Element = (props: Props) => {
   )
 }
 
+Element.displayName = 'Button'
 
 
 

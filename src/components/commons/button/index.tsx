@@ -3,6 +3,8 @@ import Classnames from 'classnames';
 import styles from './_styles.css'
 import { Link } from "react-router-dom";
 import * as Base from '~/_settings';
+import ThreeDotsLoader from '~commons/svg/threeDotsLoader';
+import * as Svg from '~commons/svg';
 
 export enum Type {
   DEFAULT = 'button',
@@ -21,6 +23,7 @@ export type Props = Base.Props & {
   text?: string,
   disabled?: boolean,
   href?: string,
+  isLoading?: boolean,
 }
 
 export const Element = (props: Props) => {
@@ -31,6 +34,7 @@ export const Element = (props: Props) => {
     text,
     disabled,
     href = '',
+    isLoading = false,
   } = props;
 
   const newProps = {
@@ -39,22 +43,32 @@ export const Element = (props: Props) => {
     border: Base.Border.SOLID,
     ...props,
   }
+
+  const onClickWithLoading = (e)=>{
+    if(!isLoading && onClick)
+      onClick(e);
+  }
+
+  const child = isLoading ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff'/> : text;
+
   //create props
   const buttonProps = {
-    onClick: onClick,
+    onClick: onClickWithLoading,
     ...Base.mapProps(newProps, styles, [type, size]),
   }
   
   const element = href === ''
-    ? <button {...buttonProps}>{text}</button>
+    ? <button {...buttonProps}>{child}</button>
     : /^http.+$/.test(href)
-      ? <a {...buttonProps}>{text}</a>  
-      : <Link  {...buttonProps} to={href}>{text}</Link>;
+      ? <a {...buttonProps}>{child}</a>  
+      : <Link  {...buttonProps} to={href}>{child}</Link>;
 
   return (
     element
   )
 }
+
+Element.displayName = 'Button'
 
 
 

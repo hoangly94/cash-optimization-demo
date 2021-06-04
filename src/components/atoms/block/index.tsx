@@ -25,3 +25,6 @@ export const Element = (props: Props): React.ReactElement => {
     <div {...blockProps} ref={refs}>{children}</div>
   )
 }
+
+Element.displayName = 'Block'
+

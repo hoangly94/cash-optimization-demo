@@ -7,6 +7,7 @@ export const REQUEST_QUERY = 'request_query';
 export const SHOW_DATA = 'show_data';
 export const SELECT_UNITNAME = 'select_unitname';
 export const SELECT_ATMCDMSTATUS = 'select_atmcdmstatus';
+export const REQUEST_RESET = 'request_reset';
 
 export type State = {
     isLoading: boolean,

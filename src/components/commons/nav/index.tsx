@@ -22,3 +22,5 @@ export const Element = (props: Props): React.ReactElement => {
     <nav {...blockProps} ref={refs} role="navigation">{children}</nav>
   )
 }
+
+Element.displayName = 'Nav'

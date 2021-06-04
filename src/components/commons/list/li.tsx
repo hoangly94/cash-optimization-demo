@@ -53,3 +53,5 @@ function convertElement<T extends Text.Props | Link.Props | Button.Props | DropD
       return <Text.Element {...($children as Text.Props)} />;
   }
 }
+
+Element.displayName = 'Li'

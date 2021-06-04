@@ -34,3 +34,7 @@ export {
   Type,
   Props,
 };
+
+Element.displayName = 'Footer'
+
+

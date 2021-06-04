@@ -30,3 +30,5 @@ export const Element = (props: Props): React.ReactElement => {
     <section {...sectionProps}>{children}</section>
   )
 }
+
+Element.displayName = 'Section'

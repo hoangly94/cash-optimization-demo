@@ -3,7 +3,7 @@ import Classnames from 'classnames'
 import styles from './_styles.css';
 import { createSelector } from 'reselect';
 import { useDispatch, useSelector } from 'react-redux';
-import { State, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, REQUEST_QUERY } from '~stores/atmCdm/constants';
+import { State, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, REQUEST_QUERY, REQUEST_RESET } from '~stores/atmCdm/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Button from "~commons/button";
@@ -20,12 +20,13 @@ export const Element = (props: Props) => {
     ...props,
   };
   const filters = useSelector((state: State) => state['atmCdmSearch'].filters);
+  const isLoading = useSelector((state: State) => state['atmCdmSearch'].isLoading);
+
   const dispatch = useDispatch();
 
   const handleOptionClick = (type, filter) => () => {
     dispatch({ type: type, filter: filter })
   }
-
 
   const managementUnitsProps: DropDown.Props = {
     $selectorWrapper: {
@@ -53,21 +54,32 @@ export const Element = (props: Props) => {
 
   const queryButtonProps: Button.Props = {
     text: 'Query',
+    isLoading: isLoading,
     padding: Base.Padding.PX_38,
     width: Base.Width.PX_150,
-    margin: Base.MarginRight.PX_38,
+    margin: Base.MarginRight.PX_18,
     backgroundColor: Base.BackgroundColor.GREEN,
     color: Base.Color.WHITE,
     borderRadius: Base.BorderRadius.PX_100,
     onClick: ()=> dispatch({ type: REQUEST_QUERY }),
   }
 
+  const resetButtonProps: Button.Props = {
+    text: 'Reset',
+    padding: Base.Padding.PX_38,
+    width: Base.Width.PX_150,
+    backgroundColor: Base.BackgroundColor.BLACK,
+    color: Base.Color.WHITE,
+    borderRadius: Base.BorderRadius.PX_100,
+    onClick: ()=> dispatch({ type: REQUEST_RESET }),
+  }
+
   return (
     <Block.Element {...componentWrapperProps}>
-
       <DropDown.Element {...managementUnitsProps} />
       <DropDown.Element {...atmCdmStatusProps} />
       <Button.Element {...queryButtonProps}></Button.Element>
+      <Button.Element {...resetButtonProps}></Button.Element>
 
 
 
@@ -134,6 +146,7 @@ const atmCdmStatusData = [
   },
 ];
 
+Element.displayName = 'SearchFilter'
 
 
 

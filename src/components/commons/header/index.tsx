@@ -33,3 +33,5 @@ export {
   Type,
   Props,
 };
+
+Element.displayName = 'Header'

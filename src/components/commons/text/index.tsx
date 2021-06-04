@@ -38,3 +38,5 @@ export const Element = (props: Props) => {
     </div>
   )
 }
+
+Element.displayName = 'Text'

@@ -33,9 +33,9 @@ export const Element = (props: Props) => {
     disable = false,
   } = props;
 
-  const defaultSelectorText = $selectorWrapper?.defaultText ? {text: $selectorWrapper.defaultText} : null;
+  // const defaultSelectorText = $selectorWrapper?.defaultText ? { text: $selectorWrapper.defaultText } : null;
   // const [isOpenedDropdown, setIsOpenedDropdown] = useState(false);
-  const [activeItem, setActiveItem] = useState(defaultSelectorText ?? getActiveItem($optionsWrapper?.$options));
+  // const [activeItem, setActiveItem] = useState(defaultSelectorText ?? getActiveItem($optionsWrapper?.$options));
 
   const {
     ref,
@@ -53,8 +53,10 @@ export const Element = (props: Props) => {
   };
 
   const textProps: Text.Props = {
-    text: activeItem?.text,
+    // text: activeItem?.text,
+    text: $selectorWrapper?.defaultText ?? 'Default Text',
   };
+
   const selectorWrapperProps: Block.Props = {
     classNames: Classnames(
       styles['dropdown-selector'],
@@ -86,7 +88,8 @@ export const Element = (props: Props) => {
         <Caret {...caretProps} />
       </Block.Element>
       <Block.Element {...optionsWrapperProps}>
-        {$optionsWrapper?.$options?.map(mapPropsToItemElement(handleItemClick(itemClickedFunction(setActiveItem, clickData, setClickData))))}
+        {/* {$optionsWrapper?.$options?.map(mapPropsToItemElement(handleItemClick(itemClickedFunction(setActiveItem, clickData, setClickData))))} */}
+        {$optionsWrapper?.$options?.map(mapPropsToItemElement(handleItemClick))}
       </Block.Element>
     </Block.Element>
   )
@@ -105,7 +108,7 @@ type ActiveItem = {
 type DropdownData = {
   value?: string | number,
   text?: string,
-  activeItemList?: ActiveItem[],
+  // activeItemList?: ActiveItem[],
 }
 
 const handleDropdownOpenCloseClick = (clickData, setClickData: Function) => {
@@ -122,47 +125,49 @@ const handleItemClick = (itemClickedFunction: any,) => {
   }
 }
 
-const itemClickedFunction = (setActiveItem: Function, clickData, setClickData: Function) => {
-  return ($item: Item.Props) => {
-    //hide dropdown data list
-    clickData.isOutside = true;
-    setClickData(clickData);
+// const itemClickedFunction = (setActiveItem: Function, clickData, setClickData: Function) => {
+//   return ($item: Item.Props) => {
+//     //hide dropdown data list
+//     clickData.isOutside = true;
+//     setClickData(clickData);
 
-    const dropdownData: DropdownData = {
-      value: $item.value,
-      text: $item.$children?.text,
-      activeItemList: [],
-    }
-    setActiveItem(dropdownData);
-  }
-}
+//     const dropdownData: DropdownData = {
+//       value: $item.value,
+//       text: $item.$children?.text,
+//       // activeItemList: [],
+//     }
+//     setActiveItem(dropdownData);
+//   }
+// }
 
-const getActiveItem = ($itemList?: Item.Props[]): DropdownData => {
-  const activeItems = $itemList?.filter($item => $item.active);
+// const getActiveItem = ($itemList?: Item.Props[]): DropdownData => {
+//   const activeItems = $itemList?.filter($item => $item.active);
 
-  const activeItem = activeItems?.length
-    ? { value: activeItems[0].value, text: activeItems[0].$children?.text }
-    : { value: '0', text: 'Default Text' };
+//   const activeItem = activeItems?.length
+//     ? { value: activeItems[0].value, text: activeItems[0].$children?.text }
+//     : { value: '0', text: 'Default Text' };
 
-  const activeItemList = activeItems?.map(item => ({ value: activeItems[0].value, text: activeItems[0].$children?.text }));
-  return {
-    ...activeItem,
-    activeItemList: activeItemList ?? [],
-  }
-}
+//   const activeItemList = activeItems?.map(item => ({ value: activeItems[0].value, text: activeItems[0].$children?.text }));
+//   return {
+//     ...activeItem,
+//     // activeItemList: activeItemList ?? [],
+//   }
+// }
 
+// const mapPropsToItemElement = (handleItemClick?: any) =>
 const mapPropsToItemElement = (handleItemClick?: any) =>
   ($item?: Item.Props) => {
     const itemProps = {
       key: $item?.value,
       padding: Base.Padding.PX_8,
       ...$item,
-      onClick: (e)=>{
+      onClick: (e) => {
         handleItemClick($item ?? {})(e);
-        if($item?.onClick)
+        if ($item?.onClick)
           $item.onClick(e);
       },
     }
     return <Item.Element {...itemProps} />
   }
 
+Element.displayName = 'Select'

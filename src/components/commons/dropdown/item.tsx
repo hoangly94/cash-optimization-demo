@@ -42,3 +42,5 @@ export const Element = (props: Props) => {
     </Block.Element>
   )
 }
+
+Element.displayName = 'Option'

@@ -69,3 +69,5 @@ export const Element = (props: Props): React.ReactElement => {
     linkElement
   )
 }
+
+Element.displayName = 'Link'

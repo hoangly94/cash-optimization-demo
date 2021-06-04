@@ -42,3 +42,5 @@ const mapPropsToLinkElemets = ($link: Link.Props) => {
   };
   return <Link.Element {...linkProps} />
 }
+
+Element.displayName = 'TopMenu'

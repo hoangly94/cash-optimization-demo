@@ -59,3 +59,5 @@ export {
   Type as RadioType,
   Size as RadioSize
 };
+
+Element.displayName = 'Radio'

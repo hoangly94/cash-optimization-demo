@@ -1,18 +1,9 @@
-import { SUBMIT, RESET, CREATE, EDIT, REQUEST_QUERY,   FETCH_DATA, SHOW_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State } from './constants'
+import { SUBMIT, RESET, CREATE, EDIT, REQUEST_QUERY, FETCH_DATA, SHOW_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET } from './constants'
 import * as Base from '~/_settings';
 
 const initState: State = {
     isLoading: false,
-    filters: {
-        managementUnitName: {
-            text: 'Tên đơn vị quản lý',
-            value: '',
-        },
-        atmCdmStatus: {
-            text: 'Trạng thái ATM/CDM',
-            value: '',
-        },
-    },
+    filters: getDefaultFilters(),
     queryResult: {},
 }
 
@@ -44,7 +35,7 @@ export default (state: State = initState, action) => {
         case SHOW_DATA:
             return {
                 ...state,
-                isLoading: true,
+                isLoading: false,
                 queryResult: { ...action.queryResult },
             }
         case SELECT_UNITNAME:
@@ -64,7 +55,25 @@ export default (state: State = initState, action) => {
                     atmCdmStatus: action.filter,
                 },
             }
+        case REQUEST_RESET:
+            return {
+                ...state,
+                filters: getDefaultFilters(),
+            }
         default:
             return state
+    }
+}
+
+function getDefaultFilters() {
+    return {
+        managementUnitName: {
+            text: 'Tên đơn vị quản lý',
+            value: '',
+        },
+        atmCdmStatus: {
+            text: 'Trạng thái ATM/CDM',
+            value: '',
+        },
     }
 }
