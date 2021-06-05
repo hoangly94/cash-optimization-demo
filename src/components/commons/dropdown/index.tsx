@@ -15,14 +15,15 @@ export enum Type {
 
 export type Props = Base.Props & {
   type?: Type,
-  $selectorWrapper?: Base.Props & Block.Props & {
+  $selectorWrapper?: Block.Props & {
     //default text
     defaultText?: string,
   }
-  $optionsWrapper?: Base.Props & Block.Props & {
+  $optionsWrapper?: Block.Props & {
     $options?: Item.Props[],
   },
   disable?: boolean,
+  isDisabled?: boolean,
 }
 
 export const Element = (props: Props) => {
@@ -30,12 +31,14 @@ export const Element = (props: Props) => {
     type = Type.DEFAULT,
     $selectorWrapper,
     $optionsWrapper,
-    disable = false,
+    isDisabled = false,
   } = props;
 
   // const defaultSelectorText = $selectorWrapper?.defaultText ? { text: $selectorWrapper.defaultText } : null;
   // const [isOpenedDropdown, setIsOpenedDropdown] = useState(false);
   // const [activeItem, setActiveItem] = useState(defaultSelectorText ?? getActiveItem($optionsWrapper?.$options));
+
+  const disabled = isDisabled ? 'disabled' : '';
 
   const {
     ref,
@@ -60,6 +63,7 @@ export const Element = (props: Props) => {
   const selectorWrapperProps: Block.Props = {
     classNames: Classnames(
       styles['dropdown-selector'],
+      styles[disabled],
     ),
     backgroundColor: Base.BackgroundColor.WHITE,
     padding: Base.Padding.PX_8,
@@ -89,7 +93,7 @@ export const Element = (props: Props) => {
       </Block.Element>
       <Block.Element {...optionsWrapperProps}>
         {/* {$optionsWrapper?.$options?.map(mapPropsToItemElement(handleItemClick(itemClickedFunction(setActiveItem, clickData, setClickData))))} */}
-        {$optionsWrapper?.$options?.map(mapPropsToItemElement(handleItemClick))}
+        {$optionsWrapper?.$options?.map(mapPropsToItemElement(handleItemClick(isDisabled)))}
       </Block.Element>
     </Block.Element>
   )
@@ -116,11 +120,12 @@ const handleDropdownOpenCloseClick = (clickData, setClickData: Function) => {
   }
 }
 
-const handleItemClick = (itemClickedFunction: any,) => {
+const handleItemClick = (isDisabled: boolean) => (itemClickedFunction: any,) => {
   return ($item: Item.Props) => {
     return (e) => {
       e.stopPropagation();
-      itemClickedFunction($item);
+      if (!isDisabled)
+        itemClickedFunction($item);
     }
   }
 }
@@ -169,5 +174,6 @@ const mapPropsToItemElement = (handleItemClick?: any) =>
     }
     return <Item.Element {...itemProps} />
   }
+
 
 Element.displayName = 'Select'

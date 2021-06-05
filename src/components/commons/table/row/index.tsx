@@ -10,20 +10,38 @@ export enum Type {
 export type Props = Base.Props & {
   type?: Type,
   $cells?: Cell.Props[],
+  isSelected?: boolean,
   children?: React.ReactNode,
+  onClick?: React.MouseEventHandler,
 }
 
 export const Element = (props: Props): React.ReactElement => {
   const {
     type = Type.DEFAULT,
+    isSelected = false,
     children,
+    onClick,
   } = props;
 
+  const backgroundColorProps = isSelected
+    ? {
+      backgroundColor: Base.BackgroundColor.BRIGHT_GRAY,
+    }
+    : null
+
+  const newProps = {
+    ...props,
+    ...backgroundColorProps,
+  }
+
+  const handleClick = onClick ? {onClick: onClick} : null
+
   //create props
-  const componentProps = Base.mapProps(props, styles, [type]);
+  const componentProps = Base.mapProps(newProps, styles, [type]);
+
 
   return (
-    <div {...componentProps}>{children}</div>
+    <div {...componentProps} {...handleClick}>{children}</div>
   )
 }
 

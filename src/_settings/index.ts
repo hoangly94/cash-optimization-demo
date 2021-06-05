@@ -233,6 +233,7 @@ export enum BackgroundColor {
     CLASSIC_BLUE = 'backgroundColor-classic-blue',
     TIGERLILY = 'backgroundColor-tigerlily',
     ULTIMATE_GRAY = 'backgroundColor-ultimate-gray',
+    BRIGHT_GRAY = 'backgroundColor-bright-gray',
 }
 
 export enum FontStyle {

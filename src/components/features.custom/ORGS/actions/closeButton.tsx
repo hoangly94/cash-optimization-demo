@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import Classnames from 'classnames'
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
-import * as Title from "~commons/title";
-import * as Popup from "./historyPopup";
+import * as Popup from "~commons/popup";
 import { buttonProps, handlePopupClick, popupProps } from ".";
 
 export const Element = () => {
@@ -11,8 +10,8 @@ export const Element = () => {
 
   const buttonComponentProps: Button.Props = {
     ...buttonProps,
-    text: 'History',
-    backgroundColor: Base.BackgroundColor.TIGERLILY,
+    text: 'close',
+    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
     onClick: handlePopupClick(creatingPopupStatus, setCreatingPopupStatus),
   }
 
@@ -20,22 +19,16 @@ export const Element = () => {
     ...popupProps,
     isShown: creatingPopupStatus,
     setIsShown: setCreatingPopupStatus,
-    $title:{
-      tagType: Title.TagType.H2,
-      text: 'HISTORY'
-    },
-    $content: {
-      width: Base.Width.PX_1200,
-    },
   }
 
   return (
     <>
       <Button.Element {...buttonComponentProps}></Button.Element>
-      <Popup.Element {...popupComponentProps} />
+      {/* <Popup.Element {...popupComponentProps}>
+        <Button.Element {...buttonComponentProps}></Button.Element>
+      </Popup.Element> */}
     </>
   )
 }
-
 export default Element;
 Element.displayName = 'Actions_Button'

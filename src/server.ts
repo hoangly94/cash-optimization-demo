@@ -4,9 +4,12 @@ import index from "./routes/index";
 import path from "path";
 import fs from "fs";
 import ReactDOMServer from "react-dom/server";
+import {hydrate} from "react-dom";
 import React from "react";
 import Home from "./components/pages/home"
 import Index from "./components/pages"
+import Dashboard from "./components/pages/dashboard"
+import * as Dasboard from "~templates/dashboard";
 
 // Server var
 // const app = express();
@@ -44,18 +47,22 @@ const manifest = fs.readFileSync(
 const assets = JSON.parse(manifest);
 
 server.get("/", (req, res) => {
-    const component = ReactDOMServer.renderToString(React.createElement(Index));
-    res.render("pages/index", { assets, component });
-});
-server.get("/index", (req, res) => {
-    const component = ReactDOMServer.renderToString(React.createElement(Index));
-    res.render("pages/index", { assets, component });
+    
+    // res.send(hydrate(<Dasboard.Element />, document.getElementById("root")));
+    // res.send(hydrate(<Dashboard />, document.getElementById("root")));
+//     const component = ReactDOMServer.renderToNodeStream(React.createElement(Index));
+    res.render("pages/index", { assets });
 });
 
-server.get("/home", (req, res) => {
-    const component = ReactDOMServer.renderToString(React.createElement(Home));
-    res.render("pages/home", { assets, component });
-});
+// server.get("/index", (req, res) => {
+//     const component = ReactDOMServer.renderToNodeStream(React.createElement(Index));
+//     res.render("pages/index", { assets, component });
+// });
+
+// server.get("/home", (req, res) => {
+//     const component = ReactDOMServer.renderToNodeStream(React.createElement(Home));
+//     res.render("pages/home", { assets, component });
+// });
 
 server.listen(3000, () => {
     console.log(`Server running on http://localhost:3000`);

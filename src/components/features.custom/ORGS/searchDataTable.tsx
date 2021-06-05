@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Classnames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROW } from '~stores/atmCdm/constants';
+import { SELECT_ROW } from '~stores/orgs/constants';
 import styles from './_styles.css';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
@@ -13,7 +13,7 @@ import { getCurrentDate } from '@utils';
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  const queryResult = useSelector(state => state['atmCdm'].queryResult);
+  const queryResult = useSelector(state => state['orgs'].queryResult);
   const dispatch = useDispatch();
 
   //create props
@@ -26,7 +26,7 @@ export const Element = (props: Props) => {
     },
     ...props,
   };
-
+  console.log(queryResult);
   const tableProps: Table.Props = {
     ...tableData(queryResult.map(mapResponseToData(handleRowClick(dispatch)))),
     // height: Base.Height.PX_300,
@@ -62,31 +62,35 @@ const tableData = (queryResult): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã ATM/CDM',
+          children: 'Mã ĐV',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên ATM/CDM',
+          children: 'Tên ĐV',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Loại máy ATM/CDM',
+          children: 'Địa chỉ Đơn vị',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Địa chỉ ATM/CDM',
+          children: 'Mã cụm',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Trạng thái ATM/CDM',
+          children: 'Tên cụm',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã DVQL',
+          children: 'Mã ĐVQL',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên DVQL',
+          children: 'Tên ĐVQL',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'KC đến ĐVQL',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -115,25 +119,28 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.atmCdmCode,
+      children: item.orgsCode,
     },
     {
-      children: item.atmCdmName,
+      children: item.orgsName,
     },
     {
-      children: item.atmCdmType,
+      children: item.orgsAddress,
     },
     {
-      children: item.atmAddress,
+      children: item.areaCode,
     },
     {
-      children: item.atmStatus,
+      children: item.areaName,
     },
     {
-      children: item.categoryOrgs.orgsCode,
+      children: item.orgsParentId,
     },
     {
-      children: item.categoryOrgs.orgsName,
+      children: item.orgsParentId,
+    },
+    {
+      children: item.dvqlKc,
     },
     {
       children: getCurrentDate(item.createddate),

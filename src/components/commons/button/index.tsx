@@ -11,9 +11,12 @@ export enum Type {
 }
 
 export enum Size {
+  S1 = 'size-s1',
   S = 'size-s',
   M = 'size-m',
   L = 'size-l',
+  L1 = 'size-l1',
+  L2 = 'size-l2',
 }
 
 export type Props = Base.Props & {
@@ -39,7 +42,7 @@ export const Element = (props: Props) => {
   } = props;
 
   const newProps = {
-    padding: Base.Padding.PX_8,
+    // padding: Base.Padding.PX_8,
     backgroundColor: Base.BackgroundColor.WHITE,
     border: Base.Border.SOLID,
     ...props,

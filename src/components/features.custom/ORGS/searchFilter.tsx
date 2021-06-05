@@ -1,68 +1,56 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import Classnames from 'classnames'
 import styles from './_styles.css';
 import { createSelector } from 'reselect';
+import { debounce } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import { State, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, REQUEST_QUERY, REQUEST_RESET, REQUEST_ORGS_LIST } from '~stores/atmCdm/constants';
+import { State, SELECT_AREA_FILTER, CHANGE_ORGS_CODE_FILTER, REQUEST_QUERY, REQUEST_RESET } from '~stores/orgs/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Button from "~commons/button";
 import * as DropDown from "~commons/dropdown";
+import * as Input from "~commons/input";
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  console.log('=======================searchFilter');
+  console.log('=======================searchFilter orgs');
   useEffect(() => {
-    dispatch({ type: REQUEST_ORGS_LIST });
-    dispatch({ type: REQUEST_QUERY });
+    dispatch({ type: REQUEST_QUERY })
   }, [])
 
-  const orgsListSelector = useSelector(state => state['atmCdm'].orgsList);
 
+  
   //create props
   const componentWrapperProps = {
     flex: Base.Flex.START,
     alignItems: Base.AlignItems.STRETCH,
     ...props,
   };
-  const filters = useSelector((state: State) => state['atmCdm'].filters);
-  const isQueryButtonLoading = useSelector((state: State) => state['atmCdm'].filters.queryButton.isLoading);
+
+  const filters = useSelector((state: State) => state['orgs'].filters);
+  const isQueryButtonLoading = useSelector((state: State) => state['orgs'].filters.queryButton.isLoading);
+  const orgsCodeRef = useRef(null);
 
   const dispatch = useDispatch();
 
   const handleOptionClick = (dispatch, type, filter) => () => {
     dispatch({ type: type, filter: filter })
   }
-  
-  const orgsOptions = orgsListSelector.map(item => {
-    const children = { text: item.orgsName, value: item.id };
-    return {
-      ...{ $children: children },
-      onClick: handleOptionClick(dispatch, SELECT_UNITNAME, children)
-    };
-  });
 
-  const managementUnitsProps: DropDown.Props = {
+  const areaNameProps: DropDown.Props = {
     $selectorWrapper: {
-      defaultText: filters.managementUnitName.text,
+      defaultText: filters.area.text,
     },
     $optionsWrapper: {
-      $options: orgsOptions,
+      $options: managementUnitsData.map(item => ({ ...item, onClick: handleOptionClick(dispatch, SELECT_AREA_FILTER, item.$children) })),
       lineHeight: Base.LineHeight.L1,
     },
     width: Base.Width.PER_30,
     margin: Base.MarginRight.PX_18,
   };
 
-  const atmCdmStatusProps: DropDown.Props = {
-    $selectorWrapper: {
-      defaultText: filters.atmCdmStatus.text,
-    },
-    $optionsWrapper: {
-      $options: atmCdmStatusData.map(item => ({ ...item, onClick: handleOptionClick(dispatch, SELECT_ATMCDMSTATUS, item.$children) })),
-      lineHeight: Base.LineHeight.L1,
-    },
+  const orgsCodeProps: Input.Props = {
     width: Base.Width.PER_30,
     margin: Base.MarginRight.PX_18,
   };
@@ -82,12 +70,14 @@ export const Element = (props: Props) => {
     onClick: () => dispatch({ type: REQUEST_RESET }),
   }
 
+  const orgsCodeOnChange = handleInputChange(dispatch);
+
   return (
     <Block.Element {...componentWrapperProps}>
-      <DropDown.Element {...managementUnitsProps} />
-      <DropDown.Element {...atmCdmStatusProps} />
-      <Button.Element {...queryButtonProps}></Button.Element>
-      <Button.Element {...resetButtonProps}></Button.Element>
+      <DropDown.Element {...areaNameProps} />
+      <Input.Element placeholder='Mã đơn vị' refs={orgsCodeRef} {...orgsCodeProps} onChange={orgsCodeOnChange} />
+      <Button.Element {...queryButtonProps} />
+      <Button.Element {...resetButtonProps} />
 
 
 
@@ -104,6 +94,10 @@ export const Element = (props: Props) => {
   )
 }
 
+const handleInputChange = (dispatch) => debounce((e) => {
+  dispatch({ type: CHANGE_ORGS_CODE_FILTER, data:  e.target.value });
+}, 300)
+
 const buttonProps: Button.Props = {
   // padding: Base.Padding.PX_38,
   width: Base.Width.PX_150,
@@ -114,6 +108,7 @@ const buttonProps: Button.Props = {
 
 const managementUnitsData = [
   {
+    value: 1,
     $children: {
       text: '1',
       value: '1',
@@ -121,12 +116,14 @@ const managementUnitsData = [
 
   },
   {
+    value: 2,
     $children: {
       text: '2',
       value: '2',
     },
   },
   {
+    value: 3,
     $children: {
       text: '3',
       value: '3',
@@ -139,21 +136,21 @@ const atmCdmStatusData = [
   {
     value: 1,
     $children: {
-      text: 'atm1',
+      text: '1',
       value: '1',
     },
   },
   {
     value: 2,
     $children: {
-      text: 'atm2',
+      text: '2',
       value: '2',
     },
   },
   {
     value: 3,
     $children: {
-      text: 'atm2',
+      text: '3',
       value: '3',
     },
   },

@@ -15,41 +15,68 @@ export enum Size {
   L = 'size-l',
   L1 = 'size-l1',
 }
+export enum ValueType {
+  NUMBER = 'number',
+  PASSWORD = 'password',
+}
 
 export type Props = Base.Props & {
   type?: string,
   size?: Size,
   // onClick?: React.MouseEventHandler,
-  onChange: React.ChangeEventHandler<HTMLInputElement>,
+  onChange?: React.ChangeEventHandler<HTMLInputElement>,
   placeholder?: string,
   value?: string,
   isDisabled?: boolean,
+  pattern?:string,
+  valueType?: ValueType,
 }
 
 export const Element = (props: Props) => {
   const {
-    type = Type.DEFAULT,
+    type = "text",
     size = Size.M,
     onChange,
     placeholder = '',
-    value = '',
+    value,
     isDisabled = false,
+    refs,
+    pattern,
+    valueType,
   } = props
 
+  const disabled = isDisabled ? 'disabled' : '';
+
+  const valueProp = value ? {value:value}: {}
+  const onChangeProp = onChange ? {onChange:onChange}: {}
+  const handleKeyPress = valueType === ValueType.NUMBER ? {onKeyPress: validateNumber} : null;
   //create props
   const componentProps = {
+    type: type,
     padding:Base.Padding.PX_8,
-    ...Base.mapProps(props, styles, [type, size]),
+    ...Base.mapProps(props, styles, ['input',size, disabled]),
     // onClick:onClick,
-    onChange:onChange,
+    ...onChangeProp,
     placeholder: placeholder,
-    value: value,
+    ...valueProp,
     disabled: isDisabled,
+    ref:refs,
+    pattern: pattern,
+    ...handleKeyPress,
   };
 
   return (
     <input {...componentProps} />
   )
+}
+
+const validateNumber=(e)=>{
+  console.log('+++++++++++');
+  console.log(e.key);
+  // const regex = /^[0-9\b]+$/;
+  // console.log(regex.test(e.target.value));
+  if(isNaN(e.key))
+    e.preventDefault();
 }
 
 Element.displayName = 'Input'

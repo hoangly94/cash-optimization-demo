@@ -3,7 +3,7 @@
 .cell {
   &{
     display:table-cell;
-    /* border:1px solid #cdcdcd; */
+    border:1px solid #cdcdcd;
   }
   &-title{
     font-weight:bold;

@@ -1,7 +1,7 @@
 import React from "react";
 
-import {hydrate} from "react-dom";
+import {hydrate, render} from "react-dom";
 
 import Index from '../components/pages'
 
-hydrate(<Index />, document.getElementById("root"));
+render(<Index />, document.getElementById("root"));

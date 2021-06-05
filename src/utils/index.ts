@@ -6,8 +6,8 @@ export const _Object = {
     }
 };
 
-export const getCurrentDate = () => {
-    const date = new Date();
+export const getCurrentDate = (dateString?:string) => {
+    const date = dateString ? new Date(dateString) : new Date();
     var dd = String(date.getDate()).padStart(2, '0');
     var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = date.getFullYear();

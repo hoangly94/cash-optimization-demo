@@ -1,7 +1,8 @@
 @import '../../../_settings/_variables.css';
 
 .input {
-  
+  box-sizing: border-box;
+  border:1px solid #cdcdcd;
 }
 
 
@@ -22,4 +23,9 @@
 }
 .size-l1 {
   padding: 28px;
+}
+
+.disabled{
+    background-color:#ececec;
+    cursor: not-allowed;
 }

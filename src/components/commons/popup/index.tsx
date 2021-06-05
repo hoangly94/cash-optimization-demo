@@ -30,7 +30,6 @@ export const Element = (props: Props) => {
     isShown = true,
     setIsShown,
     children,
-    onClick,
   } = props;
 
   //create props
@@ -66,6 +65,7 @@ export const Element = (props: Props) => {
 
   const titleProps = {
     ...$title,
+    textAlign: Base.TextAlign.CENTER,
   };
 
   return (

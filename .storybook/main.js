@@ -42,6 +42,7 @@ module.exports = {
   webpackFinal: async (config) => {
     config.resolve.extensions.push('.tsx', '.ts', '.js', '.jsx', ".css");
     config.resolve.alias = {
+      '@config': path.resolve(__dirname, 'config/index.tsx'),
       '_': path.resolve(__dirname, '../src/'),
       '_components': path.resolve(__dirname, '../src/components/'),
       '_atoms': path.resolve(__dirname, '../src/components/atoms/'),

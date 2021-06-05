@@ -22,6 +22,9 @@
     //set absolute path
     "baseUrl": ".",
     "paths": {
+      "@config": [
+        "config/index.ts"
+      ],
       "_/*": [
         "./src/*"
       ],

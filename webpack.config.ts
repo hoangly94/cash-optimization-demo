@@ -126,6 +126,7 @@ export default {
     // modules: [path.join(__dirname, '..', 'src'), path.join(__dirname, '..', 'node_modules')],
     extensions: ['.tsx', '.ts', '.js', '.jsx', ".css"],
     alias: {
+      '@config': path.resolve(__dirname, 'config/index.ts'),
       '_': path.resolve(__dirname, 'src/'),
       '_components': path.resolve(__dirname, 'src/components/'),
       '_atoms': path.resolve(__dirname, 'src/components/atoms/'),

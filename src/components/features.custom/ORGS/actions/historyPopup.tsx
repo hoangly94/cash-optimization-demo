@@ -1,19 +1,27 @@
-import * as React from 'react'
+import React, { useRef, useState } from 'react'
 import Classnames from 'classnames'
+import debounce from 'lodash.debounce';
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROW } from '~stores/atmCdm/constants';
-import styles from './_styles.css';
+import { SELECT_ROW } from '~stores/orgs/constants';
 import * as Base from '~/_settings';
-import * as Block from "~commons/block";
 import * as Button from "~commons/button";
-import * as DropDown from "~commons/dropdown";
+import * as Popup from "~commons/popup";
+import * as Input from "~commons/input";
+import * as Title from "~commons/title";
+import * as Block from "~commons/block";
 import * as Table from "~commons/table";
-import { getCurrentDate } from '@utils';
+import * as Dropdown from "~commons/dropdown";
+import { getCurrentDate } from "@utils";
 
-export type Props = Base.Props;
+export type Props = Popup.Props;
 
-export const Element = (props: Props) => {
-  const queryResult = useSelector(state => state['atmCdm'].queryResult);
+export const Element = (props: Popup.Props) => {
+  const {
+    setIsShown,
+  } = props;
+  console.log('================History Popup');
+
+  const queryResult = useSelector(state => state['orgs'].queryResult);
   const dispatch = useDispatch();
 
   //create props
@@ -28,19 +36,46 @@ export const Element = (props: Props) => {
   };
 
   const tableProps: Table.Props = {
-    ...tableData(queryResult.map(mapResponseToData(handleRowClick(dispatch)))),
+    ...tableData(queryResult.map(mapResponseToData)),
     // height: Base.Height.PX_300,
     backgroundColor: Base.BackgroundColor.WHITE,
-    style: {
+    margin:Base.MarginBottom.PX_18,
+  }
 
-    }
+
+
+  const handleCloseButtonClick = () => {
+    if (setIsShown)
+      setIsShown(false)
+  }
+  const closeButtonProps: Button.Props = {
+    text: 'Close',
+    width: Base.Width.PX_200,
+    color: Base.Color.WHITE,
+    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+    onClick: handleCloseButtonClick,
   }
   return (
-    <Block.Element {...componentWrapperProps}>
+    <Popup.Element {...props}>
       <Table.Element {...tableProps} />
-    </Block.Element >
+      <Block.Element {...actionsWrapperProps}>
+        <Block.Element {...actionsProps}>
+          <Button.Element {...closeButtonProps} />
+        </Block.Element>
+      </Block.Element>
+    </Popup.Element>
   )
 }
+
+const actionsWrapperProps: Block.Props = {
+  flex: Base.Flex.END,
+}
+
+const actionsProps: Block.Props = {
+  flex: Base.Flex.END,
+  width: Base.Width.PER_70,
+}
+
 
 const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
@@ -62,31 +97,35 @@ const tableData = (queryResult): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã ATM/CDM',
+          children: 'Mã ĐV',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên ATM/CDM',
+          children: 'Tên ĐV',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Loại máy ATM/CDM',
+          children: 'Địa chỉ Đơn vị',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Địa chỉ ATM/CDM',
+          children: 'Mã cụm',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Trạng thái ATM/CDM',
+          children: 'Tên cụm',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã DVQL',
+          children: 'Mã ĐVQL',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên DVQL',
+          children: 'Tên ĐVQL',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'KC đến ĐVQL',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -106,8 +145,7 @@ const tableData = (queryResult): Table.Props => ({
   ],
 })
 
-
-const mapResponseToData = (handleRowClick) => (item, index) => ({
+const mapResponseToData = (item, index) => ({
   isSelected: item.isSelected ?? false,
   onClick: handleRowClick(item),
   $cells: [
@@ -115,25 +153,28 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.atmCdmCode,
+      children: item.orgsCode,
     },
     {
-      children: item.atmCdmName,
+      children: item.orgsName,
     },
     {
-      children: item.atmCdmType,
+      children: item.orgsAddress,
     },
     {
-      children: item.atmAddress,
+      children: item.areaCode,
     },
     {
-      children: item.atmStatus,
+      children: item.areaName,
     },
     {
-      children: item.categoryOrgs.orgsCode,
+      children: item.orgsParentId,
     },
     {
-      children: item.categoryOrgs.orgsName,
+      children: item.orgsParentId,
+    },
+    {
+      children: item.dvqlKc,
     },
     {
       children: getCurrentDate(item.createddate),
@@ -147,5 +188,5 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   ]
 })
 
-Element.displayName = 'SearchDataTable'
-
+export default Element;
+Element.displayName = 'Actions_Button'

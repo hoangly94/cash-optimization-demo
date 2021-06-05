@@ -1,0 +1,8 @@
+@import '../../../_settings/_variables.css';
+
+.component{
+    margin:auto;
+    box-sizing:border-box;
+    padding: 28px 28px 28px 288px;
+    min-width:1300px;
+}

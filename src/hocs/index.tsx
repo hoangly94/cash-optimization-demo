@@ -24,7 +24,6 @@ export const useComponentClickOutside = (initState = {isOutside: true}) => {
   };
 
   useEffect(() => {
-    console.log('useComponentClickOutside');
     // document.addEventListener("keydown", handleHideDropdown, true);
     document.addEventListener("click", handleClickOutside(clickData, setClickData), true);
     return () => {

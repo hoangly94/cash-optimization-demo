@@ -1,8 +1,7 @@
-import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, SELECT_ATMCDM_STATUS_CREATING, SELECT_ATMCDM_STATUS_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_ORGS_LIST } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_AREA_FILTER, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_AREA_CREATING, SELECT_AREA_EDITING, SELECT_ORGS_PARENT_CREATING, SELECT_ORGS_PARENT_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, CHANGE_ORGS_CODE_FILTER } from './constants'
 import * as Base from '~/_settings';
 
 const initState: State = {
-    orgsList: [],
     filters: {
         ...getDefaultFilters(),
         queryButton: {
@@ -79,14 +78,14 @@ export default (state: State = initState, action) => {
                 isLoading: false,
                 queryResult: [...queryResult],
             }
-        case SELECT_UNITNAME:
+        case SELECT_AREA_FILTER:
             return {
                 ...state,
                 filters: {
                     ...state.filters,
-                    managementUnitName: action.filter,
+                    area: action.filter,
                 },
-                managementUnitName: action.filter.text,
+                // managementUnitName: action.filter.text,
             }
         case SELECT_ATMCDMSTATUS:
             return {
@@ -120,31 +119,31 @@ export default (state: State = initState, action) => {
                     ...action.data,
                 },
             }
-        case SELECT_ORGS_CODE_CREATING:
+        case SELECT_AREA_CREATING:
             return {
                 ...state,
                 creatingPopup: {
                     ...state.creatingPopup,
-                    orgsCodeSelected: action.data,
+                    areaSelected: action.data,
                 },
             }
-        case SELECT_ORGS_CODE_EDITING:
+        case SELECT_AREA_EDITING:
             return {
                 ...state,
                 selectedItem: {
                     ...state.selectedItem,
-                    orgsCodeSelected: action.data,
+                    areaSelected: action.data,
                 },
             }
-        case SELECT_ATMCDM_STATUS_CREATING:
+        case SELECT_ORGS_PARENT_CREATING:
             return {
                 ...state,
                 creatingPopup: {
                     ...state.creatingPopup,
-                    atmCdmSelected: action.data,
+                    orgsParentSelected: action.data,
                 },
             }
-        case SELECT_ATMCDM_STATUS_EDITING:
+        case SELECT_ORGS_PARENT_EDITING:
             return {
                 ...state,
                 selectedItem: {
@@ -161,51 +160,51 @@ export default (state: State = initState, action) => {
                 editingPopup: newData,
                 queryResult: newQueryResult,
             }
-        case UPDATE_ORGS_LIST:
+        case CHANGE_ORGS_CODE_FILTER:
             return {
                 ...state,
-                orgsList: action.data,
+                filters:{
+                    ...state.filters,
+                    orgsCode: action.data,
+                },
             }
-        default:
+        default: CHANGE_ORGS_CODE_FILTER
             return state
     }
 }
 
 function getDefaultPopupActions() {
     return {
-        orgsCodeSelected: {
-            text: 'Tên đơn vị quản lý',
+        areaSelected: {
+            text: 'Tên Cụm',
             value: '',
         },
-        atmCdmSelected: {
-            text: 'Trạng thái ATM/CDM',
+        orgsParentSelected: {
+            text: 'Tên ĐVQL',
             value: '',
         },
     }
 }
 function getDefaultFilters() {
     return {
-        managementUnitName: {
-            text: 'Tên đơn vị quản lý',
-            value: '',
+        area: {
+            text: 'Tên cụm',
+            value: 0,
         },
-        atmCdmStatus: {
-            text: 'Trạng thái ATM/CDM',
-            value: '',
-        },
+        orgsCode: 0,
     }
 }
 
 const mapToNewData = (item) => {
     return {
         ...item,
-        orgsCodeSelected: {
-            text: item.categoryOrgs.orgsName,
-            value: item.categoryOrgs.id,
+        areaSelected: {
+            text: item.areaName,
+            value: item.areaCode,
         },
-        atmCdmSelected: {
-            text: item.atmStatus,
-            value: item.atmStatus,
+        orgsParentSelected: {
+            text: item.orgsParentId,
+            value: item.orgsParentId,
         }
     }
 }

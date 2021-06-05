@@ -144,6 +144,7 @@
       "\\.(css|less)$": "jest-css-modules-transform",
       "\\.(png|gif|ttf|eot|svg)$": "<rootDir>/__mocks__/fileMock.js",
       "^~/(.*)$": "<rootDir>/src/$1",
+      "^@config$": "<rootDir>/src/config/index.ts",
       "^~components/(.*)$": "<rootDir>/src/$1",
       "^~atoms/(.*)$": "<rootDir>/src/atoms/$1",
       "^~molecules/(.*)$": "<rootDir>/molecules//$1",

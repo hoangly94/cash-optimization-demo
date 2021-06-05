@@ -71,7 +71,7 @@ export const Element = (props: Props) => {
   const listProps:List.Props<Text.Props> = {
     ...$list,
   };
-  // console.log(Classnames(styles['caret']));
+
   const caretProps = {
     size: SVG.Size.S1,
     classNames: styles['caret'],
