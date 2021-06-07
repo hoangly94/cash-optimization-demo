@@ -98,7 +98,7 @@
         "src/hocs/index.tsx"
       ],
       "~svg/*": [
-        "./src/components/atoms/svg/*"
+        "./src/components/commons/svg/*"
       ],
     },
     "plugins": [

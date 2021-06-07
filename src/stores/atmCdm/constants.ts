@@ -1,5 +1,5 @@
-export const REQUEST_ORGS_LIST = 'request_orgs_list';
-export const UPDATE_ORGS_LIST = 'update_orgs_list';
+export const FETCH_HISTORY = 'FETCH_HISTORY';
+export const UPDATE_HISTORY = 'UPDATE_HISTORY';
 export const REQUEST_CREATING = 'request_creating';
 export const REQUEST_CREATING_CANCEL = 'request_creating_cancel';
 export const DONE_CREATING = 'done_creating';
@@ -20,7 +20,7 @@ export const SELECT_ATMCDM_STATUS_EDITING = 'select_atmcdm_status_edtiting';
 export const SELECT_ROW = 'select_row';
 
 export type State = {
-    orgsList: any,
+    history: any,
     filters: {
         managementUnitName: {
             text: string,

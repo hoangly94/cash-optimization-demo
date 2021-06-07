@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Classnames from 'classnames'
-import * as Block from "~atoms/block";
-import * as Link from "~atoms/link";
+import * as Block from "~commons/block";
+import * as Link from "~commons/link";
 import * as Base from '~/_settings';
 import styles from './_styles.css';
 

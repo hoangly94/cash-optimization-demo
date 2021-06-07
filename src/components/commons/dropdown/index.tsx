@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Classnames from 'classnames'
 import * as Base from '~/_settings';
-import * as Block from "~atoms/block";
-import * as Text from "~atoms/text";
+import * as Block from "~commons/block";
+import * as Text from "~commons/text";
 import Caret from "~svg/caret";
 import * as SVG from "~svg/index";
 import * as Item from "./item";

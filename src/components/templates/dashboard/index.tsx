@@ -1,15 +1,14 @@
-import * as React from 'react';
-import { Provider } from 'react-redux'
-import store from '~stores/dashboard.store';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, NavLink, Switch } from "react-router-dom";
 import styles from './_styles.css';
 import * as Base from '~/_settings';
 import * as Main from '~commons/main';
 import * as DashboardMenu from '~features/dashboardMenu';
-import * as ATM_CDM from '~features.custom/ATM_CDM';
-import * as ORGS from '~features.custom/ORGS';
-import ReactDOM from "react-dom";
-const createBrowserHistory = require("history").createBrowserHistory;
+import * as ATM_CDM from '~features/ATM_CDM';
+import * as ORGS from '~features/ORGS';
+import * as Test from '~features/test';
+import { FETCH_AREAS, FETCH_CONFIG, FETCH_ORGS } from '_/stores/dashboardRoot/constants';
 
 export type Props = {
 }
@@ -17,6 +16,13 @@ export type Props = {
 export const Element = (props: Props) => {
     const {
     } = props;
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch({ type: FETCH_CONFIG });
+        dispatch({ type: FETCH_AREAS });
+        dispatch({ type: FETCH_ORGS });
+    });
 
     const mainProps: Main.Props = {
         // style: {
@@ -25,26 +31,25 @@ export const Element = (props: Props) => {
         // },
     };
 
-    const history = createBrowserHistory();
-
     return (
-        <>
-            <Provider store={store}>
-                <Router >
-                    <DashboardMenu.Element {...dashboardMenuProps} />
-                    <Main.Element {...mainProps}>
-                        <Switch>
-                            <Route path="/orgs">
-                                <ORGS.Element />
-                            </Route>
-                            <Route path="/atm-cdm">
-                                <ATM_CDM.Element />
-                            </Route>
-                        </Switch>
-                    </Main.Element>
-                </Router>
-            </Provider>,
-        </>
+        <Router >
+            <DashboardMenu.Element {...dashboardMenuProps} />
+            <Main.Element {...mainProps}>
+                <Switch>
+                    <Route exact path="/">
+                    </Route>
+                    <Route path="/orgs">
+                        <ORGS.Element />
+                    </Route>
+                    <Route path="/atm-cdm">
+                        <ATM_CDM.Element />
+                    </Route>
+                    <Route path="/test">
+                        <Test.Element />
+                    </Route>
+                </Switch>
+            </Main.Element>
+        </Router>
     )
 }
 
@@ -54,11 +59,27 @@ const dashboardMenuProps: DashboardMenu.Props = {
             {
                 text: 'ORGS',
                 url: '/orgs',
+                $icon: {
+                    name: 'user',
+                },
             },
             {
                 text: 'ATM/CDM',
                 url: '/atm-cdm',
+                $icon: {
+                    name: 'user',
+                },
+            },
+            {
+                text: 'Test',
+                url: '/test',
+                $icon: {
+                    name: 'user',
+                },
             },
         ]
     },
+    style: {
+        backgroundColor: '#1e3f96',
+    }
 };

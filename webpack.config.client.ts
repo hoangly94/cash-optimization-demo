@@ -20,7 +20,7 @@ module.exports = {
   },
   optimization: webpackConfig.optimization,
   plugins: [
-    new CleanWebpackPlugin(),
+    // new CleanWebpackPlugin(),
     new WebpackManifestPlugin(),
     ...webpackConfig.plugins,
   ],

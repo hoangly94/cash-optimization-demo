@@ -1,10 +1,10 @@
 import * as React from 'react'
 import styles from './styles.css'
 import * as Base from '~/_settings';
-import * as Text from "~atoms/text";
-import * as Link from "~atoms/link";
-import * as Button from "~atoms/button";
-import * as DropDown from '~molecules/dropdown'
+import * as Text from "~commons/text";
+import * as Link from "~commons/link";
+import * as Button from "~commons/button";
+import * as DropDown from '~commons/dropdown'
 
 export enum Type {
   DEFAULT = 'li',

@@ -1,8 +1,0 @@
-@import '../../../_settings/_variables.css';
-
-.image-link-list-section {
-  display:flex;
-  &>div{
-      flex-grow: 1;
-  }
-}

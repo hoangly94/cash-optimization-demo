@@ -3,10 +3,13 @@ import * as Base from '~/_settings';
 export enum Type {
   SOLID = 'solid',
   LIGHT = 'light',
-}
+} 
 
-export enum Type {
-  DEFAULT = 'svg',
+export enum Icon {
+  BARS = 'bars',
+  CARET = 'caret',
+  CHEVRON = 'chevron',
+  USER = 'user',
 }
 
 export enum Direction {

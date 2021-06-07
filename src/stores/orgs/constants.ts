@@ -1,5 +1,7 @@
 const root = 'orgs';
 
+export const FETCH_HISTORY = root+'FETCH_HISTORY';
+export const UPDATE_HISTORY = root+'UPDATE_HISTORY';
 export const REQUEST_CREATING = root+'request_creating';
 export const REQUEST_CREATING_CANCEL = root+'request_creating_cancel';
 export const DONE_CREATING = root+'done_creating';
@@ -21,6 +23,7 @@ export const SELECT_ROW = root+'select_row';
 export const CHANGE_ORGS_CODE_FILTER = root+'change_orgs_code_filter';
 
 export type State = {
+    history:[],
     filters: {
         orgsCode: number,
         area: {

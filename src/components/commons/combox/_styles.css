@@ -1,0 +1,65 @@
+@import '../../../_settings/_variables.css';
+
+.combox{
+    position:relative;
+    cursor:pointer;
+}
+.caret{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+}
+.combox-selector{
+    position:relative;
+    box-sizing: border-box;
+}
+.combox-options{
+    box-sizing: border-box;
+    border:1px solid #cdcdcd;
+    position:absolute;
+    left:0;
+    top:100%;
+    width:100%;
+    display:none;
+    border-top:0;
+    z-index:888;
+}
+.combox-options>div{
+    transition: background-color 0.5s,
+}
+.combox-options>div:hover{
+    background-color: #00000018;
+}
+
+.disabled{
+    background-color:#ececec;
+    cursor: not-allowed;
+}
+
+/* Size */
+.size-s1 {
+  padding: 0px 3px;
+  height:18px;
+  line-height:18px;
+}
+.size-s {
+  padding: 0px 5px;
+  height:28px;
+  line-height:28px;
+}
+.size-m {
+  padding: 0px 8px;
+  height:38px;
+  line-height:38px;
+}
+.size-l {
+  padding: 0px 12px;
+  height:48px;
+  line-height:48px;
+}
+.size-l1 {
+  padding: 0px 18px;
+  height:58px;
+  line-height:58px;
+}

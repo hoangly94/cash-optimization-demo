@@ -8,30 +8,6 @@ import {hydrate} from "react-dom";
 import React from "react";
 import Home from "./components/pages/home"
 import Index from "./components/pages"
-import Dashboard from "./components/pages/dashboard"
-import * as Dasboard from "~templates/dashboard";
-
-// Server var
-// const app = express();
-
-// // View engine setup
-// app.set("views", path.join(__dirname,"views"));
-// app.set("view engine", "ejs");
-
-// // Middleware
-// app.use(compression());
-// console.log(__dirname);
-// // app.use(express.static(__dirname + "/public"));
-// app.use(express.static('public'));
-
-// //Routes
-// app.use("/", index);
-
-// const port = process.env.PORT || 3000;
-
-// app.listen(port, function listenHandler() {
-//     console.info(`Running on ${port}`)
-// });
 
 const server = express();
 
@@ -46,7 +22,7 @@ const manifest = fs.readFileSync(
 );
 const assets = JSON.parse(manifest);
 
-server.get("/", (req, res) => {
+server.get("/*", (req, res) => {
     
     // res.send(hydrate(<Dasboard.Element />, document.getElementById("root")));
     // res.send(hydrate(<Dashboard />, document.getElementById("root")));

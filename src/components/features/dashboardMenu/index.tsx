@@ -6,6 +6,7 @@ import * as Block from "~commons/block";
 import * as Button from "~commons/button";
 import * as Link from "~commons/link";
 import * as Menu from "~commons/sideMenu";
+import * as Logo from "~commons/logo";
 
 export enum Type {
   DEFAULT = 'dashboardMenu',
@@ -28,6 +29,7 @@ export const Element = (props: Props) => {
       styles[type],
     ),
     padding: Base.PaddingV.PX_8,
+    bacgroundColor: Base.BackgroundColor.BLACK,
     ...props,
   };
 
@@ -35,8 +37,12 @@ export const Element = (props: Props) => {
     ...$menu,
   }
 
+  const logoProps = {
+  }
+
   return (
     <Block.Element {...componentWrapperProps}>
+      <Logo.Element {...logoProps}/>
       <Menu.Element {...menuProps}/>
     </Block.Element >
   )

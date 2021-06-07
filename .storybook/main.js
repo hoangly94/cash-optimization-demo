@@ -61,7 +61,7 @@ module.exports = {
       '~stores': path.resolve(__dirname, '../src/stores/'),
       '~utils': path.resolve(__dirname, '../src/utils/'),
       '@utils': path.resolve(__dirname, 'src/utils/index.tsx'),
-      '~svg': path.resolve(__dirname, 'src/components/atoms/svg/'),
+      '~svg': path.resolve(__dirname, 'src/components/commons/svg/'),
     };
 
     // config.module.rules.push({

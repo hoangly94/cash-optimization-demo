@@ -1,8 +1,8 @@
-import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, SELECT_ATMCDM_STATUS_CREATING, SELECT_ATMCDM_STATUS_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_ORGS_LIST } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, SELECT_ATMCDM_STATUS_CREATING, SELECT_ATMCDM_STATUS_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY } from './constants'
 import * as Base from '~/_settings';
 
 const initState: State = {
-    orgsList: [],
+    history: [],
     filters: {
         ...getDefaultFilters(),
         queryButton: {
@@ -161,10 +161,11 @@ export default (state: State = initState, action) => {
                 editingPopup: newData,
                 queryResult: newQueryResult,
             }
-        case UPDATE_ORGS_LIST:
+        case UPDATE_HISTORY:
+            const history = action.data ? action.data : [];
             return {
                 ...state,
-                orgsList: action.data,
+                history: history,
             }
         default:
             return state

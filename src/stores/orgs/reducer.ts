@@ -1,7 +1,9 @@
-import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_AREA_FILTER, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_AREA_CREATING, SELECT_AREA_EDITING, SELECT_ORGS_PARENT_CREATING, SELECT_ORGS_PARENT_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, CHANGE_ORGS_CODE_FILTER } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_HISTORY, FETCH_DATA, UPDATE_DATA, SELECT_AREA_FILTER, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_AREA_CREATING, SELECT_AREA_EDITING, SELECT_ORGS_PARENT_CREATING, SELECT_ORGS_PARENT_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, CHANGE_ORGS_CODE_FILTER } from './constants'
 import * as Base from '~/_settings';
+import {getCurrentDate} from '@utils';
 
 const initState: State = {
+    history:[],
     filters: {
         ...getDefaultFilters(),
         queryButton: {
@@ -72,11 +74,13 @@ export default (state: State = initState, action) => {
         case REQUEST_QUERY:
             return state
         case UPDATE_DATA:
-            const queryResult = action.queryResult ? action.queryResult : [];
+            const queryResult = action.queryResult ? action.queryResult.map(preprocessQueryResult) : [];
             return {
                 ...state,
                 isLoading: false,
-                queryResult: [...queryResult],
+                queryResult: [
+                    ...queryResult
+                ],
             }
         case SELECT_AREA_FILTER:
             return {
@@ -148,7 +152,7 @@ export default (state: State = initState, action) => {
                 ...state,
                 selectedItem: {
                     ...state.selectedItem,
-                    atmCdmSelected: action.data,
+                    orgsParentSelected: action.data,
                 },
             }
         case SELECT_ROW:
@@ -163,12 +167,18 @@ export default (state: State = initState, action) => {
         case CHANGE_ORGS_CODE_FILTER:
             return {
                 ...state,
-                filters:{
+                filters: {
                     ...state.filters,
                     orgsCode: action.data,
                 },
             }
-        default: CHANGE_ORGS_CODE_FILTER
+        case UPDATE_HISTORY:
+            const history = action.data ? action.data : [];
+            return {
+                ...state,
+                history: history,
+            }
+        default:
             return state
     }
 }
@@ -223,3 +233,9 @@ const mapToNewQueryResult = (selectedItem) => (item) => {
         }
     }
 }
+
+const preprocessQueryResult = (data)=>({
+    ...data,
+    createddate: getCurrentDate(data.createddate),
+    updateddate: getCurrentDate(data.updateddate),
+})

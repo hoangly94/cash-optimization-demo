@@ -1,0 +1,38 @@
+@import '../../../_settings/_variables.css';
+
+.dropdown{
+    position:relative;
+    cursor:pointer;
+}
+.caret{
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+}
+.dropdown-selector{
+    position:relative;
+    box-sizing: border-box;
+}
+.dropdown-options{
+    box-sizing: border-box;
+    border:1px solid #cdcdcd;
+    position:absolute;
+    left:0;
+    top:100%;
+    width:100%;
+    display:none;
+    border-top:0;
+    z-index:888;
+}
+.dropdown-options>div{
+    transition: background-color 0.5s,
+}
+.dropdown-options>div:hover{
+    background-color: #00000018;
+}
+
+.disabled{
+    background-color:#ececec;
+    cursor: not-allowed;
+}

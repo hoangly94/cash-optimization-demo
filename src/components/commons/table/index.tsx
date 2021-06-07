@@ -2,7 +2,7 @@ import * as React from 'react'
 import Classnames from 'classnames'
 import * as Row from "./row";
 import * as Cell from "./cell";
-import * as Block from "~atoms/block";
+import * as Block from "~commons/block";
 import * as Base from '~/_settings';
 import styles from './_styles.css';
 
@@ -71,7 +71,6 @@ Element.displayName = 'Table'
 // }
 
 // const toCol = (col: any[], index) => {
-//   console.log(col);
 //   const children = col.map(toCell);
 //   const rowProps = {
 //     key: (new Date().getTime()) + index,
@@ -82,7 +81,6 @@ Element.displayName = 'Table'
 // }
 
 // const toCell = ($cell: Cell.Props, index) => {
-//   console.log($cell);
 //   const cellProps = {
 //     key: (new Date().getTime()) + index,
 //     padding: Base.Padding.PX_3,

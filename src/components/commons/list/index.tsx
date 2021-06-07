@@ -1,12 +1,12 @@
 import * as React from 'react'
 import Classnames from 'classnames'
 import styles from './styles.css'
-import * as Base from '_/_settings';
+import * as Base from '~/_settings';
 import * as Li from './li'
-import * as Text from "_atoms/text";
-import * as Link from "_atoms/link";
-import * as Button from "_atoms/button";
-import * as Dropdown from '_molecules/dropdown'
+import * as Text from "~commons/text";
+import * as Link from "~commons/link";
+import * as Button from "~commons/button";
+import * as Dropdown from '~commons/dropdown'
 
 
 
@@ -28,22 +28,24 @@ export const Element = <T extends Text.Props | Link.Props | Button.Props | Dropd
   } = props;
 
   //create props
-  const listProps = Base.mapProps(props, styles, [type, theme]);
+  // const listProps = Base.mapProps(props, styles, [type, theme]);
 
-  const childrenElement = $liList?.map(mapChildrenElement);
+  // const childrenElement = $liList?.map(mapChildrenElement);
 
-  return (
-    <ul {...listProps}>{childrenElement}</ul>
-  )
+  // return (
+  //   <ul {...listProps}>{childrenElement}</ul>
+  // )
+
+  return (<div></div>)
 }
 
-const mapChildrenElement = <T extends Text.Props | Link.Props | Button.Props | Dropdown.Props>($li: Li.Props<T>, index: number) => {
-  const liProps = {
-    key: index,
-    ...$li,
-  };
-  return <Li.Element {...liProps} />
-}
+// const mapChildrenElement = <T extends Text.Props | Link.Props | Button.Props | Dropdown.Props>($li: Li.Props<T>, index: number) => {
+//   const liProps = {
+//     key: index,
+//     ...$li,
+//   };
+//   return <Li.Element {...liProps} />
+// }
 
 export const ItemChildrenType = Li.ChildrenType;
 

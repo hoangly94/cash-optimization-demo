@@ -5,24 +5,26 @@
   border:1px solid #cdcdcd;
 }
 
-
 /* Size */
 .size-s1 {
-  padding: 3px
+  padding: 0px 3px;
+  height:18px;
 }
 .size-s {
-  padding: 5px
+  padding: 0px 5px;
+  height:28px;
 }
-
 .size-m {
-  padding: 8px;
+  padding: 0px 8px;
+  height:38px;
 }
-
 .size-l {
-  padding: 18px;
+  padding: 0px 12px;
+  height:48px;
 }
 .size-l1 {
-  padding: 28px;
+  padding: 0px 18px;
+  height:58px;
 }
 
 .disabled{
