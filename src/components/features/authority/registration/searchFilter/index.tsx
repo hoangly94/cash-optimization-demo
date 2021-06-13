@@ -1,0 +1,161 @@
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { REQUEST_QUERY, REQUEST_RESET, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, SELECT_STATUS_FILTER } from '~stores/authority/registration/constants';
+import * as Base from '~/_settings';
+import * as Block from "~commons/block";
+import * as Combox from "~commons/combox";
+import * as Button from "~commons/button";
+import * as Input from "~commons/input";
+import * as Radio from "~commons/radio";
+import { UPDATE_CONFIG } from '_/stores/dashboardRoot/constants';
+
+export type Props = Base.Props;
+
+export const Element = (props: Props) => {
+  useEffect(() => {
+    // dispatch({ type: UPDATE_CONFIG })
+    // dispatch({ type: REQUEST_QUERY });
+  })
+  const rootSelector = useSelector(state => state['root']);
+  const radioSelector = useSelector(state => state['registration'].filters.radio);
+  const dispatch = useDispatch();
+console.log(rootSelector);
+  //create props
+  const componentWrapperProps = {
+    flex: Base.Flex.START,
+    alignItems: Base.AlignItems.STRETCH,
+    margin:Base.MarginBottom.PX_8,
+    ...props,
+  };
+
+
+  const queryButtonProps: Button.Props = {
+    ...buttonProps,
+    text: 'Query',
+    backgroundColor: Base.BackgroundColor.GREEN,
+  }
+
+  const resetButtonProps: Button.Props = {
+    ...buttonProps,
+    text: 'Reset',
+    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+    onClick: () => dispatch({ type: REQUEST_RESET }),
+  }
+
+  const filter1Props ={
+    width: Base.Width.PER_20,
+    margin: Base.MarginRight.PX_18,
+  };
+
+  const filter2Props ={
+    width: Base.Width.PER_30,
+    margin: Base.MarginRight.PX_18,
+  };
+
+
+  const radioProps = {
+    margin: Base.MarginRight.PX_18,
+    style: {
+      lineHeight: '44px',
+    },
+  }
+  return (
+    <Block.Element>
+      <Block.Element {...componentWrapperProps}>
+        <Radio.Element
+          {...radioProps}
+          name='1'
+          store={{
+            selectorKeys: ['registration', 'filters', 'radio'],
+            action: {type: CHANGE_RADIO_FILTER},
+          }}
+        />
+        <Input.Element
+          placeholder='Mã cụm'
+          {...filter1Props}
+          store={{
+            selectorKeys: ['registration', 'filters', 'date', 'from'],
+            reducerType: CHANGE_CODE_FILTER,
+          }}
+          isDisabled={radioSelector !== '1'}
+          max={10}
+        />
+        <Input.Element
+          placeholder='Mã cụm'
+          {...filter1Props}
+          store={{
+            selectorKeys: ['registration', 'filters', 'date', 'to'],
+            reducerType: CHANGE_CODE_FILTER,
+          }}
+          isDisabled={radioSelector !== '1'}
+          max={10}
+        />
+        <Input.Element
+          placeholder='Mã cụm'
+          {...filter1Props}
+          store={{
+            selectorKeys: ['registration', 'filters', 'date', 'to'],
+            reducerType: CHANGE_CODE_FILTER,
+          }}
+          isDisabled={radioSelector !== '1'}
+          max={10}
+        />
+        <Combox.Element
+          {...filter1Props}
+          store={{
+            defaultSelectorKeys: ['person', 'filters', 'orgsId'],
+            selectorKeys: ['root', 'orgs'],
+            reducerType: SELECT_STATUS_FILTER,
+            reducerKeys: {
+              text: 'orgsName',
+              value: 'id',
+            },
+            defaultOptions:[{
+              text: 'Tất cả',
+              value: 0,
+            }],
+          }}
+          isDisabled={radioSelector !== '1'}
+        />
+      </Block.Element>
+      <Block.Element {...componentWrapperProps}>
+        <Radio.Element
+          {...radioProps}
+          name='2'
+          store={{
+            selectorKeys: ['registration', 'filters', 'radio'],
+            action: {type: CHANGE_RADIO_FILTER},
+          }}
+        />
+        <Input.Element
+          placeholder='Mã cụm'
+          {...filter2Props}
+          store={{
+            selectorKeys: ['area', 'filters', 'areaCode'],
+            reducerType: CHANGE_CODE_FILTER,
+          }}
+          isDisabled={radioSelector !== '2'}
+          max={200}
+        />
+
+        <Button.Element
+          {...queryButtonProps}
+          store={{
+            isLoadingSelectorKeys: ['base', 'buttons', 'area', 'query'],
+            action: { type: REQUEST_QUERY },
+          }}
+        />
+        <Button.Element {...resetButtonProps}></Button.Element>
+      </Block.Element>
+    </Block.Element >
+  )
+}
+
+const buttonProps: Button.Props = {
+  width: Base.Width.PX_150,
+  color: Base.Color.WHITE,
+  borderRadius: Base.BorderRadius.PX_3,
+  margin: Base.MarginRight.PX_8,
+}
+
+Element.displayName = 'SearchFilter';

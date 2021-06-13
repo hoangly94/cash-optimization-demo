@@ -1,63 +1,96 @@
-import * as React  from 'react'
-import Classnames from 'classnames'
-import styles from './styles.css';
-// import baseCss from '../../_settings/_base.css'
+import * as React from 'react';
+import styles from './_styles.css'
+import * as Base from '~/_settings';
+import * as Block from '~commons/block';
+import * as Svg from '~commons/svg';
+import Circle from '~commons/svg/circle';
+import CircleDotCenter from '~commons/svg/circleDotCenter';
+import { useDispatch, useSelector } from 'react-redux';
+import { _Array } from '_/utils';
+import { HANDLE_BUTTON } from "~stores/_base/constants";
 
-const Type = {
-  DEFAULT: 'radio',
+export enum Type {
+  DEFAULT = 'radio',
 }
 
-const Size = {
-  SMALL: 'small',
-  MEDIUM: 'medium',
-  LARGE: 'large',
+export enum Size {
+  S1 = 'size-s1',
+  S = 'size-s',
+  M = 'size-m',
+  L = 'size-l',
+  L1 = 'size-l1',
+  L2 = 'size-l2',
 }
 
-type Props = {
-  type: string,
-  theme: string,
-  size: string,
+export type Props = Block.Props & {
+  type?: Type,
+  size?: Size,
+  onClick?: React.MouseEventHandler,
   name: string,
-  value: string,
-  checked: boolean,
-  onChange(): void,
-  disabled: boolean,
-  className: string,
+  text?: string,
+  isDisabled?: boolean,
+  href?: string,
+  isLoading?: boolean,
+  store?: Store,
+  children?: React.ReactNode,
 }
 
-const Element = (props: Props) => {
-  const { type, onChange, name, value, checked, size, className, disabled } = props
+type Store = {
+  selectorKeys: string[],
+  action: {},
+}
 
-  //create props
-  const classProps: string = Classnames(
-    styles[type],
-    size ? styles[size] : '',
-    {
-      [styles.disabled]: disabled,
-    },
-    className
-  )
+export const Element = (props: Props) => {
+  const {
+    type = Type.DEFAULT,
+    size = Size.M,
+    text,
+    name,
+    store,
+    // onClick,
+  } = props;
+
+  const dispatch = useDispatch();
+  // const isDisabled = store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])) : false;
+  const actived = store && store.selectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys as string[])) : '';
+
+  const onClick = store ? { onClick: handleClick(dispatch, actived, name, store) } : {};
+  const componentProps = {
+    ...props,
+    ...onClick,
+  }
+
+  const circleProps = {
+  };
 
   return (
-    <input type="radio" onChange={onChange} name={name} checked={checked} value={value} disabled={disabled} className={classProps} />
+    <Block.Element {...componentProps}>
+      {actived === name ? <CircleDotCenter {...circleProps} /> : <Circle {...circleProps} />}
+    </Block.Element>
   )
 }
 
-Element.defaultProps = {
-  type: Type.DEFAULT,
-  size: Size.MEDIUM,
-  name: '',
-  value: '',
-  checked: false,
-  onChange: null,
-  disabled: false,
-  className: [],
+const handleClick = (dispatch, actived, name, store) => () => {
+  if (actived !== name)
+    dispatch({
+      ...store.action,
+      data: {
+        ...store.action.data,
+        name: name,
+      }
+    });
 }
 
-export {
-  Element as Radio,
-  Type as RadioType,
-  Size as RadioSize
-};
+Element.displayName = 'Radio';
 
-Element.displayName = 'Radio'
+
+
+
+
+
+
+
+
+
+
+

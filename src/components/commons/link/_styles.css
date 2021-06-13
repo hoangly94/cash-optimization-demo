@@ -1,0 +1,81 @@
+@import '../../../_settings/_variables.css';
+
+.link {
+  &{
+      position:relative;
+    text-decoration:none;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    cursor:pointer;
+    transition: background-color 0.5s;
+  }
+  &:hover{
+    background-color: #ffffff33;
+  }
+  &>svg{
+  }
+}
+.logo-link {
+  &{
+    display:block;
+  }
+}
+.link-external {
+  &{
+    position:relative;
+    text-decoration:none;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    cursor:pointer;
+    transition: background-color 0.5s;
+  }
+  &:hover{
+    background-color: #ffffff33;
+  }
+  &>svg{
+  }
+}
+.breadcrumbs-link{
+  &{
+    position:relative;
+    text-decoration:none;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    cursor:pointer;
+    transition: background-color 0.5s;
+  }
+  &:hover{
+  }
+}
+
+/* size */
+.s2 {
+  font-size: 8px;
+}
+
+.s1 {
+  font-size: 10px;
+}
+
+.s {
+  font-size: 12px;
+}
+
+.m {
+  font-size: 15px;
+}
+
+.l {
+  font-size: 18px;
+}
+
+.l1 {
+  font-size: 22px;
+}
+
+.l2 {
+  font-size: 28px;
+}

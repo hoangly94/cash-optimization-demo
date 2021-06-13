@@ -1,0 +1,7 @@
+
+.component{
+    margin:auto;
+    box-sizing:border-box;
+    padding: 28px 68px 28px 288px;
+    min-width:800px;
+}

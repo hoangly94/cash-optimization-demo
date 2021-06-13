@@ -6,8 +6,8 @@ import { Props, Type, Size } from './';
 export default (props: Props) => {
     const {
         type = Type.SOLID,
-        size = Size.M,
-        fill,
+        size = Size.S2,
+        fill = '#383838',
     } = props;
 
     //create props for rendering

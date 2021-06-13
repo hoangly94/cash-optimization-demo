@@ -22,7 +22,9 @@ export const Element = (props: Props) => {
   } = props
 
   //create props
-  const componentProps = Base.mapProps(props, styles, [type]);
+  const componentProps = {
+    ...Base.mapProps(props, styles, [type]),
+  };
   // toTable($rows)
   return (
     <div {...componentProps}>

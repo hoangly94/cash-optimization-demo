@@ -53,12 +53,12 @@ export const Element = (props: Props) => {
     store,
     isDisabled = false,
     refs,
-    defaultValue,
+    defaultValue = '',
     pattern,
     max,
     valueType,
   } = props
-  
+
   const dispatch = useDispatch();
   const value = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : null;
   const ref = refs ?? useRef(null);
@@ -79,6 +79,13 @@ export const Element = (props: Props) => {
       onChange(e);
   }
 
+
+  if (ref?.current){
+    (ref as any).current.value = value ? value : defaultValue;
+  }
+
+  const valueProp = ref?.current ? null : {value: defaultValue};
+
   //create props
   const componentProps = {
     type: type,
@@ -89,15 +96,12 @@ export const Element = (props: Props) => {
     placeholder: placeholder,
     disabled: isDisabled,
     ref: ref,
+    ...valueProp,
     onKeyPress: handleKeyPress,
   };
 
-  const element = <input {...componentProps} />;
 
-  if (ref?.current)
-    (ref as any).current.value = value ?? defaultValue ?? '';
-
-  return element;
+  return <input {...componentProps} />;
 }
 
 const handleDispatchWhenInputChange = (dispatch, store: Store) => (e) => {
@@ -112,7 +116,7 @@ const validateNumber = (e) => {
 }
 
 const validateMax = (e, max) => {
-  if (e.target.value.length > max)
+  if (e.target.value.length >= max)
     e.preventDefault();
 }
 

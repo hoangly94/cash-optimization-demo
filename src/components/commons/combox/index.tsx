@@ -38,6 +38,10 @@ export type Props = Base.Props & {
 }
 
 type Store = {
+  defaultOptions?: {
+    text: string,
+    value: any,
+  }[],
   defaultSelectorKeys: string[],
   selectorKeys: string[],
   reducerType: any,
@@ -57,15 +61,11 @@ export const Element = (props: Props) => {
     isDisabled = false,
   } = props;
 
-
   const dispatch = useDispatch();
   const options: [] = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : [];
   const defaultText = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.defaultSelectorKeys)) : '';
-  
-  const aaa = useSelector(state => state['orgs'].selectedItem);
   const disabled = isDisabled ? 'disabled' : '';
-  // console.log('--------------');
-  // console.log(aaa);
+  
   const {
     ref,
     clickData,
@@ -115,6 +115,7 @@ export const Element = (props: Props) => {
         <Caret {...caretProps} />
       </Block.Element>
       <Block.Element {...optionsWrapperProps}>
+        {store.defaultOptions?.map(mapFunctionsToDefaultItemElement(props, dispatch))}
         {options?.map(mapFunctionsToItemElement(props, dispatch))}
       </Block.Element>
     </Block.Element>
@@ -126,6 +127,28 @@ const caretProps = {
   classNames: styles['caret'],
 };
 
+const mapFunctionsToDefaultItemElement = (props: Props, dispatch) => {
+  const store = props.store;
+  const type = store.reducerType;
+
+  return (option, index: number) => {
+    const child = {
+      text: option.text,
+      value: option.value,
+    }
+
+    const itemProps = {
+      key: index,
+      padding: Base.Padding.PX_8,
+      ...(props.$optionsWrapper?.$options ? props.$optionsWrapper.$options[index] : {}),
+      
+      onClick: ()=>{
+        dispatch({type: type, data: child})},
+      ...child,
+    }
+    return <Option.Element {...itemProps} />
+  }
+}
 const mapFunctionsToItemElement = (props: Props, dispatch) => {
   const store = props.store;
   const type = store.reducerType;
@@ -143,8 +166,8 @@ const mapFunctionsToItemElement = (props: Props, dispatch) => {
       ...(props.$optionsWrapper?.$options ? props.$optionsWrapper.$options[index] : {}),
       
       onClick: ()=>{
-        console.log('--------------');
-        console.log({type: type, data: child});
+        console.log(child)
+        console.log({type: type, data: child})
         dispatch({type: type, data: child})},
       ...child,
     }

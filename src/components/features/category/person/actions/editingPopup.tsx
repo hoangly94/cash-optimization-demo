@@ -1,0 +1,279 @@
+import React, { useRef, useState } from 'react'
+import debounce from 'lodash.debounce';
+import { useDispatch, useSelector } from 'react-redux';
+import { SELECT_ORGS_CODE_EDITING, REQUEST_EDITING, REQUEST_EDITING_CANCEL, CHANGE_EDITING_INPUT, SELECT_TITLE_EDITING, SELECT_STATUS_EDITING } from '~stores/category/person/constants';
+import * as Base from '~/_settings';
+import * as Button from "~commons/button";
+import * as Popup from "~commons/popup";
+import * as Input from "~commons/input";
+import * as Title from "~commons/title";
+import * as Block from "~commons/block";
+import * as Combox from "~commons/combox";
+import { comboxProps } from ".";
+import { getCurrentDate, isMatchDateDD_MM_YYY } from "@utils";
+import { HANDLE_POPUP } from '_/stores/_base/constants';
+
+export type Props = Popup.Props;
+
+export const Element = (props: Popup.Props) => {
+  const {
+    setIsShown,
+  } = props;
+
+  const dispatch = useDispatch();
+  const [errorMsg, setErrorMsg] = useState('');
+  const selectedItemSelector = useSelector(state => state['person'].selectedItem);
+
+  const handleSubmitButtonClick = () => {
+    const isValidForm = validateForm(selectedItemSelector, setErrorMsg);
+    if (isValidForm) {
+      setErrorMsg('');
+      dispatch({ type: REQUEST_EDITING });
+      if (setIsShown)
+        setIsShown(false)
+    }
+  }
+
+  const submitButtonProps: Button.Props = {
+    text: 'Update',
+    margin: Base.MarginRight.PX_28,
+    width: Base.Width.PX_200,
+    backgroundColor: Base.BackgroundColor.GREEN,
+    color: Base.Color.WHITE,
+    onClick: handleSubmitButtonClick,
+  }
+
+  const handleCancelButtonClick = () => {
+    dispatch({ type: REQUEST_EDITING_CANCEL });
+  }
+  const cancelButtonProps: Button.Props = {
+    text: 'Cancel',
+    margin: Base.MarginRight.PX_28,
+    width: Base.Width.PX_200,
+    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+    color: Base.Color.WHITE,
+    // onClick: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
+    onClick: handleCancelButtonClick,
+  }
+
+  const closeButtonProps: Button.Props = {
+    text: 'Close',
+    width: Base.Width.PX_200,
+    color: Base.Color.WHITE,
+    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+  }
+  return (
+    <Popup.Element {...props}>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Ngày đăng ký' {...inputTitleProps} />
+        <Input.Element
+          valueType={Input.ValueType.NUMBER}
+          placeholder='Ngày đăng ký'
+          {...inputProps}
+          defaultValue={getCurrentDate()}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Persnbr' {...inputTitleProps} />
+        <Input.Element
+          valueType={Input.ValueType.NUMBER}
+          placeholder='Persnbr'
+          {...inputProps}
+          store={{
+            selectorKeys: ['person', 'selectedItem', 'persCode'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Họ và tên' {...inputTitleProps} />
+        <Input.Element
+          placeholder='Họ và tên'
+          {...inputProps}
+          store={{
+            selectorKeys: ['person', 'selectedItem', 'persFullname'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+          max={50}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Chức danh' {...inputTitleProps} />
+        <Combox.Element
+          {...comboxProps}
+          store={{
+            defaultSelectorKeys: ['person', 'selectedItem', 'persTitleSelected'],
+            selectorKeys: ['root', 'titles'],
+            reducerType: SELECT_TITLE_EDITING,
+            reducerKeys: {
+              text: 'titleName',
+              value: 'titleCode',
+            },
+          }}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Số điện thoại' {...inputTitleProps} />
+        <Input.Element
+          placeholder='Số điện thoại'
+          {...inputProps}
+          store={{
+            selectorKeys: ['person', 'selectedItem', 'persMobile'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+          max={20}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='CMND/CCCD' {...inputTitleProps} />
+        <Input.Element
+          placeholder='CMND/CCCD'
+          {...inputProps}
+          store={{
+            selectorKeys: ['person', 'selectedItem', 'persCmndCccd'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+          max={20}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Ngày cấp' {...inputTitleProps} />
+        <Input.Element
+          placeholder='dd-mm-yyyy'
+          {...inputProps}
+          store={{
+            selectorKeys: ['person', 'selectedItem', 'persCmndCccdYear'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Nơi cấp' {...inputTitleProps} />
+        <Input.Element
+          placeholder='Nơi cấp'
+          {...inputProps}
+          store={{
+            selectorKeys: ['person', 'selectedItem', 'persCmndCccdPlace'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên DVQL' {...inputTitleProps} />
+        <Combox.Element
+          {...comboxProps}
+          store={{
+            defaultSelectorKeys: ['person', 'selectedItem', 'orgsSelected'],
+            selectorKeys: ['root', 'orgs'],
+            reducerType: SELECT_ORGS_CODE_EDITING,
+            reducerKeys: {
+              text: 'orgsName',
+              value: 'id',
+            },
+          }}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Email' {...inputTitleProps} />
+        <Input.Element
+          placeholder='Email'
+          {...inputProps}
+          store={{
+            selectorKeys: ['person', 'selectedItem', 'persEmail'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Trạng thái' {...inputTitleProps} />
+        <Combox.Element
+          {...comboxProps}
+          store={{
+            defaultSelectorKeys: ['person', 'selectedItem', 'persStatusSelected'],
+            selectorKeys: ['root', 'persStatuses'],
+            reducerType: SELECT_STATUS_EDITING,
+            reducerKeys: {
+              text: 'name',
+              value: 'value',
+            },
+          }}
+        />
+      </Block.Element>
+
+      <Block.Element {...actionsWrapperProps}>
+        <Block.Element >
+          <Title.Element text={errorMsg} color={Base.Color.RED}  />
+        </Block.Element>
+        <Block.Element {...actionsProps}>
+          <Button.Element {...submitButtonProps} />
+          <Button.Element {...cancelButtonProps} />
+          <Button.Element
+            {...closeButtonProps}
+            store={{
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['person', 'edit', 'isShown'],
+                value: false,
+              }
+            }}
+          />
+        </Block.Element>
+      </Block.Element>
+    </Popup.Element>
+  )
+}
+
+const handleOptionClick = (dispatch, type, data) => () => {
+  dispatch({ type: type, data: data })
+}
+
+const inputWrapperProps: Block.Props = {
+  flex: Base.Flex.BETWEEN,
+  margin: Base.MarginBottom.PX_18,
+}
+
+const inputTitleProps: Title.Props = {
+}
+
+const inputProps: Input.Props = {
+  width: Base.Width.PER_70,
+}
+
+const actionsWrapperProps: Block.Props = {
+  flex: Base.Flex.BETWEEN,
+}
+
+const actionsProps: Block.Props = {
+  flex: Base.Flex.BETWEEN,
+  width: Base.Width.PER_70,
+}
+
+const validateForm = (popupSelector, setErrorMsg) => {
+  if (!popupSelector.persCode) {
+    setErrorMsg('Persnbr không được để trống');
+    return false;
+  }
+  if (!isMatchDateDD_MM_YYY(popupSelector.persCmndCccdYear)) {
+    setErrorMsg('Ngày cấp CMND/CCCD sai định dạng');
+    return false;
+  }
+  if (!popupSelector.orgsSelected.value){
+    setErrorMsg('Phải chọn đơn vị quản lý');
+    return false;
+  }
+  return true;
+}
+
+export default Element;
+Element.displayName = 'EditingPopup'

@@ -1,0 +1,15 @@
+@import '../../../_settings/_variables.css';
+
+.pagination{
+  display:flex;
+  align-items:stretch;
+}
+.pagination-page-button{
+  display:inline-block;
+  background:transparent;
+  width:30px;
+  height: 30px;
+  line-height: 28px;
+  border-radius:5px;
+  font-weight: 600;
+}

@@ -1,11 +1,8 @@
 @import '../../../_settings/_variables.css';
 
-
-
-.white-theme{
-  color: var(--white-theme-background-color);
+.nav{
+  list-style-type: none;
 }
-
-.dark-theme{
-  color: var(--dark-theme-background-color);
+.nav>li::maker{
+  list-style-type: none;
 }

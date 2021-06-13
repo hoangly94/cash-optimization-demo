@@ -22,7 +22,7 @@ export const getCurrentDate = (dateString?: string) => {
     var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = date.getFullYear();
 
-    return mm + '/' + dd + '/' + yyyy;
+    return dd + '-' + mm + '-' + yyyy;
 };
 export const getDateString = (dateString?: string) => {
     const date = dateString ? new Date(dateString) : new Date();
@@ -30,8 +30,23 @@ export const getDateString = (dateString?: string) => {
     var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = date.getFullYear();
 
-    return mm + '/' + dd + '/' + yyyy;
+    return dd + '/' + mm + '/' + yyyy;
 };
 
+//is match dd-mm-yyyy
+export const isMatchDateDD_MM_YYY=(date:string)=>{
+    return date?.match(/^([0-2][0-9]|(3)[0-1])(-)(((0)[0-9])|((1)[0-2]))(-)\d{4}$/g);
+}
 
-export const delay = (ms) => new Promise(res => setTimeout(res, ms));
+export const convertDataToYYYY_MM_DD = (dateString?: string) => {
+    const date = dateString ? new Date(dateString) : new Date();
+    var dd = String(date.getDate()).padStart(2, '0');
+    var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = date.getFullYear();
+
+    return yyyy + '-' + mm + '-' + dd;
+};
+
+export const convertDataDDMMYYYtoYYYYMMDD = (dateString?: string) => {
+    return dateString?.slice(6,dateString.length) + '-' + dateString?.slice(3,5) + '-' + dateString?.slice(0,2);
+};

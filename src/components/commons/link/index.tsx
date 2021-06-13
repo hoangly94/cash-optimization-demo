@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Link } from "react-router-dom";
 import * as Base from '_/_settings';
-import styles from './styles.css'
+import styles from './_styles.css'
 import Caret from "~svg/caret";
 import * as Svg from "~svg/index";
 
@@ -9,6 +9,7 @@ export enum Type {
   DEFAULT = 'link',
   EXTERNAL = 'link-external',
   LOGO_LINK = 'logo-link',
+  BREADCRUMBS_LINK = 'breadcrumbs-link',
 }
 
 export enum Size {
@@ -28,6 +29,7 @@ export type Props = Base.Props & {
     name?: string,
   },
   $caret?: Svg.Props,
+  onClick?: React.MouseEventHandler,
   children?: React.ReactNode,
 }
 
@@ -39,16 +41,18 @@ export const Element = (props: Props): React.ReactElement => {
     size = Size.M,
     $icon,
     $caret,
+    onClick,
     children,
   } = props;
 
   const href = url ? { href: url } : {};
-
+  const handleClick = onClick ? {onClick:onClick} : {};
   //create props
   const linkProps = {
     ...Base.mapProps({
       ...props,
     }, styles, [type, size]),
+    ...handleClick,
     ...href,
   };
   const caretProps = {
@@ -57,21 +61,23 @@ export const Element = (props: Props): React.ReactElement => {
 
   const CaretElement = $caret ? <Caret {...caretProps} /> : '';
   const child = <>{getIcon($icon)}{text}{children}{CaretElement}</>
-  const linkElement = /^http.+$/.test(url) || url === '' ? <a {...linkProps}>{child}</a> : <Link  {...linkProps} to={url}>{child}</Link>;
+  const linkElement = url
+  ? (type === Type.EXTERNAL || type === Type.LOGO_LINK ? <a {...linkProps}>{child}</a> : <Link  {...linkProps} to={url}>{child}</Link>)
+    : <span {...linkProps}>{child}</span>;
 
   return (
     linkElement
   )
 }
 
-const getIcon = ($icon)=>{
+const getIcon = ($icon) => {
   const iconProps = {
     margin: Base.MarginRight.PX_8,
     fill: 'white',
     ...$icon,
   };
 
-  if($icon){
+  if ($icon) {
     const iconName = $icon.name ?? 'user';
     const Icon = require('~svg/' + iconName).default;
     return <Icon {...iconProps} />;

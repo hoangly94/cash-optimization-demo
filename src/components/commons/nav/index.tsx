@@ -14,7 +14,7 @@ export const Element = (props: Props): React.ReactElement => {
 
   //create props
   const blockProps = {
-    ...Base.mapProps(props, styles, []),
+    ...Base.mapProps(props, styles, ['nav']),
     ref: { refs },
   };
 

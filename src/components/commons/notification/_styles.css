@@ -1,0 +1,24 @@
+@import '../../../_settings/_variables.css';
+
+.notifications{
+  position:fixed;
+  top:0px;
+  right:8px;
+  z-index:900;
+}
+.notification-success{
+  padding:18px;
+  font-size:28px;
+  width:200px;
+  color:white;
+  background:green;
+  margin-top:8px;
+}
+.notification-error{
+  padding:18px;
+  font-size:25px;
+  width:200px;
+  color:white;
+  background:#ff4949;
+  margin-top:8px;
+}

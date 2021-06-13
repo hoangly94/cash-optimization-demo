@@ -23,12 +23,20 @@ const manifest = fs.readFileSync(
 const assets = JSON.parse(manifest);
 
 server.get("/*", (req, res) => {
-    
     // res.send(hydrate(<Dasboard.Element />, document.getElementById("root")));
     // res.send(hydrate(<Dashboard />, document.getElementById("root")));
 //     const component = ReactDOMServer.renderToNodeStream(React.createElement(Index));
     res.render("pages/index", { assets });
 });
+
+// server.get("/category/*", (req, res) => {
+//     // console.log('------------------');
+    
+//     // res.send(hydrate(<Dasboard.Element />, document.getElementById("root")));
+//     // res.send(hydrate(<Dashboard />, document.getElementById("root")));
+// //     const component = ReactDOMServer.renderToNodeStream(React.createElement(Index));
+//     res.render("pages/index", { assets });
+// });
 
 // server.get("/index", (req, res) => {
 //     const component = ReactDOMServer.renderToNodeStream(React.createElement(Index));

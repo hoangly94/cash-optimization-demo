@@ -5,6 +5,9 @@ import { Link } from "react-router-dom";
 import * as Base from '~/_settings';
 import ThreeDotsLoader from '~commons/svg/threeDotsLoader';
 import * as Svg from '~commons/svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { _Array } from '_/utils';
+import {HANDLE_BUTTON} from "~stores/_base/constants";
 
 export enum Type {
   DEFAULT = 'button',
@@ -27,35 +30,41 @@ export type Props = Base.Props & {
   isDisabled?: boolean,
   href?: string,
   isLoading?: boolean,
+  store?: Store,
   children?: React.ReactNode,
+}
+
+type Store = {
+  isLoadingSelectorKeys?: string[],
+  isDisabledSelectorKeys?: string[],
+  action?: {},
 }
 
 export const Element = (props: Props) => {
   const {
     type = Type.DEFAULT,
     size = Size.M,
-    onClick,
     text,
-    isLoading = false,
-    isDisabled = false,
+    store,
     href = '',
   } = props;
 
+  const dispatch = useDispatch();
+  const isLoading = store && store.isLoadingSelectorKeys  ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isLoadingSelectorKeys as string[], 'isLoading'])) : false;
+  const isDisabled = store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])) : false;
+  
   const newProps = {
-    // padding: Base.Padding.PX_8,
     backgroundColor: Base.BackgroundColor.WHITE,
     border: Base.Border.SOLID,
     ...props,
   }
 
-
   const child = isLoading ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff' /> : text;
-
   const disabled = isDisabled ? 'disabled' : '';
 
   //create props
   const buttonProps = {
-    onClick: onClickWithLoading(isDisabled, isLoading, onClick),
+    onClick: onClickWithLoading(dispatch, props, isLoading as boolean, isDisabled as boolean),
     ...Base.mapProps(newProps, styles, [type, size, disabled]),
   }
 
@@ -70,12 +79,17 @@ export const Element = (props: Props) => {
   )
 }
 
-const onClickWithLoading = (isDisabled: boolean, isLoading: boolean, onClick?: React.MouseEventHandler) => (e) => {
-  if (!isDisabled && !isLoading && onClick)
-    onClick(e);
+const onClickWithLoading = (dispatch, props: Props, isLoading: boolean, isDisabled: boolean) => (e) => {
+  if (!isDisabled && !isLoading) {
+    if (props.store){
+      dispatch(props.store.action);
+    }
+    if (props.onClick)
+      props.onClick(e);
+  }
 }
 
-Element.displayName = 'Button'
+Element.displayName = 'Button';
 
 
 

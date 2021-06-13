@@ -5,17 +5,35 @@
     display:block;
   }
   &>a{
+    position:relative;
+  }
+  &-item-subs{
+    width:100%;
   }
 }
 
 .size{
-  &-s>a{
+  &-s{
     padding: 5px 18px;
   }
-  &-m>a{
+  &-m{
     padding: 8px 28px;
   }
-  &-l>a{
+  &-l{
     padding: 12px 38px;
   }
+}
+
+.caret{
+  position:absolute;
+  top:50%;
+  right:0;
+  transform:translateY(-50%);
+}
+.active{
+  background-color: #ffffff18;
+}
+.item-active{
+  background-color: #ffffff87;
+    color: black;
 }

@@ -1,0 +1,62 @@
+@import '../../../_settings/_variables.css';
+
+.breadcrumbs{
+  &{
+    display:flex;
+    padding: 18px 38px 18px 288px;
+  }
+  &>a{
+    color:#383838;
+  }
+  &>svg{
+    color:#383838;
+  }
+  &>span{
+    color:#383838;
+  }
+}
+
+.size{
+  &-s{
+    /* padding: 5px 18px; */
+    &>a{
+      font-size:15px;
+      margin-right: 6px;
+    }
+    &>span{
+      font-size:15px;
+      margin-right: 6px;
+    }
+    &>svg{
+      margin-right: 6px;
+    }
+  }
+  &-m{
+    &>a{
+      font-size:18px;
+      margin-right: 8px;
+    }
+    &>span{
+      font-size:18px;
+      margin-right: 8px;
+    }
+    &>svg{
+      margin-right: 8px;
+    }
+    /* padding: 8px 28px; */
+  }
+  &-l{
+    &>a{
+      font-size:22px;
+      margin-right: 10px;
+    }
+    &>span{
+      font-size:22px;
+      margin-right: 10px;
+    }
+    &>svg{
+      margin-right: 10px;
+    }
+    /* padding: 12px 38px; */
+  }
+}
