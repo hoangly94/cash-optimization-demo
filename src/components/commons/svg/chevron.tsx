@@ -8,8 +8,9 @@ export default (props: Props) => {
         size = Size.M,
         direction = Direction.DOWN,
         fill,
+        onClick,
     } = props;
-
+    
     const rotateDegObj = {
         'up': '180',
         'right': '-90',
@@ -24,7 +25,8 @@ export default (props: Props) => {
             transform: `rotate(${rotateDegObj[direction]}deg)`,
             transformOrigin: '50% 50%',
             fill: fill,
-        }
+        },
+        onClick:onClick,
     }
 
     return (

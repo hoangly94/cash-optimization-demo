@@ -36,4 +36,5 @@ export type Props = Base.Props & {
   fill?: string,
   direction?: Direction,
   disabled?: boolean,
+  onClick?: React.MouseEventHandler;
 }

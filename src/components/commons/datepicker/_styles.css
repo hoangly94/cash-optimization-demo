@@ -2,12 +2,40 @@
 
 .datepicker {
     &{
-        width:500px;
+        position:absolute;
+        width:300px;
         z-index:888;
     }
 }
+.datepicker >table{
+    tableLayout: 'fixed';
+}
+.datepicker-menu{
+    border: 1px solid #cdcdcd;
+    border-bottom: none;
+}
+.datepicker-menu>svg{
+    cursor:pointer;
+    fill: #383838;
+    user-select: none;
+}
+table>thead{
+    font-weight:bold;
+}
 .active-day {
-    background-color:blue;
+    background-color: #1e3f96;
+    color: white;
+    cursor:pointer;
+}
+.normal-day {
+    transition:background-color 0.5s;
+    cursor:pointer;
+}
+.normal-day:hover {
+    background-color:#cee6ff;
+}
+.disable-day {
+    background-color: #e8e8e8;
 }
 
 /* Size */

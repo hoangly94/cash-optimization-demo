@@ -41,7 +41,7 @@ export const Element = (props: Props): React.ReactElement => {
 
 
   return (
-    <div {...componentProps} {...handleClick}>{children}</div>
+    <tr {...componentProps} {...handleClick}>{children}</tr>
   )
 }
 

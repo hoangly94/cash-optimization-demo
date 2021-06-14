@@ -5,7 +5,8 @@
         cursor: pointer;
         transition: opacity 0.5s, border 0.3s;
         box-sizing:border-box;
-        border: none,
+        border: none;
+        user-select: none;
     }
     &:hover{
         opacity:0.8;

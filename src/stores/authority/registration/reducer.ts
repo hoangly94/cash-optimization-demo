@@ -1,4 +1,4 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO } from './constants'
 import * as Base from '~/_settings';
 import { getCurrentDate } from '@utils';
 
@@ -184,6 +184,22 @@ export default (state: State = initState, action) => {
                     radio: action.data.name,
                 },
             }
+        case INPUT_DATE_FROM:
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    ...action.data
+                },
+            }
+        case INPUT_DATE_TO:
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    ...action.data
+                },
+            }
         default:
             return state
     }
@@ -200,20 +216,17 @@ function getDefaultPopupActions() {
 function getDefaultFilters() {
     return {
         radio: '1',
-        date: {
-            from: 'Từ ngày(dd/mm/yyyy)',
-            to: 'Đến ngày(dd/mm/yyyy)',
-            type: 'startDate',
-        },
+        dateFrom: '',
+        dateTo: '',
         orgs: {
-            text: 'DVUQ',
-            value: '0',
-        },
-        status: {
-            text: 'Trạng Thái',
+            text: '',
             value: '',
         },
-        id: '0',
+        status: {
+            text: '',
+            value: '',
+        },
+        id: '',
     }
 }
 

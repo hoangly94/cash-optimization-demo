@@ -2,10 +2,14 @@
 
 .table {
   width:100%;
-  display:table;
+  /* display:table; */
   border-collapse: collapse;
   box-sizing:border-box;
   /* display:flex;
   justify-content:space-between;
   align-items: stretch; */
+}
+
+.table td{
+  user-select: none;
 }

@@ -2,7 +2,7 @@
 
 .cell {
   &{
-    display:table-cell;
+    /* display:table-cell; */
     border:1px solid #cdcdcd;
   }
   &-title{

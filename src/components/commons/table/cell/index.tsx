@@ -12,19 +12,25 @@ export type Props = Base.Props & {
   type?: Type,
   url?: string,
   children: React.ReactNode,
+  onClick?: React.MouseEventHandler;
 }
 
 export const Element = (props: Props): React.ReactElement => {
   const {
     type = Type.DEFAULT,
     children,
+    onClick,
   } = props;
-
+  
+  const handleClick = onClick ? {onClick:onClick} : {};
   //create props
-  const componentProps = Base.mapProps(props, styles, [type]);
+  const componentProps = {
+    ...Base.mapProps(props, styles, [type]),
+    ...handleClick,
+  };
 
   return (
-    <div {...componentProps}>{children}</div>
+    <td {...componentProps}>{children}</td>
   )
 }
 

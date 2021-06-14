@@ -1,4 +1,4 @@
-const root = 'register_'
+const root = 'registration_'
 export const FETCH_HISTORY = root + 'FETCH_HISTORY';
 export const UPDATE_HISTORY = root + 'UPDATE_HISTORY';
 export const REQUEST_CREATING = root + 'REQUEST_CREATING';
@@ -20,16 +20,15 @@ export const SELECT_REGION_EDITING = root + 'SELECT_REGION_EDITING';
 export const SELECT_ROW = root + 'SELECT_ROW';
 export const CHANGE_RADIO_FILTER = root + 'CHANGE_RADIO_FILTER';
 export const SELECT_STATUS_FILTER = root + 'SELECT_STATUS_FILTER';
+export const INPUT_DATE_FROM = root + 'INPUT_DATE_FROM';
+export const INPUT_DATE_TO = root + 'INPUT_DATE_TO';
 
 export type State = {
     history: any,
     filters: {
         radio: string,
-        date:{
-            from: string,
-            to: string,
-            type: string,
-        },
+        dateFrom:string,
+        dateTo:string,
         orgs: {
             text: string,
             value: string,

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { REQUEST_QUERY, REQUEST_RESET, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, SELECT_STATUS_FILTER } from '~stores/authority/registration/constants';
+import { REQUEST_QUERY, REQUEST_RESET, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, SELECT_STATUS_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
@@ -78,33 +78,50 @@ export const Element = (props: Props) => {
           }}
         />
         <Datepicker.Element
-          {...datepickerProps}
-        />
-        <Input.Element
-          placeholder='Mã cụm'
           {...filter1Props}
-          store={{
-            selectorKeys: ['registration', 'filters', 'date', 'from'],
-            reducerType: CHANGE_CODE_FILTER,
+          $input={{
+            placeholder: 'Từ ngày(dd-mm-yyy)',
+            width: Base.Width.FULL,
+            store: {
+              selectorKeys: ['registration', 'filters', 'dateFrom'],
+              reducerType: INPUT_DATE_FROM,
+            },
+            isDisabled: radioSelector !== '1',
+            max: 10,
           }}
-          isDisabled={radioSelector !== '1'}
-          max={10}
-        />
-        <Input.Element
-          placeholder='Mã cụm'
-          {...filter1Props}
-          store={{
-            selectorKeys: ['registration', 'filters', 'date', 'to'],
-            reducerType: CHANGE_CODE_FILTER,
+          $datepicker={{
+            store: {
+              selectorKeys: ['registration', 'filters', 'dateFrom'],
+              action: { type: INPUT_DATE_FROM },
+            },
+            isDisabled: radioSelector !== '1',
           }}
-          isDisabled={radioSelector !== '1'}
-          max={10}
+        />
+        <Datepicker.Element
+          {...filter1Props}
+          $input={{
+            placeholder: 'Đến ngày(dd-mm-yyy)',
+            width: Base.Width.FULL,
+            store: {
+              selectorKeys: ['registration', 'filters', 'dateTo'],
+              reducerType: INPUT_DATE_TO,
+            },
+            isDisabled: radioSelector !== '1',
+            max: 10,
+          }}
+          $datepicker={{
+            store: {
+              selectorKeys: ['registration', 'filters', 'dateTo'],
+              action: { type: INPUT_DATE_TO },
+            },
+            isDisabled: radioSelector !== '1',
+          }}
         />
         <Input.Element
           placeholder='Mã cụm'
           {...filter1Props}
           store={{
-            selectorKeys: ['registration', 'filters', 'date', 'to'],
+            selectorKeys: ['registration', 'filters', 'orgsId'],
             reducerType: CHANGE_CODE_FILTER,
           }}
           isDisabled={radioSelector !== '1'}
@@ -113,12 +130,12 @@ export const Element = (props: Props) => {
         <Combox.Element
           {...filter1Props}
           store={{
-            defaultSelectorKeys: ['person', 'filters', 'orgsId'],
-            selectorKeys: ['root', 'orgs'],
+            defaultSelectorKeys: ['registration', 'filters', 'orgsId'],
+            selectorKeys: ['root', 'authorityStatuses'],
             reducerType: SELECT_STATUS_FILTER,
             reducerKeys: {
-              text: 'orgsName',
-              value: 'id',
+              text: 'name',
+              value: 'value',
             },
             defaultOptions: [{
               text: 'Tất cả',

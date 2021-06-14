@@ -12,12 +12,14 @@ export enum Type {
 
 export type Props = Base.Props & {
   type?: Type,
+  $thead?: Row.Props[],
   $rows?: Row.Props[],
 }
 
 export const Element = (props: Props) => {
   const {
     type = Type.DEFAULT,
+    $thead = [],
     $rows = [],
   } = props
 
@@ -27,9 +29,14 @@ export const Element = (props: Props) => {
   };
   // toTable($rows)
   return (
-    <div {...componentProps}>
-      {toTable($rows)}
-    </div>
+    <table {...componentProps}>
+      <thead>
+        {toTable($thead)}
+      </thead>
+      <tbody>
+        {toTable($rows)}
+      </tbody>
+    </table>
   )
 }
 
@@ -42,7 +49,7 @@ const toRow = ($row: Row.Props, index) => {
   const rowProps = {
     key: (new Date().getTime()) + index,
     children: children,
-    textAlign:Base.TextAlign.CENTER,
+    textAlign: Base.TextAlign.CENTER,
     ...$row,
   };
   return (<Row.Element {...rowProps} />);
@@ -62,7 +69,7 @@ Element.displayName = 'Table';
 
 // const toTable = ($rows: Row.Props[]) => {
 //   const newTableData:any[][] = [...new Array($rows[0].$cells?.length)].map(()=> [] as Row.Props[]);
-  
+
 //   $rows.map((row, rowIndex) => {
 //     row.$cells?.map((cell, cellIndex) => {
 //       newTableData[cellIndex].push(cell);
