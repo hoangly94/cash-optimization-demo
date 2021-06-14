@@ -12,9 +12,24 @@ export const _Array = {
             (item, key) => item[key],
             array
         )
+    },
+    initArrayByIndex(lenth: number, plus: number = 0, month?) {
+        return Array.from({ length: lenth }, (_, i) => ({day:i + plus, month:month}));
     }
 };
 
+
+export const _Date = {
+    getNumberDaysOfMonth(date) {
+        return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    },
+    getNumberDaysOfPreviousMonth(date) {
+        return new Date(date.getFullYear(), date.getMonth(), 0).getDate();
+    },
+    getNumberDaysOfNextMonth(date) {
+        return new Date(date.getFullYear(), date.getMonth() + 2, 0).getDate();
+    }
+};
 
 export const getCurrentDate = (dateString?: string) => {
     const date = dateString ? new Date(dateString) : new Date();
@@ -34,7 +49,7 @@ export const getDateString = (dateString?: string) => {
 };
 
 //is match dd-mm-yyyy
-export const isMatchDateDD_MM_YYY=(date:string)=>{
+export const isMatchDateDD_MM_YYY = (date: string) => {
     return date?.match(/^([0-2][0-9]|(3)[0-1])(-)(((0)[0-9])|((1)[0-2]))(-)\d{4}$/g);
 }
 
@@ -48,5 +63,5 @@ export const convertDataToYYYY_MM_DD = (dateString?: string) => {
 };
 
 export const convertDataDDMMYYYtoYYYYMMDD = (dateString?: string) => {
-    return dateString?.slice(6,dateString.length) + '-' + dateString?.slice(3,5) + '-' + dateString?.slice(0,2);
+    return dateString?.slice(6, dateString.length) + '-' + dateString?.slice(3, 5) + '-' + dateString?.slice(0, 2);
 };

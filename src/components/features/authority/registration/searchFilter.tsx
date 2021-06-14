@@ -7,7 +7,8 @@ import * as Combox from "~commons/combox";
 import * as Button from "~commons/button";
 import * as Input from "~commons/input";
 import * as Radio from "~commons/radio";
-import { UPDATE_CONFIG } from '_/stores/dashboardRoot/constants';
+import * as Datepicker from "~commons/datepicker";
+import { UPDATE_CONFIG } from '~stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 
@@ -19,12 +20,12 @@ export const Element = (props: Props) => {
   const rootSelector = useSelector(state => state['root']);
   const radioSelector = useSelector(state => state['registration'].filters.radio);
   const dispatch = useDispatch();
-console.log(rootSelector);
+
   //create props
   const componentWrapperProps = {
     flex: Base.Flex.START,
     alignItems: Base.AlignItems.STRETCH,
-    margin:Base.MarginBottom.PX_8,
+    margin: Base.MarginBottom.PX_8,
     ...props,
   };
 
@@ -42,12 +43,12 @@ console.log(rootSelector);
     onClick: () => dispatch({ type: REQUEST_RESET }),
   }
 
-  const filter1Props ={
+  const filter1Props = {
     width: Base.Width.PER_20,
     margin: Base.MarginRight.PX_18,
   };
 
-  const filter2Props ={
+  const filter2Props = {
     width: Base.Width.PER_30,
     margin: Base.MarginRight.PX_18,
   };
@@ -59,6 +60,12 @@ console.log(rootSelector);
       lineHeight: '44px',
     },
   }
+
+  const datepickerProps = {
+    style: {
+      position: 'absolute',
+    }
+  }
   return (
     <Block.Element>
       <Block.Element {...componentWrapperProps}>
@@ -67,8 +74,11 @@ console.log(rootSelector);
           name='1'
           store={{
             selectorKeys: ['registration', 'filters', 'radio'],
-            action: {type: CHANGE_RADIO_FILTER},
+            action: { type: CHANGE_RADIO_FILTER },
           }}
+        />
+        <Datepicker.Element
+          {...datepickerProps}
         />
         <Input.Element
           placeholder='Mã cụm'
@@ -110,7 +120,7 @@ console.log(rootSelector);
               text: 'orgsName',
               value: 'id',
             },
-            defaultOptions:[{
+            defaultOptions: [{
               text: 'Tất cả',
               value: 0,
             }],
@@ -124,7 +134,7 @@ console.log(rootSelector);
           name='2'
           store={{
             selectorKeys: ['registration', 'filters', 'radio'],
-            action: {type: CHANGE_RADIO_FILTER},
+            action: { type: CHANGE_RADIO_FILTER },
           }}
         />
         <Input.Element

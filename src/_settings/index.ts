@@ -28,6 +28,7 @@ export enum Width {
     L = 'width-l',
     L1 = 'width-l1',
     L2 = 'width-l2',
+    PX_40 = 'width-40px',
     PX_100 = 'width-100px',
     PX_150 = 'width-150px',
     PX_200 = 'width-200px',
@@ -180,6 +181,12 @@ export enum Flex {
     AROUND = 'flex-around',
     EVENLY = 'flex-evenly',
 }
+export enum FlexGrow {
+    NONE = '',
+    G1 = 'flex-grow-1',
+    G2 = 'flex-grow-2',
+    G3 = 'flex-grow-3',
+}
 export enum AlignItems {
     NONE = '',
     STRETCH = 'align-items-stretch',
@@ -272,6 +279,7 @@ export type Props = {
     padding?: Padding | PaddingV | PaddingH,
     margin?: Margin | MarginTop | MarginRight | MarginBottom | MarginLeft,
     flex?: Flex,
+    flexGrow?: FlexGrow,
     alignItems?: AlignItems,
     visibility?: Visibility,
     textAlign?: TextAlign,
@@ -302,6 +310,7 @@ export const mapProps = (
         padding = Padding.NONE,
         margin = Margin.NONE,
         flex = Flex.NONE,
+        flexGrow = FlexGrow.NONE,
         alignItems = AlignItems.NONE,
         visibility = Visibility.NONE,
         textAlign = TextAlign.NONE,
@@ -327,6 +336,7 @@ export const mapProps = (
             styles[padding],
             styles[margin],
             styles[flex],
+            styles[flexGrow],
             styles[alignItems],
             styles[visibility],
             styles[textAlign],

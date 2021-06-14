@@ -14,10 +14,9 @@ export type Props = Base.Props;
 export const Element = (props: Props) => {
   const type = 'component';
   useEffect(() => {
-    dispatch({ type: FETCH_CONFIG })
+    // dispatch({ type: FETCH_CONFIG })
 
   }, []);
-  // dispatch({ type
 
   const dispatch = useDispatch();
 
@@ -37,5 +36,5 @@ export const Element = (props: Props) => {
   )
 }
 
-Element.displayName = 'Ảea'
+Element.displayName = 'Registration'
 

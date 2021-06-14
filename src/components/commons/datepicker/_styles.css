@@ -1,0 +1,42 @@
+@import '../../../_settings/_variables.css';
+
+.datepicker {
+    &{
+        width:500px;
+        z-index:888;
+    }
+}
+.active-day {
+    background-color:blue;
+}
+
+/* Size */
+/* .size-s1 {
+    height: 20px;
+    line-height: 20px;
+}
+.size-s {
+    height: 30px;
+    line-height: 30px;
+}
+.size-m {
+    height: 40px;
+    line-height: 40px;
+}
+.size-l {
+    height: 50px;
+    line-height: 50px;
+}
+.size-l1 {
+    height: 60px;
+    line-height: 60px;
+}
+.size-l2 {
+    height: 80px;
+    line-height: 80px;
+}
+
+.disabled{
+    background-color:#cdcdcd;
+    cursor: not-allowed;
+} */
