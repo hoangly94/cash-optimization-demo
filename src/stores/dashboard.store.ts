@@ -16,6 +16,8 @@ import regionReducer from './category/region/reducer';
 import areaReducer from './category/area/reducer';
 import functionReducer from './category/function/reducer';
 import registrationReducer from './authority/registration/reducer';
+import searchOrgsReducer from './authority/searchOrgs/reducer';
+import searchPersReducer from './authority/searchPers/reducer';
 
 import baseSaga from './_base/sagas';
 import dashboardRootSaga from './dashboardRoot/sagas';
@@ -31,6 +33,8 @@ import regionSaga from './category/region/sagas';
 import areaSaga from './category/area/sagas';
 import functionSaga from './category/function/sagas';
 import registrationSaga from './authority/registration/sagas';
+import searchOrgsSaga from './authority/searchOrgs/sagas';
+import searchPersSaga from './authority/searchPers/sagas';
 
 const rootReducer = combineReducers({
     base: baseReducer,
@@ -47,6 +51,8 @@ const rootReducer = combineReducers({
     area: areaReducer,
     function: functionReducer,
     registration: registrationReducer,
+    searchOrgs: searchOrgsReducer,
+    searchPers: searchPersReducer,
 })
 
 function* rootSaga() {
@@ -65,6 +71,8 @@ function* rootSaga() {
         areaSaga(),
         functionSaga(),
         registrationSaga(),
+        searchOrgsSaga(),
+        searchPersSaga(),
     ]);
 }
 

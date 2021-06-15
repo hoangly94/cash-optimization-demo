@@ -69,6 +69,12 @@ body {
   &-40px{
     width:40px;
   }
+  &-50px{
+    width:50px;
+  }
+  &-80px{
+    width:80px;
+  }
   &-100px{
     width:150px;
   }
@@ -611,6 +617,9 @@ body {
 
 /* border */
 .border{
+  &-none{
+    border:none;
+  }
   &-solid{
     border:1px solid #cdcdcd;
   }

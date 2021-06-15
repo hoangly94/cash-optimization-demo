@@ -46,12 +46,13 @@ export const Element = (props: Props) => {
     size = Size.M,
     text,
     store,
+    isDisabled = false,
     href = '',
   } = props;
 
   const dispatch = useDispatch();
-  const isLoading = store && store.isLoadingSelectorKeys  ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isLoadingSelectorKeys as string[], 'isLoading'])) : false;
-  const isDisabled = store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])) : false;
+  const isLoadingSelector = store && store.isLoadingSelectorKeys  ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isLoadingSelectorKeys as string[], 'isLoading'])) : false;
+  const isDisabledSelector = store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])) : isDisabled;
   
   const newProps = {
     backgroundColor: Base.BackgroundColor.WHITE,
@@ -59,12 +60,13 @@ export const Element = (props: Props) => {
     ...props,
   }
 
-  const child = isLoading ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff' /> : text;
-  const disabled = isDisabled ? 'disabled' : '';
+  const child = isLoadingSelector ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff' /> : text;
+  const disabled = isDisabledSelector ? 'disabled' : '';
 
   //create props
   const buttonProps = {
-    onClick: onClickWithLoading(dispatch, props, isLoading as boolean, isDisabled as boolean),
+    border:Base.Border.SOLID,
+    onClick: onClickWithLoading(dispatch, props, isLoadingSelector as boolean, isDisabledSelector as boolean),
     ...Base.mapProps(newProps, styles, [type, size, disabled]),
   }
 
@@ -81,6 +83,7 @@ export const Element = (props: Props) => {
 
 const onClickWithLoading = (dispatch, props: Props, isLoading: boolean, isDisabled: boolean) => (e) => {
   if (!isDisabled && !isLoading) {
+    console.log(props.store?.action);
     if (props.store){
       dispatch(props.store.action);
     }

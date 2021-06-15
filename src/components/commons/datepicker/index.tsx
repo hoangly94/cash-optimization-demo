@@ -51,10 +51,6 @@ export const Element = (props: Props) => {
     type = Type.DEFAULT,
     size = Size.M,
     $datepicker,
-    // store,
-    // activeDay,
-    // datepicker.dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    // monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     $input,
   } = props;
   const {

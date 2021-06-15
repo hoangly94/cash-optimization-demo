@@ -29,6 +29,8 @@ export enum Width {
     L1 = 'width-l1',
     L2 = 'width-l2',
     PX_40 = 'width-40px',
+    PX_50 = 'width-50px',
+    PX_80 = 'width-80px',
     PX_100 = 'width-100px',
     PX_150 = 'width-150px',
     PX_200 = 'width-200px',
@@ -251,7 +253,8 @@ export enum FontStyle {
 }
 
 export enum Border {
-    NONE = '',
+    DEFAULT = '',
+    NONE = 'border-none',
     SOLID = 'border-solid',
 }
 
@@ -317,7 +320,7 @@ export const mapProps = (
         color = Color.NONE,
         backgroundColor = BackgroundColor.NONE,
         fontStyle = FontStyle.NONE,
-        border = Border.NONE,
+        border = Border.DEFAULT,
         borderRadius = BorderRadius.NONE,
         lineHeight = LineHeight.NONE,
         whiteSpace = WhiteSpace.NONE,

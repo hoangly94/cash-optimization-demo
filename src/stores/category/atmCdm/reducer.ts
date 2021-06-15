@@ -162,7 +162,6 @@ export default (state: State = initState, action) => {
                 },
             }
         case SELECT_ROW:
-            console.log(action);
             const newQueryResult = state.queryResult.data.map(mapToNewQueryResult(action.data))
             const newData = mapToNewData(action.data)
             return {

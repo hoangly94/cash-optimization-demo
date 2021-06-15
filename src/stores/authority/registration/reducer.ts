@@ -1,4 +1,4 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER } from './constants'
 import * as Base from '~/_settings';
 import { getCurrentDate } from '@utils';
 
@@ -200,6 +200,14 @@ export default (state: State = initState, action) => {
                     ...action.data
                 },
             }
+        case SELECT_STATUS_FILTER:
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    status: action.data,
+                },
+            }
         default:
             return state
     }
@@ -223,7 +231,7 @@ function getDefaultFilters() {
             value: '',
         },
         status: {
-            text: '',
+            text: 'Trạng thái',
             value: '',
         },
         id: '',

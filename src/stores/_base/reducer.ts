@@ -90,6 +90,22 @@ const initState: State = {
                 isLoading: false,
             },
         },
+        'searchPers': {
+            'select': {
+                isDisabled: true,
+            },
+            'query': {
+                isLoading: false,
+            },
+        },
+        'searchOrgs': {
+            'select': {
+                isDisabled: true,
+            },
+            'query': {
+                isLoading: false,
+            },
+        },
     },
     popups: {
         'orgs': {
@@ -210,6 +226,11 @@ const initState: State = {
                 isShown: false,
             },
             'history': {
+                isShown: false,
+            },
+        },
+        'registration': {
+            'searchOrgs': {
                 isShown: false,
             },
         },

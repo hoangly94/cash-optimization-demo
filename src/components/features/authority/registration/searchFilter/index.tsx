@@ -8,7 +8,10 @@ import * as Button from "~commons/button";
 import * as Input from "~commons/input";
 import * as Radio from "~commons/radio";
 import * as Datepicker from "~commons/datepicker";
-import { UPDATE_CONFIG } from '~stores/dashboardRoot/constants';
+import * as Title from "~commons/title";
+import * as Popup from "~commons/popup";
+import * as SearchOrgsPopup from "./searchOrgsPopup";
+import { HANDLE_POPUP } from '_/stores/_base/constants';
 
 export type Props = Base.Props;
 
@@ -66,6 +69,7 @@ export const Element = (props: Props) => {
       position: 'absolute',
     }
   }
+
   return (
     <Block.Element>
       <Block.Element {...componentWrapperProps}>
@@ -117,30 +121,37 @@ export const Element = (props: Props) => {
             isDisabled: radioSelector !== '1',
           }}
         />
-        <Input.Element
-          placeholder='Mã cụm'
+        <Button.Element
           {...filter1Props}
+          border={Base.Border.SOLID}
+          textAlign={Base.TextAlign.LEFT}
+          text='ĐVUQ'
           store={{
-            selectorKeys: ['registration', 'filters', 'orgsId'],
-            reducerType: CHANGE_CODE_FILTER,
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['registration', 'searchOrgs', 'isShown'],
+              value: true,
+            }
+          }}
+          style={{
+            color: '#828282',
           }}
           isDisabled={radioSelector !== '1'}
-          max={10}
         />
         <Combox.Element
           {...filter1Props}
           store={{
-            defaultSelectorKeys: ['registration', 'filters', 'orgsId'],
+            defaultSelectorKeys: ['registration', 'filters', 'status'],
             selectorKeys: ['root', 'authorityStatuses'],
             reducerType: SELECT_STATUS_FILTER,
             reducerKeys: {
               text: 'name',
               value: 'value',
             },
-            defaultOptions: [{
-              text: 'Tất cả',
-              value: 0,
-            }],
+            // defaultOptions: [{
+            //   text: 'Tất cả',
+            //   value: 0,
+            // }],
           }}
           isDisabled={radioSelector !== '1'}
         />
@@ -174,6 +185,16 @@ export const Element = (props: Props) => {
         />
         <Button.Element {...resetButtonProps}></Button.Element>
       </Block.Element>
+
+      <SearchOrgsPopup.Element
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'Tìm đơn vị',
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'registration', 'searchOrgs'],
+        }}
+      />
     </Block.Element >
   )
 }
