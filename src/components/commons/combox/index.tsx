@@ -65,7 +65,7 @@ export const Element = (props: Props) => {
   const options: [] = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : [];
   const defaultText = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.defaultSelectorKeys)) : '';
   const disabled = isDisabled ? 'disabled' : '';
-  
+
   const {
     ref,
     clickData,
@@ -96,7 +96,7 @@ export const Element = (props: Props) => {
     ...$selectorWrapper,
   };
 
-  const display = clickData.isOutside ? { display: 'none' } : { display: 'block' };
+  const display = !disabled && !clickData.isOutside ? { display: 'block' } : { display: 'none' };
   const optionsWrapperProps: Block.Props = {
     classNames: Classnames(
       styles['combox-options'],
@@ -141,14 +141,17 @@ const mapFunctionsToDefaultItemElement = (props: Props, dispatch) => {
       key: index,
       padding: Base.Padding.PX_8,
       ...(props.$optionsWrapper?.$options ? props.$optionsWrapper.$options[index] : {}),
-      
-      onClick: ()=>{
-        dispatch({type: type, data: child})},
+
+      onClick: () => {
+        if (!props.isDisabled)
+          dispatch({ type: type, data: child })
+      },
       ...child,
     }
     return <Option.Element {...itemProps} />
   }
 }
+
 const mapFunctionsToItemElement = (props: Props, dispatch) => {
   const store = props.store;
   const type = store.reducerType;
@@ -164,15 +167,15 @@ const mapFunctionsToItemElement = (props: Props, dispatch) => {
       key: index,
       padding: Base.Padding.PX_8,
       ...(props.$optionsWrapper?.$options ? props.$optionsWrapper.$options[index] : {}),
-      
-      onClick: ()=>{
-        console.log(child)
-        console.log({type: type, data: child})
-        dispatch({type: type, data: child})},
+
+      onClick: () => {
+        if (!props.isDisabled)
+          dispatch({ type: type, data: child })
+      },
       ...child,
     }
     return <Option.Element {...itemProps} />
   }
 }
 
-  Element.displayName = 'Combox';
+Element.displayName = 'Combox';

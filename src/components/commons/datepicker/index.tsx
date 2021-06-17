@@ -173,7 +173,7 @@ const reduceToRows = (dispatch, setClickData) => (props: Props, currentDate: Dat
           dispatch({
             ...store.action,
             data: {
-              [store.selectorKeys[store.selectorKeys.length - 1]]: `${_Date.convertDayTo2digits(next.day)}/${_Date.convertMonthTo2digits(next.month)}/${next.year}`,
+              [store.selectorKeys[store.selectorKeys.length - 1]]: `${_Date.convertDayTo2digits(cellDay)}/${_Date.convertMonthTo2digits(cellMonth)}/${next.year}`,
             }
           });
         }

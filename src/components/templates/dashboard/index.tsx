@@ -19,6 +19,7 @@ import * as Region from '~features/category/region';
 import * as Area from '~features/category/area';
 import * as Function from '~features/category/function';
 import * as Registration from '~features/authority/registration';
+import * as Approval from '~features/authority/registration/approval';
 
 export type Props = {
 }
@@ -98,6 +99,9 @@ export const Element = (props: Props) => {
                     <Route path="/authority/registration">
                         <Registration.Element />
                     </Route>
+                    <Route path="/authority/approval">
+                        <Approval.Element />
+                    </Route>
                 </Switch>
             </Main.Element>
         </Router>
@@ -122,8 +126,8 @@ const breadcrumbsMapper = {
     'authority': {
         _url: '',
         _name: 'Quản lý Ủy quyền',
-        'registration': { _url: '/category/registration',_name: 'Đăng ký Ủy quyền', },
-        'approval': { _url: '/category/approval',_name: 'Kiểm soát Ủy quyền', },
+        'registration': { _url: '/authority/registration',_name: 'Đăng ký Ủy quyền', },
+        'approval': { _url: '/authority/approval',_name: 'Kiểm soát Ủy quyền', },
     },
 }
 

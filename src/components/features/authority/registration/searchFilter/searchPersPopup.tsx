@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
@@ -17,10 +17,15 @@ export type Props = Popup.Props;
 export const Element = (props: Popup.Props) => {
   const dispatch = useDispatch();
   const queryResultSelector = useSelector(state => state['searchPers'].queryResult.data);
+  useLayoutEffect(() => {
+    dispatch({ type: REQUEST_QUERY });
+  }, []);
+
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_28,
     style: {
+      minHeight: '200px',
       maxHeight: '500px',
       overflowY: 'auto',
       overflowX: 'hidden',
@@ -52,10 +57,15 @@ export const Element = (props: Popup.Props) => {
           flex={Base.Flex.START}
         >
           <Combox.Element
+            $selectorWrapper={{
+              style: {
+                backgroundColor: '#e8e8e8',
+              }
+            }}
             width={Base.Width.PX_200}
             store={{
-              defaultSelectorKeys: ['searchOrgs', 'filters', 'type'],
-              selectorKeys: ['searchOrgs', 'filters', 'types'],
+              defaultSelectorKeys: ['searchPers', 'filters', 'type'],
+              selectorKeys: ['searchPers', 'filters', 'types'],
               reducerType: SELECT_TYPE_FILTER,
               reducerKeys: {
                 text: 'text',
@@ -95,7 +105,7 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...actionsWrapperProps}>
         <Pagination.Element
           store={{
-            totalSelectorKeys: ['searchOrgs', 'queryResult'],
+            totalSelectorKeys: ['searchPers', 'queryResult'],
             action: {
               type: REQUEST_QUERY,
             }
@@ -119,10 +129,15 @@ export const Element = (props: Popup.Props) => {
               isDisabledSelectorKeys: ['base', 'buttons', 'searchPers', 'select'],
               action: {
                 type: HANDLE_POPUP,
-                keys: ['registration', 'searchOrgs', 'isShown'],
+                keys: ['registration', 'searchPers', 'isShown'],
                 value: false,
               }
             }}
+            onClick={() => dispatch({
+              type: HANDLE_POPUP,
+              keys: ['registration', 'create', 'isShown'],
+              value: true,
+            })}
           />
           <Button.Element
             text='Close'
@@ -132,10 +147,15 @@ export const Element = (props: Popup.Props) => {
             store={{
               action: {
                 type: HANDLE_POPUP,
-                keys: ['registration', 'searchOrgs', 'isShown'],
+                keys: ['registration', 'searchPers', 'isShown'],
                 value: false,
               }
             }}
+            onClick={() => dispatch({
+              type: HANDLE_POPUP,
+              keys: ['registration', 'create', 'isShown'],
+              value: true,
+            })}
           />
         </Block.Element>
       </Block.Element>
@@ -151,7 +171,7 @@ const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
 
-const handleRowClick = (dispatch) => (item) => (e)=> {
+const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_ROW, data: item });
   dispatch({ type: HANDLE_BUTTON, keys: ['searchPers', 'select', 'isDisabled'], value: false });
 }

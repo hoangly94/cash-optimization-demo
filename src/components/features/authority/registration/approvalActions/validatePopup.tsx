@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
+import { CHANGE_EDITING_INPUT, HANDLE_APPROVE_ACTION, HANDLE_REJECT_ACTION, INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
 import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
-import * as Combox from "~commons/combox";
-import * as Datepicker from "~commons/datepicker";
-import * as DualTable from "~commons/dualTable";
+import * as Table from "~commons/table";
 import { getCurrentDate, isMatchDateDD_MM_YYY } from "@utils";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
 
@@ -22,26 +20,28 @@ export const Element = (props: Popup.Props) => {
 
   const [errorMsg, setErrorMsg] = useState('');
   const popupSelector = useSelector(state => state['registration'].editingPopup);
-  
-  const dispatch = useDispatch();
 
-  const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(popupSelector, setErrorMsg);
+  const dispatch = useDispatch();
+  const handleSubmitButtonClick = (actionType) => {
+    const isValidForm = actionType == HANDLE_REJECT_ACTION ? validateForm(popupSelector, setErrorMsg) : true;
     if (isValidForm) {
       setErrorMsg('');
-      dispatch({ type: REQUEST_EDITING });
+      dispatch({ type: actionType });
+      dispatch({
+        type: HANDLE_POPUP,
+        keys: ['registration', 'validate', 'isShown'],
+        value: false,
+      });
+
       if (setIsShown)
         setIsShown(false)
     }
   }
 
   const submitButtonProps: Button.Props = {
-    text: 'Edit',
     margin: Base.MarginRight.PX_28,
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
-    backgroundColor: Base.BackgroundColor.GREEN,
-    onClick: handleSubmitButtonClick,
   }
 
   const closeButtonProps: Button.Props = {
@@ -51,6 +51,14 @@ export const Element = (props: Popup.Props) => {
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
   }
   const errorMsgDisplay = errorMsg ? { display: 'block' } : { display: 'none' };
+
+  const tableProps: Table.Props = {
+    ...tableData(popupSelector.authorityContent2?.map(mapResponseToData(handleRowClick(dispatch)))),
+    backgroundColor: Base.BackgroundColor.WHITE,
+    style: {
+      minWidth: '800px',
+    }
+  }
 
   return (
     <Popup.Element {...props}>
@@ -66,12 +74,11 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Số UQ' {...inputTitleProps} />
         <Input.Element
           valueType={Input.ValueType.NUMBER}
-          placeholder=''
-          {...inputProps}
           store={{
             selectorKeys: ['registration', 'editingPopup', 'id'],
             reducerType: '',
           }}
+          {...inputProps}
           isDisabled={true}
         />
       </Block.Element>
@@ -108,42 +115,24 @@ export const Element = (props: Popup.Props) => {
           width={Base.Width.PER_70}
           flex={Base.Flex.BETWEEN}
         >
-          <Datepicker.Element
+          <Input.Element
+            {...inputProps}
             flexGrow={Base.FlexGrow.G1}
             margin={Base.MarginRight.PX_18}
-            $input={{
-              placeholder: 'Đến ngày(dd-mm-yyy)',
-              width: Base.Width.FULL,
-              store: {
-                selectorKeys: ['registration', 'editingPopup', 'dateFrom'],
-                reducerType: INPUT_DATE_FROM_EDITING,
-              },
-              max: 10,
+            store={{
+              selectorKeys: ['registration', 'editingPopup', 'dateFrom'],
+              reducerType: '',
             }}
-            $datepicker={{
-              store: {
-                selectorKeys: ['registration', 'editingPopup', 'dateFrom'],
-                action: { type: INPUT_DATE_FROM_EDITING },
-              },
-            }}
+            isDisabled={true}
           />
-          <Datepicker.Element
+          <Input.Element
+            {...inputProps}
             flexGrow={Base.FlexGrow.G1}
-            $input={{
-              placeholder: 'Đến ngày(dd-mm-yyy)',
-              width: Base.Width.FULL,
-              store: {
-                selectorKeys: ['registration', 'editingPopup', 'dateTo'],
-                reducerType: INPUT_DATE_TO_EDITING,
-              },
-              max: 10,
+            store={{
+              selectorKeys: ['registration', 'editingPopup', 'dateTo'],
+              reducerType: '',
             }}
-            $datepicker={{
-              store: {
-                selectorKeys: ['registration', 'editingPopup', 'dateTo'],
-                action: { type: INPUT_DATE_TO_EDITING },
-              },
-            }}
+            isDisabled={true}
           />
         </Block.Element>
       </Block.Element>
@@ -159,34 +148,6 @@ export const Element = (props: Popup.Props) => {
         <Title.Element
           tagType={Title.TagType.H3}
           text='Người UQ'
-        />
-        <Button.Element
-          border={Base.Border.NONE}
-          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-          color={Base.Color.WHITE}
-          width={Base.Width.PX_200}
-          text='Search'
-          store={{
-            action: {
-              type: HANDLE_POPUP,
-              keys: ['registration', 'edit', 'isShown'],
-              value: false,
-            }
-          }}
-          onClick={() => {
-            dispatch({
-              type: HANDLE_POPUP,
-              keys: ['registration', 'searchPers', 'isShown'],
-              value: true,
-            });
-            dispatch({
-              type: SEARCH_PERS,
-              data: {
-                searchPersType: 1,
-                popupType: 2,
-              },
-            });
-          }}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
@@ -235,34 +196,6 @@ export const Element = (props: Popup.Props) => {
         <Title.Element
           tagType={Title.TagType.H3}
           text='Người nhận UQ'
-        />
-        <Button.Element
-          border={Base.Border.NONE}
-          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-          color={Base.Color.WHITE}
-          width={Base.Width.PX_200}
-          text='Search'
-          store={{
-            action: {
-              type: HANDLE_POPUP,
-              keys: ['registration', 'edit', 'isShown'],
-              value: false,
-            }
-          }}
-          onClick={() => {
-            dispatch({
-              type: HANDLE_POPUP,
-              keys: ['registration', 'searchPers', 'isShown'],
-              value: true,
-            });
-            dispatch({
-              type: SEARCH_PERS,
-              data: {
-                searchPersType: 2,
-                popupType: 2,
-              },
-            });
-          }}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
@@ -341,14 +274,38 @@ export const Element = (props: Popup.Props) => {
           paddingTop: '28px',
         }}
       />
-      <DualTable.Element
-        store={{
-          selector1Keys: ['registration', 'editingPopup', 'authorityContent1'],
-          selector2Keys: ['registration', 'editingPopup', 'authorityContent2'],
-          row1ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType:2, tableType: 1 },
-          row2ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType: 2, tableType: 2 },
-        }}
-      />
+      <Table.Element {...tableProps} />
+
+      <Block.Element
+        {...inputWrapperProps}
+        margin={Base.MarginTop.PX_38}
+      >
+        <Title.Element text='Tên nhân viên đăng ký' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          store={{
+            selectorKeys: ['auth', 'user', 'name'],
+            reducerType: '',
+          }}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}
+        margin={Base.MarginTop.PX_28}>
+        <Title.Element
+          text='Lý do từ chối phê duyệt của TDV'
+          {...inputTitleProps}
+        />
+        <Input.Element
+          {...inputProps}
+          placeholder='Nhập lý do từ chối...'
+          store={{
+            selectorKeys: ['registration', 'editingPopup', 'rejectReason'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+        />
+      </Block.Element>
 
       <Block.Element
         {...actionsWrapperProps}
@@ -360,6 +317,16 @@ export const Element = (props: Popup.Props) => {
         <Block.Element {...actionsProps}>
           <Button.Element
             {...submitButtonProps}
+            text='Approve'
+            onClick={() => handleSubmitButtonClick(HANDLE_APPROVE_ACTION)}
+            backgroundColor={Base.BackgroundColor.GREEN}
+            flexGrow={Base.FlexGrow.G1}
+          />
+          <Button.Element
+            {...submitButtonProps}
+            text='Reject'
+            onClick={() => handleSubmitButtonClick(HANDLE_REJECT_ACTION)}
+            backgroundColor={Base.BackgroundColor.RED}
             flexGrow={Base.FlexGrow.G1}
           />
           <Button.Element
@@ -368,7 +335,7 @@ export const Element = (props: Popup.Props) => {
             store={{
               action: {
                 type: HANDLE_POPUP,
-                keys: ['registration', 'edit', 'isShown'],
+                keys: ['registration', 'validate', 'isShown'],
                 value: false,
               }
             }}
@@ -396,31 +363,53 @@ const actionsWrapperProps: Block.Props = {
 }
 
 const actionsProps: Block.Props = {
-  flex: Base.Flex.BETWEEN,
+  flex: Base.Flex.END,
   width: Base.Width.PER_70,
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  // console.log(popupSelector);
-  if (!isMatchDateDD_MM_YYY(popupSelector.dateFrom)) {
-    setErrorMsg('UQ từ ngày sai định dạng');
-    return false;
-  }
-  if (!isMatchDateDD_MM_YYY(popupSelector.dateTo)) {
-    setErrorMsg('UQ đến ngày sai định dạng');
-    return false;
-  }
-
-  if (!popupSelector.sendId) {
-    setErrorMsg('Chưa chọn người UQ');
-    return false;
-  }
-  if (!popupSelector.sendId) {
-    setErrorMsg('Chưa chọn người nhận UQ');
+  if (!popupSelector.rejectReason) {
+    setErrorMsg('Chưa nhập lý do từ chối');
     return false;
   }
   return true;
 }
 
+const handleRowClick = (dispatch) => (item) => (e) => {
+}
+
+const tableData = (queryResult?): Table.Props => ({
+  $rows: [
+    {
+      style: {
+        backgroundColor: '#1e3f96',
+      },
+      color: Base.Color.WHITE,
+      $cells: [
+        {
+          children: 'STT',
+        },
+        {
+          children: 'Ngày tạo',
+        },
+      ],
+    },
+    ...(queryResult ? queryResult : []),
+  ],
+})
+
+const mapResponseToData = (handleRowClick) => (item, index) => ({
+  isSelected: item.isSelected ?? false,
+  onClick: handleRowClick(item),
+  $cells: [
+    {
+      children: index + 1,
+    },
+    {
+      children: item.name,
+    },
+  ]
+})
+
 export default Element;
-Element.displayName = 'EditingPopup'
+Element.displayName = 'ValidatePopup'

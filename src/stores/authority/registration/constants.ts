@@ -22,6 +22,25 @@ export const CHANGE_RADIO_FILTER = root + 'CHANGE_RADIO_FILTER';
 export const SELECT_STATUS_FILTER = root + 'SELECT_STATUS_FILTER';
 export const INPUT_DATE_FROM = root + 'INPUT_DATE_FROM';
 export const INPUT_DATE_TO = root + 'INPUT_DATE_TO';
+export const INPUT_DATE_FROM_CREATING = root + 'INPUT_DATE_FROM_CREATING';
+export const INPUT_DATE_TO_CREATING = root + 'INPUT_DATE_TO_CREATING';
+export const INPUT_DATE_FROM_EDITING = root + 'INPUT_DATE_FROM_EDITING';
+export const INPUT_DATE_TO_EDITING = root + 'INPUT_DATE_TO_EDITING';
+export const SEARCH_PERS = root + 'SEARCH_PERS';
+export const SELECT_AUTHORITY_CONTENT_ROW = root + 'SELECT_AUTHORITY_CONTENT_ROW';
+export const SET_POPUP_TYPE = root + 'SET_POPUP_TYPE';
+
+export const HANDLE_DUALTABLE_MOVE = root + 'HANDLE_DUALTABLE_MOVE';
+export const HANDLE_APPROVE_ACTION = root + 'HANDLE_APPROVE_ACTION';
+export const HANDLE_REJECT_ACTION = root + 'HANDLE_REJECT_ACTION';
+
+export const HANDLE_DELETE_ACTION = root + 'HANDLE_DELETE_ACTION';
+
+export const RESET_FILTER_REGISTRATION = root + 'RESET_FILTER_REGISTRATION';
+export const RESET_FILTER_APPROVAL = root + 'RESET_FILTER_APPROVAL';
+
+export const HANDLE_CONTINUE_ACTION = root + 'HANDLE_CONTINUE_ACTION';
+
 
 export type State = {
     history: any,
@@ -45,23 +64,75 @@ export type State = {
     editingButton: {
         isDisabled: boolean,
     },
-    selectedItem: any,
 
+    searchPersType:number,
+    popupType:number,
+    
+    selectedItem: any,
     creatingPopup: {
         isShown: boolean,
-        areaCode?: number,
-        areaName?: string,
-        regionSelected:{
-            text: string,
-            value: string,
-        }
+
+        orgsId:string,
+        orgsName:string,
+
+        dateFrom:string,
+        dateTo:string,
+
+        sendId: string,
+        sendCode: string,
+        sendName: string,
+        sendCmnd: string,
+        sendTitle: string,
+
+        recvId: string,
+        recvCode: string,
+        recvName: string,
+        recvCmnd: string,
+        recvCmndyear: string,
+        recvCmndPlace: string,
+        recvTitle: string,
+        recvPhone: string,
+
+        authorityContent1: any,
+        authorityContent2: any,
+
+        authorityStatus: string,
+        
+        rejectReason: string,
+
+        updatedbyCode:string,
+        updatedbyName:string,
     },
     editingPopup: {
         isShown: boolean,
-        regionSelected:{
-            text: string,
-            value: string,
-        },
+        dateFrom:string,
+        dateTo:string,
+
+        sendId: string,
+        sendName: string,
+        sendCmnd: string,
+        sendTitle: string,
+
+        recvId: string,
+        recvName: string,
+        recvTitle: string,
+        recvCmnd: string,
+        recvCmndyear: string,
+        recvCmndPlace: string,
+        recvPhone: string,
+
+        authorityStatus: string,
+
+        authorityContent1: any,
+        authorityContent2: any,
+        
+        rejectReason: string,
+
+        createdbyName:string,
+
+        updatedbyCode:string,
+        updatedbyName:string,
+        updateddate:string,
     },
     historyPopup: {
         isShown: boolean,

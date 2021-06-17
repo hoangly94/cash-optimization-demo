@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
@@ -9,27 +9,22 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { getCurrentDate } from "@utils";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
-import { INPUT_VALUE_FILTER, REQUEST_QUERY, SELECT_ROW, SELECT_TYPE_FILTER } from '~stores/authority/searchOrgs/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
+import { INPUT_ORGS_VALUE_FILTER, REQUEST_QUERY, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, SELECT_ROW } from '~stores/authority/searchOrgs/constants';
+import * as RegionAreaFilter from './regionAreaFilter';
 
 export type Props = Popup.Props;
 
 export const Element = (props: Popup.Props) => {
   const dispatch = useDispatch();
   const queryResultSelector = useSelector(state => state['searchOrgs'].queryResult.data);
+  useLayoutEffect(() => {
+    dispatch({ type: REQUEST_QUERY });
+  }, []);
+
   //create props
-  const componentWrapperProps = {
-    margin: Base.MarginTop.PX_28,
-    style: {
-      maxHeight: '500px',
-      overflowY: 'auto',
-      overflowX: 'hidden',
-    },
-    ...props,
-  };
   const tableProps: Table.Props = {
     ...tableData(queryResultSelector?.map(mapResponseToData(handleRowClick(dispatch)))),
-    // height: Base.Height.PX_300,
     backgroundColor: Base.BackgroundColor.WHITE,
     margin: Base.MarginBottom.PX_18,
   }
@@ -38,6 +33,7 @@ export const Element = (props: Popup.Props) => {
     margin: Base.MarginBottom.PX_18,
     style: {
       overflow: 'auto',
+      minHeight: '200px',
       maxHeight: '520px',
     }
   }
@@ -53,26 +49,33 @@ export const Element = (props: Popup.Props) => {
           margin={Base.MarginRight.PX_18}
         >
           <Combox.Element
+            $selectorWrapper={{
+              style: {
+                backgroundColor: '#e8e8e8',
+              }
+            }}
             width={Base.Width.PX_80}
             store={{
               defaultSelectorKeys: ['searchOrgs', 'filters', 'locationType'],
               selectorKeys: ['searchOrgs', 'filters', 'locationTypes'],
-              reducerType: SELECT_TYPE_FILTER,
+              reducerType: SELECT_LOCATION_TYPE_FILTER,
               reducerKeys: {
                 text: 'text',
                 value: 'value',
               },
             }}
           />
-
-          <Input.Element
+          <RegionAreaFilter.Element
+            width={Base.Width.PX_150}
+          />
+          {/* <Input.Element
             width={Base.Width.PX_150}
             store={{
               selectorKeys: ['searchOrgs', 'filters', 'locationValue'],
               reducerType: INPUT_VALUE_FILTER,
             }}
             max={200}
-          />
+          /> */}
         </Block.Element>
 
         <Block.Element
@@ -80,11 +83,16 @@ export const Element = (props: Popup.Props) => {
           margin={Base.MarginRight.PX_18}
         >
           <Combox.Element
+            $selectorWrapper={{
+              style: {
+                backgroundColor: '#e8e8e8',
+              }
+            }}
             width={Base.Width.PX_100}
             store={{
               defaultSelectorKeys: ['searchOrgs', 'filters', 'orgsType'],
               selectorKeys: ['searchOrgs', 'filters', 'orgsTypes'],
-              reducerType: SELECT_TYPE_FILTER,
+              reducerType: SELECT_ORGS_TYPE_FILTER,
               reducerKeys: {
                 text: 'text',
                 value: 'value',
@@ -93,10 +101,11 @@ export const Element = (props: Popup.Props) => {
           />
 
           <Input.Element
+            placeholder='Nhập giá trị...'
             width={Base.Width.PX_150}
             store={{
               selectorKeys: ['searchOrgs', 'filters', 'orgsValue'],
-              reducerType: INPUT_VALUE_FILTER,
+              reducerType: INPUT_ORGS_VALUE_FILTER,
             }}
             max={200}
           />

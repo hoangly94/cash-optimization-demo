@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROW } from '~stores/category/area/constants';
+import { SELECT_ROW } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import {HANDLE_BUTTON} from "~stores/_base/constants";
@@ -10,7 +10,7 @@ import { getCurrentDate } from '@utils';
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  const queryResult = useSelector(state => state['area'].queryResult.data);
+  const queryResult = useSelector(state => state['registration'].queryResult.data);
   const dispatch = useDispatch();
   //create props
   const componentWrapperProps = {
@@ -43,7 +43,8 @@ const tableData_$rows_$cells_title = {
 
 const handleRowClick = (dispatch) => (item) => (e)=> {
   dispatch({ type: SELECT_ROW, data: item });
-  dispatch({ type: HANDLE_BUTTON, keys: ['area', 'edit', 'isDisabled'], value: false });
+  dispatch({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: false });
+  dispatch({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: false });
 }
 
 const tableData = (queryResult?): Table.Props => ({
@@ -60,31 +61,35 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã cụm',
+          children: 'Ngày tạo',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên cụm',
+          children: 'Số UQ',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã vùng',
+          children: 'Tên ĐVUQ',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên vùng',
+          children: 'Người UQ',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Ngày đăng ký',
+          children: 'Người nhận UQ',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'NV đăng ký',
+          children: 'Thời gian UQ từ ngày',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Datelastmaint',
+          children: 'Thời gian UQ đến ngày',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Trạng thái',
         },
       ],
     },
@@ -100,25 +105,28 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.areaCode,
+      children: item.createddate,
     },
     {
-      children: item.areaName,
+      children: item.id,
     },
     {
-      children: item.categoryRegion.regionCode,
+      children: item.categoryOrgs?.orgsName,
     },
     {
-      children: item.categoryRegion.regionName,
+      children: item.persFullname,
     },
     {
-      children: getCurrentDate(item.createddate),
+      children: item.receiverPersFullname,
     },
     {
-      children: item.createdby,
+      children: getCurrentDate(item.authorityFromDate),
     },
     {
-      children: getCurrentDate(item.updateddate),
+      children: getCurrentDate(item.authorityToDate),
+    },
+    {
+      children: item.authorityStatus,
     },
   ]
 })

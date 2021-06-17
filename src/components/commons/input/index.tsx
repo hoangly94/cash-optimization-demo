@@ -58,12 +58,11 @@ export const Element = (props: Props) => {
     max,
     valueType,
   } = props
-
   const dispatch = useDispatch();
   const value = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : null;
   const ref = refs ?? useRef(null);
   const disabled = isDisabled ? 'disabled' : '';
-
+  
   const handleKeyPress = (e) => {
     if (valueType === ValueType.NUMBER)
       validateNumber(e);
@@ -79,9 +78,8 @@ export const Element = (props: Props) => {
       onChange(e);
   }
 
-
   if (ref?.current){
-    (ref as any).current.value = value ? value : defaultValue;
+    (ref as any).current.value = value || defaultValue;
   }
 
   const valueProp = ref?.current ? null : {value: defaultValue};
@@ -99,7 +97,6 @@ export const Element = (props: Props) => {
     ...valueProp,
     onKeyPress: handleKeyPress,
   };
-
 
   return <input {...componentProps} />;
 }

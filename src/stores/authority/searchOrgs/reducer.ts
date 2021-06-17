@@ -1,4 +1,4 @@
-import { State, SELECT_TYPE_FILTER, INPUT_VALUE_FILTER, UPDATE_DATA, SELECT_ROW } from './constants'
+import { State, UPDATE_DATA, SELECT_ROW, SELECT_REGION_TYPE_FILTER, SELECT_AREA_TYPE_FILTER, INPUT_ORGS_VALUE_FILTER, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER } from './constants'
 import { getCurrentDate } from '@utils';
 
 const initState: State = {
@@ -15,20 +15,29 @@ const initState: State = {
 
 export default (state: State = initState, action) => {
     switch (action.type) {
-        case INPUT_VALUE_FILTER:
+        case SELECT_LOCATION_TYPE_FILTER:
             return {
                 ...state,
                 filters: {
                     ...state.filters,
-                    // ...action.data
+                    locationType: action.data,
                 },
             }
-        case SELECT_TYPE_FILTER:
+        case SELECT_ORGS_TYPE_FILTER:
             return {
                 ...state,
                 filters: {
                     ...state.filters,
-                    // type: action.data,
+                    orgsType: action.data,
+                },
+            }
+        case INPUT_ORGS_VALUE_FILTER:
+            console.log(action);
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    ...action.data,
                 },
             }
         case UPDATE_DATA:
@@ -51,6 +60,22 @@ export default (state: State = initState, action) => {
                     data: newQueryResult,
                 }
             }
+        case SELECT_REGION_TYPE_FILTER:
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    regionType: action.data,
+                },
+            }
+        case SELECT_AREA_TYPE_FILTER:
+            return {
+                ...state,
+                filters: {
+                    ...state.filters,
+                    areaType: action.data,
+                },
+            }
         default:
             return state
     }
@@ -58,6 +83,14 @@ export default (state: State = initState, action) => {
 
 function getDefaultFilters() {
     return {
+        regionType: {
+            text: 'Chọn vùng',
+            value: '',
+        },
+        areaType: {
+            text: 'Chọn cụm',
+            value: '',
+        },
         locationType: {
             text: 'Vùng',
             value: 'region',

@@ -11,6 +11,7 @@ import * as Datepicker from "~commons/datepicker";
 import * as Title from "~commons/title";
 import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
+import * as SearchPersPopup from "./searchPersPopup";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
 
 export type Props = Base.Props;
@@ -20,7 +21,6 @@ export const Element = (props: Props) => {
     // dispatch({ type: UPDATE_CONFIG })
     // dispatch({ type: REQUEST_QUERY });
   })
-  const rootSelector = useSelector(state => state['root']);
   const radioSelector = useSelector(state => state['registration'].filters.radio);
   const dispatch = useDispatch();
 
@@ -58,18 +58,9 @@ export const Element = (props: Props) => {
 
 
   const radioProps = {
+    flex: Base.Flex.BETWEEN,
     margin: Base.MarginRight.PX_18,
-    style: {
-      lineHeight: '44px',
-    },
   }
-
-  const datepickerProps = {
-    style: {
-      position: 'absolute',
-    }
-  }
-
   return (
     <Block.Element>
       <Block.Element {...componentWrapperProps}>
@@ -127,6 +118,7 @@ export const Element = (props: Props) => {
           textAlign={Base.TextAlign.LEFT}
           text='ĐVUQ'
           store={{
+            textSelectorKeys: ['registration', 'filters', 'orgs', 'text'],
             action: {
               type: HANDLE_POPUP,
               keys: ['registration', 'searchOrgs', 'isShown'],
@@ -166,10 +158,10 @@ export const Element = (props: Props) => {
           }}
         />
         <Input.Element
-          placeholder='Mã cụm'
+          placeholder='Số UQ'
           {...filter2Props}
           store={{
-            selectorKeys: ['area', 'filters', 'areaCode'],
+            selectorKeys: ['registration', 'filters', 'id'],
             reducerType: CHANGE_CODE_FILTER,
           }}
           isDisabled={radioSelector !== '2'}
@@ -179,11 +171,11 @@ export const Element = (props: Props) => {
         <Button.Element
           {...queryButtonProps}
           store={{
-            isLoadingSelectorKeys: ['base', 'buttons', 'area', 'query'],
+            isLoadingSelectorKeys: ['base', 'buttons', 'registration', 'query'],
             action: { type: REQUEST_QUERY },
           }}
         />
-        <Button.Element {...resetButtonProps}></Button.Element>
+        {/* <Button.Element {...resetButtonProps}></Button.Element> */}
       </Block.Element>
 
       <SearchOrgsPopup.Element
@@ -195,6 +187,16 @@ export const Element = (props: Props) => {
           isShownSelectorKeys: ['base', 'popups', 'registration', 'searchOrgs'],
         }}
       />
+      <SearchPersPopup.Element
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'Tìm nhân viên',
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'registration', 'searchPers'],
+        }}
+      />
+
     </Block.Element >
   )
 }

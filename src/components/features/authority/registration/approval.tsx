@@ -5,17 +5,17 @@ import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
-import * as Actions from "./actions";
+import * as ApprovalActions from "./approvalActions";
 import { useDispatch } from 'react-redux';
 import { FETCH_CONFIG } from '_/stores/dashboardRoot/constants';
-import { REQUEST_QUERY, RESET_FILTER_REGISTRATION } from '_/stores/authority/registration/constants';
+import { REQUEST_QUERY, RESET_FILTER_APPROVAL } from '_/stores/authority/registration/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const type = 'component';
   useEffect(() => {
-    dispatch({ type: RESET_FILTER_REGISTRATION });
+    dispatch({ type: RESET_FILTER_APPROVAL });
     dispatch({ type: REQUEST_QUERY });
   });
 
@@ -32,10 +32,10 @@ export const Element = (props: Props) => {
     <Block.Element {...componentWrapperProps}>
       <SearchFilter.Element />
       <SearchDataTable.Element />
-      <Actions.Element />
+      <ApprovalActions.Element />
     </Block.Element >
   )
 }
 
-Element.displayName = 'Registration'
+Element.displayName = 'Approval'
 

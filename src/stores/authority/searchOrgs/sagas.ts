@@ -19,8 +19,8 @@ function getData(filters, page: number = 0) {
     const url = Config.url + '/api/cashoptimization/authority/searchOrgs';
 
     const locationDataValue = filters.locationType.value === 'area'
-        ? { areaId: filters.locationValue ? filters.locationValue : 0 }
-        : { regionId: filters.locationValue ? filters.locationValue : 0 };
+        ? { areaId: filters.areaType.value ? filters.areaType.value : 0 }
+        : { regionId: filters.regionType.value ? filters.regionType.value : 0 };
     const orgsDataValue = filters.orgsType.value === 'name'
         ? { orgsName: filters.orgsValue ? filters.orgsValue : null }
         : { orgsCode: filters.orgsValue ? filters.orgsValue : 0 };

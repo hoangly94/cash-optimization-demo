@@ -20,11 +20,13 @@ export enum Size {
 
 export type Props = Base.Props & {
   type?: Type,
+  text?: string,
 }
 
 export const Element = (props: Props): React.ReactElement => {
   const {
     type = Type.SUCCESS,
+    text,
   } = props;
 
   //create props
@@ -36,7 +38,7 @@ export const Element = (props: Props): React.ReactElement => {
   };
   return (
     <Block.Element {...componentProps}>
-      {type === Type.SUCCESS ? 'SUCCESS': 'ERROR'}
+      {text || (type === Type.SUCCESS ? 'SUCCESS': 'ERROR')}
     </Block.Element>
   )
 }

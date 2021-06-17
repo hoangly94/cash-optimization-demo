@@ -7,19 +7,20 @@ import * as Popup from "~commons/popup";
 import * as Pagination from "~commons/pagination";
 import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
-import * as HistoryPopup from "./historyPopup";
+import * as DetailPopup from "./detailPopup";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_QUERY } from '_/stores/category/area/constants';
 import { useDispatch } from 'react-redux';
+import { HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '_/stores/authority/registration/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
-  React.useEffect(()=>{
+  React.useEffect(() => {
     dispatch({ type: FETCH_HISTORY })
-  },[]);
-  
+  }, []);
+
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -38,14 +39,32 @@ export const Element = (props: Props) => {
     text: 'Edit',
     backgroundColor: Base.BackgroundColor.TIGERLILY,
   }
-  const historyButtonComponentProps: Button.Props = {
+  const printButtonComponentProps: Button.Props = {
     ...buttonProps,
-    text: 'History',
+    text: 'Print',
+    backgroundColor: Base.BackgroundColor.CLASSIC_BLUE,
+  }
+  const continueButtonComponentProps: Button.Props = {
+    ...buttonProps,
+    text: 'Continue',
+    backgroundColor: Base.BackgroundColor.TIGERLILY,
+  }
+  const deleteButtonComponentProps: Button.Props = {
+    ...buttonProps,
+    text: 'Delete',
+    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+  }
+  const detailButtonComponentProps: Button.Props = {
+    ...buttonProps,
+    text: 'Detail',
     backgroundColor: Base.BackgroundColor.CLASSIC_BLUE,
   }
 
   const creatingPopupComponentProps: Popup.Props = {
     ...popupProps,
+    $content: {
+      width: Base.Width.PX_1200,
+    },
     $title: {
       tagType: Title.TagType.H2,
       text: 'CREATE'
@@ -53,6 +72,9 @@ export const Element = (props: Props) => {
   }
   const editingPopupComponentProps: Popup.Props = {
     ...popupProps,
+    $content: {
+      width: Base.Width.PX_1200,
+    },
     $title: {
       tagType: Title.TagType.H2,
       text: 'EDIT'
@@ -61,7 +83,7 @@ export const Element = (props: Props) => {
   const historyPopupComponentProps: Popup.Props = {
     ...popupProps,
     $content: {
-      width: Base.Width.PX_1100,
+      width: Base.Width.PX_1200,
     },
     $title: {
       tagType: Title.TagType.H2,
@@ -74,7 +96,7 @@ export const Element = (props: Props) => {
       <Block.Element {...componentWrapperProps}>
         <Pagination.Element
           store={{
-            totalSelectorKeys: ['area', 'queryResult'],
+            totalSelectorKeys: ['registration', 'queryResult'],
             action: {
               type: REQUEST_QUERY,
             }
@@ -84,56 +106,90 @@ export const Element = (props: Props) => {
           }}
         />
         <Block.Element>
-          <Button.Element
-            {...creatingButtonComponentProps}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['area', 'create', 'isShown'],
-                value: true,
-              }
-            }}
-          />
-          <Button.Element
-            {...editingButtonComponentProps}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'area', 'edit'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['area', 'edit', 'isShown'],
-                value: true,
-              }
-            }}
-          />
-          <Button.Element
-            {...historyButtonComponentProps}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['area', 'history', 'isShown'],
-                value: true,
-              }
-            }}
-          />
+          <Block.Element>
+            <Button.Element
+              {...creatingButtonComponentProps}
+              store={{
+                action: {
+                  type: HANDLE_POPUP,
+                  keys: ['registration', 'create', 'isShown'],
+                  value: true,
+                  popupType: 1,
+                }
+              }}
+            />
+            <Button.Element
+              {...editingButtonComponentProps}
+              store={{
+                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'edit'],
+                action: {
+                  type: HANDLE_POPUP,
+                  keys: ['registration', 'edit', 'isShown'],
+                  value: true,
+                  popupType: 2,
+                }
+              }}
+            />
+            <Button.Element
+              {...detailButtonComponentProps}
+              store={{
+                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+                action: {
+                  type: HANDLE_POPUP,
+                  keys: ['registration', 'detail', 'isShown'],
+                  value: true,
+                  popupType: 3,
+                }
+              }}
+            />
+          </Block.Element>
+          <Block.Element
+            margin={Base.MarginTop.PX_18}
+          >
+            <Button.Element
+              {...printButtonComponentProps}
+            // store={{
+            //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+            // }}
+            // onClick={() => dispatch({ type: HANDLE_CONTINUE_ACTION })}
+
+            />
+            <Button.Element
+              {...continueButtonComponentProps}
+              store={{
+                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+                action:{ type: HANDLE_CONTINUE_ACTION }
+              }}
+              onClick={() => dispatch({ type: REQUEST_QUERY })}
+            />
+            <Button.Element
+              {...deleteButtonComponentProps}
+              store={{
+                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+                action:{ type: HANDLE_DELETE_ACTION }
+             }}
+             onClick={() => dispatch({ type: REQUEST_QUERY })}
+            />
+          </Block.Element>
         </Block.Element>
 
       </Block.Element >
       <CreatingPopup.Element
         {...creatingPopupComponentProps}
         store={{
-          isShownSelectorKeys: ['base', 'popups', 'area', 'create'],
+          isShownSelectorKeys: ['base', 'popups', 'registration', 'create'],
         }}
       />
       <EditingPopup.Element
         {...editingPopupComponentProps}
         store={{
-          isShownSelectorKeys: ['base', 'popups', 'area', 'edit'],
+          isShownSelectorKeys: ['base', 'popups', 'registration', 'edit'],
         }}
       />
-      <HistoryPopup.Element
+      <DetailPopup.Element
         {...historyPopupComponentProps}
         store={{
-          isShownSelectorKeys: ['base', 'popups', 'area', 'history'],
+          isShownSelectorKeys: ['base', 'popups', 'registration', 'detail'],
         }}
         useEffect={{
           callback: () => dispatch({ type: FETCH_HISTORY }),

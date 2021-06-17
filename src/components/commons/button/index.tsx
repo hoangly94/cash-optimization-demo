@@ -7,7 +7,7 @@ import ThreeDotsLoader from '~commons/svg/threeDotsLoader';
 import * as Svg from '~commons/svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { _Array } from '_/utils';
-import {HANDLE_BUTTON} from "~stores/_base/constants";
+import { HANDLE_BUTTON } from "~stores/_base/constants";
 
 export enum Type {
   DEFAULT = 'button',
@@ -35,6 +35,7 @@ export type Props = Base.Props & {
 }
 
 type Store = {
+  textSelectorKeys?: string[],
   isLoadingSelectorKeys?: string[],
   isDisabledSelectorKeys?: string[],
   action?: {},
@@ -51,21 +52,23 @@ export const Element = (props: Props) => {
   } = props;
 
   const dispatch = useDispatch();
-  const isLoadingSelector = store && store.isLoadingSelectorKeys  ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isLoadingSelectorKeys as string[], 'isLoading'])) : false;
+  const textSelector = store && store.textSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.textSelectorKeys as string[])) : text;
+  const isLoadingSelector = store && store.isLoadingSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isLoadingSelectorKeys as string[], 'isLoading'])) : false;
   const isDisabledSelector = store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])) : isDisabled;
-  
+
+
   const newProps = {
     backgroundColor: Base.BackgroundColor.WHITE,
     border: Base.Border.SOLID,
     ...props,
   }
 
-  const child = isLoadingSelector ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff' /> : text;
+  const child = isLoadingSelector ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff' /> : textSelector ? textSelector : text;
   const disabled = isDisabledSelector ? 'disabled' : '';
 
   //create props
   const buttonProps = {
-    border:Base.Border.SOLID,
+    border: Base.Border.SOLID,
     onClick: onClickWithLoading(dispatch, props, isLoadingSelector as boolean, isDisabledSelector as boolean),
     ...Base.mapProps(newProps, styles, [type, size, disabled]),
   }
@@ -84,7 +87,7 @@ export const Element = (props: Props) => {
 const onClickWithLoading = (dispatch, props: Props, isLoading: boolean, isDisabled: boolean) => (e) => {
   if (!isDisabled && !isLoading) {
     console.log(props.store?.action);
-    if (props.store){
+    if (props.store) {
       dispatch(props.store.action);
     }
     if (props.onClick)

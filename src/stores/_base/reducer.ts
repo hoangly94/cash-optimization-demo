@@ -106,6 +106,23 @@ const initState: State = {
                 isLoading: false,
             },
         },
+        'registration': {
+            'select': {
+                isDisabled: true,
+            },
+            'edit': {
+                isDisabled: true,
+            },
+            'detail': {
+                isDisabled: true,
+            },
+            'validate': {
+                isDisabled: true,
+            },
+            'query': {
+                isLoading: false,
+            },
+        },
     },
     popups: {
         'orgs': {
@@ -233,6 +250,21 @@ const initState: State = {
             'searchOrgs': {
                 isShown: false,
             },
+            'searchPers': {
+                isShown: false,
+            },
+            'create': {
+                isShown: false,
+            },
+            'edit': {
+                isShown: false,
+            },
+            'detail': {
+                isShown: false,
+            },
+            'validate': {
+                isShown: false,
+            },
         },
     },
     notis: [],
@@ -280,6 +312,7 @@ export default (state: State = initState, action) => {
                     ...state.notis,
                     {
                         type: 'error',
+                        text: action.data,
                     }
                 ],
             };
@@ -290,6 +323,7 @@ export default (state: State = initState, action) => {
                     ...state.notis,
                     {
                         type: 'success',
+                        text: action.data,
                     }
                 ],
             };

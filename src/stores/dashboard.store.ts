@@ -3,6 +3,7 @@ import createSagaMiddleware from 'redux-saga'
 import { all } from 'redux-saga/effects';
 
 import baseReducer from './_base/reducer';
+import authReducer from './auth/reducer';
 import dashboardRootReducer from './dashboardRoot/reducer';
 import orgsReducer from './category/orgs/reducer';
 import atmCdmReducer from './category/atmCdm/reducer';
@@ -20,6 +21,7 @@ import searchOrgsReducer from './authority/searchOrgs/reducer';
 import searchPersReducer from './authority/searchPers/reducer';
 
 import baseSaga from './_base/sagas';
+import authSaga from './auth/sagas';
 import dashboardRootSaga from './dashboardRoot/sagas';
 import orgsSaga from './category/orgs/sagas';
 import atmCdmSaga from './category/atmCdm/sagas';
@@ -38,6 +40,7 @@ import searchPersSaga from './authority/searchPers/sagas';
 
 const rootReducer = combineReducers({
     base: baseReducer,
+    auth: authReducer,
     root: dashboardRootReducer,
     orgs: orgsReducer,
     atmCdm: atmCdmReducer,
@@ -58,6 +61,7 @@ const rootReducer = combineReducers({
 function* rootSaga() {
     yield all([
         baseSaga(),
+        authSaga(),
         dashboardRootSaga(),
         atmCdmSaga(),
         orgsSaga(),

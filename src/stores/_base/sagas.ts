@@ -6,14 +6,14 @@ function* saga() {
 
 }
 
-export function* addNoti(type){
+export function* addNoti(type, message?:string){
     if(type == 'success'){
         yield spawn(removeLastNoti);
-        return yield put({ type: ADD_NOTI_SUCCESS});
+        return yield put({ type: ADD_NOTI_SUCCESS, data:message});
     }
     if(type == 'error'){
         yield spawn(removeLastNoti);
-        yield put({ type: ADD_NOTI_ERROR});
+        yield put({ type: ADD_NOTI_ERROR, data:message});
     }
 }
 

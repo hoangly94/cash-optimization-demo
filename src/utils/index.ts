@@ -20,6 +20,14 @@ export const _Array = {
 
 
 export const _Date = {
+    getCurrentDate(dateString?: string){
+        const date = dateString ? new Date(dateString) : new Date();
+        var dd = String(date.getDate()).padStart(2, '0');
+        var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = date.getFullYear();
+    
+        return dd + '-' + mm + '-' + yyyy;
+    },
     getNumberDaysOfMonth(date) {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     },
@@ -73,7 +81,8 @@ export const getDateString = (dateString?: string) => {
 
 //is match dd-mm-yyyy
 export const isMatchDateDD_MM_YYY = (date: string) => {
-    return date?.match(/^([0-2][0-9]|(3)[0-1])(-)(((0)[0-9])|((1)[0-2]))(-)\d{4}$/g);
+    return date?.match(/^([0-2][0-9]|(3)[0-1])(-)(((0)[0-9])|((1)[0-2]))(-)\d{4}$/g)
+        || date?.match(/^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/g);
 }
 
 export const convertDataToYYYY_MM_DD = (dateString?: string) => {

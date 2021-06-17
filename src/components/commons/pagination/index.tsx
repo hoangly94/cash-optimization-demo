@@ -63,6 +63,7 @@ export const Element = (props: Props): React.ReactElement => {
     const style = currrentPage === index ? { style: { border: '1px solid #cdcdcd' } } : {};
     return <Button.Element
       key={index}
+      border={Base.Border.NONE}
       {...pageButtonProps}
       text={'' + (index + 1)}
       {...style}

@@ -19,8 +19,6 @@ const initState: State = {
 export default (state: State = initState, action) => {
     switch (action.type) {
         case UPDATE_CONFIG:
-            
-    console.log(action);
             const atmcdmStatuses = action.data.filter(item => item.type === 'ATMCDM_STATUS');
             const nhnnTctdTypes = action.data.filter(item => item.type === 'NHNNTCTD_TYPE');
             const vehicleStatuses = action.data.filter(item => item.type === 'VEHICLE_STATUS');
