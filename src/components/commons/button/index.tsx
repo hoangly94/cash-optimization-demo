@@ -78,7 +78,7 @@ export const Element = (props: Props) => {
     : /^http.+$/.test(href)
       ? <a {...buttonProps}>{child}</a>
       : <Link  {...buttonProps} to={href}>{child}</Link>;
-
+  
   return (
     element
   )

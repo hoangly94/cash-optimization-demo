@@ -3,7 +3,6 @@ import styles from './_styles.css'
 import * as Base from '~/_settings';
 import { useDispatch, useSelector } from 'react-redux';
 import { _Array } from '_/utils';
-import { AnyMxRecord } from 'dns';
 
 export enum Type {
   DEFAULT = 'input',

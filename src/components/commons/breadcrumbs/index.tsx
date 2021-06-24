@@ -39,7 +39,7 @@ export const Element = (props: Props): React.ReactElement => {
       styles[size],
     ),
     style:{
-      borderBottom: '1px solid #cdcdcd'
+      borderBottom: '1px solid #cdcdcd',
     }
   };
   return (
