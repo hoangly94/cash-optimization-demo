@@ -67,7 +67,6 @@ function getHistory(page:number = 0) {
 }
 
 function getData(filters, page:number = 0) {
-    console.log(filters);
     const url = Config.url + '/api/cashoptimization/findCategoryATMCDM';
     const postData = {
         data: {

@@ -1,36 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { BrowserRouter as Router, Route, Redirect} from "react-router-dom";
+// import { State as AuthState } from '_/stores/auth/constants';
+import Config from '@config';
 
-export const useComponentClickOutside = (initState = {isOutside: true}) => {
-  const [clickData, setClickData] = useState(initState);
-  const ref = useRef(null);
+export const AuthRoute = ({ component: Component, isAuthenticated, ...rest }) => (
 
-  // const handleHideDropdown = (event: KeyboardEvent) => {
-  //   if (event.key === "Escape") {
-  //     setIsClickOutside(true);
-  //   }
-  // };
-
-  const handleClickOutside = (clickData, setClickData: Function) => event => {
-    const isOnside = (ref as any)?.current?.contains(event.target);
-    const isClickOutside = clickData.isOutside;
-    if (!isOnside && !isClickOutside) {
-      clickData.isOutside = true;
-      setClickData({...clickData});
-    }
-    if (isOnside){
-      clickData.isOutside = false;
-      setClickData({...clickData});
-    }
-  };
-
-  useEffect(() => {
-    // document.addEventListener("keydown", handleHideDropdown, true);
-    document.addEventListener("click", handleClickOutside(clickData, setClickData));
-    return () => {
-      // document.removeEventListener("keydown", handleHideDropdown, true);
-      document.removeEventListener("click", handleClickOutside(clickData, setClickData), true);
-    };
-  },[]);
-
-  return { ref, clickData, setClickData };
-}
+  <Route {...rest} render={(props) => (
+    isAuthenticated === true
+      ? <Component {...props} />
+      : <Redirect to={Config.unAuthenticatedUrl} />
+  )} />
+)

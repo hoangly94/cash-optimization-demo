@@ -1,0 +1,10 @@
+
+.assignRole{
+    box-sizing: border-box;
+    margin: auto;
+    min-width: 800px;
+    padding: 28px 68px 28px 288px;
+}
+.assignRole input{
+    display:block;
+}

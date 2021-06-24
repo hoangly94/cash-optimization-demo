@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
+import { INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -22,7 +22,7 @@ export const Element = (props: Popup.Props) => {
 
   const [errorMsg, setErrorMsg] = useState('');
   const popupSelector = useSelector(state => state['registration'].editingPopup);
-  
+
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
@@ -41,7 +41,6 @@ export const Element = (props: Popup.Props) => {
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
     backgroundColor: Base.BackgroundColor.GREEN,
-    onClick: handleSubmitButtonClick,
   }
 
   const closeButtonProps: Button.Props = {
@@ -118,7 +117,7 @@ export const Element = (props: Popup.Props) => {
                 selectorKeys: ['registration', 'editingPopup', 'dateFrom'],
                 reducerType: INPUT_DATE_FROM_EDITING,
               },
-              max: 10,
+              max: 19,
             }}
             $datepicker={{
               store: {
@@ -136,7 +135,7 @@ export const Element = (props: Popup.Props) => {
                 selectorKeys: ['registration', 'editingPopup', 'dateTo'],
                 reducerType: INPUT_DATE_TO_EDITING,
               },
-              max: 10,
+              max: 19,
             }}
             $datepicker={{
               store: {
@@ -345,7 +344,7 @@ export const Element = (props: Popup.Props) => {
         store={{
           selector1Keys: ['registration', 'editingPopup', 'authorityContent1'],
           selector2Keys: ['registration', 'editingPopup', 'authorityContent2'],
-          row1ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType:2, tableType: 1 },
+          row1ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType: 2, tableType: 1 },
           row2ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType: 2, tableType: 2 },
         }}
       />
@@ -361,6 +360,9 @@ export const Element = (props: Popup.Props) => {
           <Button.Element
             {...submitButtonProps}
             flexGrow={Base.FlexGrow.G1}
+            onClick={() => {
+              handleSubmitButtonClick();
+              }}
           />
           <Button.Element
             {...closeButtonProps}
@@ -401,7 +403,6 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  // console.log(popupSelector);
   if (!isMatchDateDD_MM_YYY(popupSelector.dateFrom)) {
     setErrorMsg('UQ từ ngày sai định dạng');
     return false;

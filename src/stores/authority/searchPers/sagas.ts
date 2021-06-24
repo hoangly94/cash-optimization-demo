@@ -15,7 +15,6 @@ function* fetchDataSaga(action?) {
 }
 
 function getData(filters, page: number = 0) {
-    console.log(filters);
     const url = Config.url + '/api/cashoptimization/authority/searchPers';
     const dataValue = filters.type.value === 'id'
         ? { persCode: filters.value ? filters.value : 0 }

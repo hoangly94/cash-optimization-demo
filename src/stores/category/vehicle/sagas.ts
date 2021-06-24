@@ -28,7 +28,6 @@ function* fetchDataSaga(action?) {
 function* createDataSaga() {
     const state = yield select();
     const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createCategoryVehicle', state.vehicle.creatingPopup);
-    console.log(responseData);
     if(!responseData || !responseData?.data || responseData.data.resultCode != 0){
         return yield spawn(addNoti, 'error');
     }
@@ -81,7 +80,6 @@ function getData(filters, page:number = 0) {
 }
 
 function requestCreating(url: string, data) {
-    console.log(data);
     const postData = {
         data: {
             vehicleCode: data.vehicleCode,

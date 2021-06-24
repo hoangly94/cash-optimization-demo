@@ -40,12 +40,26 @@ export const Element = (props: Props) => {
   const logoProps = {
   }
 
+  const logoutProps = {
+    classNames: Classnames(
+      styles['logout'],
+    ),
+    text: 'Logout',
+    onClick:handleLogoutClick,
+  }
+
   return (
     <Block.Element {...componentWrapperProps}>
-      <Logo.Element {...logoProps}/>
-      <Menu.Element {...menuProps}/>
+      <Logo.Element {...logoProps} />
+      <Menu.Element {...menuProps} />
+      <Button.Element {...logoutProps} />
     </Block.Element >
   )
+}
+
+const handleLogoutClick = () => {
+  document.cookie = `accessToken=;`;
+  window.location.href = '/';
 }
 
 Element.displayName = 'DashboardMenu'

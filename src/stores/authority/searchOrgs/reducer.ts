@@ -32,7 +32,6 @@ export default (state: State = initState, action) => {
                 },
             }
         case INPUT_ORGS_VALUE_FILTER:
-            console.log(action);
             return {
                 ...state,
                 filters: {

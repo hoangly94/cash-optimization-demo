@@ -23,7 +23,6 @@ export const Element = (props: Popup.Props) => {
 
   const [errorMsg, setErrorMsg] = useState('');
   const popupSelector = useSelector(state => state['registration'].editingPopup);
-
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
@@ -56,11 +55,11 @@ export const Element = (props: Popup.Props) => {
   const tableProps: Table.Props = {
     ...tableData(popupSelector.authorityContent2?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
-    style:{
+    style: {
       minWidth: '800px',
     }
   }
-  
+
   return (
     <Popup.Element {...props}>
       <Title.Element
@@ -77,6 +76,8 @@ export const Element = (props: Popup.Props) => {
           valueType={Input.ValueType.NUMBER}
           placeholder=''
           {...inputProps}
+          {...inputProps}
+          defaultValue={popupSelector.id}
           isDisabled={true}
         />
       </Block.Element>
@@ -85,10 +86,7 @@ export const Element = (props: Popup.Props) => {
         <Input.Element
           valueType={Input.ValueType.NUMBER}
           {...inputProps}
-          // store={{
-          //   selectorKeys: ['registration', 'filters', 'orgs', 'value'],
-          //   reducerType: '',
-          // }}
+          defaultValue={popupSelector.orgsName}
           isDisabled={true}
         />
       </Block.Element>
@@ -281,7 +279,67 @@ export const Element = (props: Popup.Props) => {
         }}
       /> */}
 
-    <Table.Element {...tableProps}/>
+      <Table.Element {...tableProps} />
+
+      <Block.Element
+        {...inputWrapperProps}
+        margin={Base.MarginTop.PX_38}
+      >
+        <Title.Element text='Tên nhân viên đăng ký' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          store={{
+            selectorKeys: ['auth', 'user', 'name'],
+            reducerType: '',
+          }}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element
+        {...inputWrapperProps}
+        margin={Base.MarginTop.PX_38}
+      >
+        <Title.Element text='Tên TDV phê duyệt' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          store={{
+            selectorKeys: ['registration', 'editingPopup', 'updatedbyName'],
+            reducerType: '',
+          }}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element
+        {...inputWrapperProps}
+        margin={Base.MarginTop.PX_28}
+      >
+        <Title.Element text='Thời điểm TDV phê duyệt' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          store={{
+            selectorKeys: ['registration', 'editingPopup', 'updateddate'],
+            reducerType: '',
+          }}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}
+        margin={Base.MarginTop.PX_28}>
+        <Title.Element
+          text='Lý do từ chối phê duyệt của TDV'
+          {...inputTitleProps}
+        />
+        <Input.Element
+          {...inputProps}
+          store={{
+            selectorKeys: ['registration', 'editingPopup', 'rejectReason'],
+            reducerType: '',
+          }}
+          isDisabled={true}
+        />
+      </Block.Element>
 
       <Block.Element
         {...actionsWrapperProps}
@@ -334,7 +392,6 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  // console.log(popupSelector);
   if (!isMatchDateDD_MM_YYY(popupSelector.dateFrom)) {
     setErrorMsg('UQ từ ngày sai định dạng');
     return false;
@@ -355,13 +412,13 @@ const validateForm = (popupSelector, setErrorMsg) => {
   return true;
 }
 
-const handleRowClick = (dispatch) => (item) => (e)=> {
+const handleRowClick = (dispatch) => (item) => (e) => {
 }
 
 const tableData = (queryResult?): Table.Props => ({
   $rows: [
     {
-      style:{
+      style: {
         backgroundColor: '#1e3f96',
       },
       color: Base.Color.WHITE,

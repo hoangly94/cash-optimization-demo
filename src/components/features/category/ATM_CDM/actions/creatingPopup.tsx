@@ -211,7 +211,6 @@ const actionsProps: Block.Props = {
 
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  console.log(popupSelector);
   if (!popupSelector.atmCdmCode) {
     setErrorMsg('Mã ATM/CDM không được để trống');
     return false;

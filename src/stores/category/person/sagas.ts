@@ -4,7 +4,7 @@ import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { convertDataDDMMYYYtoYYYYMMDD, convertDataToYYYY_MM_DD } from '_/utils';
+import { convertDateDDMMYYYtoYYYYMMDD, convertDataToYYYY_MM_DD } from '_/utils';
 
 function* saga() {
     yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
@@ -89,7 +89,7 @@ function requestCreating(url: string, data) {
             persTitle: data.persTitleSelected.value,
             persMobile: data.persMobile,
             persCmndCccd: data.persCmndCccd,
-            persCmndCccdYear: convertDataDDMMYYYtoYYYYMMDD(data.persCmndCccdYear) ,
+            persCmndCccdYear: convertDateDDMMYYYtoYYYYMMDD(data.persCmndCccdYear) ,
             persCmndCccdPlace: data.persCmndCccdPlace,
             orgsId: data.orgsSelected.value,
             persEmail: data.persEmail,
@@ -101,7 +101,6 @@ function requestCreating(url: string, data) {
 }
 
 function requestEditing(url: string, data) {
-    console.log(convertDataDDMMYYYtoYYYYMMDD(data.persCmndCccdYear))
     const postData = {
         data: {
             id: parseInt(data.id),
@@ -110,7 +109,7 @@ function requestEditing(url: string, data) {
             persTitle: data.persTitleSelected.value,
             persMobile: data.persMobile,
             persCmndCccd: data.persCmndCccd,
-            persCmndCccdYear: convertDataDDMMYYYtoYYYYMMDD(data.persCmndCccdYear) ,
+            persCmndCccdYear: convertDateDDMMYYYtoYYYYMMDD(data.persCmndCccdYear) ,
             persCmndCccdPlace: data.persCmndCccdPlace,
             orgsId: data.orgsSelected.value,
             persEmail: data.persEmail,

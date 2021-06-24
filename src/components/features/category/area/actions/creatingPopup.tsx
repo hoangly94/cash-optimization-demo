@@ -162,7 +162,6 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  console.log(popupSelector);
   if (!popupSelector.areaCode) {
     setErrorMsg('Mã cụm không được để trống');
     return false;

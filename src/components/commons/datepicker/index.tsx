@@ -12,7 +12,7 @@ import * as Input from '~commons/input';
 import { useDispatch, useSelector } from 'react-redux';
 import { _Array, _Date } from '@utils';
 import { HANDLE_BUTTON } from "~stores/_base/constants";
-import { useComponentClickOutside } from '@hocs';
+import { useComponentClickOutside } from '@hooks';
 
 export enum Type {
   DEFAULT = 'datepicker',
@@ -68,13 +68,20 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const dateSelector = store && store.selectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys as string[])) : '';
 
-  const [currentDate, setCurrentDate] = useState(dateSelector
+  const [currentDate, setCurrentDate] = useState(_Date.isMatchDateTimeDD_MM_YYY(dateSelector)
     ? new Date(dateSelector)
     : (activeDay ? new Date(activeDay) : new Date()));
 
   // const isDisabled = store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])) : false;
   const display = !$datepicker.isDisabled && !clickData.isOutside ? { display: 'block' } : { display: 'none' };
 
+  console.log('----------------------');
+  if(_Date.isMatchDateTimeDD_MM_YYY(dateSelector)){
+    console.log('=============');
+  }
+  console.log(currentDate);
+  console.log(dateSelector.length);
+  console.log(activeDay);
   const componentProps = {
     ...props,
     refs: ref,
@@ -158,7 +165,7 @@ const mapToLabelRows = (label) => (
 )
 
 const reduceToRows = (dispatch, setClickData) => (props: Props, currentDate: Date, activeDay?: string) => {
-  const activeDate = activeDay ? new Date(_Date.convertDataDDMMYYYtoYYYYMMDD(activeDay)) : new Date();
+  const activeDate = activeDay ? new Date(_Date.convertDateTimeDDMMYYYtoYYYYMMDD(activeDay)) : new Date();
   let i = -1;
   return (result, next) => {
     const cellMonth = next.month;
@@ -170,10 +177,11 @@ const reduceToRows = (dispatch, setClickData) => (props: Props, currentDate: Dat
     const handleClick = isCurrentMonth ? {
       onClick: () => {
         if (store) {
+          const selectedDateTime = `${_Date.convertDayTo2digits(cellDay)}-${_Date.convertMonthTo2digits(cellMonth)}-${next.year} ${_Date.convertTo2digits(activeDate.getHours())}:${_Date.convertTo2digits(activeDate.getMinutes())}:${_Date.convertTo2digits(activeDate.getSeconds())}`;
           dispatch({
             ...store.action,
             data: {
-              [store.selectorKeys[store.selectorKeys.length - 1]]: `${_Date.convertDayTo2digits(cellDay)}/${_Date.convertMonthTo2digits(cellMonth)}/${next.year}`,
+              [store.selectorKeys[store.selectorKeys.length - 1]]: selectedDateTime,
             }
           });
         }

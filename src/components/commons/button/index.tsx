@@ -86,7 +86,6 @@ export const Element = (props: Props) => {
 
 const onClickWithLoading = (dispatch, props: Props, isLoading: boolean, isDisabled: boolean) => (e) => {
   if (!isDisabled && !isLoading) {
-    console.log(props.store?.action);
     if (props.store) {
       dispatch(props.store.action);
     }

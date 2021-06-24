@@ -7,7 +7,7 @@ import Caret from "~svg/caret";
 import * as SVG from "~svg/index";
 import * as Item from "./item";
 import styles from './_styles.css';
-import { useComponentClickOutside } from '@hocs';
+import { useComponentClickOutside } from '@hooks';
 
 export enum Type {
   DEFAULT = 'dropdown',

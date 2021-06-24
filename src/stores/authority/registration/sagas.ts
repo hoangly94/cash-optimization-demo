@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
+import { select, all, call, put, take, takeLatest, spawn, takeEvery } from 'redux-saga/effects';
 import { DONE_CREATING, FETCH_DATA, HANDLE_APPROVE_ACTION, HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION, HANDLE_REJECT_ACTION, REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
-import { HANDLE_POPUP } from '~stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { _Date } from '_/utils';
 
 function* saga() {
@@ -28,6 +28,10 @@ function* fetchDataSaga(action?) {
     const responseData = yield call(getData, state.registration.filters, action?.page);
 
     yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'continue', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'delete', 'isDisabled'], value: true });
 }
 
 function* createDataSaga() {
@@ -35,12 +39,17 @@ function* createDataSaga() {
     const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/authority/create', state.registration.creatingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData.data.message);
     }
 
     yield put({ type: DONE_CREATING });
+    yield fetchDataSaga();
     yield spawn(addNoti, 'success');
     yield put({ type: HANDLE_POPUP, keys: ['registration', 'create', 'isShown'], value: false });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'continue', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'delete', 'isDisabled'], value: true });
 }
 
 function* updateDataSaga() {
@@ -48,12 +57,16 @@ function* updateDataSaga() {
     const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/authority/update', state.registration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData.data.message);
     }
 
-    yield put({ type: DONE_CREATING });
+    yield fetchDataSaga();
     yield spawn(addNoti, 'success');
     yield put({ type: HANDLE_POPUP, keys: ['registration', 'edit', 'isShown'], value: false });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'continue', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'delete', 'isDisabled'], value: true });
 }
 
 function* continueSaga() {
@@ -61,12 +74,15 @@ function* continueSaga() {
     const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/authority/continue', state.registration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData.data.message);
     }
 
-    yield put({ type: DONE_CREATING });
+    yield fetchDataSaga();
     yield spawn(addNoti, 'success');
-    yield put({ type: HANDLE_POPUP, keys: ['registration', 'edit', 'isShown'], value: false });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'continue', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'delete', 'isDisabled'], value: true });
 }
 
 function* handleApprovalSaga(type) {
@@ -80,9 +96,13 @@ function* handleApprovalSaga(type) {
         return yield spawn(addNoti, 'error', 'Lệnh UQ ở trạng thái không cho phép duyệt');
     }
 
-    yield put({ type: DONE_CREATING });
+    yield fetchDataSaga();
     yield spawn(addNoti, 'success');
     yield put({ type: HANDLE_POPUP, keys: ['registration', 'edit', 'isShown'], value: false });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'continue', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'delete', 'isDisabled'], value: true });
 }
 
 function* deleteDataSaga() {
@@ -90,11 +110,15 @@ function* deleteDataSaga() {
     const responseData = yield call(requestDelete, Config.url + '/api/cashoptimization/authority/delete', state.registration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData.data.message);
     }
 
-    yield put({ type: DONE_CREATING });
+    yield fetchDataSaga();
     yield spawn(addNoti, 'success');
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'continue', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['registration', 'delete', 'isDisabled'], value: true });
 }
 
 function getHistory(page: number = 0) {
@@ -110,13 +134,12 @@ function getHistory(page: number = 0) {
 }
 
 function getData(filters, page: number = 0) {
-    console.log(filters);
     const url = Config.url + '/api/cashoptimization/authority/search';
     const data = filters.radio === '1'
         ? {
             orgsId: filters.orgs.value,
-            authorityFromDate: _Date.convertDataDDMMYYYtoYYYYMMDD(filters.dateFrom),
-            authorityToDate: _Date.convertDataDDMMYYYtoYYYYMMDD(filters.dateTo),
+            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom),
+            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo),
             authorityStatus: filters.status.value,
         }
         : {
@@ -143,8 +166,8 @@ function requestCreating(url: string, data, auth) {
             orgsId: data.orgsId,
             createdbyCode: auth.user.code,
             createdbyName: auth.user.name,
-            authorityFromDate: _Date.convertDataDDMMYYYtoYYYYMMDD(data.dateFrom),
-            authorityToDate: _Date.convertDataDDMMYYYtoYYYYMMDD(data.dateTo),
+            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateFrom),
+            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateTo),
             persId: data.sendId,
             persCode: data.sendCode,
             persFullname: data.sendName,
@@ -175,8 +198,8 @@ function requestEditing(url: string, data, auth) {
             createdbyCode: auth.user.code,
             createdbyName: auth.user.name,
             orgsId: data.orgsId,
-            authorityFromDate: _Date.convertDataDDMMYYYtoYYYYMMDD(data.dateFrom),
-            authorityToDate: _Date.convertDataDDMMYYYtoYYYYMMDD(data.dateTo),
+            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateFrom),
+            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateTo),
             persId: data.sendId,
             persCode: data.sendCode,
             persFullname: data.sendName,

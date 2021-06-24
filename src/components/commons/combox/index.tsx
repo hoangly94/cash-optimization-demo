@@ -7,7 +7,7 @@ import Caret from "~svg/caret";
 import * as SVG from "~svg/index";
 import * as Option from "./option";
 import styles from './_styles.css';
-import { useComponentClickOutside } from '@hocs';
+import { useComponentClickOutside } from '@hooks';
 import { _Array } from '@utils';
 import { useDispatch, useSelector } from 'react-redux';
 

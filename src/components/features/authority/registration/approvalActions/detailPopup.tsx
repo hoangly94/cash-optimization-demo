@@ -77,6 +77,7 @@ export const Element = (props: Popup.Props) => {
           valueType={Input.ValueType.NUMBER}
           placeholder=''
           {...inputProps}
+          defaultValue={popupSelector.id}
           isDisabled={true}
         />
       </Block.Element>
@@ -85,10 +86,7 @@ export const Element = (props: Popup.Props) => {
         <Input.Element
           valueType={Input.ValueType.NUMBER}
           {...inputProps}
-          // store={{
-          //   selectorKeys: ['registration', 'filters', 'orgs', 'value'],
-          //   reducerType: '',
-          // }}
+          defaultValue={popupSelector.orgsName}
           isDisabled={true}
         />
       </Block.Element>
@@ -302,21 +300,7 @@ export const Element = (props: Popup.Props) => {
         {...inputWrapperProps}
         margin={Base.MarginTop.PX_38}
       >
-        <Title.Element text='Tên nhân viên đăng ký' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'createdbyName'],
-            reducerType: '',
-          }}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element
-        {...inputWrapperProps}
-        margin={Base.MarginTop.PX_28}
-      >
-        <Title.Element text='Tên nhân viên đăng ký' {...inputTitleProps} />
+        <Title.Element text='Tên TDV phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           store={{
@@ -330,7 +314,7 @@ export const Element = (props: Popup.Props) => {
         {...inputWrapperProps}
         margin={Base.MarginTop.PX_28}
       >
-        <Title.Element text='Tên nhân viên đăng ký' {...inputTitleProps} />
+        <Title.Element text='Thời điểm TDV phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           store={{
@@ -408,7 +392,6 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  // console.log(popupSelector);
   if (!isMatchDateDD_MM_YYY(popupSelector.dateFrom)) {
     setErrorMsg('UQ từ ngày sai định dạng');
     return false;

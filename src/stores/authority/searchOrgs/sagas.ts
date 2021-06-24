@@ -15,7 +15,6 @@ function* fetchDataSaga(action?) {
 }
 
 function getData(filters, page: number = 0) {
-    console.log(filters);
     const url = Config.url + '/api/cashoptimization/authority/searchOrgs';
 
     const locationDataValue = filters.locationType.value === 'area'

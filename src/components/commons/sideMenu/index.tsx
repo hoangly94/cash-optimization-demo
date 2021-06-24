@@ -35,7 +35,6 @@ export const Element = (props: Props): React.ReactElement => {
   } = props;
   const location = useLocation();
   // const isActive = $links ? $links?.filter($link => hasActiveChildren(location, $link)).length > 0 : false;
-  // console.log(isChoosen);
   //create props
   const componentProps = {
     classNames: Classnames(

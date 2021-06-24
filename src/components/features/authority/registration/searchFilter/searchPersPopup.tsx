@@ -17,6 +17,7 @@ export type Props = Popup.Props;
 export const Element = (props: Popup.Props) => {
   const dispatch = useDispatch();
   const queryResultSelector = useSelector(state => state['searchPers'].queryResult.data);
+  const popupTypeSelector = useSelector(state => state['registration'].popupType);
   useLayoutEffect(() => {
     dispatch({ type: REQUEST_QUERY });
   }, []);
@@ -135,7 +136,7 @@ export const Element = (props: Popup.Props) => {
             }}
             onClick={() => dispatch({
               type: HANDLE_POPUP,
-              keys: ['registration', 'create', 'isShown'],
+              keys: ['registration', popupTypeSelector == 1 ? 'create' : 'edit', 'isShown'],
               value: true,
             })}
           />
@@ -153,7 +154,7 @@ export const Element = (props: Popup.Props) => {
             }}
             onClick={() => dispatch({
               type: HANDLE_POPUP,
-              keys: ['registration', 'create', 'isShown'],
+              keys: ['registration', popupTypeSelector == 1 ? 'create' : 'edit', 'isShown'],
               value: true,
             })}
           />

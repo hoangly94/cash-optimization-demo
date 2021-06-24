@@ -28,7 +28,7 @@ export type Props = Base.Props & {
   valueType?: ValueType,
   name?: string,
   defaultValue?: string | number,
-  store?:Store,
+  store?: Store,
   // onClick?: React.MouseEventHandler,
   onChange?: React.ChangeEventHandler<HTMLInputElement>,
   placeholder?: string,
@@ -48,6 +48,7 @@ export const Element = (props: Props) => {
   const {
     type = "text",
     size = Size.M,
+    name,
     onChange,
     placeholder = '',
     store,
@@ -62,7 +63,7 @@ export const Element = (props: Props) => {
   const value = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : null;
   const ref = refs ?? useRef(null);
   const disabled = isDisabled ? 'disabled' : '';
-  
+
   const handleKeyPress = (e) => {
     if (valueType === ValueType.NUMBER)
       validateNumber(e);
@@ -71,22 +72,23 @@ export const Element = (props: Props) => {
   }
 
   const handleChange = (e) => {
-    if(store){
+    if (store) {
       handleDispatchWhenInputChange(dispatch, store)(e);
     }
     if (onChange)
       onChange(e);
   }
 
-  if (ref?.current){
+  if (ref?.current) {
     (ref as any).current.value = value || defaultValue;
   }
 
-  const valueProp = ref?.current ? null : {value: defaultValue};
+  const valueProp = ref?.current ? null : { value: defaultValue };
 
   //create props
   const componentProps = {
-    type: type,
+    name:name,
+    type: valueType === ValueType.PASSWORD ? 'password' : '',
     padding: Base.Padding.PX_8,
     ...Base.mapProps(props, styles, ['input', size, disabled]),
     // onClick:onClick,

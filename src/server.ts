@@ -30,7 +30,6 @@ server.get("/*", (req, res) => {
 });
 
 // server.get("/category/*", (req, res) => {
-//     // console.log('------------------');
     
 //     // res.send(hydrate(<Dasboard.Element />, document.getElementById("root")));
 //     // res.send(hydrate(<Dashboard />, document.getElementById("root")));

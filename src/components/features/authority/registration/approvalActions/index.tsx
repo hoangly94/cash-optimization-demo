@@ -75,7 +75,7 @@ export const Element = (props: Props) => {
     },
     $title: {
       tagType: Title.TagType.H2,
-      text: 'HISTORY'
+      text: 'DETAIL'
     },
   }
 
@@ -153,9 +153,9 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'registration', 'detail'],
         }}
-        useEffect={{
-          callback: () => dispatch({ type: FETCH_HISTORY }),
-        }}
+        // useEffect={{
+        //   callback: () => dispatch({ type: FETCH_HISTORY }),
+        // }}
       />
     </>
   )

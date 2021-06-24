@@ -1,0 +1,17 @@
+@import '../../../_settings/_variables.css';
+
+.changePassword-background{
+    width:100%;
+    height:100%;
+    background: linear-gradient(153deg, rgba(0,154,233,1) 0%, rgba(67,225,255,1) 0%, rgba(247,163,255,1) 100%);
+}
+.changePassword{
+    width:400px;
+    position:absolute;
+    top:40%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    border-radius: 8px;
+    background-color:#ffffff;
+    
+}

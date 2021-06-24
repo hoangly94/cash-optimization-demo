@@ -11,7 +11,7 @@ import * as Title from '~commons/title';
 import * as Button from '~commons/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { _Array, _Date } from '@utils';
-import { useComponentClickOutside } from '@hocs';
+import { useComponentClickOutside } from '@hooks';
 import { HANDLE_DUALTABLE_MOVE, SELECT_AUTHORITY_CONTENT_ROW } from '_/stores/authority/registration/constants';
 
 export enum Type {
@@ -143,7 +143,6 @@ export const Element = (props: Props) => {
     </Block.Element >
   )
 }
-
 
 const handleRowClick = (dispatch, action) => (item) => (e) => {
   dispatch({ ...action, data: item });

@@ -2,7 +2,7 @@ import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, F
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/authority/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/authority/searchPers/constants'
 import * as Base from '~/_settings';
-import { getCurrentDate, _Date } from '@utils';
+import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
 import { UPDATE_CONFIG } from '_/stores/dashboardRoot/constants';
 import { HANDLE_POPUP } from '_/stores/_base/constants';
 
@@ -38,6 +38,7 @@ const initState: State = {
     historyPopup: {
         isShown: false,
     },
+    authorityContents: [],
 }
 
 export default (state: State = initState, action) => {
@@ -66,6 +67,7 @@ export default (state: State = initState, action) => {
                 ...state,
                 creatingPopup: {
                     ...getDefaultPopupActions(),
+                    authorityContent1: state.authorityContents,
                 }
             }
         case REQUEST_EDITING:
@@ -139,14 +141,21 @@ export default (state: State = initState, action) => {
         case SELECT_ROW:
             const newQueryResult = state.queryResult.data.map(mapToNewQueryResult(action.data))
             const newData = mapToNewData(action.data);
+            const approvalData = ['Approved_A', 'Rejected_A'].includes(newData.authorityStatus)
+                ? {}
+                : {
+                    updatedbyName: '',
+                    updatedbyCode: '',
+                    updateddate: '',
+                };
             return {
                 ...state,
                 selectedItem: newData,
                 editingPopup: {
-                    authorityContent1: state.editingPopup.authorityContent1.filter(item1 =>
-                        newData.authorityContent2.filter(item2 => item2.id == item1.id).length == 0),
-
                     ...newData,
+                    authorityContent1: state.authorityContents.filter(item1 =>
+                        newData.authorityContent2.filter(item2 => item2.id == item1.id).length == 0),
+                    ...approvalData,
                 },
                 queryResult: {
                     ...state.queryResult,
@@ -316,7 +325,8 @@ export default (state: State = initState, action) => {
                 editingPopup: {
                     ...state.editingPopup,
                     authorityContent1: authorityContents,
-                }
+                },
+                authorityContents: authorityContents,
             }
 
         case SELECT_AUTHORITY_CONTENT_ROW:
@@ -339,7 +349,6 @@ export default (state: State = initState, action) => {
                 ...selectAuthorityRowData,
             }
         case HANDLE_DUALTABLE_MOVE:
-            console.log(state.popupType);
             const popupType = state.popupType === 1 ? 'creatingPopup' : 'editingPopup';
 
             const moveNewData = function () {
@@ -431,9 +440,9 @@ export default (state: State = initState, action) => {
         case HANDLE_POPUP:
             return {
                 ...state,
-                popupType:action.popupType,
+                popupType: action.popupType || state.popupType,
             }
-            
+
         default:
             return state
     }
@@ -468,11 +477,11 @@ function getDefaultPopupActions() {
         authorityStatus: '',
         rejectReason: '',
 
-        createdbyName:'',
+        createdbyName: '',
 
         updatedbyCode: '',
         updatedbyName: '',
-        updateddate:'',
+        updateddate: '',
     }
 }
 
@@ -498,8 +507,8 @@ const mapToNewData = (item) => {
         id: item.id,
         orgsId: item.categoryOrgs?.id,
         orgsName: item.categoryOrgs?.orgsName,
-        dateFrom: _Date.getCurrentDate(item.authorityFromDate),
-        dateTo: _Date.getCurrentDate(item.authorityToDate),
+        dateFrom: _Date.getCurrentDateTime(item.authorityFromDate),
+        dateTo: _Date.getCurrentDateTime(item.authorityToDate),
         sendId: item.persId,
         sendCode: item.persCode,
         sendName: item.persFullname,
@@ -545,5 +554,5 @@ const mapToNewQueryResult = (selectedItem) => (item) => {
 const preprocessQueryResult = (data) => ({
     ...data,
     createddate: getCurrentDate(data.createddate),
-    updateddate: getCurrentDate(data.updateddate),
+    updateddate: getCurrentDateTime(data.updateddate),
 })

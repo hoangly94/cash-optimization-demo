@@ -150,6 +150,7 @@ export default {
       '~utils': path.resolve(__dirname, 'src/utils/'),
       '@utils': path.resolve(__dirname, 'src/utils/index.ts'),
       '@hocs': path.resolve(__dirname, 'src/hocs/index.tsx'),
+      '@hooks': path.resolve(__dirname, 'src/hooks/index.tsx'),
       '~svg': path.resolve(__dirname, 'src/components/commons/svg/'),
     },
   },

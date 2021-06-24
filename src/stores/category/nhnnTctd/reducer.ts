@@ -146,13 +146,6 @@ export default (state: State = initState, action) => {
                 },
             }
         case SELECT_NHNNTCTD_TYPE_CREATING:
-            console.log({
-                ...state,
-                creatingPopup: {
-                    ...state.creatingPopup,
-                    nnhnTctdTypeSelected: action.data,
-                }
-            });
             return {
                 ...state,
                 creatingPopup: {

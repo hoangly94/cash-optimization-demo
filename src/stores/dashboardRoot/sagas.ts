@@ -51,7 +51,6 @@ function* fetchOrgs() {
 }
 
 function* fetchFunctions() {
-    console.log('fetchFunctions');
     const path = '/api/cashoptimization/findCategoryFunction';
     const postData = {
         data: {

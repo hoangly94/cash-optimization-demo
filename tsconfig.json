@@ -97,6 +97,9 @@
       "@hocs": [
         "src/hocs/index.tsx"
       ],
+      "@hooks": [
+        "src/hooks/index.tsx"
+      ],
       "~svg/*": [
         "./src/components/commons/svg/*"
       ],

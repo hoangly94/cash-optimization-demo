@@ -8,10 +8,10 @@ import * as Pagination from "~commons/pagination";
 import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
 import * as DetailPopup from "./detailPopup";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
-import { FETCH_HISTORY, REQUEST_QUERY } from '_/stores/category/area/constants';
+import { HANDLE_POPUP } from '~stores/_base/constants';
+import { FETCH_HISTORY, REQUEST_QUERY } from '~stores/authority/registration/constants';
 import { useDispatch } from 'react-redux';
-import { HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '_/stores/authority/registration/constants';
+import { HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/authority/registration/constants';
 
 export type Props = Base.Props;
 
@@ -87,7 +87,7 @@ export const Element = (props: Props) => {
     },
     $title: {
       tagType: Title.TagType.H2,
-      text: 'HISTORY'
+      text: 'DETAIL'
     },
   }
 
@@ -191,9 +191,9 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'registration', 'detail'],
         }}
-        useEffect={{
-          callback: () => dispatch({ type: FETCH_HISTORY }),
-        }}
+        // useEffect={{
+        //   callback: () => dispatch({ type: FETCH_HISTORY }),
+        // }}
       />
     </>
   )

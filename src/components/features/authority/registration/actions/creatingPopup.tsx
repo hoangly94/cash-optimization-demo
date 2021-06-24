@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, REQUEST_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
+import { INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, REQUEST_CREATING, REQUEST_QUERY, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -117,7 +117,7 @@ export const Element = (props: Popup.Props) => {
                 selectorKeys: ['registration', 'creatingPopup', 'dateFrom'],
                 reducerType: INPUT_DATE_FROM_CREATING,
               },
-              max: 10,
+              max: 19,
             }}
             $datepicker={{
               store: {
@@ -135,7 +135,7 @@ export const Element = (props: Popup.Props) => {
                 selectorKeys: ['registration', 'creatingPopup', 'dateTo'],
                 reducerType: INPUT_DATE_TO_CREATING,
               },
-              max: 10,
+              max: 19,
             }}
             $datepicker={{
               store: {
@@ -400,7 +400,6 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  // console.log(popupSelector);
   if (!isMatchDateDD_MM_YYY(popupSelector.dateFrom)) {
     setErrorMsg('UQ từ ngày sai định dạng');
     return false;

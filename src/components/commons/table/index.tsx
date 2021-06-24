@@ -27,8 +27,6 @@ export const Element = (props: Props) => {
   const componentProps = {
     ...Base.mapProps(props, styles, [type]),
   };
-  // console.log('============')
-  // console.log(toTable($rows))
   return (
     <table {...componentProps}>
       <thead>
@@ -47,8 +45,6 @@ const toTable = (rows: Row.Props[]) => {
 
 const toRow = ($row: Row.Props, index) => {
   const children = $row.$cells ? $row.$cells.map(toCell) : null;
-  // console.log('============')
-  // console.log(children)
   const rowProps = {
     key: (new Date().getTime()) + index,
     children: children,
