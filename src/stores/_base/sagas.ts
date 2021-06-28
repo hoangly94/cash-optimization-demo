@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '~utils/axios';
 import { all, call, delay, put, spawn } from 'redux-saga/effects';
 import { ADD_NOTI_ERROR, ADD_NOTI_SUCCESS, REMOVE_LAST_NOTI } from './constants';
 

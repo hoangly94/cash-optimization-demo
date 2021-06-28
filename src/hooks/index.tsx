@@ -37,12 +37,10 @@ export const useComponentClickOutside = (initState = { isOutside: true }) => {
 
 
 export const useCooke = (name: string) => {
-  // const [cookies, setCookie] = useState(initState);
   const value = `; ${document.cookie}`;
   const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
+  if (parts.length >= 2) {
     const cookie = parts.pop()?.split(';').shift();
-
     return { cookie };
   }
   const cookie = '';

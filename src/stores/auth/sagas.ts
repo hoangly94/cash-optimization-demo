@@ -2,9 +2,10 @@ import { select, call, put, takeLatest, spawn } from 'redux-saga/effects';
 import { FETCH_ROLES, FETCH_USER, REQUEST_ASSIGN_ROLE, REQUEST_ASSIGN_ROLE_QUERY, REQUEST_CHANGE_PASSWORD, REQUEST_LOGIN, REQUEST_REGISTER, REQUEST_RESET_PASSWORD, UPDATE_ASSIGN_ROLE, UPDATE_LOGIN, UPDATE_ROLES, UPDATE_USER, UPDATE_USER_ROLE } from './constants';
 import { addNoti } from '~stores/_base/sagas';
 import Config from '@config';
-import axios from 'axios';
+// import axios from '~utils/axios';
+import axios from '~utils/axios';
 import { push } from 'react-router-redux';
-import { useCooke } from '_/hooks';
+import { useCooke } from '@hooks';
 
 function* saga() {
     yield takeLatest(FETCH_ROLES, fetchRolesSaga);
@@ -63,7 +64,7 @@ function* requestAssignRoleSaga() {
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData.data.message);
     }
-    return yield spawn(addNoti, 'success');
+    yield spawn(addNoti, 'success');
     yield put({ type: FETCH_USER });
 }
 
@@ -71,15 +72,19 @@ function* loginSaga() {
     const state = yield select();
     const responseData = yield call(requestLogin, Config.url + '/api/authentication/user/login', state.auth.login);
 
+    const d = new Date();
+    d.setTime(d.getTime() + (responseData?.data?.data?.expires_in) || 0);
+    const expires = d ? 'expires=' + d.toUTCString() : '';
+
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         if (responseData?.data?.resultCode == 1) {
-            document.cookie = `accessToken=${responseData.data.accessToken};`;
+            document.cookie = `accessToken=${responseData.data.accessToken};${expires};path=/;`;
             yield put({ type: UPDATE_LOGIN, data: responseData.data });
             return yield window.location.href = '/change-password';
         }
-        return yield spawn(addNoti, 'error', responseData.data.message);
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    document.cookie = `accessToken=${responseData.data.data.access_token};`;
+    document.cookie = `accessToken=${responseData.data.data.access_token};${expires};path=/;`;
     yield put({ type: UPDATE_LOGIN, data: responseData.data });
     yield put({ type: FETCH_USER });
 
@@ -128,30 +133,22 @@ function getUser(url) {
 }
 
 function getUser2(url: string, data) {
-    const { cookie: accessToken } = useCooke('accessToken');
-    const config = {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    };
     const postData = {
         data: {
             userName: data.username,
         },
     }
-    return axios.post(url, { ...postData }, config)
+    return axios.post(url, { ...postData })
         .catch(error => console.log(error));
 }
 
 function getUser3(url: string, data) {
-    const { cookie: accessToken } = useCooke('accessToken');
-    const config = {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    };
     const postData = {
         data: {
             id: data.persid,
         },
     }
-    return axios.post(url, { ...postData }, config)
+    return axios.post(url, { ...postData })
         .catch(error => console.log(error));
 }
 
@@ -162,8 +159,7 @@ function requestLogin(url: string, data) {
             password: data.password,
         },
     }
-    return axios.post(url, { ...postData })
-        .catch(error => console.log(error));
+    return axios.post(url, postData);
 }
 
 function requestRegister(url: string, data) {
@@ -182,50 +178,37 @@ function requestRegister(url: string, data) {
 }
 
 function requestAssignRole(url: string, data) {
-    const { cookie: accessToken } = useCooke('accessToken');
-    const config = {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    };
     const postData = {
         data: {
             username: data.username,
-            userRole: data.roleContent2.map(item=>({
+            userRole: data.roleContent2.map(item => ({
                 userId: data.id,
                 roleId: item.id,
             })),
         },
     }
-    return axios.post(url, { ...postData }, config)
+    return axios.post(url, { ...postData })
         .catch(error => console.log(error));
 }
 
 function requestChangePassword(url: string, data) {
-    const { cookie: accessToken } = useCooke('accessToken');
-    const config = {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    };
     const postData = {
         data: {
             oldPassword: data.currentPassword,
             newPassword: data.newPassword,
         },
     }
-    return axios.post(url, { ...postData }, config)
+    return axios.post(url, { ...postData })
         .catch(error => console.log(error));
 }
 
 function requestResetPassword(url: string, data) {
-    console.log(data);
-    const { cookie: accessToken } = useCooke('accessToken');
-    const config = {
-        headers: { Authorization: `Bearer ${accessToken}` }
-    };
     const postData = {
         data: {
             userName: data.username,
         },
     }
-    return axios.post(url, { ...postData }, config)
+    return axios.post(url, { ...postData })
         .catch(error => console.log(error));
 }
 

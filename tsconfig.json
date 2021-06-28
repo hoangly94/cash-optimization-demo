@@ -89,7 +89,7 @@
         "src/stores/*"
       ],
       "~utils/*": [
-        "src/utils/*.tsx"
+        "src/utils/*.ts"
       ],
       "@utils": [
         "src/utils/index.ts"

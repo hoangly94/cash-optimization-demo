@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '~utils/axios';
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 import { FETCH_CONFIG, UPDATE_CONFIG, FETCH_AREAS, FETCH_ORGS, UPDATE_AREAS, UPDATE_ORGS, FETCH_FUNCTIONS, FETCH_PERS,UPDATE_PERS, UPDATE_FUNCTIONS, FETCH_REGIONS, UPDATE_REGIONS, UPDATE_TITLES, FETCH_TITLES } from './constants';
 import Config from '@config';
@@ -21,7 +21,7 @@ function* fetchConfig() {
         size:0,
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_CONFIG, data: responseData.data.data });
+    yield put({ type: UPDATE_CONFIG, data: responseData?.data?.data });
 }
 
 

@@ -314,20 +314,23 @@ export default (state: State = initState, action) => {
                 ...selectRowData,
             }
         case UPDATE_CONFIG:
-            const authorityContents = action.data.filter(item => item.type === 'AUTHORIY_CONTENT');
+            if (action.data) {
+                const authorityContents = action.data.filter(item => item.type === 'AUTHORIY_CONTENT');
 
-            return {
-                ...state,
-                creatingPopup: {
-                    ...state.creatingPopup,
-                    authorityContent1: authorityContents,
-                },
-                editingPopup: {
-                    ...state.editingPopup,
-                    authorityContent1: authorityContents,
-                },
-                authorityContents: authorityContents,
+                return {
+                    ...state,
+                    creatingPopup: {
+                        ...state.creatingPopup,
+                        authorityContent1: authorityContents,
+                    },
+                    editingPopup: {
+                        ...state.editingPopup,
+                        authorityContent1: authorityContents,
+                    },
+                    authorityContents: authorityContents,
+                }
             }
+            return state;
 
         case SELECT_AUTHORITY_CONTENT_ROW:
             const tableType = `authorityContent${action.tableType}`;

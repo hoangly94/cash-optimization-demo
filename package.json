@@ -20,7 +20,7 @@
   "dependencies": {
     "@datepicker-react/hooks": "^2.8.0",
     "@types/classnames": "^2.3.1",
-    "axios": "^0.21.1",
+    "axios": "^0.19.0",
     "classnames": "^2.3.1",
     "compression": "^1.7.4",
     "ejs": "^3.1.6",

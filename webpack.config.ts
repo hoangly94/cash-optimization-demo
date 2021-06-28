@@ -59,17 +59,17 @@ export default {
             options: {
               modules: {
                 localIdentName: '[local]--[hash:base64:5]',
-                getLocalIdent: (loaderContext, localIdentName, localName, options) => {
-                  if (!options.context)
-                    options.context = loaderContext.options && typeof loaderContext.options.context === "string" ? loaderContext.options.context : loaderContext.context;
-                  const pathArray = loaderContext.resourcePath.split('\\');
-                  const newPath = pathArray.slice(0, pathArray.length - 1).join('\\') + '/' + localName;
-                  var request = path.relative(options.context, newPath);
-                  options.content = options.hashPrefix + request + "+" + localName;
-                  localIdentName = localIdentName.replace(/\[local\]/gi, localName);
-                  const hash = loaderUtils.interpolateName(loaderContext, localIdentName, options);
-                  return hash.replace(new RegExp("[^a-zA-Z0-9\\-_\u00A0-\uFFFF]", "g"), "-").replace(/^((-?[0-9])|--)/, "_$1");
-                },
+                // getLocalIdent: (loaderContext, localIdentName, localName, options) => {
+                //   if (!options.context)
+                //     options.context = loaderContext.options && typeof loaderContext.options.context === "string" ? loaderContext.options.context : loaderContext.context;
+                //   const pathArray = loaderContext.resourcePath.split('\\');
+                //   const newPath = pathArray.slice(0, pathArray.length - 1).join('\\') + '/' + localName;
+                //   var request = path.relative(options.context, newPath);
+                //   options.content = options.hashPrefix + request + "+" + localName;
+                //   localIdentName = localIdentName.replace(/\[local\]/gi, localName);
+                //   const hash = loaderUtils.interpolateName(loaderContext, localIdentName, options);
+                //   return hash.replace(new RegExp("[^a-zA-Z0-9\\-_\u00A0-\uFFFF]", "g"), "-").replace(/^((-?[0-9])|--)/, "_$1");
+                // },
               },
               importLoaders: 2,
             },

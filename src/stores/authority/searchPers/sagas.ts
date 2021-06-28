@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
 import { REQUEST_QUERY, UPDATE_DATA, } from './constants';
 import Config from '@config';
