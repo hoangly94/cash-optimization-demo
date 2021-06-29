@@ -19,6 +19,9 @@ import functionReducer from './category/function/reducer';
 import registrationReducer from './authority/registration/reducer';
 import searchOrgsReducer from './authority/searchOrgs/reducer';
 import searchPersReducer from './authority/searchPers/reducer';
+import pycRegistrationReducer from './pyc/registration/reducer';
+import pycSearchOrgsReducer from './pyc/searchOrgs/reducer';
+import pycSearchPersReducer from './pyc/searchPers/reducer';
 
 import baseSaga from './_base/sagas';
 import authSaga from './auth/sagas';
@@ -37,6 +40,9 @@ import functionSaga from './category/function/sagas';
 import registrationSaga from './authority/registration/sagas';
 import searchOrgsSaga from './authority/searchOrgs/sagas';
 import searchPersSaga from './authority/searchPers/sagas';
+import pycRegistrationSaga from './pyc/registration/sagas';
+import pycSearchOrgsSaga from './pyc/searchOrgs/sagas';
+import pycSearchPersSaga from './pyc/searchPers/sagas';
 
 const rootReducer = combineReducers({
     base: baseReducer,
@@ -56,6 +62,9 @@ const rootReducer = combineReducers({
     registration: registrationReducer,
     searchOrgs: searchOrgsReducer,
     searchPers: searchPersReducer,
+    pycRegistration: registrationReducer,
+    pycSearchOrgs: searchOrgsReducer,
+    pycSearchPers: searchPersReducer,
 })
 
 function* rootSaga() {
@@ -77,14 +86,17 @@ function* rootSaga() {
         registrationSaga(),
         searchOrgsSaga(),
         searchPersSaga(),
+        pycRegistrationSaga(),
+        pycSearchOrgsSaga(),
+        pycSearchPersSaga(),
     ]);
 }
 
-const sagaMiddleware = createSagaMiddleware()
+const sagaMiddleware = createSagaMiddleware();
 
 export default createStore(
     rootReducer,
     applyMiddleware(sagaMiddleware)
 );
 
-sagaMiddleware.run(rootSaga)
+sagaMiddleware.run(rootSaga);

@@ -24,6 +24,8 @@ import * as Area from '~features/category/area';
 import * as Function from '~features/category/function';
 import * as Registration from '~features/authority/registration';
 import * as Approval from '~features/authority/registration/approval';
+import * as PYCRegistration from '~features/pyc/registration';
+import * as PYCApproval from '~features/pyc/registration/approval';
 import * as ChangePassword from '~features/user/changePassword';
 import * as AssignRole from '~features/user/assignRole';
 import * as ResetPassword from '~features/user/resetPassword';
@@ -37,7 +39,6 @@ export const Element = (props: Props) => {
     const {
     } = props;
     const {cookie: accessToken} = useCooke('accessToken');
-    console.log(accessToken);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch({ type: FETCH_CONFIG });
@@ -140,6 +141,13 @@ const DashboardComponent = () => {
                     <Route path="/user/reset-password">
                         <ResetPassword.Element />
                     </Route>
+
+                    <Route path="/pyc/registration">
+                        <PYCRegistration.Element />
+                    </Route>
+                    <Route path="/pyc/approval">
+                        <PYCApproval.Element />
+                    </Route>
                 </Switch>
             </Main.Element>
         </>
@@ -174,6 +182,12 @@ const breadcrumbsMapper = {
         'change-password': { _url: '/user/change-password', _name: 'Change password', },
         'assign-role': { _url: '/user/assign-role', _name: 'Assign role', },
         'reset-password': { _url: '/user/reset-password', _name: 'Reset password', },
+    },
+    'pyc': {
+        _url: '',
+        _name: 'Quản lý PYC Điều Quỹ',
+        'registration': { _url: '/pyc/registration', _name: 'Đăng ký', },
+        'approval': { _url: '/pyc/approval', _name: 'Kiểm soát & Phê duyệt', },
     },
 }
 
@@ -267,7 +281,23 @@ const dashboardMenuProps: DashboardMenu.Props = {
                         url: '/user/reset-password',
                     },
                 ]
-            }
+            },
+            {
+                text: 'Quản lý PYC Điều Quỹ',
+                $icon: {
+                    name: 'documentCheck',
+                },
+                $subs: [
+                    {
+                        text: 'Đăng ký ',
+                        url: '/pyc/registration',
+                    },
+                    {
+                        text: 'Kiểm soát & Phê duyệt',
+                        url: '/pyc/approval',
+                    },
+                ]
+            },
         ],
     },
     style: {

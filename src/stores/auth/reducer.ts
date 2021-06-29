@@ -137,7 +137,6 @@ export default (state: State = initState, action) => {
                 },
             }
         // case UPDATE_USER_ROLE:
-        //     console.log(action);
         //     return {
         //         ...state,
         //         user:{
@@ -161,7 +160,6 @@ export default (state: State = initState, action) => {
             }
 
         case HANDLE_DUALTABLE_MOVE:
-            console.log(state);
             const moveNewData = function () {
                 if (action.moveType === 'ONE_LEFT_TO_RIGHT') {
                     return [
@@ -213,8 +211,6 @@ export default (state: State = initState, action) => {
                 }
             }
         case REQUEST_ASSIGN_ROLE_QUERY:
-            console.log('---------------------');
-            console.log(action);
             return {
                 ...state,
                 // roles: action.data,

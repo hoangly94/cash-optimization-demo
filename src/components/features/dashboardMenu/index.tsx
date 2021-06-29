@@ -62,4 +62,4 @@ const handleLogoutClick = () => {
   window.location.href = '/';
 }
 
-Element.displayName = 'DashboardMenu'
+Element.displayName = 'DashboardMenu';

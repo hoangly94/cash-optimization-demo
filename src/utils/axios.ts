@@ -1,9 +1,8 @@
 import axios from 'axios';
 import Config from '@config';
 import { useCooke } from '@hooks';
-
 const { cookie: accessToken } = useCooke('accessToken');
-
+const authorization = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
 const instance = axios.create({
     headers: {
         'Content-Type': 'application/json',
@@ -11,18 +10,13 @@ const instance = axios.create({
         // "Access-Control-Allow-Credentials": "true",
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-        // 'Authorization': `Bearer ${accessToken}`,
+        ...authorization,
     },
 });
 
 // Add a request interceptor
 instance.interceptors.request.use((config) => {
-    const authorization = accessToken ? { Authorization: `Bearer ${accessToken}` } : {};
-    
-    return {
-        ...config,
-        ...authorization,
-    };
+    return config;
 }, (error) => {
     return Promise.reject(error);
 });
