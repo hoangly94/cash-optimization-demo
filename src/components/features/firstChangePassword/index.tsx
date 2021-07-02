@@ -62,6 +62,7 @@ export const Element = (props: Props) => {
         <Input.Element
           placeholder='Current Password...'
           name='currentPassword'
+          valueType={Input.ValueType.PASSWORD}
           width={Base.Width.FULL}
           margin={Base.MarginTop.PX_18}
           border={Base.Border.NONE}

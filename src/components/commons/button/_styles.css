@@ -6,6 +6,7 @@
         transition: opacity 0.5s, border 0.3s;
         box-sizing:border-box;
         user-select: none;
+        white-space: nowrap;
     }
     &:hover{
         opacity:0.8;

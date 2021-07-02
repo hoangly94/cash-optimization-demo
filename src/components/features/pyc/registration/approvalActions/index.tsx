@@ -5,20 +5,22 @@ import * as Title from "~commons/title";
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
 import * as Pagination from "~commons/pagination";
-import * as ValidatePopup from "./validatePopup";
+import * as ValidationPopup from "./validationPopup";
 import * as DetailPopup from "./detailPopup";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_QUERY } from '_/stores/category/area/constants';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
-  React.useEffect(()=>{
+  React.useEffect(() => {
     dispatch({ type: FETCH_HISTORY })
-  },[]);
-  
+  }, []);
+
+  const editingPopupSelector = useSelector(state=>state['pycRegistration'].editingPopup);
+ 
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -29,7 +31,6 @@ export const Element = (props: Props) => {
 
   const validateButtonComponentProps: Button.Props = {
     ...buttonProps,
-    text: 'Validate',
     backgroundColor: Base.BackgroundColor.GREEN,
   }
   const editingButtonComponentProps: Button.Props = {
@@ -50,8 +51,8 @@ export const Element = (props: Props) => {
 
   const validatePopupComponentProps: Popup.Props = {
     ...popupProps,
-    $content:{
-      width:Base.Width.PX_1200,
+    $content: {
+      width: Base.Width.PX_1200,
     },
     $title: {
       tagType: Title.TagType.H2,
@@ -60,8 +61,8 @@ export const Element = (props: Props) => {
   }
   const editingPopupComponentProps: Popup.Props = {
     ...popupProps,
-    $content:{
-      width:Base.Width.PX_1200,
+    $content: {
+      width: Base.Width.PX_1200,
     },
     $title: {
       tagType: Title.TagType.H2,
@@ -84,7 +85,7 @@ export const Element = (props: Props) => {
       <Block.Element {...componentWrapperProps}>
         <Pagination.Element
           store={{
-            totalSelectorKeys: ['registration', 'queryResult'],
+            totalSelectorKeys: ['pycRegistration', 'queryResult'],
             action: {
               type: REQUEST_QUERY,
             }
@@ -94,36 +95,55 @@ export const Element = (props: Props) => {
           }}
         />
         <Block.Element>
-          {/* <Button.Element
-            {...validateButtonComponentProps}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['registration', 'create', 'isShown'],
-                value: true,
-                popupType: 1,
-              }
-            }}
-          /> */}
           <Button.Element
             {...validateButtonComponentProps}
+            text='CPD ĐVYCĐQ DUYỆT'
             store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'edit'],
+              // isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
               action: {
                 type: HANDLE_POPUP,
-                keys: ['registration', 'validate', 'isShown'],
+                keys: ['pycRegistration', 'validate1', 'isShown'],
                 value: true,
-                popupType: 2,
+                popupType: 3,
               }
             }}
+            isDisabled={!(['Approving_1', 'Canceling_1'].includes(editingPopupSelector.cashOptimizationStatus))}
+          />
+          <Button.Element
+            {...validateButtonComponentProps}
+            text='THỦ QUỸ ĐVĐQ KS'
+            store={{
+              // isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['pycRegistration', 'validate2', 'isShown'],
+                value: true,
+                popupType: 3,
+              }
+            }}
+            isDisabled={!(['Approving_2', 'Canceling_2'].includes(editingPopupSelector.cashOptimizationStatus))}
+          />
+          <Button.Element
+            {...validateButtonComponentProps}
+            text='CPD ĐVĐQ DUYỆT'
+            store={{
+              // isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['pycRegistration', 'validate3', 'isShown'],
+                value: true,
+                popupType: 3,
+              }
+            }}
+            isDisabled={!(['Approving_3', 'Canceling_3'].includes(editingPopupSelector.cashOptimizationStatus))}
           />
           <Button.Element
             {...detailButtonComponentProps}
             store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+              isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
               action: {
                 type: HANDLE_POPUP,
-                keys: ['registration', 'detail', 'isShown'],
+                keys: ['pycRegistration', 'detail', 'isShown'],
                 value: true,
                 popupType: 3,
               }
@@ -134,7 +154,7 @@ export const Element = (props: Props) => {
             store={{
               action: {
                 type: HANDLE_POPUP,
-                keys: ['registration', 'validate', 'isShown'],
+                keys: ['pycRegistration', 'validate', 'isShown'],
                 value: true,
               }
             }}
@@ -142,20 +162,82 @@ export const Element = (props: Props) => {
         </Block.Element>
 
       </Block.Element >
-      <ValidatePopup.Element
-        {...validatePopupComponentProps}
-        store={{
-          isShownSelectorKeys: ['base', 'popups', 'registration', 'validate'],
+      <ValidationPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'CPD ĐVYCĐQ DUYỆT'
         }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'validate1'],
+        }}
+        popupType='validate1'
+      />
+      <ValidationPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'THỦ QUỸ ĐVĐQ KS'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'validate2'],
+        }}
+        popupType='validate2'
+      />
+      <ValidationPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'CPD ĐVĐQ DUYỆT'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'validate3'],
+        }}
+        popupType='validate3'
+      />
+      
+      <ValidationPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'CPD ĐVYCĐQ DUYỆT'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'validateCancel1'],
+        }}
+        popupType='validateCancel1'
+      />
+      <ValidationPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'THỦ QUỸ ĐVĐQ KS'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'validateCancel2'],
+        }}
+        popupType='validateCancel2'
+      />
+      <ValidationPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'CPD ĐVĐQ DUYỆT'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'validateCancel3'],
+        }}
+        popupType='validateCancel3'
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}
         store={{
-          isShownSelectorKeys: ['base', 'popups', 'registration', 'detail'],
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'detail'],
         }}
-        // useEffect={{
-        //   callback: () => dispatch({ type: FETCH_HISTORY }),
-        // }}
+        popupType='detail'
+      // useEffect={{
+      //   callback: () => dispatch({ type: FETCH_HISTORY }),
+      // }}
       />
     </>
   )

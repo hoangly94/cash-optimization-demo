@@ -1,20 +1,16 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
+import { CHANGE_EDITING_INPUT, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_EDITING } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
 import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
-import * as Combox from "~commons/combox";
-import * as Datepicker from "~commons/datepicker";
-import * as DualTable from "~commons/dualTable";
 import * as Table from "~commons/table";
-import { getCurrentDate, isMatchDateDD_MM_YYY } from "@utils";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
-
-export type Props = Popup.Props;
+import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
+import { HANDLE_POPUP } from '~stores/_base/constants';
+import { getCurrentDate, getCurrentDateTime } from '_/utils';
 
 export const Element = (props: Popup.Props) => {
   const {
@@ -22,26 +18,42 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const [errorMsg, setErrorMsg] = useState('');
-  const popupSelector = useSelector(state => state['registration'].editingPopup);
+  const popupSelector = useSelector(state => state['pycRegistration'].editingPopup);
+  const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
 
-  const handleSubmitButtonClick = () => {
+  const handleSubmitButtonClick = (type) => () => {
     const isValidForm = validateForm(popupSelector, setErrorMsg);
     if (isValidForm) {
       setErrorMsg('');
-      dispatch({ type: REQUEST_EDITING });
       if (setIsShown)
         setIsShown(false)
     }
   }
 
-  const submitButtonProps: Button.Props = {
-    text: 'Edit',
+  const closePopup = () => {
+    dispatch({
+      type: HANDLE_POPUP,
+      keys: ['pycRegistration', 'detail', 'isShown'],
+      value: false,
+    });
+  };
+
+  const approveButtonProps: Button.Props = {
+    text: 'Approve',
     margin: Base.MarginRight.PX_28,
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
     backgroundColor: Base.BackgroundColor.GREEN,
-    onClick: handleSubmitButtonClick,
+    onClick: handleSubmitButtonClick(1),
+  }
+  const rejectButtonProps: Button.Props = {
+    text: 'Reject',
+    margin: Base.MarginRight.PX_28,
+    width: Base.Width.PX_200,
+    color: Base.Color.WHITE,
+    backgroundColor: Base.BackgroundColor.RED,
+    onClick: handleSubmitButtonClick(2),
   }
 
   const closeButtonProps: Button.Props = {
@@ -71,275 +83,340 @@ export const Element = (props: Popup.Props) => {
         }}
       />
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số UQ' {...inputTitleProps} />
+        <Title.Element text='Số PYC HT' {...inputTitleProps} />
         <Input.Element
-          valueType={Input.ValueType.NUMBER}
-          placeholder=''
-          {...inputProps}
           {...inputProps}
           defaultValue={popupSelector.id}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='ĐVUQ' {...inputTitleProps} />
+        <Title.Element text='Số PYC ĐV' {...inputTitleProps} />
         <Input.Element
-          valueType={Input.ValueType.NUMBER}
+          {...inputProps}
+          defaultValue={popupSelector.orgsRequestId}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Ngày tạo PYC' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.orgsHolderName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      {/* <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Trạng thái PYC HT' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationStatus}
+          isDisabled={true}
+        />
+      </Block.Element> */}
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên ĐVYCĐQ' {...inputTitleProps} />
+        <Input.Element
           {...inputProps}
           defaultValue={popupSelector.orgsName}
           isDisabled={true}
         />
       </Block.Element>
-      <Block.Element
-        {...inputWrapperProps}
-        margin={Base.MarginBottom.PX_28}
-      >
-        <Title.Element text='Ngày tạo' {...inputTitleProps} />
-        <Input.Element
-          valueType={Input.ValueType.NUMBER}
-          {...inputProps}
-          defaultValue={getCurrentDate()}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element
-        {...inputWrapperProps}
-        margin={Base.MarginBottom.PX_28}
-      >
-        <Title.Element text='Ngày UQ' {...inputTitleProps} />
-        <Block.Element
-          width={Base.Width.PER_70}
-          flex={Base.Flex.BETWEEN}
-        >
-          <Input.Element
-            {...inputProps}
-            flexGrow={Base.FlexGrow.G1}
-            margin={Base.MarginRight.PX_18}
-            store={{
-              selectorKeys: ['registration', 'editingPopup', 'dateFrom'],
-              reducerType: '',
-            }}
-            isDisabled={true}
-          />
-          <Input.Element
-            {...inputProps}
-            flexGrow={Base.FlexGrow.G1}
-            store={{
-              selectorKeys: ['registration', 'editingPopup', 'dateTo'],
-              reducerType: '',
-            }}
-            isDisabled={true}
-          />
-        </Block.Element>
-      </Block.Element>
-
-      <Block.Element
-        flex={Base.Flex.BETWEEN}
-        alignItems={Base.AlignItems.STRETCH}
-        style={{
-          borderTop: '1px solid #e8e8e8',
-          paddingTop: '28px',
-        }}
-      >
-        <Title.Element
-          tagType={Title.TagType.H3}
-          text='Người UQ'
-        />
-      </Block.Element>
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Họ và tên người UQ' {...inputTitleProps} />
+        <Title.Element text='Tên Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'sendName'],
-            reducerType: '',
-          }}
+          defaultValue={popupSelector.orgsHolderName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='CMND' {...inputTitleProps} />
+        <Title.Element text='SĐT Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'sendCmnd'],
-            reducerType: '',
-          }}
+          defaultValue={popupSelector.orgsHolderMobile}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Chức vụ' {...inputTitleProps} />
+        <Title.Element text='SĐT Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'sendTitle'],
-            reducerType: '',
-          }}
+          defaultValue={popupSelector.objectType.text}
           isDisabled={true}
         />
       </Block.Element>
-
-
-      <Block.Element
-        flex={Base.Flex.BETWEEN}
-        alignItems={Base.AlignItems.STRETCH}
-        style={{
-          borderTop: '1px solid #e8e8e8',
-          paddingTop: '28px',
-        }}
-      >
-        <Title.Element
-          tagType={Title.TagType.H3}
-          text='Người nhận UQ'
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Họ và tên người UQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'recvName'],
-            reducerType: '',
-          }}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='CMND' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'recvCmnd'],
-            reducerType: '',
-          }}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Ngày cấp' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'recvCmndyear'],
-            reducerType: '',
-          }}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Nơi cấp' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'recvCmndPlace'],
-            reducerType: '',
-          }}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Chức vụ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'recvTitle'],
-            reducerType: '',
-          }}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số điện thoại' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'recvPhone'],
-            reducerType: '',
-          }}
-          isDisabled={true}
-        />
-      </Block.Element>
-
 
       <Title.Element
         tagType={Title.TagType.H3}
-        text='Nội dung UQ'
+        text='Thông tin chi tiết HĐB'
         style={{
           borderTop: '1px solid #e8e8e8',
           paddingTop: '28px',
         }}
       />
-      {/* <DualTable.Element
-        store={{
-          selector1Keys: ['registration', 'editingPopup', 'authorityContent1'],
-          selector2Keys: ['registration', 'editingPopup', 'authorityContent2'],
-          row1ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType: 2, tableType: 1 },
-          row2ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType: 2, tableType: 2 },
+      <SearchDataTable.Element />
+
+      <Block.Element margin={Base.MarginBottom.PX_28} />
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Mức độ ưu tiên' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.priorityLevelName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Mô hình điều quỹ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.model.text}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Địa điểm nhận' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.placeReceive.text}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Khoảng cách ĐVĐQ với ĐVYCĐQ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.routeId}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên ĐVĐQ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={userSelector.orgsName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên ATM' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.atmCdmName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên NH đối tác KPP mở TK' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.nnhnTctdName}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Title.Element
+        tagType={Title.TagType.H3}
+        text='Thông tin người phê duyệt'
+        style={{
+          borderTop: '1px solid #e8e8e8',
+          paddingTop: '28px',
         }}
-      /> */}
+      />
 
-      <Table.Element {...tableProps} />
 
-      <Block.Element
-        {...inputWrapperProps}
-        margin={Base.MarginTop.PX_38}
-      >
-        <Title.Element text='Tên nhân viên đăng ký' {...inputTitleProps} />
+      <Title.Element
+        tagType={Title.TagType.H3}
+        text='Thông tin phê duyệt tạo PYC'
+        style={{
+          borderTop: '1px solid #e8e8e8',
+          paddingTop: '28px',
+        }}
+      />
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['auth', 'user', 'name'],
-            reducerType: '',
-          }}
+          defaultValue={popupSelector.orgsHolderName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.orgsHolderMobile}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cpdDvycdqName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cpdDvycdqDate}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên CPD ĐVĐQ phê duyệt' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời điểm CPD ĐVĐQ phê duyệt' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqDate}
           isDisabled={true}
         />
       </Block.Element>
 
-      <Block.Element
-        {...inputWrapperProps}
-        margin={Base.MarginTop.PX_38}
-      >
-        <Title.Element text='Tên TDV phê duyệt' {...inputTitleProps} />
+
+
+
+      <Title.Element
+        tagType={Title.TagType.H3}
+        text='Thông tin phê duyệt hủy PYC'
+        style={{
+          borderTop: '1px solid #e8e8e8',
+          paddingTop: '28px',
+        }}
+      />
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên Thủ quỹ ĐVĐQ hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'updatedbyName'],
-            reducerType: '',
-          }}
+          defaultValue={popupSelector.nvCancelName}
           isDisabled={true}
         />
       </Block.Element>
-      <Block.Element
-        {...inputWrapperProps}
-        margin={Base.MarginTop.PX_28}
-      >
-        <Title.Element text='Thời điểm TDV phê duyệt' {...inputTitleProps} />
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'updateddate'],
-            reducerType: '',
-          }}
+          defaultValue={popupSelector.nvCancelDate}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVYCĐQ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.nvCancelReason}
           isDisabled={true}
         />
       </Block.Element>
 
-      <Block.Element {...inputWrapperProps}
-        margin={Base.MarginTop.PX_28}>
-        <Title.Element
-          text='Lý do từ chối phê duyệt của TDV'
-          {...inputTitleProps}
-        />
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['registration', 'editingPopup', 'rejectReason'],
-            reducerType: '',
-          }}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelName}
           isDisabled={true}
         />
       </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelDate}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Lý do từ chối phê duyệt của TQ ĐVĐQ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelReason}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên CPD ĐVĐQ phê duyệt hủy PYC' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqCancelName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời điểm CPD ĐVĐQ phê duyệt hủy PYC' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqCancelDate}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVĐQ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqCancelReason}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Title.Element
+        tagType={Title.TagType.H3}
+        text='Thông tin Lộ trình'
+        style={{
+          borderTop: '1px solid #e8e8e8',
+          paddingTop: '28px',
+        }}
+      />
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Số LT' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.routeId}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Trạng thái LT' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.routeStatus}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Version LT' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.routeVersion}
+          isDisabled={true}
+        />
+      </Block.Element>
+
 
       <Block.Element
         {...actionsWrapperProps}
@@ -349,20 +426,11 @@ export const Element = (props: Popup.Props) => {
           <Title.Element text={errorMsg} color={Base.Color.RED} />
         </Block.Element>
         <Block.Element {...actionsProps}>
-          {/* <Button.Element
-            {...submitButtonProps}
-            flexGrow={Base.FlexGrow.G1}
-          /> */}
           <Button.Element
             {...closeButtonProps}
             // flexGrow={Base.FlexGrow.G1}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['registration', 'detail', 'isShown'],
-                value: false,
-              }
-            }}
+            onClick={closePopup}
+
           />
         </Block.Element>
       </Block.Element>
@@ -392,23 +460,15 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  if (!isMatchDateDD_MM_YYY(popupSelector.dateFrom)) {
-    setErrorMsg('UQ từ ngày sai định dạng');
-    return false;
-  }
-  if (!isMatchDateDD_MM_YYY(popupSelector.dateTo)) {
-    setErrorMsg('UQ đến ngày sai định dạng');
-    return false;
-  }
 
-  if (!popupSelector.sendId) {
-    setErrorMsg('Chưa chọn người UQ');
-    return false;
-  }
-  if (!popupSelector.sendId) {
-    setErrorMsg('Chưa chọn người nhận UQ');
-    return false;
-  }
+  // if (!popupSelector.sendId) {
+  //   setErrorMsg('Chưa chọn người UQ');
+  //   return false;
+  // }
+  // if (!popupSelector.sendId) {
+  //   setErrorMsg('Chưa chọn người nhận UQ');
+  //   return false;
+  // }
   return true;
 }
 

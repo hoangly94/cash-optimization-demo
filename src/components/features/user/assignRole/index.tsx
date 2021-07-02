@@ -7,7 +7,7 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Button from "~commons/button";
 import * as DualTable from "~commons/dualTable";
-import { CHANGE_ASSIGN_ROLE_INPUT, CHANGE_CHANGE_PASS_INPUT, FETCH_USER, REQUEST_ASSIGN_ROLE, REQUEST_ASSIGN_ROLE_QUERY, REQUEST_CHANGE_PASSWORD, SELECT_ROLE_CONTENT_ROW } from '~stores/auth/constants';
+import { CHANGE_ASSIGN_ROLE_INPUT, CHANGE_CHANGE_PASS_INPUT, FETCH_USER, HANDLE_DUALTABLE_MOVE, REQUEST_ASSIGN_ROLE, REQUEST_ASSIGN_ROLE_QUERY, REQUEST_CHANGE_PASSWORD, SELECT_ROLE_CONTENT_ROW } from '~stores/auth/constants';
 import { useDispatch, useSelector } from 'react-redux';
 
 export enum Type {
@@ -69,6 +69,7 @@ export const Element = (props: Props) => {
           selector2Keys: ['auth', 'assignRole', 'roleContent2'],
           row1ClickAction: { type: SELECT_ROLE_CONTENT_ROW },
           row2ClickAction: { type: SELECT_ROLE_CONTENT_ROW },
+          handleMoveActionType:HANDLE_DUALTABLE_MOVE,
         }}
       />
 

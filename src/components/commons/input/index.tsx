@@ -62,7 +62,6 @@ export const Element = (props: Props) => {
   const value = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : null;
   const ref = refs ?? useRef(null);
   const disabled = isDisabled ? 'disabled' : '';
-
   const handleKeyPress = (e) => {
     if (valueType === ValueType.NUMBER)
       validateNumber(e);
@@ -77,13 +76,12 @@ export const Element = (props: Props) => {
     if (onChange)
       onChange(e);
   }
-
+  
   if (ref?.current) {
     (ref as any).current.value = value || defaultValue;
   }
 
-  const valueProp = ref?.current ? null : { value: defaultValue };
-
+  const valueProp = ref?.current ? null : { value: value || defaultValue };
   //create props
   const componentProps = {
     name:name,

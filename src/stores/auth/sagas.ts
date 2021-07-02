@@ -78,7 +78,7 @@ function* loginSaga() {
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         if (responseData?.data?.resultCode == 1) {
-            document.cookie = `accessToken=${responseData.data.accessToken};${expires};path=/;`;
+            document.cookie = `accessToken=${responseData.data.accessToken};path=/;`;
             yield put({ type: UPDATE_LOGIN, data: responseData.data });
             return yield window.location.href = '/change-password';
         }

@@ -42,7 +42,7 @@ export const Element = (props: Props) => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch({ type: FETCH_CONFIG });
-        // dispatch({ type: FETCH_USER });
+        dispatch({ type: FETCH_USER });
         dispatch({ type: FETCH_ROLES });
         // dispatch({ type: FETCH_AREAS });
         // dispatch({ type: FETCH_ORGS });
@@ -50,9 +50,12 @@ export const Element = (props: Props) => {
         // dispatch({ type: FETCH_PERS });
         // dispatch({ type: FETCH_TITLE });
         // dispatch({ type: FETCH_REGIONS });
-    });
+    }, []);
     const userSelector = useSelector(state=>state['auth'].user);
     const isAuthenticated = userSelector.isAuthenticated || accessToken;
+    console.log('===================');
+    console.log(userSelector.isAuthenticated);
+    console.log(accessToken);
     return (
         <Router >
             <Notification.Element />

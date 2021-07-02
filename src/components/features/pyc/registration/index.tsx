@@ -7,13 +7,17 @@ import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as Actions from "./actions";
 import { useDispatch } from 'react-redux';
-import { FETCH_CONFIG } from '_/stores/dashboardRoot/constants';
+import { FETCH_CONFIG, FETCH_CURRENCIES, FETCH_ORGS, FETCH_PRIORITIES } from '_/stores/dashboardRoot/constants';
 import { REQUEST_QUERY, RESET_FILTER_REGISTRATION } from '_/stores/authority/registration/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const type = 'component';
+  useEffect(() => {
+    dispatch({ type: FETCH_CURRENCIES });
+    dispatch({ type: FETCH_PRIORITIES });
+  }, []);
   useEffect(() => {
     dispatch({ type: RESET_FILTER_REGISTRATION });
     dispatch({ type: REQUEST_QUERY });
@@ -37,5 +41,5 @@ export const Element = (props: Props) => {
   )
 }
 
-Element.displayName = 'Registration'
+Element.displayName = 'Registration';
 

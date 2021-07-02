@@ -43,6 +43,7 @@ type Store = {
   row1ClickAction: Object,
   row2ClickAction: Object,
   selectRowAction?: Object,
+  handleMoveActionType: string,
 }
 
 export const Element = (props: Props) => {
@@ -101,7 +102,7 @@ export const Element = (props: Props) => {
             text='>'
             // text='Select >'
             store={{
-              action: { type: HANDLE_DUALTABLE_MOVE, moveType: 'ONE_LEFT_TO_RIGHT' },
+              action: { type: store.handleMoveActionType, moveType: 'ONE_LEFT_TO_RIGHT' },
             }}
           />
           <Button.Element
@@ -109,7 +110,7 @@ export const Element = (props: Props) => {
             text='>>'
             // text='Select ALL >>'
             store={{
-              action: { type: HANDLE_DUALTABLE_MOVE, moveType: 'ALL_LEFT_TO_RIGHT' },
+              action: { type: store.handleMoveActionType, moveType: 'ALL_LEFT_TO_RIGHT' },
             }}
           />
           <Button.Element
@@ -117,7 +118,7 @@ export const Element = (props: Props) => {
             text='<<'
             // text='<< Remove ALL'
             store={{
-              action: { type: HANDLE_DUALTABLE_MOVE, moveType: 'ALL_RIGHT_TO_LEFT' },
+              action: { type: store.handleMoveActionType, moveType: 'ALL_RIGHT_TO_LEFT' },
             }}
           />
           <Button.Element
@@ -125,7 +126,7 @@ export const Element = (props: Props) => {
             text='<'
             // text='< Remove'
             store={{
-              action: { type: HANDLE_DUALTABLE_MOVE, moveType: 'ONE_RIGHT_TO_LEFT' },
+              action: { type: store.handleMoveActionType, moveType: 'ONE_RIGHT_TO_LEFT' },
             }}
           />
 

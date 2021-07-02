@@ -62,9 +62,9 @@ const rootReducer = combineReducers({
     registration: registrationReducer,
     searchOrgs: searchOrgsReducer,
     searchPers: searchPersReducer,
-    pycRegistration: registrationReducer,
-    pycSearchOrgs: searchOrgsReducer,
-    pycSearchPers: searchPersReducer,
+    pycRegistration: pycRegistrationReducer,
+    pycSearchOrgs: pycSearchOrgsReducer,
+    pycSearchPers: pycSearchPersReducer,
 })
 
 function* rootSaga() {

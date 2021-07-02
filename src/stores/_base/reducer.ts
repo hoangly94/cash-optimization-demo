@@ -123,6 +123,56 @@ const initState: State = {
                 isLoading: false,
             },
         },
+        'pycSearchPers': {
+            'select': {
+                isDisabled: true,
+            },
+            'query': {
+                isLoading: false,
+            },
+        },
+        'pycSearchOrgs': {
+            'select': {
+                isDisabled: true,
+            },
+            'query': {
+                isLoading: false,
+            },
+        },
+        'pycSearchOrgs2': {
+            'select': {
+                isDisabled: true,
+            },
+            'query': {
+                isLoading: false,
+            },
+        },
+        'pycRegistration': {
+            'select': {
+                isDisabled: true,
+            },
+            'edit': {
+                isDisabled: true,
+            },
+            'detail': {
+                isDisabled: true,
+            },
+            'validate': {
+                isDisabled: true,
+            },
+            'query': {
+                isLoading: false,
+            },
+            'specialDeleteCreating': {
+                isDisabled: true,
+            },
+            'specialDeleteEditing': {
+                isDisabled: true,
+            },
+            'orgsSearching': {
+                isDisabled: true,
+            },
+        },
     },
     popups: {
         'orgs': {
@@ -263,6 +313,50 @@ const initState: State = {
                 isShown: false,
             },
             'validate': {
+                isShown: false,
+            },
+        },
+        'pycRegistration': {
+            'pycSearchOrgs': {
+                isShown: false,
+            },
+            'pycSearchOrgs2': {
+                isShown: false,
+            },
+            'pycSearchPers': {
+                isShown: false,
+            },
+            'create': {
+                isShown: false,
+            },
+            'edit': {
+                isShown: false,
+            },
+            'detail': {
+                isShown: false,
+            },
+            'validate': {
+                isShown: false,
+            },
+            'orgsSearching': {
+                isShown: false,
+            },
+            'validate1': {
+                isShown: false,
+            },
+            'validate2': {
+                isShown: false,
+            },
+            'validate3': {
+                isShown: false,
+            },
+            'validateCancel1': {
+                isShown: false,
+            },
+            'validateCancel2': {
+                isShown: false,
+            },
+            'validateCancel3': {
                 isShown: false,
             },
         },

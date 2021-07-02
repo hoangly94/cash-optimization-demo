@@ -30,7 +30,7 @@ export const SEARCH_PERS = root + 'SEARCH_PERS';
 export const SELECT_AUTHORITY_CONTENT_ROW = root + 'SELECT_AUTHORITY_CONTENT_ROW';
 export const SET_POPUP_TYPE = root + 'SET_POPUP_TYPE';
 
-export const HANDLE_DUALTABLE_MOVE = 'HANDLE_DUALTABLE_MOVE';
+export const HANDLE_DUALTABLE_MOVE = root + 'HANDLE_DUALTABLE_MOVE';
 export const HANDLE_APPROVE_ACTION = root + 'HANDLE_APPROVE_ACTION';
 export const HANDLE_REJECT_ACTION = root + 'HANDLE_REJECT_ACTION';
 
@@ -41,14 +41,48 @@ export const RESET_FILTER_APPROVAL = root + 'RESET_FILTER_APPROVAL';
 
 export const HANDLE_CONTINUE_ACTION = root + 'HANDLE_CONTINUE_ACTION';
 
+export const SELECT_COMBOX_FILTER = root + 'SELECT_COMBOX_FILTER';
+export const SELECT_COMBOX = root + 'SELECT_COMBOX';
+
+export const HANDLE_SPECIAL_DELETE = root + 'HANDLE_SPECIAL_DELETE';
+export const HANDLE_SPECIAL_ADD = root + 'HANDLE_SPECIAL_ADD';
+export const SELECT_SPECIAL_ROW = root + 'SELECT_SPECIAL_ROW';
+
+export const UPDATE_SPECIAL_DATA = root + 'UPDATE_SPECIAL_DATA';
+
+export const HANDLE_ORGSSEARCHING_UPDATE = root + 'HANDLE_ORGSSEARCHING_UPDATE';
+export const HANDLE_ORGSSEARCHING_CONTINUE = root + 'HANDLE_ORGSSEARCHING_CONTINUE';
+
+export const HANDLE_VALIDATE_APPROVE1 = root + 'HANDLE_VALIDATE_APPROVE1';
+export const HANDLE_VALIDATE_APPROVE2 = root + 'HANDLE_VALIDATE_APPROVE2';
+export const HANDLE_VALIDATE_APPROVE3 = root + 'HANDLE_VALIDATE_APPROVE3';
+export const HANDLE_VALIDATE_REJECT1 = root + 'HANDLE_VALIDATE_REJECT1';
+export const HANDLE_VALIDATE_REJECT2 = root + 'HANDLE_VALIDATE_REJECT2';
+export const HANDLE_VALIDATE_REJECT3 = root + 'HANDLE_VALIDATE_REJECT3';
+
+// export const HANDLE_VALIDATE_CANCEL_APPROVE1 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE1';
+// export const HANDLE_VALIDATE_CANCEL_APPROVE2 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE2';
+// export const HANDLE_VALIDATE_CANCEL_APPROVE3 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE3';
+// export const HANDLE_VALIDATE_CANCEL_REJECT1 = root + 'HANDLE_VALIDATE_CANCEL_REJECT1';
+// export const HANDLE_VALIDATE_CANCEL_REJECT2 = root + 'HANDLE_VALIDATE_CANCEL_REJECT2';
+// export const HANDLE_VALIDATE_CANCEL_REJECT3 = root + 'HANDLE_VALIDATE_CANCEL_REJECT3';
 
 export type State = {
     history: any,
+
     filters: {
         radio: string,
-        dateFrom:string,
-        dateTo:string,
+        dateFrom: string,
+        dateTo: string,
+        orgsRole: {
+            text: string,
+            value: string,
+        },
         orgs: {
+            text: string,
+            value: string,
+        },
+        objectType: {
             text: string,
             value: string,
         },
@@ -65,80 +99,145 @@ export type State = {
         isDisabled: boolean,
     },
 
-    searchPersType:number,
-    popupType:number,
-    
+    searchPersType: number,
+    popupType: number,
+
     selectedItem: any,
     creatingPopup: {
         isShown: boolean,
-
-        orgsId:string,
-        orgsName:string,
-
-        dateFrom:string,
-        dateTo:string,
-
-        sendId: string,
-        sendCode: string,
-        sendName: string,
-        sendCmnd: string,
-        sendTitle: string,
-
-        recvId: string,
-        recvCode: string,
-        recvName: string,
-        recvCmnd: string,
-        recvCmndyear: string,
-        recvCmndPlace: string,
-        recvTitle: string,
-        recvPhone: string,
-
-        authorityContent1: any,
-        authorityContent2: any,
-
-        authorityStatus: string,
-        
-        rejectReason: string,
-
-        updatedbyCode:string,
-        updatedbyName:string,
+        orgsRequestId: string,
+        orgsCode: string,
+        orgsName: string,
+        orgsHolderCode: string,
+        orgsHolderName: string,
+        orgsHolderMobile: string,
+        objectType: {
+            text: string,
+            value: string,
+        },
+        type: {
+            text: string,
+            value: string,
+        },
+        currencyType: {
+            text: string,
+            value: string,
+        },
+        goldType: {
+            text: string,
+            value: string,
+        },
+        quanlity: string,
+        attribute: {
+            text: string,
+            value: string,
+        },
+        cashOptimizatioDetailModelList: {
+            type: string,
+            currencyType: string,
+            goldType: string,
+            quanlity: string,
+            attribute: string,
+        }[],
+        priorityLevelCode: {
+            text: string,
+            value: string,
+        },
+        model: {
+            text: string,
+            value: string,
+        },
+        placeReceive: {
+            text: string,
+            value: string,
+        },
+        isDisabledGoldTypes: boolean,
     },
     editingPopup: {
         isShown: boolean,
-        dateFrom:string,
-        dateTo:string,
 
-        sendId: string,
-        sendName: string,
-        sendCmnd: string,
-        sendTitle: string,
-
-        recvId: string,
-        recvName: string,
-        recvTitle: string,
-        recvCmnd: string,
-        recvCmndyear: string,
-        recvCmndPlace: string,
-        recvPhone: string,
-
-        authorityStatus: string,
-
-        authorityContent1: any,
-        authorityContent2: any,
-        
-        rejectReason: string,
-
-        createdbyName:string,
-
-        updatedbyCode:string,
-        updatedbyName:string,
-        updateddate:string,
+        orgsRequestId: string,
+        orgsCode: string,
+        orgsName: string,
+        orgsHolderCode: string,
+        orgsHolderName: string,
+        orgsHolderMobile: string,
+        objectType: {
+            text: string,
+            value: string,
+        },
+        type: {
+            text: string,
+            value: string,
+        },
+        currencyType: {
+            text: string,
+            value: string,
+        },
+        goldType: {
+            text: string,
+            value: string,
+        },
+        quanlity: string,
+        attribute: {
+            text: string,
+            value: string,
+        },
+        cashOptimizatioDetailModelList: {
+            type: {
+                text: string,
+                value: string,
+            },
+            currencyType: {
+                text: string,
+                value: string,
+            },
+            goldType: {
+                text: string,
+                value: string,
+            },
+            quanlity: string,
+            attribute: {
+                text: string,
+                value: string,
+            },
+        }[],
+        priorityLevelCode: {
+            text: string,
+            value: string,
+        },
+        model: {
+            text: string,
+            value: string,
+        },
+        placeReceive: {
+            text: string,
+            value: string,
+        },
+        rejectReason:string,
+        isDisabledGoldTypes: boolean,
+    },
+    orgsSearchingPopup:{
+        isShown:boolean,
+        atmCdm: {
+            text: string,
+            value: string,
+        },
+        nhnnTctd: {
+            text: string,
+            value: string,
+        },
     },
     historyPopup: {
         isShown: boolean,
     },
     queryResult: any,
-    authorityContents:any,
+    authorityContents: any,
+    
+    objectTypes: any[],
+    pycTypes: [],
+    pycModels: any[],
+    pycPlaceReceives: any[],
 }
 
 

@@ -456,8 +456,8 @@ function getDefaultPopupActions() {
         dateFrom: '',
         dateTo: '',
 
-        orgsId: '14',
-        orgsName: 'HỘI SỞ',//code 9
+        orgsId: '',
+        orgsName: '',//code 9
 
         searchPersType: 0,
         sendId: '',

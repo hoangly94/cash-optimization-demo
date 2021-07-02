@@ -51,7 +51,6 @@ const initState: State = {
 }
 
 export default (state: State = initState, action) => {
-
     switch (action.type) {
         case CHANGE_LOGIN_INPUT:
             return {
@@ -162,13 +161,12 @@ export default (state: State = initState, action) => {
         case HANDLE_DUALTABLE_MOVE:
             const moveNewData = function () {
                 if (action.moveType === 'ONE_LEFT_TO_RIGHT') {
+                    console.log(state);
                     return [
                         state.assignRole.roleContent1.filter(item => !item.isSelected),
                         [
                             ...state.assignRole.roleContent2,
-                            ...state.assignRole.roleContent1
-                                .filter(item => item.isSelected)
-                                .map(item => ({ ...item, isSelected: false })),
+                            ...state.assignRole.roleContent1.filter(item => item.isSelected).map(item => ({ ...item, isSelected: false })),
                         ],
                     ]
                 }
@@ -176,9 +174,7 @@ export default (state: State = initState, action) => {
                     return [
                         [
                             ...state.assignRole.roleContent1,
-                            ...state.assignRole.roleContent2
-                                .filter(item => item.isSelected)
-                                .map(item => ({ ...item, isSelected: false })),
+                            ...state.assignRole.roleContent2.filter(item => item.isSelected).map(item => ({ ...item, isSelected: false })),
                         ],
                         state.assignRole.roleContent2.filter(item => !item.isSelected),
                     ]

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROW } from '~stores/authority/registration/constants';
+import { SELECT_ROW } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import {HANDLE_BUTTON} from "~stores/_base/constants";
@@ -10,7 +10,7 @@ import { getCurrentDate } from '@utils';
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  const queryResult = useSelector(state => state['registration'].queryResult.data);
+  const queryResult = useSelector(state => state['pycRegistration'].queryResult.data);
   const dispatch = useDispatch();
   //create props
   const componentWrapperProps = {
@@ -22,7 +22,7 @@ export const Element = (props: Props) => {
     },
     ...props,
   };
-
+  console.log(queryResult);
   const tableProps: Table.Props = {
     ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
@@ -43,8 +43,8 @@ const tableData_$rows_$cells_title = {
 
 const handleRowClick = (dispatch) => (item) => (e)=> {
   dispatch({ type: SELECT_ROW, data: item });
-  dispatch({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: false });
-  dispatch({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: false });
+  dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'edit', 'isDisabled'], value: false });
+  dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'detail', 'isDisabled'], value: false });
 }
 
 const tableData = (queryResult?): Table.Props => ({
@@ -61,35 +61,59 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Ngày tạo',
+          children: 'Ngày tạo PYC',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Số UQ',
+          children: 'Số PYC HT',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên ĐVUQ',
+          children: 'Số PYC ĐV',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Người UQ',
+          children: 'Mã ĐVUCĐQ',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Người nhận UQ',
+          children: 'Tên ĐVUCĐQ',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Thời gian UQ từ ngày',
+          children: 'Mã ĐVĐQ',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Thời gian UQ đến ngày',
+          children: 'Tên ĐVĐQ',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Trạng thái',
+          children: 'Trạng thái PYC',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Đối tượng ĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mô hình ĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mức độ ưu tiên',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Lộ trình',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Trạng thái Lộ trình',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Datelastmaint',
         },
       ],
     },
@@ -111,25 +135,43 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.id,
     },
     {
-      children: item.categoryOrgs?.orgsName,
+      children: item.orgsRequestId,
     },
     {
-      children: item.persFullname,
+      children: item.orgsHolderCode,
     },
     {
-      children: item.receiverPersFullname,
+      children: item.orgsHolderName,
     },
     {
-      children: getCurrentDate(item.authorityFromDate),
+      children: item.orgsCode,
     },
     {
-      children: getCurrentDate(item.authorityToDate),
+      children: item.orgsName,
     },
     {
-      children: item.authorityStatus,
+      children: item.cashOptimizationStatus,
+    },
+    {
+      children: item.objectType,
+    },
+    {
+      children: item.model,
+    },
+    {
+      children: item.priorityLevelName,
+    },
+    {
+      children: item.routeId,
+    },
+    {
+      children: item.routeStatus,
+    },
+    {
+      children: item.updateddate,
     },
   ]
 })
 
-Element.displayName = 'SearchDataTable'
+Element.displayName = 'SearchDataTable';
 

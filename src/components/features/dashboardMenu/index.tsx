@@ -45,7 +45,7 @@ export const Element = (props: Props) => {
       styles['logout'],
     ),
     text: 'Logout',
-    onClick:handleLogoutClick,
+    onClick: handleLogoutClick,
   }
 
   return (
@@ -58,8 +58,10 @@ export const Element = (props: Props) => {
 }
 
 const handleLogoutClick = () => {
-  document.cookie = `accessToken=;`;
-  window.location.href = '/';
+  new Promise(function (resolve, reject) {
+    document.cookie = `accessToken=;`;
+    resolve(document.cookie);
+  }).then(() => { window.location.href = '/'; });
 }
 
 Element.displayName = 'DashboardMenu';

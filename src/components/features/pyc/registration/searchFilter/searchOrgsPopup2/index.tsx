@@ -141,13 +141,18 @@ export const Element = (props: Popup.Props) => {
             backgroundColor={Base.BackgroundColor.TIGERLILY}
             margin={Base.MarginRight.PX_18}
             store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'pycSearchOrgs', 'select'],
+              // isDisabledSelectorKeys: ['base', 'buttons', 'pycSearchOrgs2', 'select'],
               action: {
                 type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'pycSearchOrgs', 'isShown'],
+                keys: ['pycRegistration', 'pycSearchOrgs2', 'isShown'],
                 value: false,
               }
             }}
+            onClick={()=> dispatch({
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+              value: true,
+            })}
           />
           <Button.Element
             text='Close'
@@ -157,10 +162,15 @@ export const Element = (props: Popup.Props) => {
             store={{
               action: {
                 type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'pycSearchOrgs', 'isShown'],
+                keys: ['pycRegistration', 'pycSearchOrgs2', 'isShown'],
                 value: false,
               }
             }}
+            onClick={()=> dispatch({
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+              value: true,
+            })}
           />
         </Block.Element>
       </Block.Element>

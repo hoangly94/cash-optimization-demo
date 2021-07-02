@@ -8,10 +8,10 @@ import * as Pagination from "~commons/pagination";
 import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
 import * as DetailPopup from "./detailPopup";
+import * as OrgsSearchingPopup from "./orgsSearchingPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { FETCH_HISTORY, REQUEST_QUERY } from '~stores/authority/registration/constants';
-import { useDispatch } from 'react-redux';
-import { HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/authority/registration/constants';
+import { FETCH_HISTORY, REQUEST_QUERY, HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/pyc/registration/constants';
+import { useDispatch, useSelector } from 'react-redux';
 
 export type Props = Base.Props;
 
@@ -20,7 +20,7 @@ export const Element = (props: Props) => {
   React.useEffect(() => {
     dispatch({ type: FETCH_HISTORY })
   }, []);
-
+  const orgsSearchingPopupSelector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -59,7 +59,6 @@ export const Element = (props: Props) => {
     text: 'Detail',
     backgroundColor: Base.BackgroundColor.CLASSIC_BLUE,
   }
-
   const creatingPopupComponentProps: Popup.Props = {
     ...popupProps,
     $content: {
@@ -96,7 +95,7 @@ export const Element = (props: Props) => {
       <Block.Element {...componentWrapperProps}>
         <Pagination.Element
           store={{
-            totalSelectorKeys: ['registration', 'queryResult'],
+            totalSelectorKeys: ['pycRegistration', 'queryResult'],
             action: {
               type: REQUEST_QUERY,
             }
@@ -112,7 +111,7 @@ export const Element = (props: Props) => {
               store={{
                 action: {
                   type: HANDLE_POPUP,
-                  keys: ['registration', 'create', 'isShown'],
+                  keys: ['pycRegistration', 'create', 'isShown'],
                   value: true,
                   popupType: 1,
                 }
@@ -121,31 +120,63 @@ export const Element = (props: Props) => {
             <Button.Element
               {...editingButtonComponentProps}
               store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'edit'],
+                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'edit'],
                 action: {
                   type: HANDLE_POPUP,
-                  keys: ['registration', 'edit', 'isShown'],
+                  keys: ['pycRegistration', 'edit', 'isShown'],
                   value: true,
                   popupType: 2,
                 }
               }}
             />
             <Button.Element
-              {...detailButtonComponentProps}
+              {...buttonProps}
+              text={'Tìm ĐVĐQ'}
+              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
               store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+                // isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'orgsSearching'],
                 action: {
                   type: HANDLE_POPUP,
-                  keys: ['registration', 'detail', 'isShown'],
+                  keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+                  value: true,
+                  popupType: 4,
+                }
+              }}
+              isDisabled={!(orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching')}
+            />
+            <Button.Element
+              {...buttonProps}
+              text={'View'}
+              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+              store={{
+                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+                action: {
+                  type: HANDLE_POPUP,
+                  keys: ['pycRegistration', 'detail', 'isShown'],
                   value: true,
                   popupType: 3,
                 }
               }}
             />
           </Block.Element>
+
           <Block.Element
             margin={Base.MarginTop.PX_18}
           >
+            <Button.Element
+              {...buttonProps}
+              text={'View'}
+              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+              store={{
+                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+                action: {
+                  type: HANDLE_POPUP,
+                  keys: ['pycRegistration', 'detail', 'isShown'],
+                  value: true,
+                  popupType: 3,
+                }
+              }}
+            />
             <Button.Element
               {...printButtonComponentProps}
             // store={{
@@ -154,21 +185,21 @@ export const Element = (props: Props) => {
             // onClick={() => dispatch({ type: HANDLE_CONTINUE_ACTION })}
 
             />
-            <Button.Element
+            {/* <Button.Element
               {...continueButtonComponentProps}
               store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-                action:{ type: HANDLE_CONTINUE_ACTION }
+                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+                action: { type: HANDLE_CONTINUE_ACTION }
               }}
               onClick={() => dispatch({ type: REQUEST_QUERY })}
-            />
+            /> */}
             <Button.Element
               {...deleteButtonComponentProps}
               store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-                action:{ type: HANDLE_DELETE_ACTION }
-             }}
-             onClick={() => dispatch({ type: REQUEST_QUERY })}
+                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+                action: { type: HANDLE_DELETE_ACTION }
+              }}
+              onClick={() => dispatch({ type: REQUEST_QUERY })}
             />
           </Block.Element>
         </Block.Element>
@@ -177,23 +208,29 @@ export const Element = (props: Props) => {
       <CreatingPopup.Element
         {...creatingPopupComponentProps}
         store={{
-          isShownSelectorKeys: ['base', 'popups', 'registration', 'create'],
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'create'],
         }}
       />
       <EditingPopup.Element
         {...editingPopupComponentProps}
         store={{
-          isShownSelectorKeys: ['base', 'popups', 'registration', 'edit'],
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'edit'],
         }}
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}
         store={{
-          isShownSelectorKeys: ['base', 'popups', 'registration', 'detail'],
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'detail'],
         }}
-        // useEffect={{
-        //   callback: () => dispatch({ type: FETCH_HISTORY }),
-        // }}
+      // useEffect={{
+      //   callback: () => dispatch({ type: FETCH_HISTORY }),
+      // }}
+      />
+      <OrgsSearchingPopup.Element
+        {...historyPopupComponentProps}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'orgsSearching'],
+        }}
       />
     </>
   )

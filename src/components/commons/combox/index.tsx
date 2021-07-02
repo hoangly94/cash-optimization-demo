@@ -81,6 +81,10 @@ export const Element = (props: Props) => {
 
   const textProps: Text.Props = {
     text: (defaultText as any)?.text ?? 'Default Text',
+    style: {
+      whiteSpace: 'nowrap',
+      paddingRight: '18px',
+    }
   };
 
   const selectorWrapperProps: Block.Props = {
@@ -170,7 +174,7 @@ const mapFunctionsToItemElement = (props: Props, dispatch) => {
 
       onClick: () => {
         if (!props.isDisabled)
-          dispatch({ type: type, data: child })
+          dispatch({ type: type, data: child, keys: props.store?.defaultSelectorKeys?.slice(1)})
       },
       ...child,
     }

@@ -1,13 +1,15 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, } from './constants'
-import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/authority/searchOrgs/constants'
-import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/authority/searchPers/constants'
-import * as Base from '~/_settings';
+import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, } from './constants'
+import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
+import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
 import { UPDATE_CONFIG } from '~stores/dashboardRoot/constants';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 
 const initState: State = {
     history: [],
+    pycTypes: [],
+    pycModels: [],
+    pycPlaceReceives: [],
     filters: {
         ...getDefaultFilters(),
         queryButton: {
@@ -35,10 +37,29 @@ const initState: State = {
         isShown: false,
         ...getDefaultPopupActions(),
     },
+    orgsSearchingPopup: {
+        isShown: false,
+        ...getDefaultPopupActions(),
+        ...getDefaultOrgsSearchingPopup(),
+    },
     historyPopup: {
         isShown: false,
     },
     authorityContents: [],
+    objectTypes: [
+        {
+            name: 'KPP',
+            value: 'KPP',
+        },
+        {
+            name: 'ATM',
+            value: 'ATM',
+        },
+        {
+            name: 'TCTD/NHNN',
+            value: 'TCTD/NHNN',
+        },
+    ],
 }
 
 export default (state: State = initState, action) => {
@@ -88,7 +109,6 @@ export default (state: State = initState, action) => {
             return state
         case UPDATE_DATA:
             const data = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
-
             return {
                 ...state,
                 isLoading: false,
@@ -137,30 +157,6 @@ export default (state: State = initState, action) => {
                     ...state.editingPopup,
                     ...action.data,
                 },
-            }
-        case SELECT_ROW:
-            const newQueryResult = state.queryResult.data.map(mapToNewQueryResult(action.data))
-            const newData = mapToNewData(action.data);
-            const approvalData = ['Approved_A', 'Rejected_A'].includes(newData.authorityStatus)
-                ? {}
-                : {
-                    updatedbyName: '',
-                    updatedbyCode: '',
-                    updateddate: '',
-                };
-            return {
-                ...state,
-                selectedItem: newData,
-                editingPopup: {
-                    ...newData,
-                    authorityContent1: state.authorityContents.filter(item1 =>
-                        newData.authorityContent2.filter(item2 => item2.id == item1.id).length == 0),
-                    ...approvalData,
-                },
-                queryResult: {
-                    ...state.queryResult,
-                    data: newQueryResult,
-                }
             }
         case UPDATE_HISTORY:
             const historyData = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
@@ -253,14 +249,6 @@ export default (state: State = initState, action) => {
                     ...action.data
                 },
             }
-        case SELECT_STATUS_FILTER:
-            return {
-                ...state,
-                filters: {
-                    ...state.filters,
-                    status: action.data,
-                },
-            }
         case SEARCHORGS_SELECT_ROW:
             return {
                 ...state,
@@ -268,8 +256,14 @@ export default (state: State = initState, action) => {
                     ...state.filters,
                     orgs: {
                         text: action.data.orgsName,
-                        value: action.data.id,
+                        value: action.data.orgsCode,
+                        // value: action.data.orgsCode,
                     },
+                },
+                orgsSearchingPopup: {
+                    ...state.orgsSearchingPopup,
+                    orgsCode: action.data.orgsCode,
+                    orgsName: action.data.orgsName,
                 },
             }
         case SEARCH_PERS:
@@ -445,46 +439,175 @@ export default (state: State = initState, action) => {
                 ...state,
                 popupType: action.popupType || state.popupType,
             }
+        case SELECT_COMBOX:
+            // console.log(action);
+            const key1 = action.keys[0];
+            const key2 = action.keys[1];
+            return {
+                ...state,
+                ...pycTypesCheckData(key2, action.data.value),
+                [key1]: {
+                    ...state[key1],
+                    [key2]: action.data,
+                    ...currencyTypeCheckData(key2, action.data.value),
+                    ...pycTypesCheckResetData(key2),
+                },
+            }
+        case SELECT_COMBOX_FILTER:
+            return {
+                ...state,
+                [action.keys[0]]: {
+                    ...state[action.keys[0]],
+                    [action.keys[1]]: action.data,
+                },
+            }
+        case UPDATE_SPECIAL_DATA:
+            const key = state.popupType == 1 ? 'creatingPopup' : 'editingPopup';
+            // const key = state.popupType == 1 ? 'creatingPopup' : 'selectedItem';
+            const popupTypeData = state[key];
+            const cashOptimizatioDetailModelList = state[key].cashOptimizatioDetailModelList;
 
+            return {
+                ...state,
+                [key]: {
+                    ...state[key],
+                    cashOptimizatioDetailModelList: [
+                        ...state[key].cashOptimizatioDetailModelList,
+                        {
+                            id: cashOptimizatioDetailModelList.length ? cashOptimizatioDetailModelList[cashOptimizatioDetailModelList.length - 1]['id'] + 1 : 0,
+                            type: popupTypeData.type,
+                            currencyType: popupTypeData.currencyType,
+                            goldType: popupTypeData.goldType,
+                            quanlity: popupTypeData.quanlity,
+                            attribute: popupTypeData.attribute,
+                        },
+                    ],
+                },
+            }
+        case SELECT_SPECIAL_ROW:
+            const selectSpecialRowData = state.popupType == 1
+                ? {
+                    creatingPopup: {
+                        ...state.creatingPopup,
+                        cashOptimizatioDetailModelList: state.creatingPopup.cashOptimizatioDetailModelList.map(mapToNewQueryResult(action.data))
+                    }
+                }
+                : {
+                    editingPopup: {
+                        ...state.editingPopup,
+                        cashOptimizatioDetailModelList: state.editingPopup.cashOptimizatioDetailModelList.map(mapToNewQueryResult(action.data))
+                    }
+                };
+            return {
+                ...state,
+                ...selectSpecialRowData,
+            }
+        case HANDLE_SPECIAL_DELETE:
+            const newSpecialRowData = state.popupType == 1
+                ? {
+                    creatingPopup: {
+                        ...state.creatingPopup,
+                        cashOptimizatioDetailModelList: state.creatingPopup.cashOptimizatioDetailModelList.filter(item => !item['isSelected']),
+                    }
+                }
+                : {
+                    editingPopup: {
+                        ...state.editingPopup,
+                        cashOptimizatioDetailModelList: state.editingPopup.cashOptimizatioDetailModelList.filter(item => !item['isSelected']),
+                    }
+                };
+            return {
+                ...state,
+                ...newSpecialRowData,
+            }
+
+        case SELECT_ROW:
+            // console.log(action);
+            // console.log(state);
+            const newQueryResult = state.queryResult.data.map(mapToNewQueryResult(action.data))
+            const newData = mapToNewData(action.data);
+            // const approvalData = ['Approved_A', 'Rejected_A'].includes(newData.authorityStatus)
+            //     ? {}
+            //     : {
+            //         updatedbyName: '',
+            //         updatedbyCode: '',
+            //         updateddate: '',
+            //     };
+            return {
+                ...state,
+                ...pycTypesCheckData('objectType', action.data.objectType),
+                selectedItem: newData,
+                editingPopup: newData,
+                orgsSearchingPopup: {
+                    ...getDefaultOrgsSearchingPopup(),
+                    ...newData,
+                },
+                queryResult: {
+                    ...state.queryResult,
+                    data: newQueryResult,
+                }
+            }
         default:
             return state
     }
 }
+function getDefaultOrgsSearchingPopup() {
+    return {
+        atmCdm: {
+            text: 'Tên ATM',
+            value: '',
+        },
+        nhnnTctd: {
+            text: 'Tên NH đối tác KPP mở TK',
+            value: '',
+        },
+    }
 
+}
 function getDefaultPopupActions() {
     return {
-        dateFrom: '',
-        dateTo: '',
-
-        orgsId: '14',
-        orgsName: 'HỘI SỞ',//code 9
-
-        searchPersType: 0,
-        sendId: '',
-        sendCode: '',
-        sendName: '',
-        sendCmnd: '',
-        sendTitle: '',
-
-        recvId: '',
-        recvCode: '',
-        recvName: '',
-        recvTitle: '',
-        recvCmnd: '',
-        recvCmndyear: '',
-        recvCmndPlace: '',
-        recvPhone: '',
-
-        authorityContent1: [],
-        authorityContent2: [],
-        authorityStatus: '',
+        orgsRequestId: '',
+        orgsCode: '',
+        orgsName: '',
+        orgsHolderCode: '',
+        orgsHolderName: '',
+        orgsHolderMobile: '',
+        objectType: {
+            text: 'Đối tượng điều quỹ',
+            value: '',
+        },
+        type: {
+            text: 'Loại yêu cầu',
+            value: '',
+        },
+        currencyType: {
+            text: 'Loại tiền',
+            value: '',
+        },
+        goldType: {
+            text: 'Loại vàng',
+            value: '',
+        },
+        quanlity: '',
+        attribute: {
+            text: 'Đặc điểm',
+            value: '',
+        },
+        cashOptimizatioDetailModelList: [],
+        priorityLevelCode: {
+            text: 'Mức độ ưu tiên',
+            value: '',
+        },
+        model: {
+            text: 'Mô hình ĐQ',
+            value: '',
+        },
+        placeReceive: {
+            text: 'Địa điểm nhận',
+            value: '',
+        },
         rejectReason: '',
-
-        createdbyName: '',
-
-        updatedbyCode: '',
-        updatedbyName: '',
-        updateddate: '',
+        isDisabledGoldTypes: true,
     }
 }
 
@@ -493,12 +616,20 @@ function getDefaultFilters() {
         radio: '1',
         dateFrom: '',
         dateTo: '',
+        orgsRole: {
+            text: 'Vai trò của ĐV',
+            value: '',
+        },
         orgs: {
             text: '',
             value: '',
         },
+        objectType: {
+            text: 'Đối tượng ĐQ - ALL',
+            value: 'ALL',
+        },
         status: {
-            text: 'Trạng thái',
+            text: 'Trạng thái PYC',
             value: '',
         },
         id: '',
@@ -507,39 +638,43 @@ function getDefaultFilters() {
 
 const mapToNewData = (item) => {
     return {
+        ...getDefaultPopupActions(),
+        ...item,
         id: item.id,
-        orgsId: item.categoryOrgs?.id,
-        orgsName: item.categoryOrgs?.orgsName,
-        dateFrom: _Date.getCurrentDateTime(item.authorityFromDate),
-        dateTo: _Date.getCurrentDateTime(item.authorityToDate),
-        sendId: item.persId,
-        sendCode: item.persCode,
-        sendName: item.persFullname,
-        sendTitle: item.persTitle,
-        sendCmnd: item.persCmndCccd,
-        recvId: item.receiverPersId,
-        recvCode: item.receiverPersCode,
-        recvName: item.receiverPersFullname,
-        recvTitle: item.receiverPersTitle,
-        recvCmnd: item.receiverPersCmndCccd,
-        recvCmndyear: item.receiverPersCmndCccdYear,
-        recvCmndPlace: item.receiverPersCmndCccdPlace,
-        recvPhone: item.receiverPersMobile,
-        authorityContent2: item.authorityDetail.map(item => ({
-            id: item.authorityContentId,
-            name: item.authorityContentValue,
-        })),
-        rejectReason: item.authorityReason,
-        authorityStatus: item.authorityStatus,
-        updatedbyCode: item.updatedbyCode,
-        updatedbyName: item.updatedbyName,
+        createddate: item.createddate,
+        orgsRequestId: item.orgsRequestId,
+        orgsHolderCode: item.orgsHolderCode,
+        orgsHolderName: item.orgsHolderName,
+        orgsHolderMobile: item.orgsHolderMobile,
+        orgsCode: item.orgsCode,
+        orgsName: item.orgsName,
+        cashOptimizationStatus: item.cashOptimizationStatus,
+        priorityLevelName: item.priorityLevelName,
+        routeId: item.routeId,
+        routeStatus: item.routeStatus,
         updateddate: item.updateddate,
-        createdbyName: item.createdbyName,
+        objectType: {
+            text: item.objectType,
+            value: item.objectType,
+        },
+        priorityLevelCode: {
+            text: item.priorityLevelName,
+            value: item.priorityLevelCode,
+        },
+        model: {
+            text: item.model,
+            value: item.model,
+        },
+        placeReceive: {
+            text: item.placeReceive,
+            value: item.placeReceive,
+        },
+        cashOptimizatioDetailModelList: item.cashOptimizatioDetailModelList,
     }
 }
 
 const mapToNewQueryResult = (selectedItem) => (item) => {
-    const isSelectedItem = item.id === selectedItem.id
+    const isSelectedItem = item.id === selectedItem.id;
     if (isSelectedItem) {
         return {
             ...item,
@@ -559,3 +694,163 @@ const preprocessQueryResult = (data) => ({
     createddate: getCurrentDate(data.createddate),
     updateddate: getCurrentDateTime(data.updateddate),
 })
+
+
+const currencyTypeCheckData = (type, value) => {
+    if (type === 'currencyType') {
+        if (['ACB', 'XAU'].includes(value)) {
+            return {
+                isDisabledGoldTypes: false,
+                goldType: {
+                    text: 'Loại vàng',
+                    value: '',
+                },
+            };
+        }
+        return {
+            isDisabledGoldTypes: true,
+            goldType: {
+                text: 'Loại vàng',
+                value: '',
+            },
+        };
+    }
+    return {};
+}
+
+const pycTypesCheckResetData = (type) => {
+    if (type === 'objectType') {
+        return {
+            type: {
+                text: 'Loại yêu cầu',
+                value: '',
+            },
+            currencyType: {
+                text: 'Loại tiền',
+                value: '',
+            },
+            goldType: {
+                text: 'Loại vàng',
+                value: '',
+            },
+            quanlity: '',
+            attribute: {
+                text: 'Đặc điểm',
+                value: '',
+            },
+            cashOptimizatioDetailModelList: [],
+            model: {
+                text: 'Mô hình điều quỹ',
+                value: '',
+            },
+            placeReceive: {
+                text: 'Địa điểm nhận',
+                value: '',
+            },
+        };
+    }
+    return {};
+}
+const pycTypesCheckData = (type, value) => {
+    if (type === 'objectType') {
+        if (value === 'KPP') {
+            return {
+                pycTypes: [
+                    {
+                        name: 'THU QUỸ KPP',
+                        value: 'Thu quỹ KPP',
+                    },
+                    {
+                        name: 'TIẾP QUỸ KPP',
+                        value: 'Tiếp quỹ KPP',
+                    },
+                ],
+                pycModels: [
+                    {
+                        name: 'BÌNH THƯỜNG',
+                        value: 'Bình thường',
+                    },
+                    {
+
+                        name: 'ĐANG VẬN CHUYỂN',
+                        value: 'Đang vận chuyển',
+                    },
+                    {
+                        name: 'ĐANG VẬN CHUYỂN & TRUNG GIAN',
+                        value: 'Đang vận chuyển & Trung gian',
+                    },
+                    {
+                        name: 'TRUNG GIAN',
+                        value: 'Trung gian',
+                    },
+                ],
+                pycPlaceReceives: [
+                    {
+                        name: 'ĐVĐQ',
+                        value: 'ĐVĐQ',
+                    },
+                    {
+                        name: 'ĐVYCĐQ',
+                        value: 'ĐVYCĐQ',
+                    },
+                ],
+            };
+        }
+        if (value === 'ATM') {
+            return {
+                pycTypes: [
+                    {
+                        name: 'TIẾP QUỸ ATM',
+                        value: 'Tiếp quỹ ATM',
+                    },
+                    {
+                        name: 'KẾT QUỸ ATM',
+                        value: 'Kết quỹ ATM',
+                    },
+                ],
+                pycModels: [
+                    {
+                        name: 'BÌNH THƯỜNG',
+                        value: 'Bình thường',
+                    },
+                    {
+
+                        name: 'ĐANG VẬN CHUYỂN',
+                        value: 'Đang vận chuyển',
+                    },
+                ],
+                pycPlaceReceives: [
+                    {
+                        name: 'ĐVYCĐQ',
+                        value: 'ĐVYCĐQ',
+                    },
+                ],
+            };
+        }
+        if (value === 'TCTD/NHNN') {
+            return {
+                pycTypes: [
+                    {
+                        name: 'BÌNH THƯỜNG',
+                        value: 'Bình thường',
+                    },
+                ],
+                pycModels: [
+                    {
+                        name: 'BÌNH THƯỜNG',
+                        value: 'Bình thường',
+                    },
+                ],
+                pycPlaceReceives: [
+                    {
+                        name: 'ĐVYCĐQ',
+                        value: 'ĐVYCĐQ',
+                    },
+                ],
+            };
+        }
+        return [
+        ];
+    }
+    return {};
+};
