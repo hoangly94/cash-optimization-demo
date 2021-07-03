@@ -23,6 +23,7 @@ export const Element = (props: Props) => {
     ...props,
   };
 
+  console.log(queryResult);
   const tableProps: Table.Props = {
     ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
@@ -92,19 +93,19 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.type.text,
+      children: item.type,
     },
     {
-      children: item.currencyType.text
+      children: item.currencyType
     },
     {
-      children: item.goldType.value ? item.goldType.text : '',
+      children: item.goldType,
     },
     {
       children: item.quanlity,
     },
     {
-      children: item.attribute.value,
+      children: item.attribute,
     },
   ]
 })

@@ -71,10 +71,10 @@ export const Element = (props: Popup.Props) => {
           placeholder=''
           {...inputProps}
           isDisabled={true}
-        // store={{
-        //   selectorKeys: ['pycRegistration', 'editingPopup', 'id'],
-        //   reducerType: '',
-        // }}
+          store={{
+            selectorKeys: ['pycRegistration', 'editingPopup', 'id'],
+            reducerType: '',
+          }}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
@@ -116,13 +116,11 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='SĐT di động của Thủ Quỹ ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
-          valueType={Input.ValueType.NUMBER}
           {...inputProps}
           store={{
             selectorKeys: ['pycRegistration', 'editingPopup', 'orgsHolderMobile'],
             reducerType: '',
           }}
-          isDisabled={true}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps} flex={Base.Flex.START}>
@@ -356,6 +354,7 @@ const inputWrapperProps: Block.Props = {
 }
 
 const inputTitleProps: Title.Props = {
+  width: Base.Width.PER_30,
 }
 
 const inputProps: Input.Props = {
@@ -374,23 +373,23 @@ const actionsProps: Block.Props = {
 
 const validateForm = (dispatch, selector) => {
   if (!selector.orgsRequestId) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa điền Số PYC ĐV'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số PYC ĐV' } });
     return false;
   }
   if (!selector.objectType.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Đối tượng điều quỹ'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Đối tượng điều quỹ' } });
     return false;
   }
   if (!selector.priorityLevelCode.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Mức độ ưu tiên'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Mức độ ưu tiên' } });
     return false;
   }
   if (!selector.model.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Mô hình điều quỹ'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Mô hình điều quỹ' } });
     return false;
   }
   if (!selector.placeReceive.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Địa điểm nhận'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Địa điểm nhận' } });
     return false;
   }
   return true;
@@ -400,23 +399,23 @@ const validateForm = (dispatch, selector) => {
 
 const validateSpecialForm = (dispatch, selector) => {
   if (!selector.type.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Loại yêu cầu'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại yêu cầu' } });
     return false;
   }
   if (!selector.currencyType.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Loại tiền'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại tiền' } });
     return false;
   }
   if (['ACB', 'XAU'].includes(selector.currencyType.value) && !selector.goldType.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Loại vàng'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại vàng' } });
     return false;
   }
   if (!selector.quanlity || selector.quanlity == '0') {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Số lượng'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Số lượng' } });
     return false;
   }
   if (!selector.attribute.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Đặc điểm'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Đặc điểm' } });
     return false;
   }
 

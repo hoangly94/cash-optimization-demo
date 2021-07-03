@@ -474,12 +474,12 @@ export default (state: State = initState, action) => {
                     cashOptimizatioDetailModelList: [
                         ...state[key].cashOptimizatioDetailModelList,
                         {
-                            id: cashOptimizatioDetailModelList.length ? cashOptimizatioDetailModelList[cashOptimizatioDetailModelList.length - 1]['id'] + 1 : 0,
-                            type: popupTypeData.type,
-                            currencyType: popupTypeData.currencyType,
-                            goldType: popupTypeData.goldType,
+                            key: cashOptimizatioDetailModelList.length ? cashOptimizatioDetailModelList[cashOptimizatioDetailModelList.length - 1]['key'] + 1 : 0,
+                            type: popupTypeData.type?.value,
+                            currencyType: popupTypeData.currencyType?.value,
+                            goldType: popupTypeData.goldType?.value,
                             quanlity: popupTypeData.quanlity,
-                            attribute: popupTypeData.attribute,
+                            attribute: popupTypeData.attribute?.value,
                         },
                     ],
                 },
@@ -637,6 +637,10 @@ function getDefaultFilters() {
 }
 
 const mapToNewData = (item) => {
+    const cashOptimizatioDetailModelList = item.cashOptimizatioDetailModelList?.map((item, index) => ({
+        ...item,
+        key: item.id ?? index,
+    })) ?? [];
     return {
         ...getDefaultPopupActions(),
         ...item,
@@ -669,12 +673,12 @@ const mapToNewData = (item) => {
             text: item.placeReceive,
             value: item.placeReceive,
         },
-        cashOptimizatioDetailModelList: item.cashOptimizatioDetailModelList,
+        cashOptimizatioDetailModelList: cashOptimizatioDetailModelList,
     }
 }
 
-const mapToNewQueryResult = (selectedItem) => (item) => {
-    const isSelectedItem = item.id === selectedItem.id;
+const mapToNewQueryResult = (selectedItem) => (item, index) => {
+    const isSelectedItem = item.key === selectedItem.key;
     if (isSelectedItem) {
         return {
             ...item,
@@ -813,11 +817,6 @@ const pycTypesCheckData = (type, value) => {
                         name: 'BÌNH THƯỜNG',
                         value: 'Bình thường',
                     },
-                    {
-
-                        name: 'ĐANG VẬN CHUYỂN',
-                        value: 'Đang vận chuyển',
-                    },
                 ],
                 pycPlaceReceives: [
                     {
@@ -831,14 +830,23 @@ const pycTypesCheckData = (type, value) => {
             return {
                 pycTypes: [
                     {
-                        name: 'BÌNH THƯỜNG',
-                        value: 'Bình thường',
+                        name: 'NỘP HĐB TẠI TCTD/ NHNN',
+                        value: 'Nộp HĐB tại TCTD/ NHNN',
+                    },
+                    {
+                        name: 'RÚT HĐB TẠI TCTD/ NHNN',
+                        value: 'Rút HĐB tại TCTD/ NHNN',
                     },
                 ],
                 pycModels: [
                     {
                         name: 'BÌNH THƯỜNG',
                         value: 'Bình thường',
+                    },
+                    {
+
+                        name: 'ĐANG VẬN CHUYỂN',
+                        value: 'Đang vận chuyển',
                     },
                 ],
                 pycPlaceReceives: [

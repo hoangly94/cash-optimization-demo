@@ -8,6 +8,7 @@ import * as Pagination from "~commons/pagination";
 import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
 import * as DetailPopup from "./detailPopup";
+import * as DeletePopup from "./deletePopup";
 import * as OrgsSearchingPopup from "./orgsSearchingPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_QUERY, HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/pyc/registration/constants';
@@ -73,10 +74,6 @@ export const Element = (props: Props) => {
     ...popupProps,
     $content: {
       width: Base.Width.PX_1200,
-    },
-    $title: {
-      tagType: Title.TagType.H2,
-      text: 'EDIT'
     },
   }
   const historyPopupComponentProps: Popup.Props = {
@@ -197,9 +194,13 @@ export const Element = (props: Props) => {
               {...deleteButtonComponentProps}
               store={{
                 isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
-                action: { type: HANDLE_DELETE_ACTION }
+                action: {
+                  type: HANDLE_POPUP,
+                  keys: ['pycRegistration', 'delete', 'isShown'],
+                  value: true,
+                  popupType: 4,
+                }
               }}
-              onClick={() => dispatch({ type: REQUEST_QUERY })}
             />
           </Block.Element>
         </Block.Element>
@@ -213,18 +214,36 @@ export const Element = (props: Props) => {
       />
       <EditingPopup.Element
         {...editingPopupComponentProps}
+        $title= {{
+          tagType: Title.TagType.H2,
+          text: 'EDIT'
+        }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'edit'],
         }}
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}
+        $title= {{
+          tagType: Title.TagType.H2,
+          text: 'VIEW'
+        }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'detail'],
         }}
       // useEffect={{
       //   callback: () => dispatch({ type: FETCH_HISTORY }),
       // }}
+      />
+      <DeletePopup.Element
+        {...editingPopupComponentProps}
+        $title= {{
+          tagType: Title.TagType.H2,
+          text: 'DELETE'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'delete'],
+        }}
       />
       <OrgsSearchingPopup.Element
         {...historyPopupComponentProps}

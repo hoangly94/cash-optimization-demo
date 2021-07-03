@@ -25,7 +25,7 @@ function* saga() {
 function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(getData, state.registration.filters, action?.page);
+    const responseData = yield call(getData, state.registration.filters, state.auth, action?.page);
 
     yield put({ type: UPDATE_DATA, data: responseData.data });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
@@ -93,7 +93,7 @@ function* handleApprovalSaga(type) {
         : yield call(requestApproval, Config.url + '/api/cashoptimization/authority/reject', state.registration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        return yield spawn(addNoti, 'error', 'Lệnh UQ ở trạng thái không cho phép duyệt');
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
     yield fetchDataSaga();
@@ -133,11 +133,11 @@ function getHistory(page: number = 0) {
         .catch(error => console.log(error));
 }
 
-function getData(filters, page: number = 0) {
+function getData(filters, auth, page: number = 0) {
     const url = Config.url + '/api/cashoptimization/authority/search';
     const data = filters.radio === '1'
         ? {
-            orgsId: filters.orgs.value,
+            orgsId: auth.user.orgsCode == 9 ? filters.orgs.value : auth.user.orgsId,
             authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom),
             authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo),
             authorityStatus: filters.status.value,
@@ -163,7 +163,7 @@ function getData(filters, page: number = 0) {
 function requestCreating(url: string, data, auth) {
     const postData = {
         data: {
-            orgsId: data.orgsId,
+            orgsId: auth.user.orgsId,
             createdbyCode: auth.user.code,
             createdbyName: auth.user.name,
             authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateFrom),

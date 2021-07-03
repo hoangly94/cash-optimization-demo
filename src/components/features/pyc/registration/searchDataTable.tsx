@@ -22,7 +22,7 @@ export const Element = (props: Props) => {
     },
     ...props,
   };
-  console.log(queryResult);
+
   const tableProps: Table.Props = {
     ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,

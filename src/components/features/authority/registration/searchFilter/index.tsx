@@ -22,6 +22,7 @@ export const Element = (props: Props) => {
     // dispatch({ type: REQUEST_QUERY });
   })
   const radioSelector = useSelector(state => state['registration'].filters.radio);
+  const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
 
   //create props
@@ -116,8 +117,9 @@ export const Element = (props: Props) => {
           {...filter1Props}
           border={Base.Border.SOLID}
           textAlign={Base.TextAlign.LEFT}
-          text='ĐVUQ'
+          text={userSelector.orgsName}
           store={{
+
             textSelectorKeys: ['registration', 'filters', 'orgs', 'text'],
             action: {
               type: HANDLE_POPUP,
@@ -128,7 +130,7 @@ export const Element = (props: Props) => {
           style={{
             color: '#828282',
           }}
-          isDisabled={radioSelector !== '1'}
+          isDisabled={radioSelector !== '1' || userSelector.orgsCode != 9}
         />
         <Combox.Element
           {...filter1Props}

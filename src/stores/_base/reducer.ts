@@ -359,6 +359,9 @@ const initState: State = {
             'validateCancel3': {
                 isShown: false,
             },
+            'delete': {
+                isShown: false,
+            },
         },
     },
     notis: [],

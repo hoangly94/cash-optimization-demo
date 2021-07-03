@@ -22,6 +22,7 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const selector = useSelector(state => state['pycRegistration'].creatingPopup);
+  const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
@@ -112,13 +113,12 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='SĐT di động của Thủ Quỹ ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           placeholder='SĐT di động của Thủ Quỹ ĐVYCĐQ'
-          valueType={Input.ValueType.NUMBER}
+          defaultValue={userSelector.phone}
           {...inputProps}
           store={{
-            selectorKeys: ['auth', 'user', 'phone'],
-            reducerType: '',
+            selectorKeys: ['pycRegistration', 'creatingPopup', 'orgsHolderMobile'],
+            reducerType: CHANGE_CREATING_INPUT,
           }}
-          isDisabled={true}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps} flex={Base.Flex.START}>
@@ -346,6 +346,7 @@ const inputWrapperProps: Block.Props = {
 }
 
 const inputTitleProps: Title.Props = {
+  width: Base.Width.PER_30,
 }
 
 const inputProps: Input.Props = {

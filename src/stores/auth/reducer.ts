@@ -161,7 +161,6 @@ export default (state: State = initState, action) => {
         case HANDLE_DUALTABLE_MOVE:
             const moveNewData = function () {
                 if (action.moveType === 'ONE_LEFT_TO_RIGHT') {
-                    console.log(state);
                     return [
                         state.assignRole.roleContent1.filter(item => !item.isSelected),
                         [

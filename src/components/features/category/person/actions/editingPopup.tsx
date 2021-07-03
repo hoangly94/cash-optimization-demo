@@ -244,6 +244,7 @@ const inputWrapperProps: Block.Props = {
 }
 
 const inputTitleProps: Title.Props = {
+  width: Base.Width.PER_30,
 }
 
 const inputProps: Input.Props = {

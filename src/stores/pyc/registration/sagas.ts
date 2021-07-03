@@ -133,7 +133,7 @@ function* handleApprovalSaga(type) {
         : yield call(requestApproval, Config.url + '/api/cashoptimization/authority/reject', state.pycRegistration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        return yield spawn(addNoti, 'error', 'Lệnh UQ ở trạng thái không cho phép duyệt');
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
     yield fetchDataSaga();
@@ -175,10 +175,10 @@ function* specialAddSaga() {
     }
     const filterSameSpecialData = (newItem) => (item) => {
         if (
-            item.type.value == newItem.type.value
-            && item.currencyType.value == newItem.currencyType.value
-            && (!item.goldType.value || (item.goldType.value && item.goldType.value == newItem.goldType.value))
-            && item.attribute.value == newItem.attribute.value
+            item.type == newItem.type.value
+            && item.currencyType == newItem.currencyType.value
+            && (!item.goldType || (item.goldType && item.goldType == newItem.goldType.value))
+            && item.attribute == newItem.attribute.value
         ) {
             return true;
         }
@@ -284,11 +284,11 @@ function requestCreating(url: string, data, auth) {
             model: data.model.value,
             placeReceive: data.placeReceive.value,
             cashOptimizatioDetailModelList: data.cashOptimizatioDetailModelList.map(item => ({
-                type: item.type.value,
-                currencyType: item.currencyType.value,
-                goldType: item.goldType.value,
+                type: item.type,
+                currencyType: item.currencyType,
+                goldType: item.goldType,
                 quanlity: item.quanlity,
-                attribute: item.attribute.value,
+                attribute: item.attribute,
             })),
         },
     }
@@ -297,15 +297,6 @@ function requestCreating(url: string, data, auth) {
 }
 
 function requestEditing(url: string, data, auth) {
-    console.log('========================');
-    console.log(data.cashOptimizatioDetailModelList);
-    console.log(data.cashOptimizatioDetailModelList.map(item => ({
-        type: item.type.value,
-        currencyType: item.currencyType.value,
-        goldType: item.goldType.value,
-        quanlity: item.quanlity,
-        attribute: item.attribute.value,
-    })),);
     const postData = {
         data: {
             id: data.id,
@@ -321,11 +312,11 @@ function requestEditing(url: string, data, auth) {
             model: data.model.value,
             placeReceive: data.placeReceive.value,
             cashOptimizatioDetailModelList: data.cashOptimizatioDetailModelList.map(item => ({
-                type: item.type.value,
-                currencyType: item.currencyType.value,
-                goldType: item.goldType.value,
+                type: item.type,
+                currencyType: item.currencyType,
+                goldType: item.goldType,
                 quanlity: item.quanlity,
-                attribute: item.attribute.value,
+                attribute: item.attribute,
             })),
         },
     }
@@ -349,11 +340,11 @@ function requestOrgsSearching(url: string, data, auth) {
             model: data.model.value,
             placeReceive: data.placeReceive.value,
             cashOptimizatioDetailModelList: data.cashOptimizatioDetailModelList.map(item => ({
-                type: item.type.value,
-                currencyType: item.currencyType.value,
-                goldType: item.goldType.value,
+                type: item.type,
+                currencyType: item.currencyType,
+                goldType: item.goldType,
                 quanlity: item.quanlity,
-                attribute: item.attribute.value,
+                attribute: item.attribute,
             })),
         },
     }
