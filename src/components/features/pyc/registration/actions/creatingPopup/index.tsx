@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_COMBOX, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, REQUEST_CREATING, REQUEST_QUERY, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, CHANGE_CREATING_INPUT, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, } from '~stores/pyc/registration/constants';
+import { SELECT_COMBOX, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, REQUEST_CREATING, REQUEST_QUERY, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, CHANGE_CREATING_INPUT, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_CREATING_CANCEL, } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -55,11 +55,15 @@ export const Element = (props: Popup.Props) => {
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+    onClick: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
   }
 
 
   return (
-    <Popup.Element {...props}>
+    <Popup.Element
+      {...props}
+      closePopUpCallback={() => dispatch({ type: REQUEST_CREATING_CANCEL })}
+    >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
         <Input.Element

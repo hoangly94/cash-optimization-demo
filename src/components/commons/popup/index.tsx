@@ -1,4 +1,4 @@
-import React,{} from 'react'
+import React, { } from 'react'
 import Classnames from 'classnames'
 import * as Base from '~/_settings';
 import styles from './_styles.css';
@@ -23,6 +23,7 @@ export type Props = Base.Props & {
   setIsShown?: Function,
   store?: Store,
   onClick?: React.MouseEventHandler,
+  closePopUpCallback?: Function,
   useEffect?: UseEffect,
 }
 
@@ -47,17 +48,18 @@ export const Element = (props: Props) => {
     store,
     children,
     useEffect,
+    closePopUpCallback,
   } = props;
   const dispatch = useDispatch();
   const shown = store && store.isShownSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isShownSelectorKeys as string[], 'isShown'])) : false;
-  
-  React.useEffect(()=>{
-    if((useEffect?.params || shown) && useEffect?.callback){
+
+  React.useEffect(() => {
+    if ((useEffect?.params || shown) && useEffect?.callback) {
       useEffect.callback();
     }
   }, useEffect?.params ?? [shown]);
 
-//create props
+  //create props
   const componentWrapperProps = {
     classNames: Classnames(
       styles[type],
@@ -73,7 +75,7 @@ export const Element = (props: Props) => {
       styles['popup-background'],
     ),
     backgroundColor: Base.BackgroundColor.BLACK,
-    onClick: handleClosePopupClick(dispatch, store),
+    onClick: handleClosePopupClick(dispatch, closePopUpCallback, store),
     ...$background,
   };
 
@@ -104,8 +106,9 @@ export const Element = (props: Props) => {
   )
 }
 
-const handleClosePopupClick = (dispatch, store?: Store) => (e) => {
+const handleClosePopupClick = (dispatch, closePopUpCallback, store?: Store) => (e) => {
   e.stopPropagation();
+  closePopUpCallback ? closePopUpCallback() : null;
   if (store) {
     const keys = store.isShownSelectorKeys as [];
     const length = keys.length;

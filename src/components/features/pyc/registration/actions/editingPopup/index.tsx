@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_COMBOX, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, CHANGE_EDITING_INPUT, REQUEST_EDITING, HANDLE_CONTINUE_ACTION, } from '~stores/pyc/registration/constants';
+import { SELECT_COMBOX, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, CHANGE_EDITING_INPUT, REQUEST_EDITING, HANDLE_CONTINUE_ACTION, REQUEST_EDITING_CANCEL, } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -34,7 +34,7 @@ export const Element = (props: Popup.Props) => {
   const handleContinueButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_EDITING });
+      // dispatch({ type: REQUEST_EDITING });
       dispatch({ type: HANDLE_CONTINUE_ACTION });
       if (setIsShown)
         setIsShown(false)
@@ -60,10 +60,14 @@ export const Element = (props: Popup.Props) => {
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+    onClick: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
   }
 
   return (
-    <Popup.Element {...props}>
+    <Popup.Element
+      {...props}
+      closePopUpCallback={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+    >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
         <Input.Element

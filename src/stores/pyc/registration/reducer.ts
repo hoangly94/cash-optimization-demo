@@ -1,4 +1,4 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
@@ -45,6 +45,9 @@ const initState: State = {
     historyPopup: {
         isShown: false,
     },
+    detailPopup: {
+
+    },
     authorityContents: [],
     objectTypes: [
         {
@@ -60,22 +63,13 @@ const initState: State = {
             value: 'TCTD/NHNN',
         },
     ],
+    orgsChildren: [],
 }
 
 export default (state: State = initState, action) => {
     switch (action.type) {
-        case REQUEST_CREATING:
-            return {
-                ...state,
-            }
-        case REQUEST_CREATING:
-            return {
-                ...state,
-                creatingPopup: {
-                    ...state.creatingPopup,
-                    ...getDefaultPopupActions(),
-                }
-            }
+
+
         case REQUEST_CREATING_CANCEL:
             return {
                 ...state,
@@ -98,7 +92,7 @@ export default (state: State = initState, action) => {
         case REQUEST_EDITING_CANCEL:
             return {
                 ...state,
-                selectedItem: state.editingPopup,
+                editingPopup: state.selectedItem,
             }
         case FETCH_DATA:
             return {
@@ -108,7 +102,8 @@ export default (state: State = initState, action) => {
         case REQUEST_QUERY:
             return state
         case UPDATE_DATA:
-            const data = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
+            const data = action.data?.data ? action.data.data.map(preprocessQueryResult) : [];
+
             return {
                 ...state,
                 isLoading: false,
@@ -168,6 +163,17 @@ export default (state: State = initState, action) => {
                     data: historyData,
                     total: action.data.total,
                 }
+            }
+        case UPDATE_ORGS_CHILDREN:
+            return {
+                ...state,
+                orgsChildren: [
+                    {
+                        orgsCode: action.user.orgsCode,
+                        orgsName: action.user.orgsName,
+                    },
+                    ...(action.data?.data || []),
+                ],
             }
         case CHANGE_CODE_FILTER:
             return {
@@ -250,21 +256,27 @@ export default (state: State = initState, action) => {
                 },
             }
         case SEARCHORGS_SELECT_ROW:
-            return {
-                ...state,
-                filters: {
-                    ...state.filters,
-                    orgs: {
-                        text: action.data.orgsName,
-                        value: action.data.orgsCode,
-                        // value: action.data.orgsCode,
+            if (action.searchOrgsType === 2) {
+                return {
+                    ...state,
+                    orgsSearchingPopup: {
+                        ...state.orgsSearchingPopup,
+                        orgsDestCode: action.data.orgsCode,
+                        orgsDestName: action.data.orgsName,
                     },
-                },
-                orgsSearchingPopup: {
-                    ...state.orgsSearchingPopup,
-                    orgsCode: action.data.orgsCode,
-                    orgsName: action.data.orgsName,
-                },
+                }
+            }
+            else {
+                return {
+                    ...state,
+                    filters: {
+                        ...state.filters,
+                        orgs: {
+                            text: action.data.orgsName,
+                            value: action.data.orgsCode,
+                        },
+                    },
+                }
             }
         case SEARCH_PERS:
             return {
@@ -466,7 +478,6 @@ export default (state: State = initState, action) => {
             // const key = state.popupType == 1 ? 'creatingPopup' : 'selectedItem';
             const popupTypeData = state[key];
             const cashOptimizatioDetailModelList = state[key].cashOptimizatioDetailModelList;
-
             return {
                 ...state,
                 [key]: {
@@ -522,29 +533,44 @@ export default (state: State = initState, action) => {
             }
 
         case SELECT_ROW:
-            // console.log(action);
-            // console.log(state);
             const newQueryResult = state.queryResult.data.map(mapToNewQueryResult(action.data))
             const newData = mapToNewData(action.data);
-            // const approvalData = ['Approved_A', 'Rejected_A'].includes(newData.authorityStatus)
-            //     ? {}
-            //     : {
-            //         updatedbyName: '',
-            //         updatedbyCode: '',
-            //         updateddate: '',
-            //     };
+
             return {
                 ...state,
                 ...pycTypesCheckData('objectType', action.data.objectType),
                 selectedItem: newData,
                 editingPopup: newData,
+                detailPopup: newData,
                 orgsSearchingPopup: {
-                    ...getDefaultOrgsSearchingPopup(),
                     ...newData,
+                    ...{
+                        orgsName: newData.cashOptimizationOrgsDetailModel?.orgsDestName || '',
+                        atmCdm: {
+                            text: newData.cashOptimizationOrgsDetailModel?.atmCdmName || '',
+                            value: newData.cashOptimizationOrgsDetailModel?.atmCdmCode || '',
+                        },
+                        nhnnTctd: {
+                            text: newData.cashOptimizationOrgsDetailModel?.nnhnTctdName || '',
+                            value: newData.cashOptimizationOrgsDetailModel?.nnhnTctdCode || '',
+                        },
+                    }
                 },
                 queryResult: {
                     ...state.queryResult,
                     data: newQueryResult,
+                }
+            }
+
+        case SELECT_HISTORY_ROW:
+            const newQueryResultHistory = state.history.data.map(mapToNewQueryResult(action.data))
+            const newDataHistory = mapToNewData(action.data);
+            return {
+                ...state,
+                detailPopup: newDataHistory,
+                history: {
+                    ...state.history,
+                    data: newQueryResultHistory,
                 }
             }
         default:
@@ -553,12 +579,13 @@ export default (state: State = initState, action) => {
 }
 function getDefaultOrgsSearchingPopup() {
     return {
+        orgsName: '',
         atmCdm: {
-            text: 'Tên ATM',
+            text: '',
             value: '',
         },
         nhnnTctd: {
-            text: 'Tên NH đối tác KPP mở TK',
+            text: '',
             value: '',
         },
     }
@@ -606,8 +633,12 @@ function getDefaultPopupActions() {
             text: 'Địa điểm nhận',
             value: '',
         },
-        rejectReason: '',
         isDisabledGoldTypes: true,
+        reasonType: {
+            text: 'Lý do hủy',
+            value: '',
+        },
+        rejectReason: '',
     }
 }
 
@@ -621,7 +652,7 @@ function getDefaultFilters() {
             value: '',
         },
         orgs: {
-            text: '',
+            text: 'ĐVĐQ',
             value: '',
         },
         objectType: {
@@ -674,6 +705,9 @@ const mapToNewData = (item) => {
             value: item.placeReceive,
         },
         cashOptimizatioDetailModelList: cashOptimizatioDetailModelList,
+
+        orgsDestCode: item.cashOptimizationOrgsDetailModel?.orgsDestCode,
+        orgsDestName: item.cashOptimizationOrgsDetailModel?.orgsDestName,
     }
 }
 
@@ -693,10 +727,20 @@ const mapToNewQueryResult = (selectedItem) => (item, index) => {
     }
 }
 
-const preprocessQueryResult = (data) => ({
+const preprocessQueryResult = (data, index) => ({
     ...data,
+    key: data.id ?? index,
     createddate: getCurrentDate(data.createddate),
     updateddate: getCurrentDateTime(data.updateddate),
+    atmCdm: {
+        text: data.cashOptimizationOrgsDetailModel?.atmCdmName || 'Tên ATM',
+        value: data.cashOptimizationOrgsDetailModel?.atmCdmCode,
+    },
+    nnhnTctd: {
+        text: data.cashOptimizationOrgsDetailModel?.nnhnTctdName || 'Tên NH đối tác KPP mở TK',
+        value: data.cashOptimizationOrgsDetailModel?.nnhnTctdCode,
+    },
+    distanceOrgsToOrgsRequest: data.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,
 })
 
 

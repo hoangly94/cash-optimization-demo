@@ -43,18 +43,8 @@ const initState: State = {
 
 export default (state: State = initState, action) => {
     switch (action.type) {
-        case REQUEST_CREATING:
-            return {
-                ...state,
-            }
-        case REQUEST_CREATING:
-            return {
-                ...state,
-                creatingPopup: {
-                    ...state.creatingPopup,
-                    ...getDefaultPopupActions(),
-                }
-            }
+        
+        
         case REQUEST_CREATING_CANCEL:
             return {
                 ...state,

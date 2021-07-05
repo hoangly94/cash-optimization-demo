@@ -49,6 +49,7 @@ export type State = {
     pycAttributes: [],
     pycModels: [],
     pycReceivingPlaces: [],
+    reasonTypes: [],
 }
 
 

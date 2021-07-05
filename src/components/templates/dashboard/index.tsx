@@ -53,9 +53,7 @@ export const Element = (props: Props) => {
     }, []);
     const userSelector = useSelector(state=>state['auth'].user);
     const isAuthenticated = userSelector.isAuthenticated || accessToken;
-    console.log('===================');
-    console.log(userSelector.isAuthenticated);
-    console.log(accessToken);
+    
     return (
         <Router >
             <Notification.Element />

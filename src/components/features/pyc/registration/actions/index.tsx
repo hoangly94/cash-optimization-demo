@@ -10,8 +10,9 @@ import * as EditingPopup from "./editingPopup";
 import * as DetailPopup from "./detailPopup";
 import * as DeletePopup from "./deletePopup";
 import * as OrgsSearchingPopup from "./orgsSearchingPopup";
+import * as HistoryPopup from "./historyPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { FETCH_HISTORY, REQUEST_QUERY, HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/pyc/registration/constants';
+import { FETCH_HISTORY, REQUEST_QUERY, HANDLE_CONTINUE_ACTION, GET_PYC_EXCEL } from '~stores/pyc/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
 
 export type Props = Base.Props;
@@ -22,6 +23,7 @@ export const Element = (props: Props) => {
     dispatch({ type: FETCH_HISTORY })
   }, []);
   const orgsSearchingPopupSelector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
+  const userSelector = useSelector(state => state['auth'].user);
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -42,7 +44,6 @@ export const Element = (props: Props) => {
   }
   const printButtonComponentProps: Button.Props = {
     ...buttonProps,
-    text: 'Print',
     backgroundColor: Base.BackgroundColor.CLASSIC_BLUE,
   }
   const continueButtonComponentProps: Button.Props = {
@@ -53,7 +54,7 @@ export const Element = (props: Props) => {
   const deleteButtonComponentProps: Button.Props = {
     ...buttonProps,
     text: 'Delete',
-    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+    backgroundColor: Base.BackgroundColor.RED,
   }
   const detailButtonComponentProps: Button.Props = {
     ...buttonProps,
@@ -139,21 +140,8 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
-              isDisabled={!(orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching')}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'View'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['pycRegistration', 'detail', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
+              isDisabled={!(orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching' 
+              && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode) }
             />
           </Block.Element>
 
@@ -175,21 +163,19 @@ export const Element = (props: Props) => {
               }}
             />
             <Button.Element
-              {...printButtonComponentProps}
-            // store={{
-            //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-            // }}
-            // onClick={() => dispatch({ type: HANDLE_CONTINUE_ACTION })}
-
-            />
-            {/* <Button.Element
-              {...continueButtonComponentProps}
+              {...buttonProps}
+              text={'History'}
+              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
               store={{
                 isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
-                action: { type: HANDLE_CONTINUE_ACTION }
+                action: {
+                  type: HANDLE_POPUP,
+                  keys: ['pycRegistration', 'history', 'isShown'],
+                  value: true,
+                  popupType: 3,
+                }
               }}
-              onClick={() => dispatch({ type: REQUEST_QUERY })}
-            /> */}
+            />
             <Button.Element
               {...deleteButtonComponentProps}
               store={{
@@ -203,6 +189,24 @@ export const Element = (props: Props) => {
               }}
             />
           </Block.Element>
+
+          <Block.Element
+            margin={Base.MarginTop.PX_18}
+          >
+            <Button.Element
+              {...printButtonComponentProps}
+              text={'In lệnh DC HĐB'}
+            />
+            <Button.Element
+              {...printButtonComponentProps}
+              text={'In giấy YC ĐQ'}
+            />
+            <Button.Element
+              {...printButtonComponentProps}
+              text={'Excel'}
+              onClick={()=>dispatch({type:GET_PYC_EXCEL})}
+            />
+          </Block.Element>
         </Block.Element>
 
       </Block.Element >
@@ -214,7 +218,7 @@ export const Element = (props: Props) => {
       />
       <EditingPopup.Element
         {...editingPopupComponentProps}
-        $title= {{
+        $title={{
           tagType: Title.TagType.H2,
           text: 'EDIT'
         }}
@@ -224,7 +228,7 @@ export const Element = (props: Props) => {
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}
-        $title= {{
+        $title={{
           tagType: Title.TagType.H2,
           text: 'VIEW'
         }}
@@ -237,7 +241,7 @@ export const Element = (props: Props) => {
       />
       <DeletePopup.Element
         {...editingPopupComponentProps}
-        $title= {{
+        $title={{
           tagType: Title.TagType.H2,
           text: 'DELETE'
         }}
@@ -245,8 +249,25 @@ export const Element = (props: Props) => {
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'delete'],
         }}
       />
+      <HistoryPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'HISTORY'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'history'],
+        }}
+        useEffect={{
+          callback: () => dispatch({ type: FETCH_HISTORY }),
+        }}
+      />
       <OrgsSearchingPopup.Element
         {...historyPopupComponentProps}
+        $title= {{
+          tagType: Title.TagType.H2,
+          text: 'Tìm ĐVĐQ'
+        }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'orgsSearching'],
         }}

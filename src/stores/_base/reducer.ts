@@ -362,6 +362,9 @@ const initState: State = {
             'delete': {
                 isShown: false,
             },
+            'history': {
+                isShown: false,
+            },
         },
     },
     notis: [],

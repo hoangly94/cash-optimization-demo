@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_EDITING_INPUT, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_EDITING } from '~stores/pyc/registration/constants';
+import { CHANGE_EDITING_INPUT, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_DELETE, REQUEST_EDITING, SELECT_COMBOX } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -8,8 +8,9 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
+import * as Combox from "~commons/combox";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
-import { HANDLE_POPUP } from '~stores/_base/constants';
+import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import { getCurrentDate, getCurrentDateTime } from '_/utils';
 
 export const Element = (props: Popup.Props) => {
@@ -22,10 +23,10 @@ export const Element = (props: Popup.Props) => {
   const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
 
-  const handleSubmitButtonClick = (type) => () => {
-    const isValidForm = validateForm(popupSelector, setErrorMsg);
+  const handleSubmitButtonClick = () => {
+    const isValidForm = validateForm(dispatch, popupSelector);
     if (isValidForm) {
-      setErrorMsg('');
+      dispatch({ type: REQUEST_DELETE });
       if (setIsShown)
         setIsShown(false)
     }
@@ -38,23 +39,6 @@ export const Element = (props: Popup.Props) => {
       value: false,
     });
   };
-
-  const approveButtonProps: Button.Props = {
-    text: 'Approve',
-    margin: Base.MarginRight.PX_28,
-    width: Base.Width.PX_200,
-    color: Base.Color.WHITE,
-    backgroundColor: Base.BackgroundColor.GREEN,
-    onClick: handleSubmitButtonClick(1),
-  }
-  const rejectButtonProps: Button.Props = {
-    text: 'Reject',
-    margin: Base.MarginRight.PX_28,
-    width: Base.Width.PX_200,
-    color: Base.Color.WHITE,
-    backgroundColor: Base.BackgroundColor.RED,
-    onClick: handleSubmitButtonClick(2),
-  }
 
   const closeButtonProps: Button.Props = {
     text: 'Close',
@@ -178,7 +162,10 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Khoảng cách ĐVĐQ với ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.routeId}
+          store={{
+            selectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'distanceOrgsToOrgsRequest'],
+            reducerType: '',
+          }}
           isDisabled={true}
         />
       </Block.Element>
@@ -216,21 +203,52 @@ export const Element = (props: Popup.Props) => {
         }}
       />
       <Block.Element {...inputWrapperProps}>
-          <Title.Element text='Tên Nhân viên hủy PYC' {...inputTitleProps} />
-          <Input.Element
-            {...inputProps}
-            defaultValue={userSelector.fullname}
-            isDisabled={true}
-          />
-        </Block.Element>
-        <Block.Element {...inputWrapperProps}>
-          <Title.Element text='Ngày giờ hủy PYC' {...inputTitleProps} />
-          <Input.Element
-            {...inputProps}
-            defaultValue={getCurrentDateTime()}
-            isDisabled={true}
-          />
-        </Block.Element>
+        <Title.Element text='Tên Nhân viên hủy PYC' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={userSelector.fullname}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Ngày giờ hủy PYC' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={getCurrentDateTime()}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps} flex={Base.Flex.START}>
+        <Title.Element
+          text='Đối tượng điều quỹ'
+          {...inputTitleProps}
+          width={Base.Width.PER_30}
+        />
+        <Combox.Element
+          width={Base.Width.PX_300}
+          store={{
+            defaultSelectorKeys: ['pycRegistration', 'editingPopup', 'reasonType'],
+            selectorKeys: ['root', 'reasonTypes'],
+            reducerType: SELECT_COMBOX,
+            reducerKeys: {
+              text: 'name',
+              value: 'value',
+            },
+          }}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Lý do khác' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          store={{
+            selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
+            reducerType: CHANGE_EDITING_INPUT,
+          }}
+          isDisabled={!(popupSelector.reasonType.text == 'KHÁC')}
+        />
+      </Block.Element>
 
       <Block.Element
         {...actionsWrapperProps}
@@ -240,6 +258,15 @@ export const Element = (props: Popup.Props) => {
           <Title.Element text={errorMsg} color={Base.Color.RED} />
         </Block.Element>
         <Block.Element {...actionsProps}>
+          <Button.Element
+            text='Update'
+            margin={Base.MarginRight.PX_8}
+            width={Base.Width.PX_200}
+            border={Base.Border.NONE}
+            color={Base.Color.WHITE}
+            backgroundColor={Base.BackgroundColor.GREEN}
+            onClick={handleSubmitButtonClick}
+          />
           <Button.Element
             {...closeButtonProps}
             // flexGrow={Base.FlexGrow.G1}
@@ -274,16 +301,15 @@ const actionsProps: Block.Props = {
   width: Base.Width.PER_70,
 }
 
-const validateForm = (popupSelector, setErrorMsg) => {
-
-  // if (!popupSelector.sendId) {
-  //   setErrorMsg('Chưa chọn người UQ');
-  //   return false;
-  // }
-  // if (!popupSelector.sendId) {
-  //   setErrorMsg('Chưa chọn người nhận UQ');
-  //   return false;
-  // }
+const validateForm = (dispatch, selector) => {
+  if (!selector.reasonType.value) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn lý do Hủy' } });
+    return false;
+  }
+  if (selector.reasonType.text == 'KHÁC' && selector.rejectReason == '') {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa nhập lý do khác' } });
+    return false;
+  }
   return true;
 }
 

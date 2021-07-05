@@ -6,6 +6,7 @@ export const REQUEST_CREATING_CANCEL = root + 'REQUEST_CREATING_CANCEL';
 export const DONE_CREATING = root + 'DONE_CREATING';
 export const REQUEST_EDITING = root + 'REQUEST_EDITING';
 export const REQUEST_EDITING_CANCEL = root + 'REQUEST_EDITING_CANCEL';
+export const REQUEST_DELETE = root + 'REQUEST_DELETE';
 export const FETCH_DATA = root + 'FETCH_DATA';
 export const REQUEST_QUERY = root + 'REQUEST_QUERY';
 export const UPDATE_DATA = root + 'UPDATE_DATA';
@@ -34,7 +35,6 @@ export const HANDLE_DUALTABLE_MOVE = root + 'HANDLE_DUALTABLE_MOVE';
 export const HANDLE_APPROVE_ACTION = root + 'HANDLE_APPROVE_ACTION';
 export const HANDLE_REJECT_ACTION = root + 'HANDLE_REJECT_ACTION';
 
-export const HANDLE_DELETE_ACTION = root + 'HANDLE_DELETE_ACTION';
 
 export const RESET_FILTER_REGISTRATION = root + 'RESET_FILTER_REGISTRATION';
 export const RESET_FILTER_APPROVAL = root + 'RESET_FILTER_APPROVAL';
@@ -60,12 +60,18 @@ export const HANDLE_VALIDATE_REJECT1 = root + 'HANDLE_VALIDATE_REJECT1';
 export const HANDLE_VALIDATE_REJECT2 = root + 'HANDLE_VALIDATE_REJECT2';
 export const HANDLE_VALIDATE_REJECT3 = root + 'HANDLE_VALIDATE_REJECT3';
 
-// export const HANDLE_VALIDATE_CANCEL_APPROVE1 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE1';
-// export const HANDLE_VALIDATE_CANCEL_APPROVE2 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE2';
-// export const HANDLE_VALIDATE_CANCEL_APPROVE3 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE3';
-// export const HANDLE_VALIDATE_CANCEL_REJECT1 = root + 'HANDLE_VALIDATE_CANCEL_REJECT1';
-// export const HANDLE_VALIDATE_CANCEL_REJECT2 = root + 'HANDLE_VALIDATE_CANCEL_REJECT2';
-// export const HANDLE_VALIDATE_CANCEL_REJECT3 = root + 'HANDLE_VALIDATE_CANCEL_REJECT3';
+export const HANDLE_VALIDATE_CANCEL_APPROVE1 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE1';
+export const HANDLE_VALIDATE_CANCEL_APPROVE2 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE2';
+export const HANDLE_VALIDATE_CANCEL_APPROVE3 = root + 'HANDLE_VALIDATE_CANCEL_APPROVE3';
+export const HANDLE_VALIDATE_CANCEL_REJECT1 = root + 'HANDLE_VALIDATE_CANCEL_REJECT1';
+export const HANDLE_VALIDATE_CANCEL_REJECT2 = root + 'HANDLE_VALIDATE_CANCEL_REJECT2';
+export const HANDLE_VALIDATE_CANCEL_REJECT3 = root + 'HANDLE_VALIDATE_CANCEL_REJECT3';
+
+export const FETCH_ORGS_CHILDREN = root + 'FETCH_ORGS_CHILDREN';
+export const UPDATE_ORGS_CHILDREN = root + 'UPDATE_ORGS_CHILDREN';
+export const GET_PYC_EXCEL = root + 'GET_PYC_EXCEL';
+export const GET_PYC_HISTORY_EXCEL = root + 'GET_PYC_HISTORY_EXCEL';
+export const SELECT_HISTORY_ROW = root + 'SELECT_HISTORY_ROW';
 
 export type State = {
     history: any,
@@ -216,6 +222,10 @@ export type State = {
         },
         rejectReason:string,
         isDisabledGoldTypes: boolean,
+        reasonType: {
+            text: string,
+            value: string,
+        },
     },
     orgsSearchingPopup:{
         isShown:boolean,
@@ -231,6 +241,9 @@ export type State = {
     historyPopup: {
         isShown: boolean,
     },
+    detailPopup: {
+
+    },
     queryResult: any,
     authorityContents: any,
     
@@ -238,6 +251,7 @@ export type State = {
     pycTypes: [],
     pycModels: any[],
     pycPlaceReceives: any[],
+    orgsChildren: any[]
 }
 
 

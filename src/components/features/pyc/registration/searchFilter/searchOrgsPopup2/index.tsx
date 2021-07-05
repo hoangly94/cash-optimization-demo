@@ -187,7 +187,7 @@ const tableData_$rows_$cells_title = {
 }
 
 const handleRowClick = (dispatch) => (item) => (e) => {
-  dispatch({ type: SELECT_ROW, data: item });
+  dispatch({ type: SELECT_ROW, data: item, searchOrgsType: 2 });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycSearchOrgs', 'select', 'isDisabled'], value: false });
 }
 

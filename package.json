@@ -25,6 +25,7 @@
     "compression": "^1.7.4",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "file-saver": "^2.0.5",
     "glob": "^7.1.7",
     "loader-utils": "^2.0.0",
     "lodash": "^4.17.21",

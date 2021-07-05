@@ -25,6 +25,7 @@ const initState: State = {
     pycAttributes: [],
     pycModels: [],
     pycReceivingPlaces: [],
+    reasonTypes: [],
 }
 
 export default (state: State = initState, action) => {
@@ -45,6 +46,7 @@ export default (state: State = initState, action) => {
                 const pycAttributes = action.data.filter(item => item.type === 'CASH_OPTIMIZATION_ATTRIBUTE');
                 const pycModels = action.data.filter(item => item.type === 'CASH_OPTIMIZATION_MODEL');
                 const pycReceivingPlaces = action.data.filter(item => item.type === 'CASH_OPTIMIZATION_PLACE_RECEIVE');
+                const reasonTypes = action.data.filter(item => item.type === 'CASH_OPTIMIZATION_REASON_TYPE');
                 
                 return {
                     ...state,
@@ -62,6 +64,7 @@ export default (state: State = initState, action) => {
                     pycAttributes: pycAttributes,
                     pycModels: pycModels,
                     pycReceivingPlaces: pycReceivingPlaces,
+                    reasonTypes: reasonTypes,
                 }
             }
             return state;

@@ -23,7 +23,7 @@ export const Element = (props: Props) => {
     // dispatch({ type: REQUEST_QUERY });
   })
   const radioSelector = useSelector(state => state['pycRegistration'].filters.radio);
-  const dispatch = useDispatch();
+  const userSelector = useSelector(state => state['auth'].user);
 
   //create props
   const componentWrapperProps = {
@@ -133,8 +133,25 @@ export const Element = (props: Props) => {
           }}
           style={{
             color: '#828282',
+            display: userSelector.orgsCode === 9 ? 'block' : 'none'
           }}
           isDisabled={radioSelector !== '1'}
+        />
+        <Combox.Element
+          {...filter1Props}
+          store={{
+            defaultSelectorKeys: ['pycRegistration', 'filters', 'orgs'],
+            selectorKeys: ['pycRegistration', 'orgsChildren'],
+            reducerType: SELECT_COMBOX_FILTER,
+            reducerKeys: {
+              text: 'orgsName',
+              value: 'orgsCode',
+            },
+          }}
+          isDisabled={radioSelector !== '1'}
+          style={{
+            display: userSelector.orgsCode === 9 ? 'none' : 'block'
+          }}
         />
         <Combox.Element
           {...filter1Props}

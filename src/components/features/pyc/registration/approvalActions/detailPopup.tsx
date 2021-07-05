@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_EDITING_INPUT, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_EDITING } from '~stores/pyc/registration/constants';
+import { CHANGE_EDITING_INPUT, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_EDITING, REQUEST_EDITING_CANCEL } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -10,7 +10,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { getCurrentDate, getCurrentDateTime } from '_/utils';
+import { getCurrentDate, getCurrentDateTime, _Date } from '_/utils';
 
 export type Props = Popup.Props & {
   popupType: string,
@@ -66,6 +66,7 @@ export const Element = (props: Props) => {
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+    onClick: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
   }
   const errorMsgDisplay = errorMsg ? { display: 'block' } : { display: 'none' };
 
@@ -78,7 +79,10 @@ export const Element = (props: Props) => {
   }
 
   return (
-    <Popup.Element {...props}>
+    <Popup.Element
+      {...props}
+      closePopUpCallback={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+    >
       <Title.Element
         tagType={Title.TagType.H3}
         text='Thông tin'
@@ -107,7 +111,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Ngày tạo PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.orgsHolderName}
+          defaultValue={_Date.getCurrentDate(popupSelector.createddate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -191,7 +195,10 @@ export const Element = (props: Props) => {
         <Title.Element text='Khoảng cách ĐVĐQ với ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.routeId}
+          store={{
+            selectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'distanceOrgsToOrgsRequest'],
+            reducerType: '',
+          }}
           isDisabled={true}
         />
       </Block.Element>
@@ -199,7 +206,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Tên ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={userSelector.orgsName}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.orgsDestName}
           isDisabled={true}
         />
       </Block.Element>
@@ -222,16 +229,6 @@ export const Element = (props: Props) => {
 
       <Title.Element
         tagType={Title.TagType.H3}
-        text='Thông tin người phê duyệt'
-        style={{
-          borderTop: '1px solid #e8e8e8',
-          paddingTop: '28px',
-        }}
-      />
-
-
-      <Title.Element
-        tagType={Title.TagType.H3}
         text='Thông tin phê duyệt tạo PYC'
         style={{
           borderTop: '1px solid #e8e8e8',
@@ -242,7 +239,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.orgsHolderName}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
           isDisabled={true}
         />
       </Block.Element>
@@ -250,7 +247,7 @@ export const Element = (props: Props) => {
         <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.orgsHolderMobile}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
           isDisabled={true}
         />
       </Block.Element>
@@ -401,7 +398,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Số LT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.routeId}
+          defaultValue={popupSelector.routeId || ''}
           isDisabled={true}
         />
       </Block.Element>

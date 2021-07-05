@@ -8,7 +8,7 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
+import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_ATMCDMS, FETCH_NHNNTCTDS } from '~stores/dashboardRoot/constants';
 
 export type Props = Popup.Props;
@@ -21,27 +21,32 @@ export const Element = (props: Popup.Props) => {
     dispatch({ type: FETCH_ATMCDMS });
     dispatch({ type: FETCH_NHNNTCTDS });
   }, []);
-
-  const [errorMsg, setErrorMsg] = useState('');
-  const [errorMsg2, setErrorMsg2] = useState('');
+  
   const selector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   const dispatch = useDispatch();
-
   const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(selector, setErrorMsg);
+    const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      setErrorMsg('');
       dispatch({ type: HANDLE_ORGSSEARCHING_UPDATE });
+      dispatch({
+        type: HANDLE_POPUP,
+        keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+        value: false,
+      });
       if (setIsShown)
         setIsShown(false)
     }
   }
+
   const handleContinueButtonClick = () => {
-    const isValidForm = validateForm(selector, setErrorMsg);
+    const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      setErrorMsg('');
-      dispatch({ type: HANDLE_ORGSSEARCHING_UPDATE });
       dispatch({ type: HANDLE_ORGSSEARCHING_CONTINUE });
+      dispatch({
+        type: HANDLE_POPUP,
+        keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+        value: false,
+      });
       if (setIsShown)
         setIsShown(false)
     }
@@ -53,7 +58,6 @@ export const Element = (props: Popup.Props) => {
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
     backgroundColor: Base.BackgroundColor.GREEN,
-    onClick: handleSubmitButtonClick,
   }
 
   const closeButtonProps: Button.Props = {
@@ -63,7 +67,6 @@ export const Element = (props: Popup.Props) => {
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
   }
 
-  const errorMsgDisplay = errorMsg ? { display: 'block' } : { display: 'none' };
 
   return (
     <Popup.Element {...props}>
@@ -83,10 +86,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Trạng thái PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'cashOptimizationStatus'],
-            reducerType: '',
-          }}
+          defaultValue='Searching'
           isDisabled={true}
         />
       </Block.Element>
@@ -103,14 +103,13 @@ export const Element = (props: Popup.Props) => {
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Tên ĐVĐQ' {...inputTitleProps} />
-
         <Button.Element
           width={Base.Width.PER_70}
           border={Base.Border.SOLID}
           textAlign={Base.TextAlign.LEFT}
           text='ĐVUQ'
           store={{
-            textSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'orgsName'],
+            textSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'orgsDestName'],
             action: {
               type: HANDLE_POPUP,
               keys: ['pycRegistration', 'pycSearchOrgs2', 'isShown'],
@@ -120,11 +119,12 @@ export const Element = (props: Popup.Props) => {
           style={{
             color: '#828282',
           }}
-          onClick={()=> dispatch({
+          onClick={() => dispatch({
             type: HANDLE_POPUP,
             keys: ['pycRegistration', 'orgsSearching', 'isShown'],
             value: false,
           })}
+          isDisabled={!(selector.objectType.text === 'KPP')}
         />
       </Block.Element>
 
@@ -145,6 +145,7 @@ export const Element = (props: Popup.Props) => {
               value: 'atmCdmCode',
             },
           }}
+          isDisabled={!(selector.objectType.text === 'ATM')}
         />
       </Block.Element>
 
@@ -165,16 +166,17 @@ export const Element = (props: Popup.Props) => {
               value: 'nnhnTctdCode',
             },
           }}
+          isDisabled={!(selector.objectType.text === 'TCTD/NHNN')}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Khoảng cách ĐVĐQ với ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          // store={{
-          //   selectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'objectType', 'value'],
-          //   reducerType: '',
-          // }}
+          store={{
+            selectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'distanceOrgsToOrgsRequest'],
+            reducerType: '',
+          }}
           isDisabled={true}
         />
       </Block.Element>
@@ -184,30 +186,16 @@ export const Element = (props: Popup.Props) => {
         margin={Base.MarginTop.PX_38}
       >
         <Block.Element >
-          <Title.Element text={errorMsg} color={Base.Color.RED} />
         </Block.Element>
         <Block.Element {...actionsProps}>
           <Button.Element
             {...submitButtonProps}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'orgsSearching', 'isShown'],
-                value: false,
-              }
-            }}
             flexGrow={Base.FlexGrow.G1}
+            onClick={handleSubmitButtonClick}
           />
           <Button.Element
             {...submitButtonProps}
             text='Continue'
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'orgsSearching', 'isShown'],
-                value: false,
-              }
-            }}
             onClick={handleContinueButtonClick}
             flexGrow={Base.FlexGrow.G1}
           />
@@ -250,40 +238,18 @@ const actionsProps: Block.Props = {
   width: Base.Width.PER_70,
 }
 
-const validateForm = (selector, setErrorMsg) => {
-  if (selector.objectType === 'ATM' && !selector.atmCdm.value) {
-    setErrorMsg('Chưa chọn Tên ATM');
-    return false;
-  }
-  if (selector.objectType === 'Tên NH đối tác KPP mở TK' && !selector.nhnnTctd.value) {
-    setErrorMsg('Chưa chọn Tên ATM');
-    return false;
-  }
 
-  return true;
-}
-
-
-
-const validateSpecialForm = (selector, setErrorMsg) => {
-  if (!selector.type.value) {
-    setErrorMsg('');
+const validateForm = (dispatch, selector) => {
+  if (selector.objectType.text === 'KPP' && !selector.orgsDestCode) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Tên ĐVĐQ' } });
     return false;
   }
-  if (!selector.currencyType.value) {
-    setErrorMsg('');
+  if (selector.objectType.text === 'ATM' && !selector.atmCdm.value) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Tên ATM' } });
     return false;
   }
-  if (!selector.goldType.value) {
-    setErrorMsg('');
-    return false;
-  }
-  if (!selector.quanlity || selector.quanlity == '0') {
-    setErrorMsg('');
-    return false;
-  }
-  if (!selector.attribute.value) {
-    setErrorMsg('');
+  if (selector.objectType.text === 'TCTD/NHNN' && !selector.nhnnTctd.value) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Tên ATM' } });
     return false;
   }
   return true;

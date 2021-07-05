@@ -9,7 +9,7 @@ function* saga() {
 }
 function* fetchDataSaga(action?) {
     const state = yield select();
-    const responseData = yield call(getData, state.searchOrgs.filters, action?.page);
+    const responseData = yield call(getData, state.pycSearchOrgs.filters, action?.page);
     yield put({ type: UPDATE_DATA, data: responseData.data });
 }
 
