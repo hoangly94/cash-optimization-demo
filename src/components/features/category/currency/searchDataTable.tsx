@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROW } from '~stores/category/currency/constants';
+import { REQUEST_QUERY, SELECT_ROW } from '~stores/category/currency/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import {HANDLE_BUTTON} from "~stores/_base/constants";
 import * as Table from "~commons/table";
-import { getCurrentDate } from '@utils';
+import { _Date, getCurrentDate } from '@utils';
 
 export type Props = Base.Props;
 
@@ -47,7 +47,7 @@ const handleRowClick = (dispatch) => (item) => (e)=> {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style:{
         backgroundColor: '#1e3f96',
@@ -61,31 +61,55 @@ const tableData = (queryResult?): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Loại tiền',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'currencyType',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Diễn giải',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'currencyDescription',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Đơn vị tính',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'currencyUnit',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Ngày đăng ký',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'createddate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'NV đăng ký',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'createdby',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Datelastmaint',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'updateddate',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({
@@ -105,13 +129,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.currencyUnit,
     },
     {
-      children: getCurrentDate(item.createddate),
+      children: _Date.getCurrentDate(item.createddate),
     },
     {
       children: item.createdby,
     },
     {
-      children: getCurrentDate(item.updateddate),
+      children: _Date.getCurrentDate(item.updateddate),
     },
   ]
 })

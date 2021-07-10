@@ -13,14 +13,14 @@ function* saga() {
 }
 
 function* fetchHistorySaga(action?) {
-    const responseData = yield call(getHistory, action?.page);
+    const responseData = yield call(getHistory, action);
     yield put({ type: UPDATE_HISTORY, data: responseData.data });
 }
 
 function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(getData, state.vehicle.filters, action?.page);
+    const responseData = yield call(getData, state.vehicle.filters, action);
 
     yield put({ type: UPDATE_DATA, data: responseData.data });
 }
@@ -52,10 +52,15 @@ function* editDataSaga() {
     yield put({ type: HANDLE_POPUP,  keys: ['vehicle', 'edit', 'isShown'], value:false});
 }
 
-function getHistory(page:number = 0) {
+function getHistory(action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;
     const url = Config.url + '/api/cashoptimization/historyCategoryVehicle';
     const postData = {
         data: {
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         }
@@ -64,14 +69,19 @@ function getHistory(page:number = 0) {
         .catch(error => console.log(error));
 }
 
-function getData(filters, page:number = 0) {
+function getData(filters, action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;
     const url = Config.url + '/api/cashoptimization/findCategoryVehicle';
     const vehicleCode = parseInt(filters.vehicleCode);
     const postData = {
         data: {
             orgsId: filters.orgsId?.value ? parseInt(filters.orgsId.value) : 0,
             vehicleCode: vehicleCode ? ''+vehicleCode : 0,
-            page:page,
+            sort,
+            page,
             size: Config.numberOfItemsPerPage,
         },
     }

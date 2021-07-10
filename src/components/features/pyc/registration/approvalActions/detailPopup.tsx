@@ -111,7 +111,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Ngày tạo PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDate(popupSelector.createddate)}
+          defaultValue={popupSelector.createddate?.split('-').join('/')}
           isDisabled={true}
         />
       </Block.Element>
@@ -479,7 +479,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -494,8 +494,8 @@ const tableData = (queryResult?): Table.Props => ({
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

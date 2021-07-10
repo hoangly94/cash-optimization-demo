@@ -2,8 +2,9 @@
 
 .cell {
   &{
-    /* display:table-cell; */
     border:1px solid #cdcdcd;
+    position:relative;
+    padding: 8px 18px 8px 8px;
   }
   &-title{
     font-weight:bold;

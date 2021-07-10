@@ -1,10 +1,10 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGS_CHILDREN, GET_PYC_EXCEL, GET_PYC_HISTORY_EXCEL, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGS_CHILDREN, UPDATE_SPECIAL_DATA, } from './constants';
+import { DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, GET_PYC_EXCEL, GET_PYC_HISTORY_EXCEL, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_SPECIAL_DATA, } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
-import { _Date } from '@utils';
+import { _Date, getCurrentDate } from '@utils';
 import _ from 'lodash';
 import FileSaver from 'file-saver';
 
@@ -15,6 +15,7 @@ function* saga() {
     yield takeLatest(REQUEST_EDITING, updateDataSaga);
     yield takeLatest(REQUEST_DELETE, deleteDataSaga);
     yield takeLatest(HANDLE_CONTINUE_ACTION, continueSaga);
+    yield takeLatest(FETCH_ORGSSEARCHING_DISTANCE, fectchOrgsSearchingSaga);
     yield takeLatest(HANDLE_ORGSSEARCHING_UPDATE, orgsSearchingUpdateSaga);
     yield takeLatest(HANDLE_ORGSSEARCHING_CONTINUE, orgsSearchingContinueSaga);
     yield takeLatest(HANDLE_VALIDATE_APPROVE1, validateSaga, 1, 1, 1);
@@ -39,14 +40,14 @@ function* saga() {
 
 
 // function* fetchHistorySaga(action?) {
-//     const responseData = yield call(getHistory, action?.page);
+//     const responseData = yield call(getHistory, action);
 //     yield put({ type: UPDATE_HISTORY, data: responseData.data });
 // }
 
 function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(getData, state.pycRegistration.filters, state.auth, action?.page);
+    const responseData = yield call(getData, state.pycRegistration.filters, state.auth, action);
     yield put({ type: UPDATE_DATA, data: responseData.data });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'detail', 'isDisabled'], value: true });
@@ -57,7 +58,7 @@ function* fetchDataSaga(action?) {
 function* getPycExcelSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    yield call(getPycExcel, state.pycRegistration.filters, state.auth, action?.page);
+    yield call(getPycExcel, state.pycRegistration.filters, state.auth, action);
 }
 
 function* createDataSaga() {
@@ -112,9 +113,16 @@ function* continueSaga() {
 
 }
 
+function* fectchOrgsSearchingSaga() {
+    const state = yield select();
+    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_find', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth);
+
+    yield put({ type: UPDATE_ORGSSEARCHING_DISTANCE, data: responseData.data });
+}
+
 function* orgsSearchingUpdateSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_update', state.pycRegistration.orgsSearchingPopup, state.auth);
+    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_update', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -131,7 +139,7 @@ function* orgsSearchingUpdateSaga() {
 
 function* orgsSearchingContinueSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_continue', state.pycRegistration.orgsSearchingPopup, state.auth, 'continue');
+    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_continue', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth, 'continue');
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -219,7 +227,7 @@ function* validateSaga(statusType, validateType, urlType) {
                 if (urlType === 2)
                     return '/api/cashoptimization/pyc_dvdq_check_cancel';
                 if (urlType === 3)
-                    return '/api/cashoptimization/pyc_cpd_dvdq_check_cancel';
+                    return '/api/cashoptimization/pyc_cpd_dvdq_cancel';
             }
             if (validateType === 2) {
                 if (urlType === 1)
@@ -227,7 +235,7 @@ function* validateSaga(statusType, validateType, urlType) {
                 if (urlType === 2)
                     return '/api/cashoptimization/pyc_dvdq_check_cancel_reject';
                 if (urlType === 3)
-                    return '/api/cashoptimization/pyc_cpd_dvdq_check_cancel_reject';
+                    return '/api/cashoptimization/pyc_cpd_dvdq_cancel_reject';
             }
         }
     })();
@@ -249,7 +257,7 @@ function* validateSaga(statusType, validateType, urlType) {
 
 function* fetchHistorySaga(action?) {
     const state = yield select();
-    const responseData = yield call(getHistory, state.pycRegistration.editingPopup, action?.page);
+    const responseData = yield call(getHistory, state.pycRegistration.editingPopup, action);
     yield put({ type: UPDATE_HISTORY, data: responseData.data });
 }
 
@@ -264,11 +272,15 @@ function* fetchOrgsChildrenSaga(action?) {
     yield put({ type: UPDATE_ORGS_CHILDREN, data: responseData.data, user: state.auth.user });
 }
 
-function getHistory(data, page: number = 0) {
-    const url = Config.url + '/api/cashoptimization/pyc_history';
+function getHistory(data, action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;const url = Config.url + '/api/cashoptimization/pyc_history';
     const postData = {
         data: {
             cash_optimization_id: data.id,
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         }
@@ -302,17 +314,20 @@ function getOrgsChildren(user) {
         .catch(error => console.log(error));
 }
 
-function getData(filters, auth, page: number = 0) {
-    const url = Config.url + '/api/cashoptimization/pycsearch';
+function getData(filters, auth, action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;const url = Config.url + '/api/cashoptimization/pycsearch';
     const data = filters.radio === '1'
         ? {
-            pers_code: auth.user.code,
-            orgs_code: filters.orgs.value,
+            pers_code: auth.user?.code,
+            orgs_code: filters.orgs?.value,
             from_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom),
             to_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo),
-            orgs_role: filters.orgsRole.value,
-            object_type: filters.objectType.value,
-            status: filters.status.value,
+            orgs_role: filters.orgsRole?.value,
+            object_type: filters.objectType?.value,
+            status: filters.status?.value,
         }
         : {
             id: filters.id,
@@ -325,6 +340,7 @@ function getData(filters, auth, page: number = 0) {
     const postData = {
         data: {
             ...data,
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         },
@@ -333,17 +349,20 @@ function getData(filters, auth, page: number = 0) {
         .catch(error => console.log(error));
 }
 
-function getPycExcel(filters, auth, page: number = 0) {
-    const url = Config.url + '/api/cashoptimization/pyc_excel';
+function getPycExcel(filters, auth, action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;const url = Config.url + '/api/cashoptimization/pyc_excel';
     const data = filters.radio === '1'
         ? {
-            pers_code: auth.user.code,
-            orgs_code: filters.orgs.value,
+            pers_code: auth.user?.code,
+            orgs_code: filters.orgs?.value,
             from_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom),
             to_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo),
-            orgs_role: filters.orgsRole.value,
-            object_type: filters.objectType.value,
-            status: filters.status.value,
+            orgs_role: filters.orgsRole?.value,
+            object_type: filters.objectType?.value,
+            status: filters.status?.value,
         }
         : {
             id: filters.id,
@@ -356,6 +375,7 @@ function getPycExcel(filters, auth, page: number = 0) {
     const postData = {
         data: {
             ...data,
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         },
@@ -486,7 +506,7 @@ function requestApproval(url: string, data, auth, statusType, validateType, urlT
         .catch(error => console.log(error));
 }
 
-function requestOrgsSearching(url: string, data, auth, type?) {
+function requestOrgsSearching(url: string, pycRegistration, data, auth, type?) {
     const postData = {
         data: {
             id: data.id,
@@ -515,7 +535,9 @@ function requestOrgsSearching(url: string, data, auth, type?) {
                 nnhnTctdCode: data.nhnnTctd.value,
                 orgsDestCode: data.orgsDestCode,
                 orgsDestName: data.orgsDestName,
-            }
+                distanceOrgsToOrgsRequest: pycRegistration.distanceOrgsToOrgsRequest,
+            },
+            orgsDestCode: data.orgsDestCode,
         },
     }
     return axios.post(url, postData)

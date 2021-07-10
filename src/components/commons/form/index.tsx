@@ -5,7 +5,7 @@ import * as Block from '~commons/block';
 import * as Label from '~commons/label';
 import * as Input from '~commons/input';
 import * as Button from '~commons/button';
-import { getCurrentDate } from '@utils';
+import { _Date, getCurrentDate } from '@utils';
 
 export enum Type {
   DEFAULT = 'form',

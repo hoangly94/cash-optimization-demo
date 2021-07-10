@@ -18,7 +18,6 @@ export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   useEffect(() => {
-    // dispatch({ type: UPDATE_CONFIG })
     // dispatch({ type: REQUEST_QUERY });
   })
   const radioSelector = useSelector(state => state['registration'].filters.radio);

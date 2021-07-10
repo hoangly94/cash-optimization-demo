@@ -8,7 +8,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { getCurrentDate } from "@utils";
+import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
 import { INPUT_VALUE_FILTER, REQUEST_QUERY, SELECT_ROW, SELECT_TYPE_FILTER } from '_/stores/authority/searchPers/constants';
 
@@ -178,7 +178,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 }
 
 const tableData = (queryResult): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -192,43 +192,79 @@ const tableData = (queryResult): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã NV',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'persCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Họ Tên NV',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'persFullname',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'CMND',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'persCmndCccd',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Chức vụ',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'persTitle',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'SĐT Nhân viên',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'persMobile',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã chi nhánh quản lý',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'categoryOrgs.orgsCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên chi nhánh quản lý',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'categoryOrgs.orgsName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Địa chỉ',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'categoryOrgs.orgsAddress',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Trạng thái NV',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'persStatus',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

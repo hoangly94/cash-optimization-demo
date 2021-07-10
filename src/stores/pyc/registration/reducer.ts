@@ -1,4 +1,4 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
@@ -64,6 +64,7 @@ const initState: State = {
         },
     ],
     orgsChildren: [],
+    distanceOrgsToOrgsRequest: '',
 }
 
 export default (state: State = initState, action) => {
@@ -278,6 +279,7 @@ export default (state: State = initState, action) => {
                     },
                 }
             }
+        // UPDATE_ORGSSEARCHING_DISTANCE
         case SEARCH_PERS:
             return {
                 ...state,
@@ -413,38 +415,12 @@ export default (state: State = initState, action) => {
         case RESET_FILTER_REGISTRATION:
             return {
                 ...state,
-                filters: {
-                    radio: '1',
-                    dateFrom: '',
-                    dateTo: '',
-                    orgs: {
-                        text: '',
-                        value: '',
-                    },
-                    status: {
-                        text: 'ALL',
-                        value: 'ALL',
-                    },
-                    id: '',
-                },
+                filters: getDefaultFilters(),
             }
         case RESET_FILTER_APPROVAL:
             return {
                 ...state,
-                filters: {
-                    radio: '1',
-                    dateFrom: '',
-                    dateTo: '',
-                    orgs: {
-                        text: '',
-                        value: '',
-                    },
-                    status: {
-                        text: 'Pending_A',
-                        value: 'Pending_A',
-                    },
-                    id: '',
-                },
+                filters: getDefaultFilters(),
             }
         case HANDLE_POPUP:
             return {
@@ -573,6 +549,20 @@ export default (state: State = initState, action) => {
                     data: newQueryResultHistory,
                 }
             }
+        case UPDATE_ORGSSEARCHING_DISTANCE:
+            return {
+                ...state,
+                distanceOrgsToOrgsRequest: action.data?.data?.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,
+            }
+        case REQUEST_ORGSSEARCHING_CANCEL:
+            return {
+                ...state,
+                orgsSearchingPopup: {
+                    ...state.orgsSearchingPopup,
+                    ...getDefaultOrgsSearchingPopup(),
+                },
+                distanceOrgsToOrgsRequest: '',
+            }
         default:
             return state
     }
@@ -580,6 +570,7 @@ export default (state: State = initState, action) => {
 function getDefaultOrgsSearchingPopup() {
     return {
         orgsName: '',
+        orgsDestName: '',
         atmCdm: {
             text: '',
             value: '',

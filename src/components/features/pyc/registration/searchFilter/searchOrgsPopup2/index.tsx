@@ -8,10 +8,11 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { getCurrentDate } from "@utils";
+import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { INPUT_ORGS_VALUE_FILTER, REQUEST_QUERY, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, SELECT_ROW } from '~stores/pyc/searchOrgs/constants';
 import * as RegionAreaFilter from './regionAreaFilter';
+import { FETCH_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL } from '_/stores/pyc/registration/constants';
 
 export type Props = Popup.Props;
 
@@ -148,7 +149,7 @@ export const Element = (props: Popup.Props) => {
                 value: false,
               }
             }}
-            onClick={()=> dispatch({
+            onClick={() => dispatch({
               type: HANDLE_POPUP,
               keys: ['pycRegistration', 'orgsSearching', 'isShown'],
               value: true,
@@ -166,11 +167,13 @@ export const Element = (props: Popup.Props) => {
                 value: false,
               }
             }}
-            onClick={()=> dispatch({
-              type: HANDLE_POPUP,
-              keys: ['pycRegistration', 'orgsSearching', 'isShown'],
-              value: true,
-            })}
+            onClick={() => {
+              dispatch({
+                type: HANDLE_POPUP,
+                keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+                value: true,
+              });
+            }}
           />
         </Block.Element>
       </Block.Element>
@@ -189,10 +192,12 @@ const tableData_$rows_$cells_title = {
 const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_ROW, data: item, searchOrgsType: 2 });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycSearchOrgs', 'select', 'isDisabled'], value: false });
+  dispatch({ type: FETCH_ORGSSEARCHING_DISTANCE });
 }
 
+
 const tableData = (queryResult): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -206,15 +211,23 @@ const tableData = (queryResult): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã đơn vị',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'orgsCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên đơn vị',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'orgsName',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

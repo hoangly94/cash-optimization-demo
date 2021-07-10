@@ -8,7 +8,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { getCurrentDate } from "@utils";
+import { _Date, getCurrentDate } from "@utils";
 import {  SELECT_AREA_TYPE_FILTER, SELECT_REGION_TYPE_FILTER } from '~stores/authority/searchOrgs/constants';
 import { FETCH_AREAS, FETCH_REGIONS } from '_/stores/dashboardRoot/constants';
 import { NONAME } from 'dns';

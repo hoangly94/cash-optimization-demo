@@ -8,7 +8,7 @@
     }
 }
 .datepicker >table{
-    tableLayout: 'fixed';
+    table-layout: fixed;
 }
 .datepicker-menu{
     border: 1px solid #cdcdcd;

@@ -7,7 +7,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { getCurrentDate } from "@utils";
+import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
 
 export type Props = Popup.Props;
@@ -89,10 +89,10 @@ const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
 
-const tableData = (queryResult): Table.Props => ({
-  $rows: [
+const tableData = (queryResult?): Table.Props => ({
+  $thead: [
     {
-      style: {
+      style:{
         backgroundColor: '#1e3f96',
       },
       color: Base.Color.WHITE,
@@ -104,49 +104,88 @@ const tableData = (queryResult): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã ATM/CDM',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'atmCdmCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên ATM/CDM',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'atmCdmName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Loại máy ATM/CDM',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'atmCdmType',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Địa chỉ ATM/CDM',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'atmAddress',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Trạng thái ATM/CDM',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'atmStatus',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã DVQL',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'categoryOrgs.orgsCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên DVQL',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'categoryOrgs.orgsName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Ngày đăng ký',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'createddate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'NV đăng ký',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'createdby',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Datelastmaint',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'updateddate',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
-
 
 const mapResponseToData = (item, index) => ({
   isSelected: item.isSelected ?? false,
@@ -176,13 +215,13 @@ const mapResponseToData = (item, index) => ({
       children: item.orgsName,
     },
     {
-      children: getCurrentDate(item.createddate),
+      children: _Date.getCurrentDate(item.createddate),
     },
     {
       children: item.createdby,
     },
     {
-      children: getCurrentDate(item.updateddate),
+      children: _Date.getCurrentDate(item.updateddate),
     },
   ]
 })

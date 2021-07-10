@@ -59,7 +59,9 @@ export const Element = (props: Props) => {
 
 const handleLogoutClick = () => {
   new Promise(function (resolve, reject) {
+    console.log();
     document.cookie = `accessToken=;`;
+    console.log();
     resolve(document.cookie);
   }).then(() => { window.location.href = '/'; });
 }

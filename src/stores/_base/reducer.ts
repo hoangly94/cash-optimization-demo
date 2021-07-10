@@ -157,6 +157,9 @@ const initState: State = {
             'detail': {
                 isDisabled: true,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
             'validate': {
                 isDisabled: true,
             },
@@ -333,6 +336,9 @@ const initState: State = {
                 isShown: false,
             },
             'detail': {
+                isShown: false,
+            },
+            'historyDetail': {
                 isShown: false,
             },
             'validate': {

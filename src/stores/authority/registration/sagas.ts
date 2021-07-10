@@ -18,14 +18,14 @@ function* saga() {
 }
 
 // function* fetchHistorySaga(action?) {
-//     const responseData = yield call(getHistory, action?.page);
+//     const responseData = yield call(getHistory, action);
 //     yield put({ type: UPDATE_HISTORY, data: responseData.data });
 // }
 
 function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(getData, state.registration.filters, state.auth, action?.page);
+    const responseData = yield call(getData, state.registration.filters, state.auth, action);
 
     yield put({ type: UPDATE_DATA, data: responseData.data });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
@@ -121,10 +121,14 @@ function* deleteDataSaga() {
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'delete', 'isDisabled'], value: true });
 }
 
-function getHistory(page: number = 0) {
-    const url = Config.url + '/api/cashoptimization/historyCategoryArea';
+function getHistory(action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;const url = Config.url + '/api/cashoptimization/historyCategoryArea';
     const postData = {
         data: {
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         }
@@ -133,8 +137,11 @@ function getHistory(page: number = 0) {
         .catch(error => console.log(error));
 }
 
-function getData(filters, auth, page: number = 0) {
-    const url = Config.url + '/api/cashoptimization/authority/search';
+function getData(filters, auth, action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;const url = Config.url + '/api/cashoptimization/authority/search';
     const data = filters.radio === '1'
         ? {
             orgsId: auth.user.orgsCode == 9 ? filters.orgs.value : auth.user.orgsId,
@@ -152,6 +159,7 @@ function getData(filters, auth, page: number = 0) {
     const postData = {
         data: {
             ...data,
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         },

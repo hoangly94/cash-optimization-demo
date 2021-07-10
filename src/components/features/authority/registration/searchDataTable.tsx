@@ -1,11 +1,11 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROW } from '~stores/authority/registration/constants';
+import { REQUEST_QUERY, SELECT_ROW } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import {HANDLE_BUTTON} from "~stores/_base/constants";
 import * as Table from "~commons/table";
-import { getCurrentDate } from '@utils';
+import { _Date, getCurrentDate } from '@utils';
 
 export type Props = Base.Props;
 
@@ -48,7 +48,7 @@ const handleRowClick = (dispatch) => (item) => (e)=> {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style:{
         backgroundColor: '#1e3f96',
@@ -62,39 +62,71 @@ const tableData = (queryResult?): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Ngày tạo',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'createddate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Số UQ',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'id',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên ĐVUQ',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'categoryOrgs?.orgsName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Người UQ',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'persFullname',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Người nhận UQ',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'receiverPersFullname',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Thời gian UQ từ ngày',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'authorityFromDate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Thời gian UQ đến ngày',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'authorityToDate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Trạng thái',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'authorityStatus',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

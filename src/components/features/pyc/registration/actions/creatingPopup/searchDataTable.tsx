@@ -5,7 +5,7 @@ import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import { HANDLE_BUTTON } from "~stores/_base/constants";
 import * as Table from "~commons/table";
-import { getCurrentDate } from '@utils';
+import { _Date, getCurrentDate } from '@utils';
 
 export type Props = Base.Props;
 
@@ -47,7 +47,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -80,8 +80,8 @@ const tableData = (queryResult?): Table.Props => ({
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

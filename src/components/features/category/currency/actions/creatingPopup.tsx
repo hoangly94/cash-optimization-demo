@@ -7,7 +7,7 @@ import * as Popup from "~commons/popup";
 import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
-import { getCurrentDate } from "@utils";
+import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
 
 export type Props = Popup.Props;

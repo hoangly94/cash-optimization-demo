@@ -73,6 +73,11 @@ export const GET_PYC_EXCEL = root + 'GET_PYC_EXCEL';
 export const GET_PYC_HISTORY_EXCEL = root + 'GET_PYC_HISTORY_EXCEL';
 export const SELECT_HISTORY_ROW = root + 'SELECT_HISTORY_ROW';
 
+export const REQUEST_ORGSSEARCHING_CANCEL = root + 'REQUEST_ORGSSEARCHING_CANCEL';
+export const SELECT_ORGSSEARCHING = root + 'SELECT_ORGSSEARCHING';
+export const FETCH_ORGSSEARCHING_DISTANCE = root + 'FETCH_ORGSSEARCHING_DISTANCE';
+export const UPDATE_ORGSSEARCHING_DISTANCE = root + 'UPDATE_ORGSSEARCHING_DISTANCE';
+
 export type State = {
     history: any,
 
@@ -251,7 +256,8 @@ export type State = {
     pycTypes: [],
     pycModels: any[],
     pycPlaceReceives: any[],
-    orgsChildren: any[]
+    orgsChildren: any[],
+    distanceOrgsToOrgsRequest: string,
 }
 
 

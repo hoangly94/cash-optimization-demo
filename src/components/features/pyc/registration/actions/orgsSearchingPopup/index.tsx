@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_COMBOX, HANDLE_SPECIAL_ADD, CHANGE_EDITING_INPUT, REQUEST_EDITING, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_ORGSSEARCHING_CONTINUE, } from '~stores/pyc/registration/constants';
+import { SELECT_COMBOX, HANDLE_SPECIAL_ADD, CHANGE_EDITING_INPUT, REQUEST_EDITING, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_ORGSSEARCHING_CONTINUE, REQUEST_ORGSSEARCHING_CANCEL} from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -21,7 +21,10 @@ export const Element = (props: Popup.Props) => {
     dispatch({ type: FETCH_ATMCDMS });
     dispatch({ type: FETCH_NHNNTCTDS });
   }, []);
-  
+  // useEffect(() => {
+  //   dispatch({ type: FETCH_ORGSSEARCHING_DATA })
+  // });
+
   const selector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   const dispatch = useDispatch();
   const handleSubmitButtonClick = () => {
@@ -69,7 +72,10 @@ export const Element = (props: Popup.Props) => {
 
 
   return (
-    <Popup.Element {...props}>
+    <Popup.Element
+      {...props}
+      closePopUpCallback={() => dispatch({ type: REQUEST_ORGSSEARCHING_CANCEL })}
+    >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
         <Input.Element
@@ -174,7 +180,7 @@ export const Element = (props: Popup.Props) => {
         <Input.Element
           {...inputProps}
           store={{
-            selectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'distanceOrgsToOrgsRequest'],
+            selectorKeys: ['pycRegistration', 'distanceOrgsToOrgsRequest'],
             reducerType: '',
           }}
           isDisabled={true}
@@ -209,6 +215,7 @@ export const Element = (props: Popup.Props) => {
                 value: false,
               }
             }}
+            onClick={()=> dispatch({ type: REQUEST_ORGSSEARCHING_CANCEL })}
           />
         </Block.Element>
       </Block.Element>

@@ -1,10 +1,12 @@
-import * as React from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import Classnames from 'classnames'
 import * as Row from "./row";
 import * as Cell from "./cell";
+import * as TitleCell from "./titleCell";
 import * as Block from "~commons/block";
 import * as Base from '~/_settings';
 import styles from './_styles.css';
+import { Record, Map } from 'immutable';
 
 export enum Type {
   DEFAULT = 'table',
@@ -12,6 +14,7 @@ export enum Type {
 
 export type Props = Base.Props & {
   type?: Type,
+  action?: Object,
   $thead?: Row.Props[],
   $rows?: Row.Props[],
 }
@@ -19,18 +22,32 @@ export type Props = Base.Props & {
 export const Element = (props: Props) => {
   const {
     type = Type.DEFAULT,
+    action,
     $thead = [],
     $rows = [],
-  } = props
+  } = props;
+
+  // const sortedState = useState('');
+  // const TheadComponent = useRef(
+  //   <thead>
+  //     {toTitle($thead, sortedState)}
+  //   </thead>
+  // );
+  const sortedRef = useRef({
+    key: '',
+    type: 0,
+  });
 
   //create props
   const componentProps = {
     ...Base.mapProps(props, styles, [type]),
   };
+
   return (
     <table {...componentProps}>
+      {/* {TheadComponent.current} */}
       <thead>
-        {toTable($thead)}
+        {toTitle($thead, sortedRef)}
       </thead>
       <tbody>
         {toTable($rows)}
@@ -39,8 +56,32 @@ export const Element = (props: Props) => {
   )
 }
 
+const toTitle = (rows: Row.Props[], sortedRef) => {
+  return rows.map(toTitleRow(sortedRef));
+}
 const toTable = (rows: Row.Props[]) => {
   return rows.map(toRow);
+}
+
+const toTitleRow = (sortedRef) => ($row: Row.Props, index) => {
+
+  const children = $row.$cells ? $row.$cells.map(toTitleCell(sortedRef)) : null;
+  const rowProps = {
+    key: (new Date().getTime()) + index,
+    children: children,
+    textAlign: Base.TextAlign.CENTER,
+    ...$row,
+  };
+  return (<Row.Element {...rowProps} />);
+}
+const toTitleCell = (sortedRef) => ($cell: TitleCell.Props, index) => {
+  const cellProps = {
+    key: (new Date().getTime()) + index,
+    padding: Base.PaddingV.PX_8,
+    ...$cell,
+    sortedRef,
+  };
+  return (<TitleCell.Element {...cellProps} />);
 }
 
 const toRow = ($row: Row.Props, index) => {

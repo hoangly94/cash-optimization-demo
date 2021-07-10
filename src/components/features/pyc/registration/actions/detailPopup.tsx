@@ -9,7 +9,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { getCurrentDate, getCurrentDateTime, _Date } from '_/utils';
+import { getCurrentDate, getCurrentDateTime, getDateString, _Date } from '_/utils';
 import { REQUEST_EDITING_CANCEL } from '_/stores/pyc/registration/constants';
 
 export const Element = (props: Popup.Props) => {
@@ -106,7 +106,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Ngày tạo PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDate(popupSelector.createddate)}
+          defaultValue={popupSelector.createddate?.split('-').join('/')}
           isDisabled={true}
         />
       </Block.Element>
@@ -267,7 +267,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.cpdDvycdqDate}
+          defaultValue={_Date.getCurrentDateTime(popupSelector.cpdDvycdqDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -291,7 +291,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate}
+          defaultValue={_Date.getCurrentDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -299,7 +299,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Lý do từ chối TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.tqDvdqCheckReason}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckReason}
           isDisabled={true}
         />
       </Block.Element>
@@ -315,7 +315,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm CPD ĐVĐQ phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqDate}
+          defaultValue={_Date.getCurrentDateTime(popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -323,7 +323,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Lý do từ chối CPD ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.cpdDvdqReason}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqReason}
           isDisabled={true}
         />
       </Block.Element>
@@ -351,7 +351,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Ngày giờ hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.nvCancelDate}
+          defaultValue={_Date.getCurrentDateTime(popupSelector.nvCancelDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -359,7 +359,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Lý do hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.nvCancelReason}
+          defaultValue={popupSelector.nvCancelReason === 'KHÁC' ? popupSelector.cashOptimizationReasonDesc : popupSelector.nvCancelReason}
           isDisabled={true}
         />
       </Block.Element>
@@ -376,7 +376,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.cpdDvycdqCancelDate}
+          defaultValue={_Date.getCurrentDateTime(popupSelector.cpdDvycdqCancelDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -401,7 +401,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelDate}
+          defaultValue={_Date.getCurrentDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -532,7 +532,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -547,8 +547,8 @@ const tableData = (queryResult?): Table.Props => ({
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

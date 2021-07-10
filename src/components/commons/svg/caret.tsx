@@ -1,21 +1,32 @@
 import * as React from 'react';
 import * as Base from '_/_settings';
 import styles from './_styles.css';
-import { Props, Type, Size } from './';
+import { Props, Type, Size, Direction  } from './';
 
 export default (props: Props) => {
     const {
         type = Type.SOLID,
+        direction = Direction.DOWN,
         size = Size.S2,
         fill = '#383838',
     } = props;
+
+    
+    const rotateDegObj = {
+        'up': '180',
+        'right': '-90',
+        'down': '0',
+        'left': '90',
+    };
 
     //create props for rendering
     const svgProps = {
         ...Base.mapProps(props, styles, [size]),
         style: {
+            transform: `rotate(${rotateDegObj[direction]}deg)`,
+            transformOrigin: '50% 50%',
             fill: fill,
-        }
+        },
     }
 
     return (

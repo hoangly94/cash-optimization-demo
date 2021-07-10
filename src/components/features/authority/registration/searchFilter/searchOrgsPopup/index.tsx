@@ -8,7 +8,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { getCurrentDate } from "@utils";
+import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { INPUT_ORGS_VALUE_FILTER, REQUEST_QUERY, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, SELECT_ROW } from '~stores/authority/searchOrgs/constants';
 import * as RegionAreaFilter from './regionAreaFilter';
@@ -190,7 +190,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 }
 
 const tableData = (queryResult): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -204,15 +204,23 @@ const tableData = (queryResult): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã đơn vị',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'orgsCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên đơn vị',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'orgsName',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

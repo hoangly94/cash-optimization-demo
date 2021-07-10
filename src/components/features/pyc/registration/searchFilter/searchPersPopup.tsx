@@ -8,7 +8,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { getCurrentDate } from "@utils";
+import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
 import { INPUT_VALUE_FILTER, REQUEST_QUERY, SELECT_ROW, SELECT_TYPE_FILTER } from '_/stores/authority/searchPers/constants';
 
@@ -178,7 +178,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 }
 
 const tableData = (queryResult): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -227,8 +227,8 @@ const tableData = (queryResult): Table.Props => ({
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

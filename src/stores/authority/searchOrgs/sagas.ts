@@ -9,13 +9,16 @@ function* saga() {
 }
 function* fetchDataSaga(action?) {
     const state = yield select();
-    const responseData = yield call(getData, state.searchOrgs.filters, action?.page);
+    const responseData = yield call(getData, state.searchOrgs.filters, action);
 
     yield put({ type: UPDATE_DATA, data: responseData.data });
 }
 
-function getData(filters, page: number = 0) {
-    const url = Config.url + '/api/cashoptimization/authority/searchOrgs';
+function getData(filters, action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;const url = Config.url + '/api/cashoptimization/authority/searchOrgs';
 
     const locationDataValue = filters.locationType.value === 'area'
         ? { areaId: filters.areaType.value ? filters.areaType.value : 0 }
@@ -28,6 +31,7 @@ function getData(filters, page: number = 0) {
         data: {
             ...locationDataValue,
             ...orgsDataValue,
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         },

@@ -111,8 +111,7 @@ export const Element = (props: Props) => {
   const labelRowProps = dayLabels.map(mapToLabelRows);
   const tableFromData = getTableData(currentDate);
   const tableFromProps = tableFromData.reduce(reduceToRows(dispatch, setClickData)(props, currentDate, dateSelector), []);
-
-  const currentMonthYearString = `${_Date.convertMonthTo2digits(currentDate.getMonth() + 1)}-${currentDate.getFullYear()}`;
+  const currentMonthYearString = `${String(currentDate.getMonth() + 1).padStart(2, '0')}-${currentDate.getFullYear()}`;
 
   const tableProps = {
     $thead: [
@@ -177,7 +176,7 @@ const reduceToRows = (dispatch, setClickData) => (props: Props, currentDate: Dat
     const handleClick = isCurrentMonth ? {
       onClick: () => {
         if (store) {
-          const selectedDateTime = `${_Date.convertDayTo2digits(cellDay)}-${_Date.convertMonthTo2digits(cellMonth)}-${next.year} ${_Date.convertTo2digits(activeDate.getHours())}:${_Date.convertTo2digits(activeDate.getMinutes())}:${_Date.convertTo2digits(activeDate.getSeconds())}`;
+          const selectedDateTime = `${String(cellDay).padStart(2, '0')}-${String(cellMonth).padStart(2, '0')}-${next.year} ${String(activeDate.getHours()).padStart(2, '0')}:${String(activeDate.getMinutes()).padStart(2, '0')}:${String(activeDate.getSeconds()).padStart(2, '0')}`;
           dispatch({
             ...store.action,
             data: {

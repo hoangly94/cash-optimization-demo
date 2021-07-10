@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Classnames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROW } from '~stores/category/atmCdm/constants';
+import { REQUEST_QUERY, SELECT_ROW } from '~stores/category/atmCdm/constants';
 import styles from './_styles.css';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
@@ -10,7 +10,7 @@ import * as DropDown from "~commons/dropdown";
 import {HANDLE_BUTTON} from "~stores/_base/constants";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { getCurrentDate } from '@utils';
+import { _Date, getCurrentDate } from '@utils';
 
 export type Props = Base.Props;
 
@@ -32,7 +32,7 @@ export const Element = (props: Props) => {
     ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
     style:{
-      minWidth: '1200px',
+      minWidth: '2000px',
     }
   }
   return (
@@ -52,7 +52,7 @@ const handleRowClick = (dispatch) => (item) => (e)=> {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style:{
         backgroundColor: '#1e3f96',
@@ -66,47 +66,87 @@ const tableData = (queryResult?): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã ATM/CDM',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'atmCdmCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên ATM/CDM',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'atmCdmName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Loại máy ATM/CDM',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'atmCdmType',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Địa chỉ ATM/CDM',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'atmAddress',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Trạng thái ATM/CDM',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'atmStatus',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã DVQL',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'categoryOrgs.orgsCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên DVQL',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'categoryOrgs.orgsName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Ngày đăng ký',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'createddate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'NV đăng ký',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'createdby',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Datelastmaint',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'updateddate',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({
@@ -138,13 +178,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.categoryOrgs.orgsName,
     },
     {
-      children: getCurrentDate(item.createddate),
+      children: _Date.getCurrentDate(item.createddate),
     },
     {
       children: item.createdby,
     },
     {
-      children: getCurrentDate(item.updateddate),
+      children: _Date.getCurrentDate(item.updateddate),
     },
   ]
 })

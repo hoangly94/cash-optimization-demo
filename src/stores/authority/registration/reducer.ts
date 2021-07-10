@@ -281,7 +281,7 @@ export default (state: State = initState, action) => {
                     recvCode: action.data.persCode,
                     recvName: action.data.persFullname,
                     recvCmnd: action.data.persCmndCccd,
-                    recvCmndyear: action.data.persCmndCccdYear,
+                    recvCmndyear: _Date.getCurrentDate(action.data.persCmndCccdYear),
                     recvCmndPlace: action.data.persCmndCccdPlace,
                     recvTitle: action.data.persTitle,
                     recvPhone: action.data.persMobile,

@@ -1,6 +1,6 @@
 import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY } from './constants'
 import * as Base from '~/_settings';
-import { getCurrentDate } from '@utils';
+import { _Date, getCurrentDate } from '@utils';
 
 const initState: State = {
     history: [],

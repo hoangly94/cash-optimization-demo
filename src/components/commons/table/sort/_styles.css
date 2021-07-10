@@ -1,0 +1,15 @@
+@import '../../../../_settings/_variables.css';
+
+.sort{
+    display:inline-block;
+    vertical-align: middle;
+    user-select: none;
+    position:absolute;
+    right:8px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+}
+.caret{
+    display:block;
+}

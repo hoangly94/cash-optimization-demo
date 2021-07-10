@@ -1,14 +1,14 @@
 import * as React from 'react'
 import Classnames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROW } from '~stores/category/orgs/constants';
+import { REQUEST_QUERY, SELECT_ROW } from '~stores/category/orgs/constants';
 import styles from './_styles.css';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Button from "~commons/button";
 import * as DropDown from "~commons/dropdown";
 import * as Table from "~commons/table";
-import { getCurrentDate } from '@utils';
+import { _Date, getCurrentDate } from '@utils';
 import {HANDLE_BUTTON} from "~stores/_base/constants";
 
 export type Props = Base.Props;
@@ -52,7 +52,7 @@ const handleRowClick = (dispatch) => (item) => (e)=> {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style:{
         backgroundColor: '#1e3f96',
@@ -66,51 +66,95 @@ const tableData = (queryResult?): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã ĐV',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'orgsCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên ĐV',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'orgsName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Địa chỉ Đơn vị',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'orgsAddress',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã cụm',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'areaCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên cụm',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'areaName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã ĐVQL',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'categoryOrgsParent.orgsParentId',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên ĐVQL',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'categoryOrgsParent.orgsCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'KC đến ĐVQL',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'dvqlKc',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Ngày đăng ký',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'createddate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'NV đăng ký',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'createdby',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Datelastmaint',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'updateddate',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 
@@ -146,13 +190,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.dvqlKc,
     },
     {
-      children: getCurrentDate(item.createddate),
+      children: _Date.getCurrentDate(item.createddate),
     },
     {
       children: item.createdby,
     },
     {
-      children: getCurrentDate(item.updateddate),
+      children: _Date.getCurrentDate(item.updateddate),
     },
   ]
 })

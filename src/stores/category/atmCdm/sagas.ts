@@ -13,7 +13,7 @@ function* saga() {
 }
 
 function* fetchHistorySaga(action?) {
-    const responseData = yield call(getHistory, action?.page);
+    const responseData = yield call(getHistory, action);
 
     yield put({ type: UPDATE_HISTORY, data: responseData.data });
 }
@@ -21,7 +21,7 @@ function* fetchHistorySaga(action?) {
 function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(getData, state.atmCdm.filters, action?.page);
+    const responseData = yield call(getData, state.atmCdm.filters, action);
 
     yield put({ type: UPDATE_DATA, data: responseData.data });
 }
@@ -54,10 +54,15 @@ function* editDataSaga() {
     yield fetchDataSaga();
     yield put({ type: HANDLE_POPUP,  keys: ['atmCdm', 'edit', 'isShown'], value:false});
 }
-function getHistory(page:number = 0) {
+function getHistory(action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;
     const url = Config.url + '/api/cashoptimization/historyCategoryATMCDM';
     const postData = {
         data: {
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         }
@@ -66,13 +71,18 @@ function getHistory(page:number = 0) {
         .catch(error => console.log(error));
 }
 
-function getData(filters, page:number = 0) {
+function getData(filters, action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;
     const url = Config.url + '/api/cashoptimization/findCategoryATMCDM';
     const postData = {
         data: {
             atmStatus: filters.atmCdmStatus?.value ? filters.atmCdmStatus.value : null,
             orgsId: filters.orgs?.value ? filters.orgs.value : 0,
-            page:page,
+            sort,
+            page,
             size: Config.numberOfItemsPerPage,
         },
     }

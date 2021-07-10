@@ -7,7 +7,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -66,6 +66,7 @@ export const Element = (props: Popup.Props) => {
             backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
             margin={Base.MarginRight.PX_18}
             store={{
+              isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'historyDetail'],
               action: {
                 type: HANDLE_POPUP,
                 keys: ['pycRegistration', 'history', 'isShown'],
@@ -120,11 +121,12 @@ const tableData_$rows_$cells_title = {
   
 const handleRowClick = (dispatch) => (item) => (e)=> {
   dispatch({ type: SELECT_HISTORY_ROW, data: item });
+  dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'historyDetail', 'isDisabled'], value: false });
 }
 
 
 const tableData = (queryResult): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -138,79 +140,151 @@ const tableData = (queryResult): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Ngày tạo PYC',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'createddate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Số PYC HT',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'id',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Số PYC ĐV',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'orgsRequestId',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã ĐVYCĐQ ',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'orgsCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên ĐVYCĐQ',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'orgsName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã ĐVĐQ',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'cashOptimizationOrgsDetailModel.orgsDestCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên ĐVĐQ',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'cashOptimizationOrgsDetailModel.orgsDestName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Trạng thái PYC',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'cashOptimizationStatus',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Đối tượng ĐQ',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'objectType',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mô hình ĐQ',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'model',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mức độ ưu tiên',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'priorityLevelName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Số LT',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'routeId',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Trạng thái LT',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'routeStatus',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã ATM',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'cashOptimizationOrgsDetailModel.atmCdmCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên ATM',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'item.cashOptimizationOrgsDetailModel.atmCdmName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã NH đối tác KPP mở TK',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'item.cashOptimizationOrgsDetailModel.nnhnTctdCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Tên NH đối tác KPP mở TK',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'item.cashOptimizationOrgsDetailModel.nnhnTctdName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Datelastmaint',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'updateddate',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

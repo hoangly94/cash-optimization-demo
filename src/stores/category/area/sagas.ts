@@ -13,14 +13,14 @@ function* saga() {
 }
 
 function* fetchHistorySaga(action?) {
-    const responseData = yield call(getHistory, action?.page);
+    const responseData = yield call(getHistory, action);
     yield put({ type: UPDATE_HISTORY, data: responseData.data });
 }
 
 function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(getData, state.area.filters, action?.page);
+    const responseData = yield call(getData, state.area.filters, action);
 
     yield put({ type: UPDATE_DATA, data: responseData.data });
 }
@@ -28,35 +28,40 @@ function* fetchDataSaga(action?) {
 function* createDataSaga() {
     const state = yield select();
     const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createCategoryArea', state.area.creatingPopup);
-    
-    if(!responseData || !responseData.data || responseData.data.resultCode != 0){
+
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error');
     }
 
     yield put({ type: DONE_CREATING });
     yield fetchDataSaga();
     yield spawn(addNoti, 'success');
-    yield put({ type: HANDLE_POPUP,  keys: ['area', 'create', 'isShown'], value:false});
+    yield put({ type: HANDLE_POPUP, keys: ['area', 'create', 'isShown'], value: false });
 }
 
 function* editDataSaga() {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/updateCategoryArea', state.area.selectedItem);
-    
-    if(!responseData || !responseData.data || responseData.data.resultCode != 0){
+
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error');
     }
 
     yield put({ type: DONE_CREATING });
     yield spawn(addNoti, 'success');
     yield fetchDataSaga();
-    yield put({ type: HANDLE_POPUP,  keys: ['area', 'edit', 'isShown'], value:false});
+    yield put({ type: HANDLE_POPUP, keys: ['area', 'edit', 'isShown'], value: false });
 }
-function getHistory(page:number = 0) {
+function getHistory(action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;
     const url = Config.url + '/api/cashoptimization/historyCategoryArea';
     const postData = {
         data: {
+            sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
         }
@@ -65,14 +70,20 @@ function getHistory(page:number = 0) {
         .catch(error => console.log(error));
 }
 
-function getData(filters, page:number = 0) {
+function getData(filters, action) {
+    const {
+        page = 0,
+        sort = '',
+    } = action;
     const url = Config.url + '/api/cashoptimization/findCategoryArea';
     const areaCode = parseInt(filters.areaCode);
     const postData = {
         data: {
-            areaCode: areaCode ? ''+areaCode : 0,
-            page:page,
+            areaCode: areaCode ? '' + areaCode : 0,
+            sort: sort,
+            page: page,
             size: Config.numberOfItemsPerPage,
+            
         },
     }
     return axios.post(url, postData)

@@ -1,5 +1,5 @@
 import { State, SELECT_TYPE_FILTER, INPUT_VALUE_FILTER, UPDATE_DATA, SELECT_ROW } from './constants'
-import { getCurrentDate } from '@utils';
+import { getCurrentDate, _Date } from '@utils';
 
 const initState: State = {
     filters: {

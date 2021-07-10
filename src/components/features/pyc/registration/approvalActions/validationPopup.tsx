@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_EDITING_INPUT, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_EDITING } from '~stores/pyc/registration/constants';
+import { CHANGE_EDITING_INPUT, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING_CANCEL, REQUEST_EDITING, REQUEST_EDITING_CANCEL } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -90,6 +90,7 @@ export const Element = (props: Props) => {
       keys: ['pycRegistration', 'validate3', 'isShown'],
       value: false,
     });
+    dispatch({ type: REQUEST_EDITING_CANCEL });
   };
 
   const html1 = (function () {
@@ -145,7 +146,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cpdDvycdqDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.cpdDvycdqDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -181,7 +182,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cpdDvycdqDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.cpdDvycdqDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -197,7 +198,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -234,7 +235,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Ngày giờ hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.nvCancelDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.nvCancelDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -242,7 +243,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Lý do hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.nvCancelReason}
+              defaultValue={popupSelector.nvCancelReason === 'KHÁC' ? popupSelector.cashOptimizationReasonDesc : popupSelector.nvCancelReason}
               isDisabled={true}
             />
           </Block.Element>
@@ -278,7 +279,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Ngày giờ hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.nvCancelDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.nvCancelDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -286,7 +287,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Lý do hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.nvCancelReason}
+              defaultValue={popupSelector.nvCancelReason === 'KHÁC' ? popupSelector.cashOptimizationReasonDesc : popupSelector.nvCancelReason}
               isDisabled={true}
             />
           </Block.Element>
@@ -302,7 +303,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cpdDvycdqDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.cpdDvycdqDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -338,7 +339,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Ngày giờ hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.nvCancelDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.nvCancelDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -346,7 +347,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Lý do hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.nvCancelReason}
+              defaultValue={popupSelector.nvCancelReason === 'KHÁC' ? popupSelector.cashOptimizationReasonDesc : popupSelector.nvCancelReason}
               isDisabled={true}
             />
           </Block.Element>
@@ -362,7 +363,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cpdDvycdqDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.cpdDvycdqDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -378,7 +379,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate}
+              defaultValue={_Date.getCurrentDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate)}
               isDisabled={true}
             />
           </Block.Element>
@@ -543,7 +544,12 @@ export const Element = (props: Props) => {
   }
 
   return (
-    <Popup.Element {...props}>
+    <Popup.Element
+      {...props}
+      closePopUpCallback={() => {
+        dispatch({ type: REQUEST_EDITING_CANCEL });
+      }}
+    >
       <Title.Element
         tagType={Title.TagType.H3}
         text='Thông tin'
@@ -572,7 +578,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Ngày tạo PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDate(popupSelector.createddate)}
+          defaultValue={popupSelector.createddate?.split('-').join('/')}
           isDisabled={true}
         />
       </Block.Element>
@@ -667,7 +673,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Tên ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={userSelector.cashOptimizationOrgsDetailModel?.orgsDestName}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.orgsDestName}
           isDisabled={true}
         />
       </Block.Element>
@@ -696,10 +702,9 @@ export const Element = (props: Props) => {
             selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
+          max={200}
         />
       </Block.Element>
-
-
 
 
       <Block.Element
@@ -763,7 +768,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style: {
         backgroundColor: '#1e3f96',
@@ -778,8 +783,8 @@ const tableData = (queryResult?): Table.Props => ({
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (handleRowClick) => (item, index) => ({

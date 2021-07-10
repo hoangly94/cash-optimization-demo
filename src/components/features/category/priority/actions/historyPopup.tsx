@@ -7,7 +7,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
-import { getCurrentDate } from "@utils";
+import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
 
 export type Props = Popup.Props;
@@ -91,7 +91,7 @@ const tableData_$rows_$cells_title = {
 }
 
 const tableData = (queryResult?): Table.Props => ({
-  $rows: [
+  $thead: [
     {
       style:{
         backgroundColor: '#1e3f96',
@@ -105,27 +105,47 @@ const tableData = (queryResult?): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Mã mức độ ưu tiên',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'priorityLevelCode',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mức độ ưu tiên',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'priorityLevelName',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Ngày đăng ký',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'createddate',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'NV đăng ký',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'createdby',
+          }
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Datelastmaint',
+          sort: {
+            type: FETCH_HISTORY,
+            data: 'updateddate',
+          }
         },
       ],
     },
-    ...(queryResult ? queryResult : []),
-  ],
+     ],
+  $rows: queryResult ? queryResult : [],
 })
 
 const mapResponseToData = (item, index) => ({
@@ -141,13 +161,13 @@ const mapResponseToData = (item, index) => ({
       children: item.priorityLevelName,
     },
     {
-      children: getCurrentDate(item.createddate),
+      children: _Date.getCurrentDate(item.createddate),
     },
     {
       children: item.createdby,
     },
     {
-      children: getCurrentDate(item.updateddate),
+      children: _Date.getCurrentDate(item.updateddate),
     },
   ]
 })
