@@ -46,3 +46,7 @@ export const useCooke = (name: string) => {
   const cookie = '';
   return { cookie };
 }
+
+export const useForceRender = () => {
+  return React.useState()[1].bind(null, {} as any);;
+}

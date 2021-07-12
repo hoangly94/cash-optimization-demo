@@ -7,7 +7,7 @@ import * as Nav from "~commons/nav";
 import * as Link from "~commons/link";
 import * as Block from "~commons/block";
 import { useLocation } from 'react-router';
-import { NONAME } from 'dns';
+import _ from 'lodash';
 
 export enum Type {
   DEFAULT = 'menu',
@@ -22,6 +22,7 @@ export type Props = Base.Props & {
   type?: Type,
   size?: Size,
   $links?: ItemType[],
+  roleCodeList?: string[],
 };
 
 type ItemType = Link.Props & {
@@ -32,6 +33,7 @@ export const Element = (props: Props): React.ReactElement => {
   const {
     type = Type.DEFAULT,
     $links,
+    roleCodeList,
   } = props;
   const location = useLocation();
   // const isActive = $links ? $links?.filter($link => hasActiveChildren(location, $link)).length > 0 : false;
@@ -107,7 +109,10 @@ const mapPropsToLinkElemets = (location, props: Props) => ($link: ItemType, inde
         maxHeight: isChoosen ? '500px' : '0px',
       }
     };
-    const children = $link.$subs.map(mapPropsToLinkElemets(location, props));
+    const children = $link.$subs.filter((item:any) => props.roleCodeList?.includes(item.accessedRole)).map(mapPropsToLinkElemets(location, props));
+    if($link.$subs && _.isEmpty(children)){
+      return <></>
+    }
     return <Block.Element {...ItemWrapperProps}>
       <Link.Element {...linkProps} />
       <Block.Element {...childrenWrapperProps}>

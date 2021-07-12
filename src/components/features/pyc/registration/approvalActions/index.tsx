@@ -243,6 +243,7 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'history'],
         }}
+        
         useEffect={{
           callback: () => dispatch({ type: FETCH_HISTORY }),
         }}

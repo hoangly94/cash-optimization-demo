@@ -121,27 +121,11 @@ function* deleteDataSaga() {
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'delete', 'isDisabled'], value: true });
 }
 
-function getHistory(action) {
-    const {
-        page = 0,
-        sort = '',
-    } = action;const url = Config.url + '/api/cashoptimization/historyCategoryArea';
-    const postData = {
-        data: {
-            sort: sort,
-            page: page,
-            size: Config.numberOfItemsPerPage,
-        }
-    }
-    return axios.post(url, postData)
-        .catch(error => console.log(error));
-}
-
 function getData(filters, auth, action) {
     const {
         page = 0,
         sort = '',
-    } = action;const url = Config.url + '/api/cashoptimization/authority/search';
+    } = action ?? {};const url = Config.url + '/api/cashoptimization/authority/search';
     const data = filters.radio === '1'
         ? {
             orgsId: auth.user.orgsCode == 9 ? filters.orgs.value : auth.user.orgsId,
@@ -186,7 +170,7 @@ function requestCreating(url: string, data, auth) {
             receiverPersFullname: data.recvName,
             receiverPersTitle: data.recvTitle,
             receiverPersCmndCccd: data.recvCmnd,
-            receiverPersCmndCccdYear: data.recvCmndyear,
+            receiverPersCmndCccdYear: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.recvCmndyear)+ ' 00:00:00',
             receiverPersCmndCccdPlace: data.recvCmndPlace,
             receiverPersMobile: data.recvPhone,
             authorityDetail: data.authorityContent2.map(item => ({
@@ -218,7 +202,7 @@ function requestEditing(url: string, data, auth) {
             receiverPersFullname: data.recvName,
             receiverPersTitle: data.recvTitle,
             receiverPersCmndCccd: data.recvCmnd,
-            receiverPersCmndCccdYear: data.recvCmndyear,
+            receiverPersCmndCccdYear: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.recvCmndyear)+ ' 00:00:00',
             receiverPersCmndCccdPlace: data.recvCmndPlace,
             receiverPersMobile: data.recvPhone,
             authorityDetail: data.authorityContent2.map(item => ({

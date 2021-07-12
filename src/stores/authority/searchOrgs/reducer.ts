@@ -123,8 +123,8 @@ function getDefaultFilters() {
     }
 }
 
-const mapToNewQueryResult = (selectedItem) => (item) => {
-    const isSelectedItem = item.id === selectedItem.id
+const mapToNewQueryResult = (selectedItem) => (item, index) => {
+    const isSelectedItem = item.key === selectedItem.key;
     if (isSelectedItem) {
         return {
             ...item,
@@ -138,9 +138,9 @@ const mapToNewQueryResult = (selectedItem) => (item) => {
         }
     }
 }
-
-const preprocessQueryResult = (data) => ({
+const preprocessQueryResult = (data, index) => ({
     ...data,
-    createddate: getCurrentDate(data.createddate),
-    updateddate: getCurrentDate(data.updateddate),
+    key: data.id ?? index,
+    createddate: _Date.getDate(data.createddate),
+    updateddate: _Date.getDate(data.updateddate),
 })

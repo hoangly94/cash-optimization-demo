@@ -15,12 +15,14 @@ export enum Type {
 export type Props = Base.Props & {
   type?: Type,
   $menu?: Menu.Props;
+  roleCodeList?: string[],
 }
 
 export const Element = (props: Props) => {
   const {
     type = Type.DEFAULT,
     $menu,
+    roleCodeList,
   } = props;
 
   //create props
@@ -35,6 +37,7 @@ export const Element = (props: Props) => {
 
   const menuProps = {
     ...$menu,
+    roleCodeList,
   }
 
   const logoProps = {
@@ -59,9 +62,7 @@ export const Element = (props: Props) => {
 
 const handleLogoutClick = () => {
   new Promise(function (resolve, reject) {
-    console.log();
     document.cookie = `accessToken=;`;
-    console.log();
     resolve(document.cookie);
   }).then(() => { window.location.href = '/'; });
 }

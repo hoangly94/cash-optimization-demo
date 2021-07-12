@@ -64,6 +64,7 @@ export const Element = (props: Popup.Props) => {
                 value: 'value',
               },
             }}
+            isInputDisabled={true}
           />
           <RegionAreaFilter.Element
             width={Base.Width.PX_150}
@@ -90,6 +91,7 @@ export const Element = (props: Popup.Props) => {
                 value: 'value',
               },
             }}
+            isInputDisabled={true}
           />
 
           <Input.Element

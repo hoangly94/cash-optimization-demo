@@ -77,6 +77,7 @@ export const Element = (props: Popup.Props) => {
               //   value: 0,
               // }],
             }}
+            isInputDisabled={true}
           />
 
           <Input.Element

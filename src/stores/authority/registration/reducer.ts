@@ -281,7 +281,7 @@ export default (state: State = initState, action) => {
                     recvCode: action.data.persCode,
                     recvName: action.data.persFullname,
                     recvCmnd: action.data.persCmndCccd,
-                    recvCmndyear: _Date.getCurrentDate(action.data.persCmndCccdYear),
+                    recvCmndyear: _Date.getDate(action.data.persCmndCccdYear),
                     recvCmndPlace: action.data.persCmndCccdPlace,
                     recvTitle: action.data.persTitle,
                     recvPhone: action.data.persMobile,
@@ -512,7 +512,7 @@ const mapToNewData = (item) => {
         recvName: item.receiverPersFullname,
         recvTitle: item.receiverPersTitle,
         recvCmnd: item.receiverPersCmndCccd,
-        recvCmndyear: item.receiverPersCmndCccdYear,
+        recvCmndyear: _Date.getDate(item.receiverPersCmndCccdYear),
         recvCmndPlace: item.receiverPersCmndCccdPlace,
         recvPhone: item.receiverPersMobile,
         authorityContent2: item.authorityDetail.map(item => ({
@@ -528,8 +528,8 @@ const mapToNewData = (item) => {
     }
 }
 
-const mapToNewQueryResult = (selectedItem) => (item) => {
-    const isSelectedItem = item.id === selectedItem.id
+const mapToNewQueryResult = (selectedItem) => (item, index) => {
+    const isSelectedItem = item.key === selectedItem.key;
     if (isSelectedItem) {
         return {
             ...item,
@@ -543,9 +543,9 @@ const mapToNewQueryResult = (selectedItem) => (item) => {
         }
     }
 }
-
-const preprocessQueryResult = (data) => ({
+const preprocessQueryResult = (data, index) => ({
     ...data,
+    key: data.id ?? index,
     createddate: getCurrentDate(data.createddate),
     updateddate: getCurrentDateTime(data.updateddate),
 })

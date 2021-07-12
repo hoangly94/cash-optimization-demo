@@ -19,10 +19,14 @@ export const SELECT_ORGS_CODE_EDITING = root + 'select_orgs_code_editing';
 export const SELECT_ATMCDM_STATUS_CREATING = root + 'select_atmcdm_status_creating';
 export const SELECT_ATMCDM_STATUS_EDITING = root + 'select_atmcdm_status_edtiting';
 export const SELECT_ROW = root + 'select_row';
+export const SELECT_HISTORY_ROW = root + 'SELECT_HISTORY_ROW';
+export const FETCH_HISTORY_DETAIL = root + 'FETCH_HISTORY_DETAIL';
+export const UPDATE_HISTORY_DETAIL = root + 'UPDATE_HISTORY_DETAIL';
 
 
 export type State = {
     history: any,
+    detailPopup: any,
     filters: {
         orgs: {
             text: string,

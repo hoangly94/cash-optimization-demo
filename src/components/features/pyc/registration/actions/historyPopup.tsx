@@ -119,16 +119,16 @@ const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
   
-const handleRowClick = (dispatch) => (item) => (e)=> {
+const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_HISTORY_ROW, data: item });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'historyDetail', 'isDisabled'], value: false });
 }
 
 
-const tableData = (queryResult): Table.Props => ({
+const tableData = (queryResult?): Table.Props => ({
   $thead: [
     {
-      style: {
+      style:{
         backgroundColor: '#1e3f96',
       },
       color: Base.Color.WHITE,
@@ -158,7 +158,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Số PYC ĐV',
           sort: {
             type: FETCH_HISTORY,
-            data: 'orgsRequestId',
+            data: 'orgs_request_id',
           }
         },
         {
@@ -166,7 +166,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Mã ĐVYCĐQ ',
           sort: {
             type: FETCH_HISTORY,
-            data: 'orgsCode',
+            data: 'orgs_code',
           }
         },
         {
@@ -174,7 +174,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Tên ĐVYCĐQ',
           sort: {
             type: FETCH_HISTORY,
-            data: 'orgsName',
+            data: 'orgs_name',
           }
         },
         {
@@ -182,7 +182,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Mã ĐVĐQ',
           sort: {
             type: FETCH_HISTORY,
-            data: 'cashOptimizationOrgsDetailModel.orgsDestCode',
+            data: 'coo_orgs_dest_code',
           }
         },
         {
@@ -190,7 +190,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Tên ĐVĐQ',
           sort: {
             type: FETCH_HISTORY,
-            data: 'cashOptimizationOrgsDetailModel.orgsDestName',
+            data: 'coo_orgs_dest_name',
           }
         },
         {
@@ -198,7 +198,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Trạng thái PYC',
           sort: {
             type: FETCH_HISTORY,
-            data: 'cashOptimizationStatus',
+            data: 'cash_optimization_status',
           }
         },
         {
@@ -222,7 +222,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Mức độ ưu tiên',
           sort: {
             type: FETCH_HISTORY,
-            data: 'priorityLevelName',
+            data: 'priority_level_name',
           }
         },
         {
@@ -230,7 +230,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Số LT',
           sort: {
             type: FETCH_HISTORY,
-            data: 'routeId',
+            data: 'route_id',
           }
         },
         {
@@ -238,7 +238,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Trạng thái LT',
           sort: {
             type: FETCH_HISTORY,
-            data: 'routeStatus',
+            data: 'route_status',
           }
         },
         {
@@ -246,7 +246,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Mã ATM',
           sort: {
             type: FETCH_HISTORY,
-            data: 'cashOptimizationOrgsDetailModel.atmCdmCode',
+            data: 'coo_atm_cdm_code',
           }
         },
         {
@@ -254,7 +254,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Tên ATM',
           sort: {
             type: FETCH_HISTORY,
-            data: 'item.cashOptimizationOrgsDetailModel.atmCdmName',
+            data: 'coo_atm_cdm_name',
           }
         },
         {
@@ -262,7 +262,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Mã NH đối tác KPP mở TK',
           sort: {
             type: FETCH_HISTORY,
-            data: 'item.cashOptimizationOrgsDetailModel.nnhnTctdCode',
+            data: 'coo_nnhn_tctd_code',
           }
         },
         {
@@ -270,7 +270,7 @@ const tableData = (queryResult): Table.Props => ({
           children: 'Tên NH đối tác KPP mở TK',
           sort: {
             type: FETCH_HISTORY,
-            data: 'item.cashOptimizationOrgsDetailModel.nnhnTctdName',
+            data: 'coo_nnhn_tctd_name',
           }
         },
         {
@@ -295,7 +295,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.createddate,
+      children: item.createddate.split('-').join('/'),
     },
     {
       children: item.id,

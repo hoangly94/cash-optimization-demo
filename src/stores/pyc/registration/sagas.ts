@@ -276,7 +276,7 @@ function getHistory(data, action) {
     const {
         page = 0,
         sort = '',
-    } = action;const url = Config.url + '/api/cashoptimization/pyc_history';
+    } = action ?? {};const url = Config.url + '/api/cashoptimization/pyc_history';
     const postData = {
         data: {
             cash_optimization_id: data.id,
@@ -318,7 +318,7 @@ function getData(filters, auth, action) {
     const {
         page = 0,
         sort = '',
-    } = action;const url = Config.url + '/api/cashoptimization/pycsearch';
+    } = action ?? {};const url = Config.url + '/api/cashoptimization/pycsearch';
     const data = filters.radio === '1'
         ? {
             pers_code: auth.user?.code,
@@ -353,7 +353,7 @@ function getPycExcel(filters, auth, action) {
     const {
         page = 0,
         sort = '',
-    } = action;const url = Config.url + '/api/cashoptimization/pyc_excel';
+    } = action ?? {};const url = Config.url + '/api/cashoptimization/pyc_excel';
     const data = filters.radio === '1'
         ? {
             pers_code: auth.user?.code,

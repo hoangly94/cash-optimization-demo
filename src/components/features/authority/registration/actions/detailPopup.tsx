@@ -289,7 +289,7 @@ export const Element = (props: Popup.Props) => {
         <Input.Element
           {...inputProps}
           store={{
-            selectorKeys: ['auth', 'user', 'name'],
+            selectorKeys: ['registration', 'editingPopup', 'createdbyName'],
             reducerType: '',
           }}
           isDisabled={true}

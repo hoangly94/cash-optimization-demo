@@ -49,6 +49,9 @@ export type State = {
         authorities: string[],
         active: boolean,
         userRole: Object,
+        roleCodeList: any[],
+        roleList: any[],
+        viewList: any[],
     },
     isAuthenticated: boolean,
     login: {

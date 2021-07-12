@@ -107,7 +107,6 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['currency', 'selectedItem', 'currencyUnit'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
-          max={4}
         />
       </Block.Element>
 

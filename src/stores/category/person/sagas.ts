@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
-import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY } from './constants';
+import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_POPUP } from '~stores/_base/constants';
@@ -11,6 +11,13 @@ function* saga() {
     yield takeLatest(REQUEST_QUERY, fetchDataSaga);
     yield takeLatest(REQUEST_CREATING, createDataSaga);
     yield takeLatest(REQUEST_EDITING, editDataSaga);
+    yield takeLatest(FETCH_HISTORY_DETAIL, fetchHistoryDetailSaga);
+}
+
+function* fetchHistoryDetailSaga(action?) {
+    const state = yield select();
+    const responseData = yield call(getHistoryDetail, action, state.person.selectedItem);
+    yield put({ type: UPDATE_HISTORY_DETAIL, data: responseData.data});
 }
 
 function* fetchHistorySaga(action?) {
@@ -54,11 +61,29 @@ function* editDataSaga() {
     yield fetchDataSaga();
     yield put({ type: HANDLE_POPUP,  keys: ['person', 'edit', 'isShown'], value:false});
 }
+function getHistoryDetail(action, data) {
+    const {
+        page = 0,
+        sort = '',
+    } = action ?? {};
+    const url = Config.url + '/api/cashoptimization/historyCategoryPersByCode';
+    const postData = {
+        data: {
+            sort: sort,
+            page: page,
+            persCode: data?.persCode,
+            size: Config.numberOfItemsPerPage,
+        }
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
+}
+
 function getHistory(action) {
     const {
         page = 0,
         sort = '',
-    } = action;
+    } = action ?? {};
     const url = Config.url + '/api/cashoptimization/historyCategoryPers';
     const postData = {
         data: {
@@ -75,7 +100,7 @@ function getData(filters, action) {
     const {
         page = 0,
         sort = '',
-    } = action;
+    } = action ?? {};
     const url = Config.url + '/api/cashoptimization/findCategoryPers';
     const persCode = parseInt(filters.persCode);
     const postData = {

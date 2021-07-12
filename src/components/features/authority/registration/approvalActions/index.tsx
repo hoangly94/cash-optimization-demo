@@ -8,7 +8,7 @@ import * as Pagination from "~commons/pagination";
 import * as ValidatePopup from "./validatePopup";
 import * as DetailPopup from "./detailPopup";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
-import { FETCH_HISTORY, REQUEST_QUERY } from '_/stores/category/area/constants';
+import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '_/stores/category/area/constants';
 import { useDispatch } from 'react-redux';
 
 export type Props = Base.Props;

@@ -117,6 +117,7 @@ export const Element = (props: Props) => {
             },
           }}
           isDisabled={radioSelector !== '1'}
+          isInputDisabled={radioSelector !== '1'}
         />
         <Button.Element
           {...filter1Props}
@@ -149,6 +150,7 @@ export const Element = (props: Props) => {
             },
           }}
           isDisabled={radioSelector !== '1'}
+          isInputDisabled={radioSelector !== '1'}
           style={{
             display: userSelector.orgsCode === 9 ? 'none' : 'block'
           }}
@@ -169,6 +171,7 @@ export const Element = (props: Props) => {
             // }],
           }}
           isDisabled={radioSelector !== '1'}
+          isInputDisabled={radioSelector !== '1'}
         />
         <Combox.Element
           {...filter1Props}
@@ -186,6 +189,7 @@ export const Element = (props: Props) => {
             // }],
           }}
           isDisabled={radioSelector !== '1'}
+          isInputDisabled={radioSelector !== '1'}
         />
       </Block.Element>
       <Block.Element {...componentWrapperProps}>

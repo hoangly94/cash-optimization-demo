@@ -1,9 +1,10 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL } from './constants'
 import * as Base from '~/_settings';
 import { _Date, getCurrentDate } from '@utils';
 
 const initState: State = {
     history: [],
+    detailPopup: [],
     filters: {
         ...getDefaultFilters(),
         queryButton: {
@@ -36,8 +37,8 @@ const initState: State = {
 
 export default (state: State = initState, action) => {
     switch (action.type) {
-        
-        
+
+
         case REQUEST_CREATING_CANCEL:
             return {
                 ...state,
@@ -131,6 +132,27 @@ export default (state: State = initState, action) => {
                     data: newQueryResult,
                 }
             }
+        case SELECT_HISTORY_ROW:
+            const newQueryResultHistory = state.history.data.map(mapToNewQueryResult(action.data))
+            return {
+                ...state,
+                selectedItem: action.data,
+                history: {
+                    ...state.history,
+                    data: newQueryResultHistory,
+                }
+            }
+        case UPDATE_HISTORY_DETAIL:
+            const historyDetailData = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
+            return {
+                ...state,
+                isLoading: false,
+                detailPopup: {
+                    ...state.history,
+                    data: historyDetailData,
+                    total: action.data.total,
+                }
+            }
         case UPDATE_HISTORY:
             const historyData = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
             return {
@@ -195,8 +217,8 @@ const mapToNewData = (item) => {
     }
 }
 
-const mapToNewQueryResult = (selectedItem) => (item) => {
-    const isSelectedItem = item.id === selectedItem.id
+const mapToNewQueryResult = (selectedItem) => (item, index) => {
+    const isSelectedItem = item.key === selectedItem.key;
     if (isSelectedItem) {
         return {
             ...item,
@@ -210,9 +232,9 @@ const mapToNewQueryResult = (selectedItem) => (item) => {
         }
     }
 }
-
-const preprocessQueryResult = (data) => ({
+const preprocessQueryResult = (data, index) => ({
     ...data,
-    createddate: getCurrentDate(data.createddate),
-    updateddate: getCurrentDate(data.updateddate),
+    key: data.id ?? index,
+    createddate: _Date.getDate(data.createddate),
+    updateddate: _Date.getDate(data.updateddate),
 })

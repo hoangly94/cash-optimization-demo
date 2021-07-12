@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { FETCH_HISTORY } from '~stores/category/area/constants';
+import { FETCH_HISTORY, SELECT_HISTORY_ROW, FETCH_HISTORY_DETAIL } from '~stores/category/area/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -8,7 +8,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -27,7 +27,7 @@ export const Element = (props: Popup.Props) => {
   };
 
   const tableProps: Table.Props = {
-    ...tableData(historySelector.data?.map(mapResponseToData)),
+    ...tableData(historySelector?.data?.map(mapResponseToData(handleRowClick(dispatch)))),
     // height: Base.Height.PX_300,
     backgroundColor: Base.BackgroundColor.WHITE,
     margin: Base.MarginBottom.PX_18,
@@ -69,6 +69,27 @@ export const Element = (props: Popup.Props) => {
         <Block.Element>
           <Button.Element
             {...closeButtonProps}
+            text='View'
+            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+            margin={Base.MarginRight.PX_18}
+            store={{
+              isDisabledSelectorKeys: ['base', 'buttons', 'area', 'historyDetail'],
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['area', 'history', 'isShown'],
+                value: false,
+              }
+            }}
+
+            onClick={() => dispatch({
+                type: HANDLE_POPUP,
+                keys: ['area', 'historyDetail', 'isShown'],
+                value: true,
+                popupType: 3,
+            })}
+          />
+          <Button.Element
+            {...closeButtonProps}
             store={{
               action: {
                 type: HANDLE_POPUP,
@@ -89,6 +110,11 @@ const actionsWrapperProps: Block.Props = {
 
 const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
+}
+
+const handleRowClick = (dispatch) => (item) => (e) => {
+  dispatch({ type: SELECT_HISTORY_ROW, data: item });
+  dispatch({ type: HANDLE_BUTTON, keys: ['area', 'historyDetail', 'isDisabled'], value: false });
 }
 
 const tableData = (queryResult?): Table.Props => ({
@@ -165,8 +191,9 @@ const tableData = (queryResult?): Table.Props => ({
   $rows: queryResult ? queryResult : [],
 })
 
-const mapResponseToData = (item, index) => ({
+const mapResponseToData = (handleRowClick) => (item, index) => ({
   isSelected: item.isSelected ?? false,
+  onClick: handleRowClick(item),
   $cells: [
     {
       children: index + 1,
@@ -187,7 +214,7 @@ const mapResponseToData = (item, index) => ({
       children: _Date.getCurrentDate(item.createddate),
     },
     {
-      children: item.createdby,
+      children: item.createdbyname,
     },
     {
       children: _Date.getCurrentDate(item.updateddate),

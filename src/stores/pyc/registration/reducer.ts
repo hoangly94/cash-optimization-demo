@@ -543,9 +543,9 @@ export default (state: State = initState, action) => {
             const newDataHistory = mapToNewData(action.data);
             return {
                 ...state,
-                detailPopup: newDataHistory,
                 history: {
                     ...state.history,
+                    detailPopup: newDataHistory,
                     data: newQueryResultHistory,
                 }
             }

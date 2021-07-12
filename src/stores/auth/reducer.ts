@@ -19,6 +19,9 @@ const initState: State = {
         authorities: [],
         active: false,
         userRole: [],
+        roleCodeList: [],
+        roleList: [],
+        viewList: [],
     },
     isAuthenticated: false,
     login: {
@@ -119,7 +122,10 @@ export default (state: State = initState, action) => {
                     orgsCode: action.data.orgsCode,
                     orgsName: action.data.orgsName,
                     authorities: action.data.authorities,
+                    roleCodeList: action.data.roleCodeList,
+                    roleList: action.data.roleList,
                     active: false,
+                    viewList: action.data.viewList.join(';').split(';').filter(item => item),
                 },
                 isAuthenticated: true,
             }

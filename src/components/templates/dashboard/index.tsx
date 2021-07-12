@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, NavLink, Switch } from "react-router-dom";
 import { FETCH_AREAS, FETCH_CONFIG, FETCH_FUNCTIONS, FETCH_ORGS, FETCH_PERS, FETCH_REGIONS } from '_/stores/dashboardRoot/constants';
-import { AuthRoute } from '@hocs';
+import { AuthRoute, RoleRoute } from '@hocs';
 import * as Base from '~/_settings';
 import * as Login from '~features/login';
 import * as Register from '~features/register';
@@ -38,7 +38,7 @@ export type Props = {
 export const Element = (props: Props) => {
     const {
     } = props;
-    const {cookie: accessToken} = useCooke('accessToken');
+    const { cookie: accessToken } = useCooke('accessToken');
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch({ type: FETCH_CONFIG });
@@ -51,9 +51,9 @@ export const Element = (props: Props) => {
         // dispatch({ type: FETCH_TITLE });
         // dispatch({ type: FETCH_REGIONS });
     }, []);
-    const userSelector = useSelector(state=>state['auth'].user);
+    const userSelector = useSelector(state => state['auth'].user);
     const isAuthenticated = userSelector.isAuthenticated || accessToken;
-    
+
     return (
         <Router >
             <Notification.Element />
@@ -62,13 +62,13 @@ export const Element = (props: Props) => {
                 <Route path="/register" component={Register.Element} />
                 <Route path="/change-password" component={FirstChangePassword.Element} />
                 {/* <Route path="/forgot-password" component={Forgot.Element} /> */}
-                <AuthRoute path="/" component={DashboardComponent} isAuthenticated={isAuthenticated?true:false} />
+                <AuthRoute path="/" component={DashboardComponent(userSelector)} isAuthenticated={isAuthenticated ? true : false} />
             </Switch>
         </Router>
     )
 }
 
-const DashboardComponent = () => {
+const DashboardComponent = (userSelector) => () => {
 
     const mainProps: Main.Props = {
         // style: {
@@ -86,69 +86,35 @@ const DashboardComponent = () => {
     };
     return (
         <>
-            <DashboardMenu.Element {...dashboardMenuProps} />
+            <DashboardMenu.Element {...dashboardMenuProps} roleCodeList={userSelector.viewList}/>
             <Main.Element {...mainProps}>
                 <Breadcrumbs.Element {...breadcrumbsProps} />
                 <Switch>
                     <Route exact path="/">
                     </Route>
-                    <Route path="/category/orgs">
-                        <ORGS.Element />
-                    </Route>
-                    <Route path="/category/atm-cdm">
-                        <ATM_CDM.Element />
-                    </Route>
-                    <Route path="/category/nhnn-tctd">
-                        <NHNN_TCTD.Element />
-                    </Route>
-                    <Route path="/category/vehicle">
-                        <Vehicle.Element />
-                    </Route>
-                    <Route path="/category/person">
-                        <Person.Element />
-                    </Route>
-                    <Route path="/category/title">
-                        <Title.Element />
-                    </Route>
-                    <Route path="/category/currency">
-                        <Currency.Element />
-                    </Route>
-                    <Route path="/category/priority">
-                        <Priority.Element />
-                    </Route>
-                    <Route path="/category/region">
-                        <Region.Element />
-                    </Route>
-                    <Route path="/category/area">
-                        <Area.Element />
-                    </Route>
-                    <Route path="/category/function">
-                        <Function.Element />
-                    </Route>
-                    <Route path="/authority/registration">
-                        <Registration.Element />
-                    </Route>
-                    <Route path="/authority/approval">
-                        <Approval.Element />
-                    </Route>
 
-
-                    <Route path="/user/change-password">
-                        <ChangePassword.Element />
-                    </Route>
-                    <Route path="/user/assign-role">
-                        <AssignRole.Element />
-                    </Route>
-                    <Route path="/user/reset-password">
-                        <ResetPassword.Element />
-                    </Route>
-
-                    <Route path="/pyc/registration">
-                        <PYCRegistration.Element />
-                    </Route>
-                    <Route path="/pyc/approval">
-                        <PYCApproval.Element />
-                    </Route>
+                    <RoleRoute path="/category/orgs" component={ORGS.Element} accessedRole='41' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/atm-cdm" component={ATM_CDM.Element} accessedRole='39' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/nhnn-tctd" component={NHNN_TCTD.Element} accessedRole='43' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/vehicle" component={Vehicle.Element} accessedRole='45' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/pers" component={Person.Element} accessedRole='49' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/title" component={Title.Element} accessedRole='51' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/currency" component={Currency.Element} accessedRole='47' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/priority" component={Priority.Element} accessedRole='53' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/region" component={Region.Element} accessedRole='55' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/area" component={Area.Element} accessedRole='57' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/function" component={Function.Element} accessedRole='59' roles={userSelector.viewList} />
+                    
+                    <RoleRoute path="/authority/registration" component={Registration.Element} accessedRole='31A' roles={userSelector.viewList} />
+                    <RoleRoute path="/authority/approval" component={Approval.Element} accessedRole='31B' roles={userSelector.viewList} />
+                    
+                    <RoleRoute path="/user/change-password" component={ChangePassword.Element} accessedRole='61' roles={userSelector.viewList} />
+                    <RoleRoute path="/user/assign-role" component={AssignRole.Element} accessedRole='62' roles={userSelector.viewList} />
+                    <RoleRoute path="/user/reset-password" component={ResetPassword.Element} accessedRole='63' roles={userSelector.viewList} />
+                    
+                    <RoleRoute path="/pyc/registration" component={PYCRegistration.Element} accessedRole='1A' roles={userSelector.viewList} />
+                    <RoleRoute path="/pyc/approval" component={PYCApproval.Element} accessedRole='1B' roles={userSelector.viewList} />
+                    
                 </Switch>
             </Main.Element>
         </>
@@ -163,7 +129,7 @@ const breadcrumbsMapper = {
         'atm-cdm': { _url: '/category/atm-cdm', _name: 'ATM/CDM', },
         'nhnn-tctd': { _url: '/category/nhnn-tctd', _name: 'NHNN/TCTD', },
         'vehicle': { _url: '/category/vehicle', _name: 'Vehicle', },
-        'person': { _url: '/category/person', _name: 'Person', },
+        'pers': { _url: '/category/pers', _name: 'Pers', },
         'title': { _url: '/category/title', _name: 'Title', },
         'currency': { _url: '/category/currency', _name: 'Currency', },
         'priority': { _url: '/category/priority', _name: 'Priority', },
@@ -204,46 +170,57 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'ORGS',
                         url: '/category/orgs',
+                        accessedRole: '41',
                     },
                     {
                         text: 'ATM/CDM',
                         url: '/category/atm-cdm',
+                        accessedRole: '39',
                     },
                     {
                         text: 'NHNN/TCTD',
                         url: '/category/nhnn-tctd',
+                        accessedRole: '43',
                     },
                     {
                         text: 'Vehicle',
                         url: '/category/vehicle',
+                        accessedRole: '45',
                     },
                     {
                         text: 'Pers',
-                        url: '/category/person',
+                        url: '/category/pers',
+                        accessedRole: '49',
                     },
                     {
                         text: 'Title',
                         url: '/category/title',
+                        accessedRole: '51',
                     },
                     {
                         text: 'Currency',
                         url: '/category/currency',
+                        accessedRole: '47',
                     },
                     {
                         text: 'Priority',
                         url: '/category/priority',
+                        accessedRole: '53',
                     },
                     {
                         text: 'Region',
                         url: '/category/region',
+                        accessedRole: '55',
                     },
                     {
                         text: 'Area',
                         url: '/category/area',
+                        accessedRole: '57',
                     },
                     {
                         text: 'Function',
                         url: '/category/function',
+                        accessedRole: '59',
                     },
                 ],
             },
@@ -256,10 +233,12 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'Đăng ký Ủy quyền',
                         url: '/authority/registration',
+                        accessedRole: '31A',
                     },
                     {
                         text: 'Kiểm soát Ủy quyền',
                         url: '/authority/approval',
+                        accessedRole: '31B',
                     },
                 ]
             },
@@ -272,14 +251,17 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'Change password',
                         url: '/user/change-password',
+                        accessedRole: '61',
                     },
                     {
                         text: 'Assign role',
                         url: '/user/assign-role',
+                        accessedRole: '62',
                     },
                     {
                         text: 'Reset password',
                         url: '/user/reset-password',
+                        accessedRole: '63',
                     },
                 ]
             },
@@ -292,10 +274,12 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'Đăng ký ',
                         url: '/pyc/registration',
+                        accessedRole: '1A',
                     },
                     {
                         text: 'Kiểm soát & Phê duyệt',
                         url: '/pyc/approval',
+                        accessedRole: '1B',
                     },
                 ]
             },

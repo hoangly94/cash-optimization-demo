@@ -9,6 +9,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'atmCdm': {
             'edit': {
@@ -16,6 +19,9 @@ const initState: State = {
             },
             'query': {
                 isLoading: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'nhnnTctd': {
@@ -25,6 +31,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'vehicle': {
             'edit': {
@@ -32,6 +41,9 @@ const initState: State = {
             },
             'query': {
                 isLoading: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'person': {
@@ -41,6 +53,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'title': {
             'edit': {
@@ -48,6 +63,9 @@ const initState: State = {
             },
             'query': {
                 isLoading: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'currency': {
@@ -57,6 +75,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'priority': {
             'edit': {
@@ -64,6 +85,9 @@ const initState: State = {
             },
             'query': {
                 isLoading: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'region': {
@@ -73,6 +97,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'area': {
             'edit': {
@@ -80,6 +107,9 @@ const initState: State = {
             },
             'query': {
                 isLoading: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'function': {
@@ -89,6 +119,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'searchPers': {
             'select': {
@@ -97,6 +130,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'searchOrgs': {
             'select': {
@@ -104,6 +140,9 @@ const initState: State = {
             },
             'query': {
                 isLoading: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'registration': {
@@ -122,6 +161,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'pycSearchPers': {
             'select': {
@@ -129,6 +171,9 @@ const initState: State = {
             },
             'query': {
                 isLoading: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'pycSearchOrgs': {
@@ -138,6 +183,9 @@ const initState: State = {
             'query': {
                 isLoading: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'pycSearchOrgs2': {
             'select': {
@@ -145,6 +193,9 @@ const initState: State = {
             },
             'query': {
                 isLoading: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'pycRegistration': {
@@ -188,6 +239,9 @@ const initState: State = {
             'history': {
                 isShown: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'atmCdm': {
             'create': {
@@ -198,6 +252,9 @@ const initState: State = {
             },
             'history': {
                 isShown: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'nhnnTctd': {
@@ -210,6 +267,9 @@ const initState: State = {
             'history': {
                 isShown: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'vehicle': {
             'create': {
@@ -220,6 +280,9 @@ const initState: State = {
             },
             'history': {
                 isShown: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'person': {
@@ -232,6 +295,9 @@ const initState: State = {
             'history': {
                 isShown: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'title': {
             'create': {
@@ -242,6 +308,9 @@ const initState: State = {
             },
             'history': {
                 isShown: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'currency': {
@@ -254,6 +323,9 @@ const initState: State = {
             'history': {
                 isShown: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'priority': {
             'create': {
@@ -264,6 +336,9 @@ const initState: State = {
             },
             'history': {
                 isShown: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'region': {
@@ -276,6 +351,9 @@ const initState: State = {
             'history': {
                 isShown: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'area': {
             'create': {
@@ -287,6 +365,9 @@ const initState: State = {
             'history': {
                 isShown: false,
             },
+            'historyDetail': {
+                isDisabled: true,
+            },
         },
         'function': {
             'create': {
@@ -297,6 +378,9 @@ const initState: State = {
             },
             'history': {
                 isShown: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'registration': {
@@ -317,6 +401,9 @@ const initState: State = {
             },
             'validate': {
                 isShown: false,
+            },
+            'historyDetail': {
+                isDisabled: true,
             },
         },
         'pycRegistration': {

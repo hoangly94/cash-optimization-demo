@@ -22,9 +22,13 @@ export const SELECT_STATUS_CREATING = root + 'SELECT_STATUS_CREATING';
 export const SELECT_STATUS_EDITING = root + 'SELECT_STATUS_EDITING';
 export const CHANGE_CODE_FILTER = root + 'CHANGE_CODE_FILTER';
 export const SELECT_ROW = root + 'SELECT_ROW';
+export const SELECT_HISTORY_ROW = root + 'SELECT_HISTORY_ROW';
+export const FETCH_HISTORY_DETAIL = root + 'FETCH_HISTORY_DETAIL';
+export const UPDATE_HISTORY_DETAIL = root + 'UPDATE_HISTORY_DETAIL';
 
 export type State = {
     history: any,
+    detailPopup: any,
     filters: {
         orgsId: {
             text: string,

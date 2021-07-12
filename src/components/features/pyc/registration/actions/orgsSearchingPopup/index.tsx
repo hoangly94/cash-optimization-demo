@@ -152,6 +152,7 @@ export const Element = (props: Popup.Props) => {
             },
           }}
           isDisabled={!(selector.objectType.text === 'ATM')}
+          isInputDisabled={!(selector.objectType.text === 'TCTD/NHNN')}
         />
       </Block.Element>
 
@@ -173,6 +174,7 @@ export const Element = (props: Popup.Props) => {
             },
           }}
           isDisabled={!(selector.objectType.text === 'TCTD/NHNN')}
+          isInputDisabled={!(selector.objectType.text === 'TCTD/NHNN')}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>

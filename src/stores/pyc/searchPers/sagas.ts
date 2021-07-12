@@ -18,7 +18,7 @@ function getData(filters, action) {
     const {
         page = 0,
         sort = '',
-    } = action;const url = Config.url + '/api/cashoptimization/authority/searchPers';
+    } = action ?? {};const url = Config.url + '/api/cashoptimization/authority/searchPers';
     const dataValue = filters.type.value === 'id'
         ? { persCode: filters.value ? filters.value : 0 }
         : (filters.type.value === 'name')

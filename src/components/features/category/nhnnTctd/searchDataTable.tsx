@@ -41,7 +41,7 @@ const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
 
-const handleRowClick = (dispatch) => (item) => (e)=> {
+const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_ROW, data: item });
   dispatch({ type: HANDLE_BUTTON, keys: ['nhnnTctd', 'edit', 'isDisabled'], value: false });
 }
@@ -162,13 +162,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.categoryOrgs.orgsName,
     },
     {
-      children: _Date.getCurrentDate(item.createddate),
+      children: item.createddate.split('-').join('/'),
     },
     {
-      children: item.createdby,
+      children: item.createdbyname,
     },
     {
-      children: _Date.getCurrentDate(item.updateddate),
+      children: item.updateddate?.split('-').join('/'),
     },
   ]
 })

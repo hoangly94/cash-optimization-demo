@@ -107,7 +107,6 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['currency', 'creatingPopup', 'currencyUnit'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
-          max={50}
         />
       </Block.Element>
 

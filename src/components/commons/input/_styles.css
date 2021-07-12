@@ -29,5 +29,5 @@
 
 .disabled{
     background-color:#ececec;
-    cursor: not-allowed;
+    /* cursor: not-allowed; */
 }

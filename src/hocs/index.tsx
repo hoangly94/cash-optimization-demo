@@ -11,3 +11,10 @@ export const AuthRoute = ({ component: Component, isAuthenticated, ...rest }) =>
       : <Redirect to={Config.unAuthenticatedUrl} />
   )} />
 )
+export const RoleRoute = ({ component: Component, roles, accessedRole, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    roles.includes(accessedRole)
+      ? <Component {...props} />
+      : <Redirect to='/' />
+  )} />
+)

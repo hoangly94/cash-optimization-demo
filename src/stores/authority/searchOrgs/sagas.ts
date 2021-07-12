@@ -18,7 +18,7 @@ function getData(filters, action) {
     const {
         page = 0,
         sort = '',
-    } = action;const url = Config.url + '/api/cashoptimization/authority/searchOrgs';
+    } = action ?? {};const url = Config.url + '/api/cashoptimization/authority/searchOrgs';
 
     const locationDataValue = filters.locationType.value === 'area'
         ? { areaId: filters.areaType.value ? filters.areaType.value : 0 }

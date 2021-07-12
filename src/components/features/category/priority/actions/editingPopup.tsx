@@ -76,7 +76,6 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Mã mức độ ưu tiên' {...inputTitleProps} />
         <Input.Element
-          valueType={Input.ValueType.NUMBER}
           placeholder='Mã mức độ ưu tiên'
           {...inputProps}
           store={{

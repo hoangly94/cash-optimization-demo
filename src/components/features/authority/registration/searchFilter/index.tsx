@@ -147,6 +147,7 @@ export const Element = (props: Props) => {
             // }],
           }}
           isDisabled={radioSelector !== '1'}
+          isInputDisabled={radioSelector !== '1'}
         />
       </Block.Element>
       <Block.Element {...componentWrapperProps}>

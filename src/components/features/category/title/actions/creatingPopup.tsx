@@ -77,7 +77,6 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Mã chức danh' {...inputTitleProps} />
         <Input.Element
-          valueType={Input.ValueType.NUMBER}
           placeholder='Mã chức danh'
           {...inputProps}
           store={{

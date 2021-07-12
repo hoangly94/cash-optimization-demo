@@ -16,9 +16,13 @@ export const CHANGE_CREATING_INPUT = root + 'CHANGE_CREATING_INPUT';
 export const CHANGE_EDITING_INPUT = root + 'CHANGE_EDITING_INPUT';
 export const CHANGE_CODE_FILTER = root + 'CHANGE_CODE_FILTER';
 export const SELECT_ROW = root + 'SELECT_ROW';
+export const SELECT_HISTORY_ROW = root + 'SELECT_HISTORY_ROW';
+export const FETCH_HISTORY_DETAIL = root + 'FETCH_HISTORY_DETAIL';
+export const UPDATE_HISTORY_DETAIL = root + 'UPDATE_HISTORY_DETAIL';
 
 export type State = {
     history: any,
+    detailPopup: any,
     filters: {
         priorityLevelCode: string,
         queryButton: {

@@ -8,8 +8,9 @@ import * as Pagination from "~commons/pagination";
 import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
 import * as HistoryPopup from "./historyPopup";
+import * as DetailPopup from "./detailPopup";
 import { HANDLE_POPUP } from '_/stores/_base/constants';
-import { FETCH_HISTORY, REQUEST_QUERY } from '_/stores/category/function/constants';
+import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '_/stores/category/function/constants';
 import { useDispatch } from 'react-redux';
 
 export type Props = Base.Props;
@@ -136,6 +137,19 @@ export const Element = (props: Props) => {
         }}
         useEffect={{
           callback: () => dispatch({ type: FETCH_HISTORY }),
+        }}
+      />
+      <DetailPopup.Element
+        {...historyPopupComponentProps}
+        $title= {{
+          tagType: Title.TagType.H2,
+          text: 'Detail'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'function', 'historyDetail'],
+        }}
+        useEffect={{
+          callback: () => dispatch({ type: FETCH_HISTORY_DETAIL }),
         }}
       />
     </>

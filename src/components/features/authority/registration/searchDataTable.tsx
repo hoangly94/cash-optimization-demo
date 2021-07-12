@@ -41,7 +41,7 @@ const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
 
-const handleRowClick = (dispatch) => (item) => (e)=> {
+const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_ROW, data: item });
   dispatch({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: false });
   dispatch({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: false });
@@ -80,7 +80,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Tên ĐVUQ',
           sort: {
             type: REQUEST_QUERY,
-            data: 'categoryOrgs?.orgsName',
+            data: 'co_orgs_name',
           }
         },
         {
@@ -88,7 +88,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Người UQ',
           sort: {
             type: REQUEST_QUERY,
-            data: 'persFullname',
+            data: 'pers_fullname',
           }
         },
         {
@@ -96,7 +96,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Người nhận UQ',
           sort: {
             type: REQUEST_QUERY,
-            data: 'receiverPersFullname',
+            data: 'receiver_pers_fullname',
           }
         },
         {
@@ -104,7 +104,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Thời gian UQ từ ngày',
           sort: {
             type: REQUEST_QUERY,
-            data: 'authorityFromDate',
+            data: 'authority_from_date',
           }
         },
         {
@@ -112,7 +112,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Thời gian UQ đến ngày',
           sort: {
             type: REQUEST_QUERY,
-            data: 'authorityToDate',
+            data: 'authority_to_date',
           }
         },
         {
@@ -120,7 +120,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Trạng thái',
           sort: {
             type: REQUEST_QUERY,
-            data: 'authorityStatus',
+            data: 'authority_status',
           }
         },
       ],
@@ -137,7 +137,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.createddate,
+      children: item.createddate.split('-').join('/'),
     },
     {
       children: item.id,
@@ -152,10 +152,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.receiverPersFullname,
     },
     {
-      children: getCurrentDate(item.authorityFromDate),
+      children: getCurrentDate(item.authorityFromDate).split('-').join('/'),
     },
     {
-      children: getCurrentDate(item.authorityToDate),
+      children: getCurrentDate(item.authorityToDate).split('-').join('/'),
     },
     {
       children: item.authorityStatus,
