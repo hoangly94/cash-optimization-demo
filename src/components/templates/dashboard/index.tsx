@@ -293,24 +293,24 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     },
                 ]
             },
-            {
-                text: 'Quản lý Lộ trình',
-                $icon: {
-                    name: 'documentCheck',
-                },
-                $subs: [
-                    {
-                        text: 'Lộ trình Bình thường',
-                        url: '/route-management/normal',
-                        accessedRole: '11A',
-                    },
-                    {
-                        text: 'Lộ trình Khẩn cấp',
-                        url: '/route-management/urgent',
-                        accessedRole: '11B',
-                    },
-                ]
-            },
+            // {
+            //     text: 'Quản lý Lộ trình',
+            //     $icon: {
+            //         name: 'documentCheck',
+            //     },
+            //     $subs: [
+            //         {
+            //             text: 'Lộ trình Bình thường',
+            //             url: '/route-management/normal',
+            //             accessedRole: '11A',
+            //         },
+            //         {
+            //             text: 'Lộ trình Khẩn cấp',
+            //             url: '/route-management/urgent',
+            //             accessedRole: '11B',
+            //         },
+            //     ]
+            // },
         ],
     },
     style: {

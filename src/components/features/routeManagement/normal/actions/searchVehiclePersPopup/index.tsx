@@ -63,7 +63,6 @@ export const Element = (props: Popup.Props) => {
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
   }
 
-
   return (
     <Popup.Element
       {...props}

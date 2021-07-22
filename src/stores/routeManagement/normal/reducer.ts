@@ -1,4 +1,4 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
@@ -106,6 +106,16 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 editingPopup: state.selectedItem,
+            }
+        case REQUEST_EDITING_CANCEL:
+            return {
+                ...state,
+                editingPopup: state.selectedItem,
+            }
+        case REQUEST_SEACHVEHICLEPERS_CANCEL:
+            return {
+                ...state,
+                searchVehiclePersPopup: state.selectedItem,
             }
         case FETCH_DATA:
             return {
@@ -411,7 +421,7 @@ export default (state: State = initState, action) => {
                 filters: getDefaultFilters(),
             }
         case HANDLE_POPUP:
-            console.log( action.popupType);
+            console.log(action.popupType);
             return {
                 ...state,
                 popupType: action.popupType || state.popupType,
@@ -433,6 +443,7 @@ export default (state: State = initState, action) => {
                 selectedItem: newData,
                 editingPopup: newData,
                 detailPopup: newData,
+                searchVehiclePersPopup: newData,
                 view: newData,
                 queryResult: {
                     ...state.queryResult,
