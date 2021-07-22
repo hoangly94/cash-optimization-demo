@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_EDITING_INPUT, HANDLE_APPROVE_ACTION, HANDLE_REJECT_ACTION, INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
+import { CHANGE_EDITING_INPUT, HANDLE_APPROVE_ACTION, HANDLE_REJECT_ACTION, INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -8,8 +8,8 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
-import { getCurrentDate, isMatchDateDD_MM_YYY } from "@utils";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { getCurrentDate } from "@utils";
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 

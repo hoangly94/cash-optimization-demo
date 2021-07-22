@@ -7,7 +7,7 @@ import * as Button from "~commons/button";
 import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as Actions from "./actions";
-import { FETCH_ORGS } from '_/stores/dashboardRoot/constants';
+import { FETCH_ORGS } from '~/stores/dashboardRoot/constants';
 import { useDispatch } from 'react-redux';
 
 export type Props = Base.Props;

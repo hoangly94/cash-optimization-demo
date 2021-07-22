@@ -4,7 +4,7 @@ import { DONE_CREATING, FETCH_DATA, HANDLE_APPROVE_ACTION, HANDLE_CONTINUE_ACTIO
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
-import { _Date } from '_/utils';
+import { _Date } from '~/utils';
 
 function* saga() {
     // yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
@@ -44,7 +44,7 @@ function* createDataSaga() {
 
     yield put({ type: DONE_CREATING });
     yield fetchDataSaga();
-    yield spawn(addNoti, 'success');
+    yield spawn(addNoti, 'success', `Create success ID ${responseData.data.data.id}`);
     yield put({ type: HANDLE_POPUP, keys: ['registration', 'create', 'isShown'], value: false });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });

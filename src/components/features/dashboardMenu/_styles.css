@@ -7,12 +7,15 @@
     left: 0;
     top:0;
     box-sizing:border-box;
+    overflow: hidden auto;
+    padding-bottom: 68px;
 }
 .logout{
     position:absolute;
     bottom:0;
-    left:0x;
-    width:100%;
+    left:0;
+    position: fixed;
+    width: 250px;
 }
 .logout:hover{
     color:red;

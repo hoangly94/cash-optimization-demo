@@ -26,6 +26,8 @@ const initState: State = {
     pycModels: [],
     pycReceivingPlaces: [],
     reasonTypes: [],
+    routeStatuses: [],
+    routeTransportTypes: [],
 }
 
 export default (state: State = initState, action) => {
@@ -47,24 +49,28 @@ export default (state: State = initState, action) => {
                 const pycModels = action.data.filter(item => item.type === 'CASH_OPTIMIZATION_MODEL');
                 const pycReceivingPlaces = action.data.filter(item => item.type === 'CASH_OPTIMIZATION_PLACE_RECEIVE');
                 const reasonTypes = action.data.filter(item => item.type === 'CASH_OPTIMIZATION_REASON_TYPE');
+                const routeStatuses = action.data.filter(item => item.type === 'ROUTE_STATUS');
+                const routeTransportTypes = action.data.filter(item => item.type === 'ROUTE_TRANSPORT_TYPE');
                 
                 return {
                     ...state,
-                    atmcdmStatuses: atmcdmStatuses,
-                    nhnnTctdTypes: nhnnTctdTypes,
-                    vehicleStatuses: vehicleStatuses,
-                    persStatuses: persStatuses,
-                    authorityStatuses: authorityStatuses,
-                    authorityContents: authorityContents,
-                    pycOrgsRoles: pycOrgsRoles,
-                    pycTypes: pycTypes,
-                    pycObjectTypes: pycObjectTypes,
-                    pycStatuses: pycStatuses,
-                    goldTypes: goldTypes,
-                    pycAttributes: pycAttributes,
-                    pycModels: pycModels,
-                    pycReceivingPlaces: pycReceivingPlaces,
-                    reasonTypes: reasonTypes,
+                    atmcdmStatuses,
+                    nhnnTctdTypes,
+                    vehicleStatuses,
+                    persStatuses,
+                    authorityStatuses,
+                    authorityContents,
+                    pycOrgsRoles,
+                    pycTypes,
+                    pycObjectTypes,
+                    pycStatuses,
+                    goldTypes,
+                    pycAttributes,
+                    pycModels,
+                    pycReceivingPlaces,
+                    reasonTypes,
+                    routeStatuses,
+                    routeTransportTypes,
                 }
             }
             return state;

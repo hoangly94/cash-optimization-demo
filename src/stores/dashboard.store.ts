@@ -22,6 +22,7 @@ import searchPersReducer from './authority/searchPers/reducer';
 import pycRegistrationReducer from './pyc/registration/reducer';
 import pycSearchOrgsReducer from './pyc/searchOrgs/reducer';
 import pycSearchPersReducer from './pyc/searchPers/reducer';
+import routeManagementNormalReducer from './routeManagement/normal/reducer';
 
 import baseSaga from './_base/sagas';
 import authSaga from './auth/sagas';
@@ -43,6 +44,7 @@ import searchPersSaga from './authority/searchPers/sagas';
 import pycRegistrationSaga from './pyc/registration/sagas';
 import pycSearchOrgsSaga from './pyc/searchOrgs/sagas';
 import pycSearchPersSaga from './pyc/searchPers/sagas';
+import routeManagementSaga from './routeManagement/normal/sagas';
 
 const rootReducer = combineReducers({
     base: baseReducer,
@@ -65,6 +67,7 @@ const rootReducer = combineReducers({
     pycRegistration: pycRegistrationReducer,
     pycSearchOrgs: pycSearchOrgsReducer,
     pycSearchPers: pycSearchPersReducer,
+    routeManagement: routeManagementNormalReducer,
 })
 
 function* rootSaga() {
@@ -89,6 +92,7 @@ function* rootSaga() {
         pycRegistrationSaga(),
         pycSearchOrgsSaga(),
         pycSearchPersSaga(),
+        routeManagementSaga(),
     ]);
 }
 

@@ -17,9 +17,9 @@ export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
-  React.useEffect(()=>{
-    dispatch({ type: FETCH_HISTORY })
-  },[]);
+  // React.useEffect(()=>{
+  //   dispatch({ type: FETCH_HISTORY })
+  // },[]);
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -136,7 +136,7 @@ export const Element = (props: Props) => {
           isShownSelectorKeys: ['base', 'popups', 'vehicle', 'history'],
         }}
         useEffect={{
-          callback: () => dispatch({ type: FETCH_HISTORY }),
+          callback: () => dispatch({ type: FETCH_HISTORY}),
         }}
       />
       <DetailPopup.Element

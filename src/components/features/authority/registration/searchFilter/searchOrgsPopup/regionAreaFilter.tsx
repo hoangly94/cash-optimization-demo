@@ -10,7 +10,7 @@ import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
 import {  SELECT_AREA_TYPE_FILTER, SELECT_REGION_TYPE_FILTER } from '~stores/authority/searchOrgs/constants';
-import { FETCH_AREAS, FETCH_REGIONS } from '_/stores/dashboardRoot/constants';
+import { FETCH_AREAS, FETCH_REGIONS } from '~/stores/dashboardRoot/constants';
 import { NONAME } from 'dns';
 
 export type Props = Popup.Props;

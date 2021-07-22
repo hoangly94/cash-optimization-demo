@@ -268,7 +268,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.cashOptimizationOrgsDetailModel?.nnhnTctdName,
     },
     {
-      children: item.updateddate.substring(0,10),
+      children: item.updateddate?.substring(0,10)?.split('-').join('/'),
     },
   ]
 })

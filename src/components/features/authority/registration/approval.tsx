@@ -7,8 +7,8 @@ import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as ApprovalActions from "./approvalActions";
 import { useDispatch } from 'react-redux';
-import { FETCH_CONFIG } from '_/stores/dashboardRoot/constants';
-import { REQUEST_QUERY, RESET_FILTER_APPROVAL } from '_/stores/authority/registration/constants';
+import { FETCH_CONFIG } from '~/stores/dashboardRoot/constants';
+import { REQUEST_QUERY, RESET_FILTER_APPROVAL } from '~/stores/authority/registration/constants';
 
 export type Props = Base.Props;
 

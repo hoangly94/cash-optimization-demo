@@ -1,10 +1,10 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/authority/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/authority/searchPers/constants'
 import * as Base from '~/_settings';
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
-import { UPDATE_CONFIG } from '_/stores/dashboardRoot/constants';
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { UPDATE_CONFIG } from '~/stores/dashboardRoot/constants';
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 
 const initState: State = {
     history: [],
@@ -43,13 +43,14 @@ const initState: State = {
 
 export default (state: State = initState, action) => {
     switch (action.type) {
-        
-        
+
+
         case REQUEST_CREATING_CANCEL:
             return {
                 ...state,
                 creatingPopup: {
                     ...getDefaultPopupActions(),
+                    authorityContent1: state.authorityContents,
                 }
             }
         case DONE_CREATING:
@@ -67,7 +68,7 @@ export default (state: State = initState, action) => {
         case REQUEST_EDITING_CANCEL:
             return {
                 ...state,
-                selectedItem: state.editingPopup,
+                editingPopup: state.selectedItem,
             }
         case FETCH_DATA:
             return {
@@ -305,7 +306,7 @@ export default (state: State = initState, action) => {
             }
         case UPDATE_CONFIG:
             if (action.data) {
-                const authorityContents = action.data.filter(item => item.type === 'AUTHORIY_CONTENT');
+                const authorityContents = action.data.filter(item => item.type === 'AUTHORIY_CONTENT').map(item => ({ ...item, key: item.id }));
 
                 return {
                     ...state,
@@ -322,7 +323,7 @@ export default (state: State = initState, action) => {
             }
             return state;
 
-        case SELECT_AUTHORITY_CONTENT_ROW:
+        case SELECT_DUALTABLE_CONTENT_ROW:
             const tableType = `authorityContent${action.tableType}`;
             const selectAuthorityRowData = action.popupType === 1
                 ? {
@@ -517,6 +518,7 @@ const mapToNewData = (item) => {
         recvPhone: item.receiverPersMobile,
         authorityContent2: item.authorityDetail.map(item => ({
             id: item.authorityContentId,
+            key: item.authorityContentId,
             name: item.authorityContentValue,
         })),
         rejectReason: item.authorityReason,

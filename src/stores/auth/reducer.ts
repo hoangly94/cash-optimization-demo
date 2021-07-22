@@ -92,8 +92,9 @@ export default (state: State = initState, action) => {
                 ...state,
                 assignRole: {
                     ...state.assignRole,
-                    filter: {
-                        username: action.data,
+                    filters: {
+                        ...state.assignRole.filters,
+                        username: action.data.username,
                     }
                 },
             }
@@ -160,7 +161,8 @@ export default (state: State = initState, action) => {
                 ...state,
                 assignRole: {
                     ...state.assignRole,
-                    roleContent1: state.assignRole.roleContent1.map(mapToNewQueryResult(action.data))
+                    roleContent1: state.assignRole.roleContent1.map(mapToNewQueryResult(action.data)),
+                    roleContent2: state.assignRole.roleContent2.map(mapToNewQueryResult(action.data)),
                 }
             }
 

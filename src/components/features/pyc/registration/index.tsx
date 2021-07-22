@@ -7,9 +7,8 @@ import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as Actions from "./actions";
 import { useDispatch } from 'react-redux';
-import { FETCH_CONFIG, FETCH_CURRENCIES, FETCH_ORGS, FETCH_PRIORITIES } from '_/stores/dashboardRoot/constants';
-import { REQUEST_QUERY, RESET_FILTER_REGISTRATION } from '_/stores/authority/registration/constants';
-import { FETCH_ORGS_CHILDREN } from '_/stores/pyc/registration/constants';
+import { FETCH_CONFIG, FETCH_CURRENCIES, FETCH_ORGS, FETCH_PRIORITIES } from '~/stores/dashboardRoot/constants';
+import { REQUEST_QUERY, RESET_FILTER_REGISTRATION ,FETCH_ORGS_CHILDREN } from '~/stores/pyc/registration/constants';
 
 export type Props = Base.Props;
 

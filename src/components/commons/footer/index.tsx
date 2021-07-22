@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Classnames from 'classnames'
 import * as Title from "~commons/title";
-import * as Base from '_/_settings';
+import * as Base from '~/_settings';
 import styles from './styles.css';
 
 enum Type {

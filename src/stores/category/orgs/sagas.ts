@@ -10,18 +10,12 @@ function* saga() {
     yield takeLatest(REQUEST_QUERY, fetchDataSaga);
     yield takeLatest(REQUEST_CREATING, createDataSaga);
     yield takeLatest(REQUEST_EDITING, editDataSaga);
-    yield takeLatest(FETCH_HISTORY_DETAIL, fetchHistoryDetailSaga);
-}
-
-function* fetchHistoryDetailSaga(action?) {
-    const state = yield select();
-    const responseData = yield call(getHistoryDetail, action, state.orgs.selectedItem);
-    yield put({ type: UPDATE_HISTORY_DETAIL, data: responseData.data});
 }
 
 function* fetchHistorySaga(action?) {
-    const responseData = yield call(getHistory, action);
-    yield put({ type: UPDATE_HISTORY, data: responseData.data });
+    const state = yield select();
+    const responseData = yield call(getHistory, action, state.orgs.selectedItem);
+    yield put({ type: UPDATE_HISTORY, data: responseData.data});
 }
 
 
@@ -62,7 +56,7 @@ function* editDataSaga() {
     yield put({ type: HANDLE_POPUP, keys: ['orgs', 'edit', 'isShown'], value: false });
 }
 
-function getHistoryDetail(action, data) {
+function getHistory(action, data) {
     const {
         page = 0,
         sort = '',
@@ -73,23 +67,6 @@ function getHistoryDetail(action, data) {
             sort: sort,
             page: page,
             orgsCode: data?.orgsCode,
-            size: Config.numberOfItemsPerPage,
-        }
-    }
-    return axios.post(url, postData)
-        .catch(error => console.log(error));
-}
-
-function getHistory(action) {
-    const {
-        page = 0,
-        sort = '',
-    } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/historyCategoryOrgs';
-    const postData = {
-        data: {
-            sort: sort,
-            page: page,
             size: Config.numberOfItemsPerPage,
         }
     }

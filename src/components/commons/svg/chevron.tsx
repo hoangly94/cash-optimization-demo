@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Base from '_/_settings';
+import * as Base from '~/_settings';
 import styles from './_styles.css';
 import { Props, Type, Size, Direction } from './';
 

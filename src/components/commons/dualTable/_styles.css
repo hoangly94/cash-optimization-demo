@@ -9,6 +9,28 @@
     & tbody > tr > td{
         width:100%;
     } */
+    & thead > tr{
+        background-color: rgb(30, 63, 150);
+        position: sticky;
+        top: 0;
+        color:white;
+      }
+}
+.dualtableBlock {
+    /* & tbody {
+        display:block;
+        max-height: 300px;
+        overflow: auto;
+    }
+    & tbody > tr > td{
+        width:100%;
+    } */
+    & thead > tr > td{
+        background-color: rgb(30, 63, 150);
+        position: sticky;
+        top: 0;
+        color:white;
+      }
 }
 
 /* Size */

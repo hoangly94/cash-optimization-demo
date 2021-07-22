@@ -195,7 +195,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                detailPopup: {
+                history: {
                     ...state.history,
                     data: historyDetailData,
                     total: action.data.total,
@@ -287,7 +287,7 @@ const mapToNewQueryResult = (selectedItem) => (item, index) => {
 const preprocessQueryResult = (data, index) => ({
     ...data,
     key: data.id ?? index,
-    persCmndCccdYear: getCurrentDate(data.persCmndCccdYear),
+    persCmndCccdYear: _Date.getDate(data.persCmndCccdYear),
     createddate: _Date.getDate(data.createddate),
     updateddate: _Date.getDate(data.updateddate),
 })

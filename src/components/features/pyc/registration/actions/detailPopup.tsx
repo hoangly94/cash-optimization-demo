@@ -9,8 +9,8 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { getCurrentDate, getCurrentDateTime, getDateString, _Date } from '_/utils';
-import { REQUEST_EDITING_CANCEL } from '_/stores/pyc/registration/constants';
+import { getCurrentDate, getCurrentDateTime, getDateString, _Date } from '~/utils';
+import { REQUEST_EDITING_CANCEL } from '~/stores/pyc/registration/constants';
 
 export const Element = (props: Popup.Props) => {
   const {
@@ -267,7 +267,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDateTime(popupSelector.cpdDvycdqDate)}
+          defaultValue={_Date.getDateTime(popupSelector.cpdDvycdqDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -291,7 +291,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate)}
+          defaultValue={_Date.getDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -315,7 +315,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm CPD ĐVĐQ phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDateTime(popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqDate)}
+          defaultValue={_Date.getDateTime(popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -351,7 +351,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Ngày giờ hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDateTime(popupSelector.nvCancelDate)}
+          defaultValue={_Date.getDateTime(popupSelector.nvCancelDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -376,7 +376,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDateTime(popupSelector.cpdDvycdqCancelDate)}
+          defaultValue={_Date.getDateTime(popupSelector.cpdDvycdqCancelDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -401,7 +401,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getCurrentDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelDate)}
+          defaultValue={_Date.getDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelDate)}
           isDisabled={true}
         />
       </Block.Element>

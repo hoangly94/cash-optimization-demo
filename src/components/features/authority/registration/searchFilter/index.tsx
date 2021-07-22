@@ -12,7 +12,7 @@ import * as Title from "~commons/title";
 import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchPersPopup from "./searchPersPopup";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Base.Props;
 
@@ -75,7 +75,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Từ ngày(dd-mm-yyy)',
+            placeholder: 'Từ ngày(dd/mm/yyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['registration', 'filters', 'dateFrom'],
@@ -95,7 +95,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Đến ngày(dd-mm-yyy)',
+            placeholder: 'Đến ngày(dd/mm/yyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['registration', 'filters', 'dateTo'],

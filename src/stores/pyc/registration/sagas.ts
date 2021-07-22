@@ -64,14 +64,13 @@ function* getPycExcelSaga(action?) {
 function* createDataSaga() {
     const state = yield select();
     const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/pyc_add', state.pycRegistration.creatingPopup, state.auth);
-
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
     yield put({ type: DONE_CREATING });
     yield fetchDataSaga();
-    yield spawn(addNoti, 'success');
+    yield spawn(addNoti, 'success', `Create success ID ${responseData.data.data.id}`);
     yield put({ type: HANDLE_POPUP, keys: ['pycRegistration', 'create', 'isShown'], value: false });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'specialDeleteCreating', 'isDisabled'], value: true });
 }

@@ -9,7 +9,7 @@ import * as Radio from "~commons/radio";
 import * as Title from "~commons/title";
 import * as Label from "~commons/label";
 import * as Button from "~commons/button";
-import { CHANGE_LOGIN_INPUT, REQUEST_LOGIN } from '_/stores/auth/constants';
+import { CHANGE_LOGIN_INPUT, REQUEST_LOGIN } from '~/stores/auth/constants';
 import { useDispatch, useSelector } from 'react-redux';
 
 export enum Type {

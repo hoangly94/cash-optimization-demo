@@ -8,7 +8,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -70,27 +70,6 @@ export const Element = (props: Popup.Props) => {
           }}
         />
         <Block.Element>
-          <Button.Element
-            {...closeButtonProps}
-            text='View'
-            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-            margin={Base.MarginRight.PX_18}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'nhnnTctd', 'historyDetail'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['nhnnTctd', 'history', 'isShown'],
-                value: false,
-              }
-            }}
-
-            onClick={() => dispatch({
-                type: HANDLE_POPUP,
-                keys: ['nhnnTctd', 'historyDetail', 'isShown'],
-                value: true,
-                popupType: 3,
-            })}
-          />
           <Button.Element
             {...closeButtonProps}
             store={{
@@ -237,13 +216,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.categoryOrgs.orgsName,
     },
     {
-      children: _Date.getCurrentDate(item.createddate),
+      children: item.createddate,
     },
     {
       children: item.createdbyname,
     },
     {
-      children: _Date.getCurrentDate(item.updateddate),
+      children: item.updateddate,
     },
   ]
 })

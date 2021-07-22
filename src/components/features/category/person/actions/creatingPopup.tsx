@@ -8,9 +8,9 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
-import { getCurrentDate, isMatchDateDD_MM_YYY } from "@utils";
+import { getCurrentDate, isMatchDateDD_MM_YYYY } from "@utils";
 import { comboxProps } from "./";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -146,7 +146,7 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Ngày cấp' {...inputTitleProps} />
         <Input.Element
-          placeholder='dd-mm-yyy'
+          placeholder='dd/mm/yyy'
           {...inputProps}
           store={{
             selectorKeys: ['person', 'creatingPopup', 'persCmndCccdYear'],
@@ -257,16 +257,44 @@ const actionsProps: Block.Props = {
 
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  if (!popupSelector.persCode) {
-    setErrorMsg('Persnbr không được để trống');
-    return false;
-  }
-  if (!isMatchDateDD_MM_YYY(popupSelector.persCmndCccdYear)) {
+  // if (!popupSelector.persCode) {
+  //   setErrorMsg('Persnbr không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persFullname) {
+  //   setErrorMsg('Họ và tên không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persTitleSelected.value) {
+  //   setErrorMsg('Chức danh không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persMobile) {
+  //   setErrorMsg('Số điện thoại không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persCmndCccd) {
+  //   setErrorMsg('CMND/CCCD không được để trống');
+  //   return false;
+  // }
+  if (!isMatchDateDD_MM_YYYY(popupSelector.persCmndCccdYear)) {
     setErrorMsg('Ngày cấp CMND/CCCD sai định dạng');
     return false;
   }
-  if (!popupSelector.orgsSelected.value){
-    setErrorMsg('Phải chọn đơn vị quản lý');
+  if (!popupSelector.persCmndCccdPlace){
+    setErrorMsg('Nơi cấp không được để trống');
+    return false;
+  }
+  if (!popupSelector.orgsSelected.value) {
+    setErrorMsg('Tên DVQL không được để trống');
+    return false;
+  }
+  if (!popupSelector.persEmail) {
+    setErrorMsg('Email không được để trống');
+    return false;
+  }
+  if (!popupSelector.persStatusSelected.value) {
+    setErrorMsg('Trạng thái không được để trống');
     return false;
   }
   return true;

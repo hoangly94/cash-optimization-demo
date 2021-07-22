@@ -64,7 +64,6 @@ const toTable = (rows: Row.Props[]) => {
 }
 
 const toTitleRow = (sortedRef) => ($row: Row.Props, index) => {
-
   const children = $row.$cells ? $row.$cells.map(toTitleCell(sortedRef)) : null;
   const rowProps = {
     key: (new Date().getTime()) + index,

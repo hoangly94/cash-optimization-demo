@@ -100,6 +100,7 @@
     "jest-css-modules-transform": "^4.2.1",
     "kill-port": "^1.6.1",
     "mini-css-extract-plugin": "^1.6.0",
+    "moment": "^2.29.1",
     "nodemon": "^2.0.7",
     "open": "^8.0.9",
     "optimize-css-assets-webpack-plugin": "^6.0.0",

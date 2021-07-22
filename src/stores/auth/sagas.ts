@@ -29,9 +29,10 @@ function* fetchRolesSaga() {
 function* fetchUserSaga() {
     // yield put({ type: FETCH_USER });
     const responseData = yield call(getUser, Config.url + '/api/cashoptimization/user/getInfoAccount');
-    console.log(responseData);
+    // console.log(responseData);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        return yield spawn(addNoti, 'error', responseData?.data?.message);
+        // return yield spawn(addNoti, 'error', responseData?.data?.message);
+        return ;
     }
     yield put({ type: UPDATE_USER, data: responseData.data.data });
 
@@ -51,7 +52,7 @@ function* fetchUserSaga() {
 
 function* queryAssignRoleSaga() {
     const state = yield select();
-    const responseData = yield call(getUser2, Config.url + '/api/cashoptimization/user/getUserByUsername', state.auth.user);
+    const responseData = yield call(getUser2, Config.url + '/api/cashoptimization/user/getUserByUsername', state.auth.assignRole);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -136,7 +137,7 @@ function getUser(url) {
 function getUser2(url: string, data) {
     const postData = {
         data: {
-            userName: data.username,
+            userName: data.filters.username,
         },
     }
     return axios.post(url, { ...postData })

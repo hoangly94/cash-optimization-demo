@@ -10,7 +10,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { getCurrentDate, getCurrentDateTime, _Date } from '_/utils';
+import { getCurrentDate, getCurrentDateTime, _Date } from '~/utils';
 
 export type Props = Popup.Props & {
   popupType: string,

@@ -12,7 +12,7 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { _Date, getCurrentDate } from "@utils";
 import { comboxProps } from "./";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 

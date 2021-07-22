@@ -7,17 +7,18 @@ import * as Popup from "~commons/popup";
 import * as Pagination from "~commons/pagination";
 import * as ValidatePopup from "./validatePopup";
 import * as DetailPopup from "./detailPopup";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
-import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '_/stores/category/area/constants';
-import { useDispatch } from 'react-redux';
+import { HANDLE_POPUP } from '~/stores/_base/constants';
+import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '~/stores/category/area/constants';
+import { useDispatch, useSelector } from 'react-redux';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
-  React.useEffect(()=>{
-    dispatch({ type: FETCH_HISTORY })
-  },[]);
+  const userSelector = useSelector(state => state['auth'].user);
+  // React.useEffect(()=>{
+  //   dispatch({ type: FETCH_HISTORY })
+  // },[]);
   
   //create props
   const componentWrapperProps = {
@@ -116,6 +117,7 @@ export const Element = (props: Props) => {
                 popupType: 2,
               }
             }}
+            isDisabled={!userSelector.viewList.includes('36')}
           />
           <Button.Element
             {...detailButtonComponentProps}

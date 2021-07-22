@@ -9,17 +9,18 @@ import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
 import * as HistoryPopup from "./historyPopup";
 import * as DetailPopup from "./detailPopup";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
-import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '_/stores/category/area/constants';
+import { HANDLE_POPUP } from '~/stores/_base/constants';
+import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '~/stores/category/area/constants';
 import { useDispatch } from 'react-redux';
+import { REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL } from '~/stores/authority/registration/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
-  React.useEffect(()=>{
-    dispatch({ type: FETCH_HISTORY })
-  },[]);
+  // React.useEffect(()=>{
+  //   dispatch({ type: FETCH_HISTORY })
+  // },[]);
   
   //create props
   const componentWrapperProps = {

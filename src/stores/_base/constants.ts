@@ -1,7 +1,7 @@
 const root = 'BASE_';
 
 export const HANDLE_BUTTON = root + 'HANDLE_BUTTON';
-export const HANDLE_POPUP = root + 'HANDLE_POPUP';
+export const HANDLE_POPUP = 'HANDLE_POPUP';
 export const ADD_NOTI = root + 'ADD_NOTI';
 export const ADD_NOTI_ERROR = root + 'ADD_NOTI_ERROR';
 export const ADD_NOTI_SUCCESS = root + 'ADD_NOTI_SUCCESS';

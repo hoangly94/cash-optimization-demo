@@ -10,8 +10,8 @@ import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { comboxProps } from ".";
-import { getCurrentDate, isMatchDateDD_MM_YYY } from "@utils";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { getCurrentDate, isMatchDateDD_MM_YYYY } from "@utils";
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -147,7 +147,7 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Ngày cấp' {...inputTitleProps} />
         <Input.Element
-          placeholder='dd-mm-yyyy'
+          placeholder='dd/mm/yyyy'
           {...inputProps}
           store={{
             selectorKeys: ['person', 'selectedItem', 'persCmndCccdYear'],
@@ -265,12 +265,40 @@ const validateForm = (popupSelector, setErrorMsg) => {
     setErrorMsg('Persnbr không được để trống');
     return false;
   }
-  if (!isMatchDateDD_MM_YYY(popupSelector.persCmndCccdYear)) {
+  if (!popupSelector.persFullname) {
+    setErrorMsg('Họ và tên không được để trống');
+    return false;
+  }
+  if (!popupSelector.persTitleSelected.value) {
+    setErrorMsg('Chức danh không được để trống');
+    return false;
+  }
+  if (!popupSelector.persMobile) {
+    setErrorMsg('Số điện thoại không được để trống');
+    return false;
+  }
+  if (!popupSelector.persCmndCccd) {
+    setErrorMsg('CMND/CCCD không được để trống');
+    return false;
+  }
+  if (!isMatchDateDD_MM_YYYY(popupSelector.persCmndCccdYear)) {
     setErrorMsg('Ngày cấp CMND/CCCD sai định dạng');
     return false;
   }
-  if (!popupSelector.orgsSelected.value){
-    setErrorMsg('Phải chọn đơn vị quản lý');
+  if (!popupSelector.persCmndCccdPlace){
+    setErrorMsg('Nơi cấp không được để trống');
+    return false;
+  }
+  if (!popupSelector.orgsSelected.value) {
+    setErrorMsg('Tên DVQL không được để trống');
+    return false;
+  }
+  if (!popupSelector.persEmail) {
+    setErrorMsg('Email không được để trống');
+    return false;
+  }
+  if (!popupSelector.persStatusSelected.value) {
+    setErrorMsg('Trạng thái không được để trống');
     return false;
   }
   return true;

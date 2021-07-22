@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_COMBOX, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, REQUEST_CREATING, REQUEST_QUERY, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, CHANGE_CREATING_INPUT, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_CREATING_CANCEL, } from '~stores/pyc/registration/constants';
+import { SELECT_COMBOX, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, REQUEST_CREATING, REQUEST_QUERY, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, CHANGE_CREATING_INPUT, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_CREATING_CANCEL, } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -10,7 +10,7 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import * as Datepicker from "~commons/datepicker";
 import * as DualTable from "~commons/dualTable";
-import { getCurrentDate, isMatchDateDD_MM_YYY } from "@utils";
+import { getCurrentDate } from "@utils";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import * as SearchDataTable from './searchDataTable';
 
@@ -29,6 +29,7 @@ export const Element = (props: Popup.Props) => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
       dispatch({ type: REQUEST_CREATING });
+      // dispatch({ type: REQUEST_CREATING_CANCEL });
       if (setIsShown)
         setIsShown(false)
     }
@@ -55,7 +56,7 @@ export const Element = (props: Popup.Props) => {
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
-    onClick: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
+    // onClick: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
   }
 
 
@@ -194,6 +195,7 @@ export const Element = (props: Popup.Props) => {
             },
           }}
           isDisabled={selector.isDisabledGoldTypes}
+          isInputDisabled={selector.isDisabledGoldTypes}
         />
         <Input.Element
           placeholder='Số lượng HĐB'
@@ -249,12 +251,12 @@ export const Element = (props: Popup.Props) => {
           />
         </Block.Element>
       </Block.Element>
-      <SearchDataTable.Element/>
+      <SearchDataTable.Element />
 
       <Block.Element
         style={{
           borderTop: '1px solid #e8e8e8',
-        }} 
+        }}
         padding={Base.PaddingV.PX_18}
       />
       <Block.Element {...inputWrapperProps} flex={Base.Flex.START}>
@@ -368,23 +370,23 @@ const actionsProps: Block.Props = {
 
 const validateForm = (dispatch, selector) => {
   if (!selector.orgsRequestId) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa điền Số PYC ĐV'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số PYC ĐV' } });
     return false;
   }
   if (!selector.objectType.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Đối tượng điều quỹ'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Đối tượng điều quỹ' } });
     return false;
   }
   if (!selector.priorityLevelCode.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Mức độ ưu tiên'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Mức độ ưu tiên' } });
     return false;
   }
   if (!selector.model.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Mô hình điều quỹ'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Mô hình điều quỹ' } });
     return false;
   }
   if (!selector.placeReceive.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Địa điểm nhận'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Địa điểm nhận' } });
     return false;
   }
   return true;
@@ -394,23 +396,23 @@ const validateForm = (dispatch, selector) => {
 
 const validateSpecialForm = (dispatch, selector) => {
   if (!selector.type.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Loại yêu cầu'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại yêu cầu' } });
     return false;
   }
   if (!selector.currencyType.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Loại tiền'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại tiền' } });
     return false;
   }
   if (['ACB', 'XAU'].includes(selector.currencyType.value) && !selector.goldType.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Loại vàng'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại vàng' } });
     return false;
   }
   if (!selector.quanlity || selector.quanlity == '0') {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Số lượng'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Số lượng' } });
     return false;
   }
   if (!selector.attribute.value) {
-    dispatch({type: ADD_NOTI, noti:{type:'error', message:'Chưa chọn Đặc điểm'}});
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Đặc điểm' } });
     return false;
   }
 

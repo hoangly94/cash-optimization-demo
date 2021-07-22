@@ -6,7 +6,7 @@ import * as Svg from '~commons/svg';
 import Circle from '~commons/svg/circle';
 import CircleDotCenter from '~commons/svg/circleDotCenter';
 import { useDispatch, useSelector } from 'react-redux';
-import { _Array } from '_/utils';
+import { _Array } from '~/utils';
 import { HANDLE_BUTTON } from "~stores/_base/constants";
 
 export enum Type {

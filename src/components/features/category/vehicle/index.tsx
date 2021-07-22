@@ -7,7 +7,7 @@ import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as Actions from "./actions";
 import { useDispatch } from 'react-redux';
-import { FETCH_AREAS, FETCH_FUNCTIONS, FETCH_ORGS, FETCH_PERS } from '_/stores/dashboardRoot/constants';
+import { FETCH_AREAS, FETCH_FUNCTIONS, FETCH_ORGS, FETCH_PERS } from '~/stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 

@@ -9,8 +9,8 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
-import { INPUT_VALUE_FILTER, REQUEST_QUERY, SELECT_ROW, SELECT_TYPE_FILTER } from '_/stores/authority/searchPers/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
+import { INPUT_VALUE_FILTER, REQUEST_QUERY, SELECT_ROW, SELECT_TYPE_FILTER } from '~/stores/authority/searchPers/constants';
 
 export type Props = Popup.Props;
 

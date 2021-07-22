@@ -6,7 +6,7 @@ import * as Block from "~commons/block";
 import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as Actions from "./actions";
-import { FETCH_ORGS, FETCH_TITLES } from '_/stores/dashboardRoot/constants';
+import { FETCH_ORGS, FETCH_TITLES } from '~/stores/dashboardRoot/constants';
 import { useDispatch } from 'react-redux';
 
 export type Props = Base.Props;

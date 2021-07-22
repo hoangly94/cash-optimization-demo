@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, NavLink, Switch } from "react-router-dom";
-import { FETCH_AREAS, FETCH_CONFIG, FETCH_FUNCTIONS, FETCH_ORGS, FETCH_PERS, FETCH_REGIONS } from '_/stores/dashboardRoot/constants';
+import { FETCH_AREAS, FETCH_CONFIG, FETCH_FUNCTIONS, FETCH_ORGS, FETCH_PERS, FETCH_REGIONS } from '~/stores/dashboardRoot/constants';
 import { AuthRoute, RoleRoute } from '@hocs';
 import * as Base from '~/_settings';
 import * as Login from '~features/login';
@@ -29,8 +29,10 @@ import * as PYCApproval from '~features/pyc/registration/approval';
 import * as ChangePassword from '~features/user/changePassword';
 import * as AssignRole from '~features/user/assignRole';
 import * as ResetPassword from '~features/user/resetPassword';
-import { FETCH_ROLES, FETCH_USER } from '_/stores/auth/constants';
-import { useCooke } from '_/hooks';
+import * as RouteManagementNormal from '~features/routeManagement/normal';
+import * as RouteManagementUrgent from '~features/routeManagement/normal/urgent';
+import { FETCH_ROLES, FETCH_USER } from '~/stores/auth/constants';
+import { useCooke } from '~/hooks';
 
 export type Props = {
 }
@@ -86,7 +88,7 @@ const DashboardComponent = (userSelector) => () => {
     };
     return (
         <>
-            <DashboardMenu.Element {...dashboardMenuProps} roleCodeList={userSelector.viewList}/>
+            <DashboardMenu.Element {...dashboardMenuProps} roleCodeList={userSelector.viewList} />
             <Main.Element {...mainProps}>
                 <Breadcrumbs.Element {...breadcrumbsProps} />
                 <Switch>
@@ -104,16 +106,18 @@ const DashboardComponent = (userSelector) => () => {
                     <RoleRoute path="/category/region" component={Region.Element} accessedRole='55' roles={userSelector.viewList} />
                     <RoleRoute path="/category/area" component={Area.Element} accessedRole='57' roles={userSelector.viewList} />
                     <RoleRoute path="/category/function" component={Function.Element} accessedRole='59' roles={userSelector.viewList} />
-                    
+
                     <RoleRoute path="/authority/registration" component={Registration.Element} accessedRole='31A' roles={userSelector.viewList} />
                     <RoleRoute path="/authority/approval" component={Approval.Element} accessedRole='31B' roles={userSelector.viewList} />
-                    
+
                     <RoleRoute path="/user/change-password" component={ChangePassword.Element} accessedRole='61' roles={userSelector.viewList} />
                     <RoleRoute path="/user/assign-role" component={AssignRole.Element} accessedRole='62' roles={userSelector.viewList} />
                     <RoleRoute path="/user/reset-password" component={ResetPassword.Element} accessedRole='63' roles={userSelector.viewList} />
-                    
+
                     <RoleRoute path="/pyc/registration" component={PYCRegistration.Element} accessedRole='1A' roles={userSelector.viewList} />
                     <RoleRoute path="/pyc/approval" component={PYCApproval.Element} accessedRole='1B' roles={userSelector.viewList} />
+                    <RoleRoute path="/route-management/normal" component={RouteManagementNormal.Element} accessedRole='11A' roles={userSelector.viewList} />
+                    <RoleRoute path="/route-management/urgent" component={RouteManagementUrgent.Element} accessedRole='11B' roles={userSelector.viewList} />
                     
                 </Switch>
             </Main.Element>
@@ -122,26 +126,32 @@ const DashboardComponent = (userSelector) => () => {
 }
 
 const breadcrumbsMapper = {
-    'category': {
-        _url: '',
-        _name: 'Categories',
-        'orgs': { _url: '/category/orgs', _name: 'ORGS', },
-        'atm-cdm': { _url: '/category/atm-cdm', _name: 'ATM/CDM', },
-        'nhnn-tctd': { _url: '/category/nhnn-tctd', _name: 'NHNN/TCTD', },
-        'vehicle': { _url: '/category/vehicle', _name: 'Vehicle', },
-        'pers': { _url: '/category/pers', _name: 'Pers', },
-        'title': { _url: '/category/title', _name: 'Title', },
-        'currency': { _url: '/category/currency', _name: 'Currency', },
-        'priority': { _url: '/category/priority', _name: 'Priority', },
-        'region': { _url: '/category/region', _name: 'Region', },
-        'area': { _url: '/category/area', _name: 'Area', },
-        'function': { _url: '/category/function', _name: 'Function', },
-    },
     'authority': {
         _url: '',
         _name: 'Quản lý Ủy quyền',
         'registration': { _url: '/authority/registration', _name: 'Đăng ký Ủy quyền', },
         'approval': { _url: '/authority/approval', _name: 'Kiểm soát Ủy quyền', },
+    },
+    'pyc': {
+        _url: '',
+        _name: 'Quản lý PYC Điều Quỹ',
+        'registration': { _url: '/pyc/registration', _name: 'Đăng ký', },
+        'approval': { _url: '/pyc/approval', _name: 'Kiểm soát & Phê duyệt', },
+    },
+    'category': {
+        _url: '',
+        _name: 'Categories',
+        'area': { _url: '/category/area', _name: 'Area', },
+        'atm-cdm': { _url: '/category/atm-cdm', _name: 'ATM/CDM', },
+        'currency': { _url: '/category/currency', _name: 'Currency', },
+        'function': { _url: '/category/function', _name: 'Function', },
+        'nhnn-tctd': { _url: '/category/nhnn-tctd', _name: 'NHNN/TCTD', },
+        'orgs': { _url: '/category/orgs', _name: 'ORGS', },
+        'pers': { _url: '/category/pers', _name: 'Pers', },
+        'priority': { _url: '/category/priority', _name: 'Priority', },
+        'region': { _url: '/category/region', _name: 'Region', },
+        'title': { _url: '/category/title', _name: 'Title', },
+        'vehicle': { _url: '/category/vehicle', _name: 'Vehicle', },
     },
     'user': {
         _url: '',
@@ -150,80 +160,17 @@ const breadcrumbsMapper = {
         'assign-role': { _url: '/user/assign-role', _name: 'Assign role', },
         'reset-password': { _url: '/user/reset-password', _name: 'Reset password', },
     },
-    'pyc': {
+    'route-management': {
         _url: '',
-        _name: 'Quản lý PYC Điều Quỹ',
-        'registration': { _url: '/pyc/registration', _name: 'Đăng ký', },
-        'approval': { _url: '/pyc/approval', _name: 'Kiểm soát & Phê duyệt', },
+        _name: 'Quản lý Lộ trình',
+        'normal': { _url: '/route-management/normal', _name: 'Lộ trình Bình thường', },
+        'urgent': { _url: '/route-management/urgent', _name: 'Lộ trình Khẩn cấp', },
     },
 }
-
+                    
 const dashboardMenuProps: DashboardMenu.Props = {
     $menu: {
         $links: [
-            {
-                text: 'Categories',
-                $icon: {
-                    name: 'documentCheck',
-                },
-                $subs: [
-                    {
-                        text: 'ORGS',
-                        url: '/category/orgs',
-                        accessedRole: '41',
-                    },
-                    {
-                        text: 'ATM/CDM',
-                        url: '/category/atm-cdm',
-                        accessedRole: '39',
-                    },
-                    {
-                        text: 'NHNN/TCTD',
-                        url: '/category/nhnn-tctd',
-                        accessedRole: '43',
-                    },
-                    {
-                        text: 'Vehicle',
-                        url: '/category/vehicle',
-                        accessedRole: '45',
-                    },
-                    {
-                        text: 'Pers',
-                        url: '/category/pers',
-                        accessedRole: '49',
-                    },
-                    {
-                        text: 'Title',
-                        url: '/category/title',
-                        accessedRole: '51',
-                    },
-                    {
-                        text: 'Currency',
-                        url: '/category/currency',
-                        accessedRole: '47',
-                    },
-                    {
-                        text: 'Priority',
-                        url: '/category/priority',
-                        accessedRole: '53',
-                    },
-                    {
-                        text: 'Region',
-                        url: '/category/region',
-                        accessedRole: '55',
-                    },
-                    {
-                        text: 'Area',
-                        url: '/category/area',
-                        accessedRole: '57',
-                    },
-                    {
-                        text: 'Function',
-                        url: '/category/function',
-                        accessedRole: '59',
-                    },
-                ],
-            },
             {
                 text: 'Quản lý Ủy quyền',
                 $icon: {
@@ -241,6 +188,87 @@ const dashboardMenuProps: DashboardMenu.Props = {
                         accessedRole: '31B',
                     },
                 ]
+            },
+            {
+                text: 'Quản lý PYC Điều Quỹ',
+                $icon: {
+                    name: 'documentCheck',
+                },
+                $subs: [
+                    {
+                        text: 'Đăng ký ',
+                        url: '/pyc/registration',
+                        accessedRole: '1A',
+                    },
+                    {
+                        text: 'Kiểm soát & Phê duyệt',
+                        url: '/pyc/approval',
+                        accessedRole: '1B',
+                    },
+                ]
+            },
+            {
+                text: 'Categories',
+                $icon: {
+                    name: 'documentCheck',
+                },
+                $subs: [
+                    {
+                        text: 'Area',
+                        url: '/category/area',
+                        accessedRole: '57',
+                    },
+                    {
+                        text: 'ATM/CDM',
+                        url: '/category/atm-cdm',
+                        accessedRole: '39',
+                    },
+                    {
+                        text: 'Currency',
+                        url: '/category/currency',
+                        accessedRole: '47',
+                    },
+                    {
+                        text: 'Function',
+                        url: '/category/function',
+                        accessedRole: '59',
+                    },
+                    {
+                        text: 'NHNN/TCTD',
+                        url: '/category/nhnn-tctd',
+                        accessedRole: '43',
+                    },
+                    {
+                        text: 'ORGS',
+                        url: '/category/orgs',
+                        accessedRole: '41',
+                    },
+                    {
+                        text: 'Pers',
+                        url: '/category/pers',
+                        accessedRole: '49',
+                    },
+                    {
+                        text: 'Priority',
+                        url: '/category/priority',
+                        accessedRole: '53',
+                    },
+                    {
+                        text: 'Region',
+                        url: '/category/region',
+                        accessedRole: '55',
+                    },
+                    {
+                        text: 'Title',
+                        url: '/category/title',
+                        accessedRole: '51',
+                    },
+                    {
+                        text: 'Vehicle',
+                        url: '/category/vehicle',
+                        accessedRole: '45',
+                    },
+                ],
             },
             {
                 text: 'User',
@@ -266,20 +294,20 @@ const dashboardMenuProps: DashboardMenu.Props = {
                 ]
             },
             {
-                text: 'Quản lý PYC Điều Quỹ',
+                text: 'Quản lý Lộ trình',
                 $icon: {
                     name: 'documentCheck',
                 },
                 $subs: [
                     {
-                        text: 'Đăng ký ',
-                        url: '/pyc/registration',
-                        accessedRole: '1A',
+                        text: 'Lộ trình Bình thường',
+                        url: '/route-management/normal',
+                        accessedRole: '11A',
                     },
                     {
-                        text: 'Kiểm soát & Phê duyệt',
-                        url: '/pyc/approval',
-                        accessedRole: '1B',
+                        text: 'Lộ trình Khẩn cấp',
+                        url: '/route-management/urgent',
+                        accessedRole: '11B',
                     },
                 ]
             },

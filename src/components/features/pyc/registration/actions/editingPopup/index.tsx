@@ -26,6 +26,7 @@ export const Element = (props: Popup.Props) => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
       dispatch({ type: REQUEST_EDITING });
+      dispatch({ type: REQUEST_EDITING_CANCEL });
       if (setIsShown)
         setIsShown(false)
     }
@@ -196,6 +197,7 @@ export const Element = (props: Popup.Props) => {
             },
           }}
           isDisabled={selector.isDisabledGoldTypes}
+          isInputDisabled={selector.isDisabledGoldTypes}
         />
         <Input.Element
           placeholder='Số lượng HĐB'

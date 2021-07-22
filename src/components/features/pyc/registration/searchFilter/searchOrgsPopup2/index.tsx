@@ -12,7 +12,7 @@ import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { INPUT_ORGS_VALUE_FILTER, REQUEST_QUERY, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, SELECT_ROW } from '~stores/pyc/searchOrgs/constants';
 import * as RegionAreaFilter from './regionAreaFilter';
-import { FETCH_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL } from '_/stores/pyc/registration/constants';
+import { FETCH_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL } from '~/stores/pyc/registration/constants';
 
 export type Props = Popup.Props;
 

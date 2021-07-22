@@ -23,9 +23,6 @@ export const Element = (props: Props) => {
     type = Type.DEFAULT,
   } = props;
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch({ type: FETCH_USER });
-  }, []);
   const [errorMsg, setErrorMsg] = useState('');
 
   const componentProps = {
@@ -64,6 +61,8 @@ export const Element = (props: Props) => {
       </Block.Element>
 
       <DualTable.Element
+        title1 = 'Roles Fund Manager'
+        title2 = 'Assigned Roles'
         store={{
           selector1Keys: ['auth', 'assignRole', 'roleContent1'],
           selector2Keys: ['auth', 'assignRole', 'roleContent2'],

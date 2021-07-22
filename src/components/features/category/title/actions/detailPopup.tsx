@@ -8,7 +8,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 

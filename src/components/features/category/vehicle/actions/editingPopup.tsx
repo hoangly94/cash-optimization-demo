@@ -11,7 +11,7 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { comboxProps } from ".";
 import { _Date, getCurrentDate } from "@utils";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 import { SELECT_FUNCTIONS_EDITING, SELECT_PERS_EDITING, SELECT_STATUS_EDITING } from '~stores/category/vehicle/constants';
 
 export type Props = Popup.Props;

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Link } from "react-router-dom";
-import * as Base from '_/_settings';
+import * as Base from '~/_settings';
 import styles from './_styles.css'
 import Caret from "~svg/caret";
 import * as Svg from "~svg/index";

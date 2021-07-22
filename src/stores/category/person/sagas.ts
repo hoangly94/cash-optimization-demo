@@ -4,25 +4,19 @@ import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { convertDateDDMMYYYtoYYYYMMDD, convertDataToYYYY_MM_DD } from '_/utils';
+import { convertDateDDMMYYYtoYYYYMMDD, convertDataToYYYY_MM_DD } from '~/utils';
 
 function* saga() {
     yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
     yield takeLatest(REQUEST_QUERY, fetchDataSaga);
     yield takeLatest(REQUEST_CREATING, createDataSaga);
     yield takeLatest(REQUEST_EDITING, editDataSaga);
-    yield takeLatest(FETCH_HISTORY_DETAIL, fetchHistoryDetailSaga);
-}
-
-function* fetchHistoryDetailSaga(action?) {
-    const state = yield select();
-    const responseData = yield call(getHistoryDetail, action, state.person.selectedItem);
-    yield put({ type: UPDATE_HISTORY_DETAIL, data: responseData.data});
 }
 
 function* fetchHistorySaga(action?) {
-    const responseData = yield call(getHistory, action);
-    yield put({ type: UPDATE_HISTORY, data: responseData.data });
+    const state = yield select();
+    const responseData = yield call(getHistory, action, state.person.selectedItem);
+    yield put({ type: UPDATE_HISTORY, data: responseData.data});
 }
 
 function* fetchDataSaga(action?) {
@@ -38,7 +32,7 @@ function* createDataSaga() {
     const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createCategoryPers', state.person.creatingPopup);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
     yield put({ type: DONE_CREATING });
@@ -53,7 +47,7 @@ function* editDataSaga() {
     const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/updateCategoryPers', state.person.selectedItem);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
     yield put({ type: DONE_CREATING });
@@ -61,7 +55,7 @@ function* editDataSaga() {
     yield fetchDataSaga();
     yield put({ type: HANDLE_POPUP,  keys: ['person', 'edit', 'isShown'], value:false});
 }
-function getHistoryDetail(action, data) {
+function getHistory(action, data) {
     const {
         page = 0,
         sort = '',
@@ -72,23 +66,6 @@ function getHistoryDetail(action, data) {
             sort: sort,
             page: page,
             persCode: data?.persCode,
-            size: Config.numberOfItemsPerPage,
-        }
-    }
-    return axios.post(url, postData)
-        .catch(error => console.log(error));
-}
-
-function getHistory(action) {
-    const {
-        page = 0,
-        sort = '',
-    } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/historyCategoryPers';
-    const postData = {
-        data: {
-            sort: sort,
-            page: page,
             size: Config.numberOfItemsPerPage,
         }
     }
@@ -124,7 +101,7 @@ function requestCreating(url: string, data) {
             persTitle: data.persTitleSelected.value,
             persMobile: data.persMobile,
             persCmndCccd: data.persCmndCccd,
-            persCmndCccdYear: convertDateDDMMYYYtoYYYYMMDD(data.persCmndCccdYear) ,
+            persCmndCccdYear: convertDateDDMMYYYtoYYYYMMDD(data.persCmndCccdYear) + ' 00:00:00',
             persCmndCccdPlace: data.persCmndCccdPlace,
             orgsId: data.orgsSelected.value,
             persEmail: data.persEmail,
@@ -144,7 +121,7 @@ function requestEditing(url: string, data) {
             persTitle: data.persTitleSelected.value,
             persMobile: data.persMobile,
             persCmndCccd: data.persCmndCccd,
-            persCmndCccdYear: convertDateDDMMYYYtoYYYYMMDD(data.persCmndCccdYear) ,
+            persCmndCccdYear: convertDateDDMMYYYtoYYYYMMDD(data.persCmndCccdYear) + ' 00:00:00' ,
             persCmndCccdPlace: data.persCmndCccdPlace,
             orgsId: data.orgsSelected.value,
             persEmail: data.persEmail,

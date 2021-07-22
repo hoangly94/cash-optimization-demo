@@ -9,8 +9,8 @@ import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
 import * as DetailPopup from "./detailPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { FETCH_HISTORY, REQUEST_QUERY } from '~stores/authority/registration/constants';
-import { useDispatch } from 'react-redux';
+import { FETCH_HISTORY, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, REQUEST_QUERY } from '~stores/authority/registration/constants';
+import { useDispatch, useSelector } from 'react-redux';
 import { HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/authority/registration/constants';
 
 export type Props = Base.Props;
@@ -20,7 +20,7 @@ export const Element = (props: Props) => {
   React.useEffect(() => {
     dispatch({ type: FETCH_HISTORY })
   }, []);
-
+  const userSelector = useSelector(state => state['auth'].user);
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -117,6 +117,7 @@ export const Element = (props: Props) => {
                   popupType: 1,
                 }
               }}
+              isDisabled={!userSelector.viewList.includes('34')}
             />
             <Button.Element
               {...editingButtonComponentProps}
@@ -129,6 +130,7 @@ export const Element = (props: Props) => {
                   popupType: 2,
                 }
               }}
+              isDisabled={!userSelector.viewList.includes('35')}
             />
             <Button.Element
               {...detailButtonComponentProps}
@@ -179,12 +181,18 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'registration', 'create'],
         }}
+        // useEffect={{
+        //   callback: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
+        // }}
       />
       <EditingPopup.Element
         {...editingPopupComponentProps}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'registration', 'edit'],
         }}
+        // useEffect={{
+        //   callback: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
+        // }}
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}

@@ -11,7 +11,7 @@ import * as Block from "~commons/block";
 import * as Dropdown from "~commons/dropdown";
 import { comboxProps } from "./";
 import * as Combox from "~commons/combox";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 

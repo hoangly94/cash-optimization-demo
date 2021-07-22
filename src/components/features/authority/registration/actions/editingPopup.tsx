@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { HANDLE_DUALTABLE_MOVE, INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
+import { HANDLE_DUALTABLE_MOVE, INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, REQUEST_EDITING_CANCEL, REQUEST_QUERY, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -10,8 +10,8 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import * as Datepicker from "~commons/datepicker";
 import * as DualTable from "~commons/dualTable";
-import { getCurrentDate, isMatchDateDD_MM_YYY } from "@utils";
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { getCurrentDate, isMatchDateTimeDD_MM_YYY } from "@utils";
+import { HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -30,6 +30,7 @@ export const Element = (props: Popup.Props) => {
     if (isValidForm) {
       setErrorMsg('');
       dispatch({ type: REQUEST_EDITING });
+      dispatch({ type: REQUEST_EDITING_CANCEL })
       if (setIsShown)
         setIsShown(false)
     }
@@ -48,6 +49,7 @@ export const Element = (props: Popup.Props) => {
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
+    onClick: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
   }
   const errorMsgDisplay = errorMsg ? { display: 'block' } : { display: 'none' };
 
@@ -111,7 +113,7 @@ export const Element = (props: Popup.Props) => {
             flexGrow={Base.FlexGrow.G1}
             margin={Base.MarginRight.PX_18}
             $input={{
-              placeholder: 'Đến ngày(dd-mm-yyy)',
+              placeholder: 'Đến ngày(dd/mm/yyy)',
               width: Base.Width.FULL,
               store: {
                 selectorKeys: ['registration', 'editingPopup', 'dateFrom'],
@@ -129,7 +131,7 @@ export const Element = (props: Popup.Props) => {
           <Datepicker.Element
             flexGrow={Base.FlexGrow.G1}
             $input={{
-              placeholder: 'Đến ngày(dd-mm-yyy)',
+              placeholder: 'Đến ngày(dd/mm/yyy)',
               width: Base.Width.FULL,
               store: {
                 selectorKeys: ['registration', 'editingPopup', 'dateTo'],
@@ -341,12 +343,14 @@ export const Element = (props: Popup.Props) => {
         }}
       />
       <DualTable.Element
+        title1='Nội dung ủy quyền chưa chọn'
+        title2='Nội dung ủy quyền đã chọn'
         store={{
           selector1Keys: ['registration', 'editingPopup', 'authorityContent1'],
           selector2Keys: ['registration', 'editingPopup', 'authorityContent2'],
-          row1ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType: 2, tableType: 1 },
-          row2ClickAction: { type: SELECT_AUTHORITY_CONTENT_ROW, popupType: 2, tableType: 2 },
-          handleMoveActionType:HANDLE_DUALTABLE_MOVE,
+          row1ClickAction: { type: SELECT_DUALTABLE_CONTENT_ROW, popupType: 2, tableType: 1 },
+          row2ClickAction: { type: SELECT_DUALTABLE_CONTENT_ROW, popupType: 2, tableType: 2 },
+          handleMoveActionType: HANDLE_DUALTABLE_MOVE,
         }}
       />
 
@@ -363,7 +367,7 @@ export const Element = (props: Popup.Props) => {
             flexGrow={Base.FlexGrow.G1}
             onClick={() => {
               handleSubmitButtonClick();
-              }}
+            }}
           />
           <Button.Element
             {...closeButtonProps}
@@ -405,11 +409,11 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  if (!isMatchDateDD_MM_YYY(popupSelector.dateFrom)) {
+  if (!isMatchDateTimeDD_MM_YYY(popupSelector.dateFrom)) {
     setErrorMsg('UQ từ ngày sai định dạng');
     return false;
   }
-  if (!isMatchDateDD_MM_YYY(popupSelector.dateTo)) {
+  if (!isMatchDateTimeDD_MM_YYY(popupSelector.dateTo)) {
     setErrorMsg('UQ đến ngày sai định dạng');
     return false;
   }

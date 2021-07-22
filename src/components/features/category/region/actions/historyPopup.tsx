@@ -8,7 +8,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -67,27 +67,6 @@ export const Element = (props: Popup.Props) => {
           }}
         />
         <Block.Element>
-          <Button.Element
-            {...closeButtonProps}
-            text='View'
-            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-            margin={Base.MarginRight.PX_18}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'region', 'historyDetail'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['region', 'history', 'isShown'],
-                value: false,
-              }
-            }}
-
-            onClick={() => dispatch({
-                type: HANDLE_POPUP,
-                keys: ['region', 'historyDetail', 'isShown'],
-                value: true,
-                popupType: 3,
-            })}
-          />
           <Button.Element
             {...closeButtonProps}
             store={{
@@ -189,13 +168,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.regionName,
     },
     {
-      children: _Date.getCurrentDate(item.createddate),
+      children: item.createddate,
     },
     {
       children: item.createdbyname,
     },
     {
-      children: _Date.getCurrentDate(item.updateddate),
+      children: item.updateddate,
     },
   ]
 })

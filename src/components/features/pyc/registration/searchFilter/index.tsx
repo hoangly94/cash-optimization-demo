@@ -68,7 +68,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Từ ngày(dd-mm-yyy)',
+            placeholder: 'Từ ngày(dd/mm/yyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['pycRegistration', 'filters', 'dateFrom'],
@@ -88,7 +88,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Đến ngày(dd-mm-yyy)',
+            placeholder: 'Đến ngày(dd/mm/yyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['pycRegistration', 'filters', 'dateTo'],

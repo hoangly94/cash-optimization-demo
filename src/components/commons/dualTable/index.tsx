@@ -12,10 +12,11 @@ import * as Button from '~commons/button';
 import { useDispatch, useSelector } from 'react-redux';
 import { _Array, _Date } from '@utils';
 import { useComponentClickOutside } from '@hooks';
-import { HANDLE_DUALTABLE_MOVE, SELECT_AUTHORITY_CONTENT_ROW } from '_/stores/authority/registration/constants';
+import { HANDLE_DUALTABLE_MOVE, SELECT_DUALTABLE_CONTENT_ROW } from '~/stores/authority/registration/constants';
 
 export enum Type {
   DEFAULT = 'dualtable',
+  BLOCK = 'dualtableBlock',
 }
 
 export enum Size {
@@ -30,11 +31,33 @@ export enum Size {
 export type Props = Base.Props & {
   type?: Type,
   size?: Size,
-  $title1?: Title.Props,
-  $title2?: Title.Props,
+  title1?: string,
+  title2?: string,
   label1?: string,
   label2?: string,
   store: Store,
+  cellMapping1?: Function,
+  cellMapping2?: Function,
+  titleCallback1?: Function,
+  titleCallback2?: Function,
+  actionButtons?: {
+    oneRightToLeft?: {
+      text?: string,
+      disabled: boolean,
+    },
+    oneLeftToRight?: {
+      text?: string,
+      disabled: boolean,
+    },
+    allRightToLeft?: {
+      text?: string,
+      disabled: boolean,
+    },
+    allLeftToRight?: {
+      text?: string,
+      disabled: boolean,
+    },
+  },
 }
 
 type Store = {
@@ -50,22 +73,28 @@ export const Element = (props: Props) => {
   const {
     type = Type.DEFAULT,
     size = Size.M,
-    store
+    title1,
+    title2,
+    store,
+    cellMapping1,
+    cellMapping2,
+    titleCallback1,
+    titleCallback2,
+    actionButtons,
   } = props;
   const dispatch = useDispatch();
   const table1DataSelector = store && store.selector1Keys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selector1Keys as string[])) : [];
   const table2DataSelector = store && store.selector2Keys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selector2Keys as string[])) : [];
 
   const table1Props = {
-    ...tableData(table1DataSelector?.map(mapResponseToData(handleRowClick(dispatch, store.row1ClickAction)))),
+    ...tableData1(titleCallback1, title1, table1DataSelector?.map(mapResponseToData(cellMapping1, handleRowClick(dispatch, store.row1ClickAction)))),
   }
   const table2Props = {
-    ...tableData(table2DataSelector?.map(mapResponseToData(handleRowClick(dispatch, store.row2ClickAction)))),
+    ...tableData2(titleCallback2, title2, table2DataSelector?.map(mapResponseToData(cellMapping2, handleRowClick(dispatch, store.row2ClickAction)))),
   }
-
   const componentProps = {
     classNames: Classnames(
-      // styles[type],
+      styles[type],
       // styles[size],
     ),
     ...props,
@@ -76,6 +105,83 @@ export const Element = (props: Props) => {
     border: Base.Border.NONE,
     color: Base.Color.WHITE,
     margin: Base.MarginBottom.PX_18,
+  }
+
+  if (type === Type.BLOCK) {
+    return (
+      <Block.Element {...componentProps}>
+        <Block.Element>
+          <Block.Element
+            width={Base.Width.FULL}
+            style={{
+              overflow: 'auto',
+            }}
+          >
+            <Table.Element {...table1Props} />
+          </Block.Element>
+          <Block.Element
+            flex={Base.Flex.BETWEEN}
+            padding={Base.PaddingV.PX_18}
+            alignItems={Base.AlignItems.START}
+            width={Base.Width.PX_400}
+          >
+            <Button.Element
+              {...buttonProps}
+              margin={Base.MarginRight.PX_18}
+              style={{
+                display: actionButtons?.oneRightToLeft?.disabled ? 'none' : 'block',
+              }}
+              text={actionButtons?.oneRightToLeft?.text || '>'}
+              store={{
+                action: { type: store.handleMoveActionType, moveType: 'ONE_LEFT_TO_RIGHT' },
+              }}
+            />
+            <Button.Element
+              {...buttonProps}
+              margin={Base.MarginRight.PX_18}
+              style={{
+                display: actionButtons?.allRightToLeft?.disabled ? 'none' : 'block',
+              }}
+              text={actionButtons?.allRightToLeft?.text || '>>'}
+              store={{
+                action: { type: store.handleMoveActionType, moveType: 'ALL_LEFT_TO_RIGHT' },
+              }}
+            />
+            <Button.Element
+              {...buttonProps}
+              margin={Base.MarginRight.PX_18}
+              style={{
+                display: actionButtons?.allLeftToRight?.disabled ? 'none' : 'block',
+              }}
+              text={actionButtons?.allLeftToRight?.text || '<<'}
+              store={{
+                action: { type: store.handleMoveActionType, moveType: 'ALL_RIGHT_TO_LEFT' },
+              }}
+            />
+            <Button.Element
+              {...buttonProps}
+              margin={Base.MarginRight.PX_18}
+              style={{
+                display: actionButtons?.oneLeftToRight?.disabled ? 'none' : 'block',
+              }}
+              text={actionButtons?.oneLeftToRight?.text || '<'}
+              store={{
+                action: { type: store.handleMoveActionType, moveType: 'ONE_RIGHT_TO_LEFT' },
+              }}
+            />
+
+          </Block.Element>
+          <Block.Element
+            width={Base.Width.FULL}
+            style={{
+              overflow: 'auto',
+            }}
+          >
+            <Table.Element {...table2Props} />
+          </Block.Element>
+        </Block.Element>
+      </Block.Element >
+    )
   }
   return (
     <Block.Element {...componentProps}>
@@ -149,27 +255,43 @@ const handleRowClick = (dispatch, action) => (item) => (e) => {
   dispatch({ ...action, data: item });
 }
 
-const tableData = (queryResult?): Table.Props => ({
+const tableData1 = (titleCallback, title1, queryResult?): Table.Props => ({
   $thead: [
     {
-      style: {
-        backgroundColor: '#1e3f96',
-      },
-      color: Base.Color.WHITE,
-      $cells: [
+      // style: {
+      //   backgroundColor: '#1e3f96',
+      // },
+      // color: Base.Color.WHITE,
+      $cells: titleCallback ? titleCallback() : [
         {
-          children: 'Nội dung ủy quyền',
+          children: title1,
         },
       ],
     },
-     ],
+  ],
+  $rows: queryResult ? queryResult : [],
+})
+const tableData2 = (titleCallback, title2, queryResult?): Table.Props => ({
+  $thead: [
+    {
+      // style: {
+      //   backgroundColor: '#1e3f96',
+      // },
+      // color: Base.Color.WHITE,
+      $cells: titleCallback ? titleCallback() : [
+        {
+          children: title2,
+        },
+      ],
+    },
+  ],
   $rows: queryResult ? queryResult : [],
 })
 
-const mapResponseToData = (handleRowClick) => (item, index) => ({
+const mapResponseToData = (cellMapping, handleRowClick) => (item, index) => ({
   isSelected: item.isSelected ?? false,
   onClick: handleRowClick(item),
-  $cells: [
+  $cells: cellMapping ? cellMapping(item, index) : [
     {
       children: item.name,
     },

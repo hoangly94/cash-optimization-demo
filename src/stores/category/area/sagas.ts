@@ -7,21 +7,16 @@ import { HANDLE_POPUP } from '~stores/_base/constants';
 
 function* saga() {
     yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
+    yield takeLatest(FETCH_HISTORY_DETAIL, fetchHistorySaga);
     yield takeLatest(REQUEST_QUERY, fetchDataSaga);
     yield takeLatest(REQUEST_CREATING, createDataSaga);
     yield takeLatest(REQUEST_EDITING, editDataSaga);
-    yield takeLatest(FETCH_HISTORY_DETAIL, fetchHistoryDetailSaga);
-}
-
-function* fetchHistoryDetailSaga(action?) {
-    const state = yield select();
-    const responseData = yield call(getHistoryDetail, action, state.area.selectedItem);
-    yield put({ type: UPDATE_HISTORY_DETAIL, data: responseData.data});
 }
 
 function* fetchHistorySaga(action?) {
-    const responseData = yield call(getHistory, action);
-    yield put({ type: UPDATE_HISTORY, data: responseData.data });
+    const state = yield select();
+    const responseData = yield call(getHistory, action, state.area.selectedItem);
+    yield put({ type: UPDATE_HISTORY, data: responseData.data});
 }
 
 function* fetchDataSaga(action?) {
@@ -60,7 +55,7 @@ function* editDataSaga() {
     yield fetchDataSaga();
     yield put({ type: HANDLE_POPUP, keys: ['area', 'edit', 'isShown'], value: false });
 }
-function getHistoryDetail(action, data) {
+function getHistory(action, data) {
     const {
         page = 0,
         sort = '',
@@ -71,23 +66,6 @@ function getHistoryDetail(action, data) {
             sort: sort,
             page: page,
             areaCode: data.areaCode,
-            size: Config.numberOfItemsPerPage,
-        }
-    }
-    return axios.post(url, postData)
-        .catch(error => console.log(error));
-}
-
-function getHistory(action) {
-    const {
-        page = 0,
-        sort = '',
-    } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/historyCategoryArea';
-    const postData = {
-        data: {
-            sort: sort,
-            page: page,
             size: Config.numberOfItemsPerPage,
         }
     }

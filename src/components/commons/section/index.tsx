@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Classnames from 'classnames'
 import styles from './styles.css';
-import * as Base from '_/_settings';
+import * as Base from '~/_settings';
 
 export enum Type {
   DEFAULT = 'section',

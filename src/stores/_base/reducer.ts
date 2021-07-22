@@ -227,6 +227,36 @@ const initState: State = {
                 isDisabled: true,
             },
         },
+
+        'routeManagement': {
+            'select': {
+                isDisabled: true,
+            },
+            'edit': {
+                isDisabled: true,
+            },
+            'detail': {
+                isDisabled: true,
+            },
+            'historyDetail': {
+                isDisabled: true,
+            },
+            'validate': {
+                isDisabled: true,
+            },
+            'query': {
+                isLoading: false,
+            },
+            'specialDeleteCreating': {
+                isDisabled: true,
+            },
+            'specialDeleteEditing': {
+                isDisabled: true,
+            },
+            'orgsSearching': {
+                isDisabled: true,
+            },
+        },
     },
     popups: {
         'orgs': {
@@ -456,6 +486,68 @@ const initState: State = {
                 isShown: false,
             },
             'history': {
+                isShown: false,
+            },
+        },
+        'routeManagement': {
+            'pycSearchOrgs': {
+                isShown: false,
+            },
+            'pycSearchOrgs2': {
+                isShown: false,
+            },
+            'pycSearchPers': {
+                isShown: false,
+            },
+            'create': {
+                isShown: false,
+            },
+            'edit': {
+                isShown: false,
+            },
+            'detail': {
+                isShown: false,
+            },
+            'historyDetail': {
+                isShown: false,
+            },
+            'validate': {
+                isShown: false,
+            },
+            'orgsSearching': {
+                isShown: false,
+            },
+            'validate1': {
+                isShown: false,
+            },
+            'validate2': {
+                isShown: false,
+            },
+            'validate3': {
+                isShown: false,
+            },
+            'validateCancel1': {
+                isShown: false,
+            },
+            'validateCancel2': {
+                isShown: false,
+            },
+            'validateCancel3': {
+                isShown: false,
+            },
+            'delete': {
+                isShown: false,
+            },
+            'history': {
+                isShown: false,
+            },
+            'special': {
+                isShown: false,
+            },
+            'searchVehiclePers': {
+                isShown: false,
+            },
+            'organizeRoute': {
                 isShown: false,
             },
         },

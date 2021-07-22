@@ -6,7 +6,7 @@ import * as Block from '~commons/block';
 import * as Title from '~commons/title';
 import { useDispatch, useSelector } from 'react-redux';
 import * as SVG from "~svg/index";
-import { _Array } from '_/utils';
+import { _Array } from '~/utils';
 import { HANDLE_POPUP } from "~stores/_base/constants";
 
 export enum Type {

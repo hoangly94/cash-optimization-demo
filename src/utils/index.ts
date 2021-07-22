@@ -29,6 +29,19 @@ export const _Date = {
         var yyyy = date.getFullYear();
         return dd + '/' + mm + '/' + yyyy;
     },
+    getDateTime(dateString?: string) {
+        const date = new Date(dateString ?? '');
+        if (isNaN(date.getTime()))
+            return dateString;
+        const dd = String(date.getDate()).padStart(2, '0');
+        const mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = date.getFullYear();
+
+        const h = String(date.getHours()).padStart(2, '0');
+        const m = String(date.getMinutes()).padStart(2, '0');
+        const s = String(date.getSeconds()).padStart(2, '0');
+        return `${dd}/${mm}/${yyyy} ${h}:${m}:${s}`;
+    },
     getCurrentDate(dateString?: string) {
         const date = dateString ? new Date(dateString) : new Date();
         if (isNaN(date.getTime()))
@@ -37,6 +50,17 @@ export const _Date = {
         var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = date.getFullYear();
         return dd + '/' + mm + '/' + yyyy;
+    },
+    getCurrentDateTime(dateString?: string) {
+        const date = dateString ? new Date(dateString) : new Date();
+        const dd = String(date.getDate()).padStart(2, '0');
+        const mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+        const yyyy = date.getFullYear();
+
+        const h = String(date.getHours()).padStart(2, '0');
+        const m = String(date.getMinutes()).padStart(2, '0');
+        const s = String(date.getSeconds()).padStart(2, '0');
+        return `${dd}/${mm}/${yyyy} ${h}:${m}:${s}`;
     },
     getNumberDaysOfMonth(date) {
         return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -82,17 +106,6 @@ export const _Date = {
         var yyyy = date.getFullYear();
         return yyyy + '-' + mm + '-' + dd;
     },
-    getCurrentDateTime(dateString?: string) {
-        const date = dateString ? new Date(dateString) : new Date();
-        const dd = String(date.getDate()).padStart(2, '0');
-        const mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
-        const yyyy = date.getFullYear();
-
-        const h = String(date.getHours()).padStart(2, '0');
-        const m = String(date.getMinutes()).padStart(2, '0');
-        const s = String(date.getSeconds()).padStart(2, '0');
-        return `${dd}/${mm}/${yyyy} ${h}:${m}:${s}`;
-    },
 };
 
 export const getCurrentDate = (dateString?: string) => {
@@ -112,7 +125,7 @@ export const getCurrentDateTime = (dateString?: string) => {
     const h = date.getHours();
     const m = date.getMinutes();
     const s = date.getSeconds();
-    return `${dd}-${mm}-${yyyy} ${h}:${m}:${s}`;
+    return `${dd}/${mm}/${yyyy} ${h}:${m}:${s}`;
 };
 export const getDateString = (dateString?: string) => {
     const date = dateString ? new Date(dateString) : new Date();
@@ -124,7 +137,10 @@ export const getDateString = (dateString?: string) => {
 };
 
 //is match dd-mm-yyyy
-export const isMatchDateDD_MM_YYY = (date: string) => {
+export const isMatchDateDD_MM_YYYY = (date: string) => {
+    return date?.match(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/g);
+}
+export const isMatchDateTimeDD_MM_YYY = (date: string) => {
     return date?.match(/^([1-9]|([012][0-9])|(3[01]))-([0]{0,1}[1-9]|1[012])-\d\d\d\d (20|21|22|23|[0-1]?\d):[0-5]?\d:[0-5]?\d$/g)
         || date?.match(/^([1-9]|([012][0-9])|(3[01]))\/([0]{0,1}[1-9]|1[012])\/\d\d\d\d (20|21|22|23|[0-1]?\d):[0-5]?\d:[0-5]?\d$/g);
 }

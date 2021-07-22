@@ -2,7 +2,7 @@ import React, { useRef } from 'react'
 import styles from './_styles.css'
 import * as Base from '~/_settings';
 import { useDispatch, useSelector } from 'react-redux';
-import { _Array } from '_/utils';
+import { _Array } from '~/utils';
 
 export enum Type {
   DEFAULT = 'input',
@@ -59,7 +59,7 @@ export const Element = (props: Props) => {
     valueType,
   } = props
   const dispatch = useDispatch();
-  const value = store ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : null;
+  const value = store?.selectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : null;
   const ref = refs ?? useRef(null);
   const disabled = isDisabled ? 'disabled' : '';
   const handleKeyPress = (e) => {

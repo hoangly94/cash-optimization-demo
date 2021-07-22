@@ -11,7 +11,7 @@ import * as Table from "~commons/table";
 import * as Combox from "~commons/combox";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
-import { getCurrentDate, getCurrentDateTime } from '_/utils';
+import { getCurrentDate, getCurrentDateTime } from '~/utils';
 
 export const Element = (props: Popup.Props) => {
   const {

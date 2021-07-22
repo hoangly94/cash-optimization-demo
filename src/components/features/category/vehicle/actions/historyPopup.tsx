@@ -68,27 +68,6 @@ export const Element = (props: Popup.Props) => {
         <Block.Element>
           <Button.Element
             {...closeButtonProps}
-            text='View'
-            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-            margin={Base.MarginRight.PX_18}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'vehicle', 'historyDetail'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['vehicle', 'history', 'isShown'],
-                value: false,
-              }
-            }}
-
-            onClick={() => dispatch({
-                type: HANDLE_POPUP,
-                keys: ['vehicle', 'historyDetail', 'isShown'],
-                value: true,
-                popupType: 3,
-            })}
-          />
-          <Button.Element
-            {...closeButtonProps}
             store={{
               action: {
                 type: HANDLE_POPUP,
@@ -276,13 +255,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.driverName,
     },
     {
-      children: _Date.getCurrentDate(item.createddate),
+      children: item.createddate,
     },
     {
       children: item.createdbyname,
     },
     {
-      children: _Date.getCurrentDate(item.updateddate),
+      children: item.updateddate,
     },
   ]
 })

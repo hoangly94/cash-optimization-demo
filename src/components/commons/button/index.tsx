@@ -6,7 +6,7 @@ import * as Base from '~/_settings';
 import ThreeDotsLoader from '~commons/svg/threeDotsLoader';
 import * as Svg from '~commons/svg';
 import { useDispatch, useSelector } from 'react-redux';
-import { _Array } from '_/utils';
+import { _Array } from '~/utils';
 import { HANDLE_BUTTON } from "~stores/_base/constants";
 
 export enum Type {
@@ -54,9 +54,7 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const textSelector = store && store.textSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.textSelectorKeys as string[])) : text;
   const isLoadingSelector = store && store.isLoadingSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isLoadingSelectorKeys as string[], 'isLoading'])) : false;
-  const isDisabledSelector = store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])) : isDisabled;
-
-
+  const isDisabledSelector = isDisabled || (store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])): false);
   const newProps = {
     backgroundColor: Base.BackgroundColor.WHITE,
     border: Base.Border.SOLID,

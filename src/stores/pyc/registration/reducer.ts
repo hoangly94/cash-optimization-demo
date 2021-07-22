@@ -1,4 +1,4 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_AUTHORITY_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
@@ -49,7 +49,13 @@ const initState: State = {
 
     },
     authorityContents: [],
-    objectTypes: [
+    objectTypes: getDefaultObjectTypes(),
+    orgsChildren: [],
+    distanceOrgsToOrgsRequest: '',
+}
+
+function getDefaultObjectTypes(){
+    return [
         {
             name: 'KPP',
             value: 'KPP',
@@ -62,21 +68,17 @@ const initState: State = {
             name: 'TCTD/NHNN',
             value: 'TCTD/NHNN',
         },
-    ],
-    orgsChildren: [],
-    distanceOrgsToOrgsRequest: '',
+    ];
 }
 
 export default (state: State = initState, action) => {
     switch (action.type) {
-
-
         case REQUEST_CREATING_CANCEL:
             return {
                 ...state,
                 creatingPopup: {
                     ...getDefaultPopupActions(),
-                }
+                },
             }
         case DONE_CREATING:
             return {
@@ -340,7 +342,7 @@ export default (state: State = initState, action) => {
             }
             return state;
 
-        case SELECT_AUTHORITY_CONTENT_ROW:
+        case SELECT_DUALTABLE_CONTENT_ROW:
             const tableType = `authorityContent${action.tableType}`;
             const selectAuthorityRowData = action.popupType === 1
                 ? {
@@ -428,7 +430,6 @@ export default (state: State = initState, action) => {
                 popupType: action.popupType || state.popupType,
             }
         case SELECT_COMBOX:
-            // console.log(action);
             const key1 = action.keys[0];
             const key2 = action.keys[1];
             return {

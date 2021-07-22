@@ -12,7 +12,7 @@ import * as DeletePopup from "./deletePopup";
 import * as OrgsSearchingPopup from "./orgsSearchingPopup";
 import * as HistoryPopup from "./historyPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { FETCH_HISTORY, REQUEST_QUERY, HANDLE_CONTINUE_ACTION, GET_PYC_EXCEL } from '~stores/pyc/registration/constants';
+import { FETCH_HISTORY, REQUEST_QUERY, HANDLE_CONTINUE_ACTION, GET_PYC_EXCEL, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL } from '~stores/pyc/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
 
 export type Props = Base.Props;
@@ -114,6 +114,7 @@ export const Element = (props: Props) => {
                   popupType: 1,
                 }
               }}
+              isDisabled={!userSelector.viewList.includes('5')}
             />
             <Button.Element
               {...editingButtonComponentProps}
@@ -126,6 +127,7 @@ export const Element = (props: Props) => {
                   popupType: 2,
                 }
               }}
+              isDisabled={!userSelector.viewList.includes('6')}
             />
             <Button.Element
               {...buttonProps}
@@ -140,8 +142,8 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
-              isDisabled={!(orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching' 
-              && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode) }
+              isDisabled={!(userSelector.viewList.includes('7') && (orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching' 
+              && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode)) }
             />
           </Block.Element>
 
@@ -187,6 +189,7 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
+              isDisabled={!userSelector.viewList.includes('64')}
             />
           </Block.Element>
 
@@ -215,6 +218,9 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'create'],
         }}
+        useEffect={{
+          callback: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
+        }}
       />
       <EditingPopup.Element
         {...editingPopupComponentProps}
@@ -225,6 +231,9 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'edit'],
         }}
+        // useEffect={{
+        //   callback: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
+        // }}
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}

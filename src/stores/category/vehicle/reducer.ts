@@ -211,7 +211,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                detailPopup: {
+                history: {
                     ...state.history,
                     data: historyDetailData,
                     total: action.data.total,
