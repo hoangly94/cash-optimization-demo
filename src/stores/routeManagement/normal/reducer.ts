@@ -521,6 +521,7 @@ function getDefaultSearchVehiclePersPopup() {
     return {
         vehicles: [],
         pers: [],
+        startTime: '',
     }
 }
 function getDefaultFilters() {
@@ -541,6 +542,7 @@ function getDefaultFilters() {
             value: '',
         },
         id: '',
+        
     }
 }
 
