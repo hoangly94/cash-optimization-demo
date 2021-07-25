@@ -79,7 +79,7 @@ export const Element = (props: Props) => {
       />
 
       <Input.Element
-        placeholder='Persnbr'
+        placeholder='Mã nhân viên'
         {...orgsCodeProps}
         store={{
           selectorKeys: ['person', 'filters', 'persCode'],

@@ -60,7 +60,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Persnbr',
+          children: 'Mã nhân viên',
           sort: {
             type: REQUEST_QUERY,
             data: 'persCode',
