@@ -111,7 +111,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Persnbr',
+          children: 'Mã nhân viên',
           sort: {
             type: FETCH_HISTORY,
             data: 'persCode',

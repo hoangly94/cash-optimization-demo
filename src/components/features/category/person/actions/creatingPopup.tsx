@@ -76,10 +76,10 @@ export const Element = (props: Popup.Props) => {
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Persnbr' {...inputTitleProps} />
+        <Title.Element text='Mã nhân viên' {...inputTitleProps} />
         <Input.Element
           valueType={Input.ValueType.NUMBER}
-          placeholder='Persnbr'
+          placeholder='Mã nhân viên'
           {...inputProps}
           store={{
             selectorKeys: ['person', 'creatingPopup', 'persCode'],

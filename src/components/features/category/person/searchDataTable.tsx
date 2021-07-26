@@ -60,7 +60,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Persnbr',
+          children: 'Mã nhân viên',
           sort: {
             type: REQUEST_QUERY,
             data: 'persCode',
@@ -217,13 +217,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.persStatus,
     },
     {
-      children: item.createddate.split('-').join('/'),
+      children: item.createddate, //item.createddate.split('-').join('/'),
     },
     {
       children: item.createdbyname,
     },
     {
-      children: item.updateddate?.split('-').join('/'),
+      children: item.updateddate, //item.updateddate?.split('-').join('/'),
     },
   ]
 })

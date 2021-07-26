@@ -644,11 +644,11 @@ function getDefaultFilters() {
             value: '',
         },
         orgs: {
-            text: 'ĐVĐQ',
+            text: 'Đơn vị',
             value: '',
         },
         objectType: {
-            text: 'Đối tượng ĐQ - ALL',
+            text: 'Đối tượng ĐQ',
             value: 'ALL',
         },
         status: {

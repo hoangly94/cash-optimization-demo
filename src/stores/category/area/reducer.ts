@@ -236,5 +236,5 @@ const preprocessQueryResult = (data, index) => ({
     ...data,
     key: data.id ?? index,
     createddate: _Date.getDate(data.createddate),
-    updateddate: _Date.getDate(data.updateddate),
+    updateddate: _Date.getDateTime(data.updateddate),
 })

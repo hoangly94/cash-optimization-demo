@@ -190,13 +190,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.dvqlKc,
     },
     {
-      children: item.createddate.split('-').join('/'),
+      children: item.createddate,//item.createddate.split('-').join('/'),
     },
     {
       children: item.createdbyname,
     },
     {
-      children: item.updateddate?.split('-').join('/'),
+      children: item.updateddate, //item.updateddate?.split('-').join('/'),
     },
   ]
 })

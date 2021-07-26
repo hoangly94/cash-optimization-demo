@@ -208,63 +208,63 @@ const dashboardMenuProps: DashboardMenu.Props = {
                 ]
             },
             {
-                text: 'Categories',
+                text: 'Danh mục',
                 $icon: {
                     name: 'documentCheck',
                 },
                 $subs: [
                     {
-                        text: 'Area',
+                        text: 'Danh mục cụm',
                         url: '/category/area',
                         accessedRole: '57',
                     },
                     {
-                        text: 'ATM/CDM',
+                        text: 'Danh mục ATM/CDM',
                         url: '/category/atm-cdm',
                         accessedRole: '39',
                     },
                     {
-                        text: 'Currency',
+                        text: 'Danh mục tiền tệ',
                         url: '/category/currency',
                         accessedRole: '47',
                     },
                     {
-                        text: 'Function',
+                        text: 'Danh mục chức năng',
                         url: '/category/function',
                         accessedRole: '59',
                     },
                     {
-                        text: 'NHNN/TCTD',
+                        text: 'Danh mục TCTD/NHNN',
                         url: '/category/nhnn-tctd',
                         accessedRole: '43',
                     },
                     {
-                        text: 'ORGS',
+                        text: 'Danh mục đơn vị',
                         url: '/category/orgs',
                         accessedRole: '41',
                     },
                     {
-                        text: 'Pers',
+                        text: 'Danh mục nhân viên',
                         url: '/category/pers',
                         accessedRole: '49',
                     },
                     {
-                        text: 'Priority',
+                        text: 'Danh mục mức độ ưu tiên',
                         url: '/category/priority',
                         accessedRole: '53',
                     },
                     {
-                        text: 'Region',
+                        text: 'Danh mục vùng',
                         url: '/category/region',
                         accessedRole: '55',
                     },
                     {
-                        text: 'Title',
+                        text: 'Danh mục chức danh nhân viên',
                         url: '/category/title',
                         accessedRole: '51',
                     },
                     {
-                        text: 'Vehicle',
+                        text: 'Danh mục xe',
                         url: '/category/vehicle',
                         accessedRole: '45',
                     },

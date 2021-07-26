@@ -37,7 +37,7 @@ export const Element = (props: Popup.Props) => {
   }
 
   const submitButtonProps: Button.Props = {
-    text: 'Edit',
+    text: 'Update',
     margin: Base.MarginRight.PX_28,
     width: Base.Width.PX_200,
     color: Base.Color.WHITE,

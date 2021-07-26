@@ -5,12 +5,13 @@ import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import {HANDLE_BUTTON} from "~stores/_base/constants";
 import * as Table from "~commons/table";
-import { _Date, getCurrentDate } from '@utils';
+import { _Date, getCurrentDate, getCurrentDateTime } from '@utils';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const queryResult = useSelector(state => state['area'].queryResult.data);
+  console.log(queryResult);
   const dispatch = useDispatch();
   //create props
   const componentWrapperProps = {
@@ -139,14 +140,14 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
     {
       children: item.categoryRegion.regionName,
     },
-    {
+    {     
       children: item.createddate.split('-').join('/'),
     },
     {
       children: item.createdbyname,
     },
     {
-      children: item.updateddate?.split('-').join('/'),
+      children: item.updateddate,
     },
   ]
 })

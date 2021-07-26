@@ -106,6 +106,13 @@ export const _Date = {
         var yyyy = date.getFullYear();
         return yyyy + '-' + mm + '-' + dd;
     },
+    convertFromDateTimeDDMMYYYtoYYYYMMDD(dateString?: string) {
+        return dateString?.slice(6, 10) + '-' + dateString?.slice(3, 5) + '-' + dateString?.slice(0, 2) + ' 00:00:00.0';
+    }
+    ,
+    convertToDateTimeDDMMYYYtoYYYYMMDD(dateString?: string) {
+        return dateString?.slice(6, 10) + '-' + dateString?.slice(3, 5) + '-' + dateString?.slice(0, 2) + ' 23:59:00.0';
+    }
 };
 
 export const getCurrentDate = (dateString?: string) => {
