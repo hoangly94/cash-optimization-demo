@@ -1,130 +1,34 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { REQUEST_SEACHVEHICLEPERS_CONTINUE, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_FILTER, REQUEST_VEHICLE, REQUEST_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
 import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
-import * as Table from "~commons/table";
 import * as Combox from "~commons/combox";
-// import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
-import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
-import { _Date } from '~/utils';
-import { CHANGE_EDITING_INPUT, REQUEST_DELETE, SELECT_COMBOX, REQUEST_EDITING_CANCEL } from '~/stores/routeManagement/normal/constants';
+import * as Table from "~commons/table";
+import * as VehiclePopup from "./vehiclePopup";
+import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
+import moment from 'moment';
+
+export type Props = Popup.Props;
 
 export const Element = (props: Popup.Props) => {
   const {
     setIsShown,
   } = props;
-  const selector = useSelector(state => state['routeManagement'].editingPopup);
-  // const userSelector = useSelector(state => state['auth'].user);
-  const dispatch = useDispatch();
 
-  const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(dispatch, selector);
-    if (isValidForm) {
-      dispatch({ type: REQUEST_DELETE });
-      if (setIsShown)
-        setIsShown(false)
-    }
-  }
+  const selector = useSelector(state => state['routeManagement'].organizingPopup);
+  const dispatch = useDispatch();
   return (
     <Popup.Element
       {...props}
-      closePopUpCallback={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+      // closePopUpCallback={() => dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL })}
     >
-      <Title.Element
-        tagType={Title.TagType.H3}
-        text='Thông tin'
-        style={{
-          borderTop: '1px solid #e8e8e8',
-          paddingTop: '28px',
-        }}
-      />
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số PYC HT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={selector.id}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Trạng thái LT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={selector.routeStatus}
-          isDisabled={true}
-        />
-      </Block.Element>
 
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Version LT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={selector.routeVersion}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Ngày tạo LT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={_Date.getDate(selector.createddate)}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên ĐVTLT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={selector.orgsName}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên thủ quỹ ĐVTLT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={selector.tqDltltName}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời gian bắt đầu lộ trình' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={selector.startTime}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-
-      <Title.Element text='Các PYC được chọn tham gia lộ trình'
-        width={Base.Width.PER_70}
-        tagType={Title.TagType.H3}
-      />
-      <Block.Element
-        margin={Base.MarginBottom.PX_38}
-        style={{
-          overflow: 'auto',
-        }}
-      >
-        < Table.Element
-          {...pycTableData(selector.routeCashOptimization?.map(pycMapResponseToData(handleRowClick(dispatch), dispatch)))}
-          backgroundColor={Base.BackgroundColor.WHITE}
-          style={{
-            minWidth: '1800px',
-          }}
-        />
-      </Block.Element>
-
-      <Title.Element text='Thông tin xe đính kèm lái xe tham gia lộ trình'
+      <Title.Element text='Thông tin xe đính kèm lái xe được chọn tham gia lộ trình'
         width={Base.Width.PER_70}
         tagType={Title.TagType.H3}
       />
@@ -143,7 +47,7 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
 
-      <Title.Element text='Thông tin nhân viên tham gia lộ trình'
+      <Title.Element text='Thông tin NHÂN VIÊN được chọn tham gia lộ trình'
         width={Base.Width.PER_70}
         tagType={Title.TagType.H3}
       />
@@ -162,7 +66,7 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
 
-      <Title.Element text='Thông tin thứ tự di chuyển của lộ trình '
+      <Title.Element text='Thông tin tên và địa chỉ điểm đến theo PYC được chọn tham gia lộ trình'
         width={Base.Width.PER_70}
         tagType={Title.TagType.H3}
       />
@@ -173,39 +77,27 @@ export const Element = (props: Popup.Props) => {
         }}
       >
         < Table.Element
-          {...orgsTableData(selector.categoryOrg?.map(orgsMapResponseToData(handleRowClick(dispatch))))}
+          {...pycTableData(selector.routeCashOptimization?.map(pycMapResponseToData(handleRowClick(dispatch), dispatch)))}
           backgroundColor={Base.BackgroundColor.WHITE}
+          style={{
+            minWidth: '1800px',
+          }}
         />
       </Block.Element>
 
-      <Block.Element {...inputWrapperProps} flex={Base.Flex.START}>
-        <Title.Element
-          text='Lý do Hủy'
-          {...inputTitleProps}
-          width={Base.Width.PER_30}
-        />
-        <Combox.Element
-          width={Base.Width.PX_300}
-          store={{
-            defaultSelectorKeys: ['routeManagement', 'editingPopup', 'reasonType'],
-            selectorKeys: ['root', 'reasonTypes'],
-            reducerType: SELECT_COMBOX,
-            reducerKeys: {
-              text: 'name',
-              value: 'value',
-            },
-          }}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Lý do khác' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['routeManagement', 'editingPopup', 'rejectReason'],
-            reducerType: CHANGE_EDITING_INPUT,
-          }}
-          isDisabled={!(selector.reasonType?.text == 'KHÁC')}
+      <Title.Element text='Thông tin tên và địa chỉ đến theo ĐVTLT'
+        width={Base.Width.PER_70}
+        tagType={Title.TagType.H3}
+      />
+      <Block.Element
+        margin={Base.MarginBottom.PX_38}
+        style={{
+          overflow: 'auto',
+        }}
+      >
+        < Table.Element
+          {...orgsTableData((selector.categoryOrgs ? [selector.categoryOrgs] : [])?.map(orgsMapResponseToData(handleRowClick(dispatch))))}
+          backgroundColor={Base.BackgroundColor.WHITE}
         />
       </Block.Element>
 
@@ -217,26 +109,36 @@ export const Element = (props: Popup.Props) => {
         </Block.Element>
         <Block.Element {...actionsProps}>
           <Button.Element
-            text='Update'
-            margin={Base.MarginRight.PX_8}
+            text='Select'
+            margin={Base.MarginRight.PX_28}
             width={Base.Width.PX_200}
-            border={Base.Border.NONE}
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
-            onClick={handleSubmitButtonClick}
+            flexGrow={Base.FlexGrow.G1}
+            store={{
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['routeManagement', 'destinationPointPopup', 'isShown'],
+                value: false,
+              }
+            }}
+            onClick={() => dispatch({ type: SELECT_DESTINATION_POINT })}
+            isDisabled={!selector.selectedItem}
           />
+
           <Button.Element
             text='Close'
             width={Base.Width.PX_200}
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.ULTIMATE_GRAY}
-            // flexGrow={Base.FlexGrow.G1}
-            onClick={() => dispatch({
-              type: HANDLE_POPUP,
-              keys: ['routeManagement', 'delete', 'isShown'],
-              value: false,
-            })}
-
+            flexGrow={Base.FlexGrow.G1}
+            store={{
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['routeManagement', 'destinationPointPopup', 'isShown'],
+                value: false,
+              }
+            }}
           />
         </Block.Element>
       </Block.Element>
@@ -262,7 +164,7 @@ const actionsWrapperProps: Block.Props = {
 }
 
 const actionsProps: Block.Props = {
-  flex: Base.Flex.END,
+  flex: Base.Flex.BETWEEN,
   width: Base.Width.PER_70,
 }
 
@@ -271,7 +173,7 @@ const tableData_$rows_$cells_title = {
 }
 
 const handleRowClick = (dispatch) => (item, tableType) => (e) => {
-  // dispatch({ type: SELECT_ROW_DESTINATION_POINT, data: item, tableType });
+  dispatch({ type: SELECT_ROW_DESTINATION_POINT, data: item, tableType });
 }
 
 const vehicleTableData = (queryResult?): Table.Props => ({
@@ -288,7 +190,19 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Tên điểm đến',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Địa chỉ điểm đến',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Biển số xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Trạng thái xe',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -309,10 +223,6 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         {
           ...tableData_$rows_$cells_title,
           children: 'Vị trí GPS của xe',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Trạng thái xe',
         },
       ]
     },
@@ -371,7 +281,19 @@ const persTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Tên điểm đến',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Địa chỉ điểm đến',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Mã NV',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Trạng thái',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -387,19 +309,11 @@ const persTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã chi nhánh quản lý',
+          children: 'Mã ĐVQL NV',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên chi nhánh quản lý',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Địa chỉ',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Trạng thái',
+          children: 'Tên ĐVQL NV',
         },
       ]
     },
@@ -415,7 +329,16 @@ const persMapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
+      children: item.categoryPers?.categoryOrgs?.orgsName,
+    },
+    {
+      children: item.categoryPers?.categoryOrgs?.orgsAddress,
+    },
+    {
       children: item.persCode,
+    },
+    {
+      children: item.categoryPers?.persStatus,
     },
     {
       children: item.persName,
@@ -431,12 +354,6 @@ const persMapResponseToData = (handleRowClick) => (item, index) => ({
     },
     {
       children: item.categoryPers?.categoryOrgs?.orgsName,
-    },
-    {
-      children: item.categoryPers?.categoryOrgs?.orgsAddress,
-    },
-    {
-      children: item.categoryPers?.persStatus,
     },
   ]
 })
@@ -455,15 +372,23 @@ const pycTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Tên điểm đến',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Địa chỉ điểm đến',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Số PYC HT',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Trạng thái PYC HT',
+          children: 'Trạng thái',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Số PYC DV',
+          children: 'Mức độ ưu tiên',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -471,19 +396,11 @@ const pycTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Họ và tên thủ quỹ ĐVYCĐQ',
+          children: 'Thông tin chi tiết HĐB',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'SĐT thủ quỹ thủ quỹ ĐVYCĐQ',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên ĐVĐQ',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Họ và tên thủ quỹ ĐVĐQ',
+          children: 'Khoảng cách',
         },
       ]
     },
@@ -499,28 +416,37 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.cashOptimization?.id,
-    },
-    {
-      children: item.cashOptimization?.cashOptimizationStatus,
-    },
-    {
-      children: item.cashOptimization?.orgsRequestId,
+      children: item.cashOptimization?.orgsName,
     },
     {
       children: item.cashOptimization?.orgsName,
     },
     {
-      children: item.cashOptimization?.orgsHolderName,
+      children: item.cashOptimizationId,
     },
     {
-      children: item.cashOptimization?.orgsHolderMobile,
+      children: item.cashOptimization?.routeStatus,
     },
     {
-      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestCode || ''
+      children: item.cashOptimization?.priorityLevelName,
     },
     {
-      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
+      children: item.cashOptimization?.orgsName,
+    },
+    {
+      children: <a
+        style={{
+          color: 'blue',
+          cursor: 'pointer',
+        }}
+        onClick={() => dispatch({
+          type: HANDLE_POPUP,
+          keys: ['routeManagement', 'special', 'isShown'],
+          value: true,
+        })} >Link</a>,
+    },
+    {
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,
     },
   ]
 })
@@ -539,41 +465,13 @@ const orgsTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Trạng thái điểm dừng',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Loại điểm dừng',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên điểm đi',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Địa chỉ điểm đi',
-        },
-        {
-          ...tableData_$rows_$cells_title,
           children: 'Tên điểm đến',
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Địa chỉ điểm đến',
         },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Khoảng cách số PYC HT',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mô hình điều quỹ',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Số dư HĐB',
-        },
-      ],
+      ]
     },
   ],
   $rows: queryResult ? queryResult : [],
@@ -595,16 +493,5 @@ const orgsMapResponseToData = (handleRowClick) => (item, index) => ({
   ]
 })
 
-const validateForm = (dispatch, selector) => {
-  if (!selector.reasonType.value) {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn lý do Hủy' } });
-    return false;
-  }
-  if (selector.reasonType.text == 'KHÁC' && selector.rejectReason == '') {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa nhập lý do khác' } });
-    return false;
-  }
-  return true;
-}
-
-Element.displayName = 'DetailPopup'
+export default Element;
+Element.displayName = 'DestinationPointPopup'

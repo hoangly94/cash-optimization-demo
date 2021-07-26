@@ -5,10 +5,10 @@ import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
-import * as ApprovalActions from "./approvalActions";
+import * as UrgentActions from "./urgentActions";
 import { useDispatch } from 'react-redux';
 import { FETCH_CONFIG, FETCH_CURRENCIES, FETCH_PRIORITIES } from '~stores/dashboardRoot/constants';
-import { FETCH_ORGS_CHILDREN, REQUEST_QUERY, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION } from '~stores/pyc/registration/constants';
+import { FETCH_ORGS_CHILDREN, REQUEST_QUERY } from '~stores/routeManagement/normal/constants';
 
 export type Props = Base.Props;
 
@@ -20,7 +20,6 @@ export const Element = (props: Props) => {
   }, []);
   useLayoutEffect(() => {
     dispatch({ type: FETCH_ORGS_CHILDREN });
-    dispatch({ type: RESET_FILTER_APPROVAL });
     dispatch({ type: REQUEST_QUERY });
   });
 
@@ -37,7 +36,7 @@ export const Element = (props: Props) => {
     <Block.Element {...componentWrapperProps}>
       <SearchFilter.Element />
       <SearchDataTable.Element />
-      <ApprovalActions.Element />
+      <UrgentActions.Element />
     </Block.Element >
   )
 }

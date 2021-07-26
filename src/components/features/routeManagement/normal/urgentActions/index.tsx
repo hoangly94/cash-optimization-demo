@@ -5,18 +5,16 @@ import * as Title from "~commons/title";
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
 import * as Pagination from "~commons/pagination";
-import * as CreatingPopup from "./creatingPopup";
-import * as EditingPopup from "./editingPopup";
-import * as DetailPopup from "./detailPopup";
-import * as DeletePopup from "./deletePopup";
-import * as SpecialPopup from "./specialPopup";
-import * as OrgsSearchingPopup from "./orgsSearchingPopup";
-import * as HistoryPopup from "./historyPopup";
-import * as SearchVehiclePersPopup from "./searchVehiclePersPopup";
-import * as VehiclePopup from "./vehiclePopup";
-import * as PersPopup from "./persPopup";
-import * as OrganizingPopup from "./organizingPopup";
-import * as DestinationPointPopup from "./destinationPointPopup";
+import * as CreatingPopup from "../actions/creatingPopup";
+import * as DetailPopup from "../actions/detailPopup";
+import * as SpecialPopup from "../actions/specialPopup";
+import * as OrgsSearchingPopup from "../actions/orgsSearchingPopup";
+import * as HistoryPopup from "../actions/historyPopup";
+import * as SearchVehiclePersPopup from "../actions/searchVehiclePersPopup";
+import * as VehiclePopup from "../actions/vehiclePopup";
+import * as PersPopup from "../actions/persPopup";
+import * as OrganizingPopup from "../actions/organizingPopup";
+import * as DestinationPointPopup from "../actions/destinationPointPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_QUERY, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, GET_EXCEL, FETCH_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL } from '~stores/routeManagement/normal/constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,7 +36,7 @@ export const Element = (props: Props) => {
 
   const creatingButtonComponentProps: Button.Props = {
     ...buttonProps,
-    text: 'Create',
+    text: 'ĐĂNG KÝ PYC BS',
     backgroundColor: Base.BackgroundColor.GREEN,
   }
   const editingButtonComponentProps: Button.Props = {
@@ -119,67 +117,6 @@ export const Element = (props: Props) => {
               isDisabled={!userSelector.viewList.includes('5')}
             />
             <Button.Element
-              {...editingButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'edit'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'edit', 'isShown'],
-                  value: true,
-                  popupType: 2,
-                }
-              }}
-              isDisabled={!userSelector.viewList.includes('6')}
-            />
-            <Button.Element
-              {...deleteButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'delete', 'isShown'],
-                  value: true,
-                  popupType: 4,
-                }
-              }}
-              isDisabled={!userSelector.viewList.includes('64')}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'View'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'detail', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
-            />
-          </Block.Element>
-
-          <Block.Element
-            margin={Base.MarginTop.PX_18}
-          >
-            <Button.Element
-              {...buttonProps}
-              text={'Tìm PT_TP VẬN CHUYỂN'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'],
-                  value: true,
-                  popupType: 4,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('7') && (viewSelector?.routeStatus === 'Adding'
-                && viewSelector.orgsCode == userSelector.orgsCode))}
-            />
-            <Button.Element
               {...buttonProps}
               text={'Sắp xếp lộ trình'}
               backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
@@ -199,6 +136,25 @@ export const Element = (props: Props) => {
               {...printButtonComponentProps}
               text={'Excel'}
               onClick={() => dispatch({ type: GET_EXCEL })}
+            />
+          </Block.Element>
+
+          <Block.Element
+            margin={Base.MarginTop.PX_18}
+          >
+            <Button.Element
+              {...buttonProps}
+              text={'View'}
+              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+              store={{
+                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+                action: {
+                  type: HANDLE_POPUP,
+                  keys: ['routeManagement', 'detail', 'isShown'],
+                  value: true,
+                  popupType: 3,
+                }
+              }}
             />
             <Button.Element
               {...buttonProps}
@@ -229,16 +185,6 @@ export const Element = (props: Props) => {
           },
         }}
       />
-      <EditingPopup.Element
-        {...editingPopupComponentProps}
-        $title={{
-          tagType: Title.TagType.H2,
-          text: 'EDIT'
-        }}
-        store={{
-          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'edit'],
-        }}
-      />
       <DetailPopup.Element
         {...historyPopupComponentProps}
         $title={{
@@ -247,19 +193,6 @@ export const Element = (props: Props) => {
         }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'detail'],
-        }}
-      />
-      <DeletePopup.Element
-        {...editingPopupComponentProps}
-        $title={{
-          tagType: Title.TagType.H2,
-          text: 'DELETE'
-        }}
-        store={{
-          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'delete'],
-        }}
-        useEffect={{
-          callback: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
         }}
       />
       <HistoryPopup.Element
@@ -284,16 +217,6 @@ export const Element = (props: Props) => {
         }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'orgsSearching'],
-        }}
-      />
-      <DeletePopup.Element
-        {...editingPopupComponentProps}
-        $title={{
-          tagType: Title.TagType.H2,
-          text: 'DELETE'
-        }}
-        store={{
-          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'delete'],
         }}
       />
       <SearchVehiclePersPopup.Element
@@ -358,11 +281,11 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'destinationPointPopup'],
         }}
-        // useEffect={{
-        //   callback: () => {
-        //     dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL });
-        //   },
-        // }}
+      // useEffect={{
+      //   callback: () => {
+      //     dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL });
+      //   },
+      // }}
       />
 
       <SpecialPopup.Element

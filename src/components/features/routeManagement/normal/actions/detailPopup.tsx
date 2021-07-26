@@ -18,60 +18,9 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const [errorMsg, setErrorMsg] = useState('');
-  const popupSelector = useSelector(state => state['pycRegistration'].detailPopup);
-  const userSelector = useSelector(state => state['auth'].user);
+  const selector = useSelector(state => state['routeManagement'].organizingPopup);
+  // const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
-
-  const handleSubmitButtonClick = (type) => () => {
-    const isValidForm = validateForm(popupSelector, setErrorMsg);
-    if (isValidForm) {
-      setErrorMsg('');
-      if (setIsShown)
-        setIsShown(false)
-    }
-  }
-
-  const closePopup = () => {
-    dispatch({
-      type: HANDLE_POPUP,
-      keys: ['pycRegistration', 'detail', 'isShown'],
-      value: false,
-    });
-  };
-
-  const approveButtonProps: Button.Props = {
-    text: 'Approve',
-    margin: Base.MarginRight.PX_28,
-    width: Base.Width.PX_200,
-    color: Base.Color.WHITE,
-    backgroundColor: Base.BackgroundColor.GREEN,
-    onClick: handleSubmitButtonClick(1),
-  }
-  const rejectButtonProps: Button.Props = {
-    text: 'Reject',
-    margin: Base.MarginRight.PX_28,
-    width: Base.Width.PX_200,
-    color: Base.Color.WHITE,
-    backgroundColor: Base.BackgroundColor.RED,
-    onClick: handleSubmitButtonClick(2),
-  }
-
-  const closeButtonProps: Button.Props = {
-    text: 'Close',
-    width: Base.Width.PX_200,
-    color: Base.Color.WHITE,
-    backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
-    onClick: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
-  }
-  const errorMsgDisplay = errorMsg ? { display: 'block' } : { display: 'none' };
-
-  const tableProps: Table.Props = {
-    ...tableData(popupSelector.authorityContent2?.map(mapResponseToData(handleRowClick(dispatch)))),
-    backgroundColor: Base.BackgroundColor.WHITE,
-    style: {
-      minWidth: '800px',
-    }
-  }
 
   return (
     <Popup.Element
@@ -90,368 +39,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.id}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số PYC ĐV' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.orgsRequestId}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Ngày tạo PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.createddate?.split('-').join('/')}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Trạng thái PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationStatus}
-          isDisabled={true}
-        />
-      </Block.Element>
-      {/* <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Trạng thái PYC HT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationStatus}
-          isDisabled={true}
-        />
-      </Block.Element> */}
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên ĐVYCĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.orgsName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.orgsHolderName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='SĐT Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.orgsHolderMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='SĐT Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.objectType?.text}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Title.Element
-        tagType={Title.TagType.H3}
-        text='Thông tin chi tiết HĐB'
-        style={{
-          borderTop: '1px solid #e8e8e8',
-          paddingTop: '28px',
-        }}
-      />
-      {/* <SearchDataTable.Element /> */}
-
-      <Block.Element margin={Base.MarginBottom.PX_28} />
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Mức độ ưu tiên' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.priorityLevelName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Mô hình điều quỹ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.model?.text}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Địa điểm nhận' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.placeReceive?.text}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Khoảng cách ĐVĐQ với ĐVYCĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'distanceOrgsToOrgsRequest'],
-            reducerType: '',
-          }}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên ĐVĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.orgsDestName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên ATM' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.atmCdmName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên NH đối tác KPP mở TK' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.nnhnTctdName}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-
-      <Title.Element
-        tagType={Title.TagType.H3}
-        text='Thông tin phê duyệt tạo PYC'
-        style={{
-          borderTop: '1px solid #e8e8e8',
-          paddingTop: '28px',
-        }}
-      />
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cpdDvycdqName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector.cpdDvycdqDate)}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do từ chối DVYCDQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cpdDvycdqReason}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate)}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do từ chối TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckReason}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên CPD ĐVĐQ phê duyệt' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời điểm CPD ĐVĐQ phê duyệt' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqDate)}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Lý do từ chối CPD ĐVĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqReason}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-
-
-
-      <Title.Element
-        tagType={Title.TagType.H3}
-        text='Thông tin phê duyệt hủy PYC'
-        style={{
-          borderTop: '1px solid #e8e8e8',
-          paddingTop: '28px',
-        }}
-      />
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên Nhân viên hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.nvCancelName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Ngày giờ hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector.nvCancelDate)}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.nvCancelReason === 'KHÁC' ? popupSelector.cashOptimizationReasonDesc : popupSelector.nvCancelReason}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên CPD ĐVĐQ phê duyệt hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cpdDvycdqCancelName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector.cpdDvycdqCancelDate)}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVYCĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cpdDvycdqCancelReason}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelDate)}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do từ chối kiểm soát hủy của TQ ĐVĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelReason}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên CPD ĐVĐQ phê duyệt hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqCancelName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời điểm CPD ĐVĐQ phê duyệt hủy PYC' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqCancelDate}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do từ chối phê duyệt hủy của CPD ĐVĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqCancelReason}
-          isDisabled={true}
-        />
-      </Block.Element>
-
-      <Title.Element
-        tagType={Title.TagType.H3}
-        text='Thông tin Lộ trình'
-        style={{
-          borderTop: '1px solid #e8e8e8',
-          paddingTop: '28px',
-        }}
-      />
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số LT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.routeId || ''}
+          defaultValue={selector.id}
           isDisabled={true}
         />
       </Block.Element>
@@ -459,32 +47,157 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Trạng thái LT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.routeStatus}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Version LT' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.routeVersion}
+          defaultValue={selector.routeStatus}
           isDisabled={true}
         />
       </Block.Element>
 
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Version LT' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={selector.routeVersion}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Ngày tạo LT' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={_Date.getDate(selector.createddate)}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên ĐVTLT' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={selector.orgsName}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên thủ quỹ ĐVTLT' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={selector.tqDltltName}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời gian bắt đầu lộ trình' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={selector.startTime}
+          isDisabled={true}
+        />
+      </Block.Element>
+
+
+      <Title.Element text='Các PYC được chọn tham gia lộ trình'
+        width={Base.Width.PER_70}
+        tagType={Title.TagType.H3}
+      />
+      <Block.Element
+        margin={Base.MarginBottom.PX_38}
+        style={{
+          overflow: 'auto',
+        }}
+      >
+        < Table.Element
+          {...pycTableData(selector.routeCashOptimization?.map(pycMapResponseToData(handleRowClick(dispatch), dispatch)))}
+          backgroundColor={Base.BackgroundColor.WHITE}
+          style={{
+            minWidth: '1800px',
+          }}
+        />
+      </Block.Element>
+
+      <Title.Element text='Thông tin xe đính kèm lái xe tham gia lộ trình'
+        width={Base.Width.PER_70}
+        tagType={Title.TagType.H3}
+      />
+      <Block.Element
+        margin={Base.MarginBottom.PX_38}
+        style={{
+          overflow: 'auto',
+        }}
+      >
+        < Table.Element
+          {...vehicleTableData(selector.routeDetailVehicle?.map(vehicleMapResponseToData(handleRowClick(dispatch))))}
+          backgroundColor={Base.BackgroundColor.WHITE}
+          style={{
+            minWidth: '1800px',
+          }}
+        />
+      </Block.Element>
+
+      <Title.Element text='Thông tin nhân viên tham gia lộ trình'
+        width={Base.Width.PER_70}
+        tagType={Title.TagType.H3}
+      />
+      <Block.Element
+        margin={Base.MarginBottom.PX_38}
+        style={{
+          overflow: 'auto',
+        }}
+      >
+        < Table.Element
+          {...persTableData(selector.routeDetailPers?.map(persMapResponseToData(handleRowClick(dispatch))))}
+          backgroundColor={Base.BackgroundColor.WHITE}
+          style={{
+            minWidth: '1800px',
+          }}
+        />
+      </Block.Element>
+
+      <Title.Element text='Thông tin thứ tự di chuyển của lộ trình '
+        width={Base.Width.PER_70}
+        tagType={Title.TagType.H3}
+      />
+      <Block.Element
+        margin={Base.MarginBottom.PX_38}
+        style={{
+          overflow: 'auto',
+        }}
+      >
+        < Table.Element
+          {...orgsTableData(selector.categoryOrg?.map(orgsMapResponseToData(handleRowClick(dispatch))))}
+          backgroundColor={Base.BackgroundColor.WHITE}
+        />
+      </Block.Element>
 
       <Block.Element
         {...actionsWrapperProps}
         margin={Base.MarginTop.PX_38}
       >
         <Block.Element >
-          <Title.Element text={errorMsg} color={Base.Color.RED} />
         </Block.Element>
         <Block.Element {...actionsProps}>
+          {/* <Button.Element
+            text='Update'
+            margin={Base.MarginRight.PX_8}
+            width={Base.Width.PX_200}
+            border={Base.Border.NONE}
+            color={Base.Color.WHITE}
+            backgroundColor={Base.BackgroundColor.GREEN}
+            onClick={handleSubmitButtonClick}
+          /> */}
           <Button.Element
-            {...closeButtonProps}
+            text='Close'
+            width={Base.Width.PX_200}
+            color={Base.Color.WHITE}
+            backgroundColor={Base.BackgroundColor.ULTIMATE_GRAY}
             // flexGrow={Base.FlexGrow.G1}
-            onClick={closePopup}
+            onClick={() => dispatch({
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'detail', 'isShown'],
+              value: false,
+            })}
 
           />
         </Block.Element>
@@ -515,23 +228,15 @@ const actionsProps: Block.Props = {
   width: Base.Width.PER_70,
 }
 
-const validateForm = (popupSelector, setErrorMsg) => {
-
-  // if (!popupSelector.sendId) {
-  //   setErrorMsg('Chưa chọn người UQ');
-  //   return false;
-  // }
-  // if (!popupSelector.sendId) {
-  //   setErrorMsg('Chưa chọn người nhận UQ');
-  //   return false;
-  // }
-  return true;
+const tableData_$rows_$cells_title = {
+  whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
 
-const handleRowClick = (dispatch) => (item) => (e) => {
+const handleRowClick = (dispatch) => (item, tableType) => (e) => {
+  // dispatch({ type: SELECT_ROW_DESTINATION_POINT, data: item, tableType });
 }
 
-const tableData = (queryResult?): Table.Props => ({
+const vehicleTableData = (queryResult?): Table.Props => ({
   $thead: [
     {
       style: {
@@ -540,29 +245,315 @@ const tableData = (queryResult?): Table.Props => ({
       color: Base.Color.WHITE,
       $cells: [
         {
+          ...tableData_$rows_$cells_title,
           children: 'STT',
         },
         {
-          children: 'Ngày tạo',
+          ...tableData_$rows_$cells_title,
+          children: 'Biển số xe',
         },
-      ],
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Họ và tên Lái xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mã đơn vị quản lý xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Tên đơn bị quản lý xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'SĐT Lái xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Vị trí GPS của xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Trạng thái xe',
+        },
+      ]
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 
-const mapResponseToData = (handleRowClick) => (item, index) => ({
+const vehicleMapResponseToData = (handleRowClick) => (item, index) => ({
   isSelected: item.isSelected ?? false,
-  onClick: handleRowClick(item),
+  onClick: handleRowClick(item, 1),
   $cells: [
     {
       children: index + 1,
     },
     {
-      children: item.name,
+      children: item.categoryVehicle?.categoryOrgs?.orgsName,
+    },
+    {
+      children: item.categoryVehicle?.categoryOrgs?.orgsAddress,
+    },
+    {
+      children: item.vehicleCode,
+    },
+    {
+      children: item.categoryVehicle?.vehicleStatus,
+    },
+    {
+      children: item.categoryVehicle?.categoryOrgs?.orgsCode,
+    },
+    {
+      children: item.categoryVehicle?.categoryOrgs?.orgsName,
+    },
+    {
+      children: item.categoryVehicle?.driverName,
+    },
+    {
+      children: item.categoryVehicle?.categoryPers?.persMobile,
+    },
+    {
+      children: item.gps,
     },
   ]
 })
 
-export default Element;
+const persTableData = (queryResult?): Table.Props => ({
+  $thead: [
+    {
+      style: {
+        backgroundColor: '#1e3f96',
+      },
+      color: Base.Color.WHITE,
+      $cells: [
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'STT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mã NV',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Họ và tên nhân viên',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Chức danh',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'SĐT Nhân viên',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mã chi nhánh quản lý',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Tên chi nhánh quản lý',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Địa chỉ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Trạng thái',
+        },
+      ]
+    },
+  ],
+  $rows: queryResult ? queryResult : [],
+})
+
+const persMapResponseToData = (handleRowClick) => (item, index) => ({
+  isSelected: item.isSelected ?? false,
+  onClick: handleRowClick(item, 2),
+  $cells: [
+    {
+      children: index + 1,
+    },
+    {
+      children: item.persCode,
+    },
+    {
+      children: item.persName,
+    },
+    {
+      children: item.categoryPers?.persTitle,
+    },
+    {
+      children: item.categoryPers?.persMobile,
+    },
+    {
+      children: item.categoryPers?.categoryOrgs?.orgsCode,
+    },
+    {
+      children: item.categoryPers?.categoryOrgs?.orgsName,
+    },
+    {
+      children: item.categoryPers?.categoryOrgs?.orgsAddress,
+    },
+    {
+      children: item.categoryPers?.persStatus,
+    },
+  ]
+})
+
+const pycTableData = (queryResult?): Table.Props => ({
+  $thead: [
+    {
+      style: {
+        backgroundColor: '#1e3f96',
+      },
+      color: Base.Color.WHITE,
+      $cells: [
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'STT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Số PYC HT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Trạng thái PYC HT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Số PYC DV',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Tên ĐVYCĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Họ và tên thủ quỹ ĐVYCĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'SĐT thủ quỹ thủ quỹ ĐVYCĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Tên ĐVĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Họ và tên thủ quỹ ĐVĐQ',
+        },
+      ]
+    },
+  ],
+  $rows: queryResult ? queryResult : [],
+})
+
+const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
+  isSelected: item.isSelected ?? false,
+  onClick: handleRowClick(item, 3),
+  $cells: [
+    {
+      children: index + 1,
+    },
+    {
+      children: item.cashOptimization?.id,
+    },
+    {
+      children: item.cashOptimization?.cashOptimizationStatus,
+    },
+    {
+      children: item.cashOptimization?.orgsRequestId,
+    },
+    {
+      children: item.cashOptimization?.orgsName,
+    },
+    {
+      children: item.cashOptimization?.orgsHolderName,
+    },
+    {
+      children: item.cashOptimization?.orgsHolderMobile,
+    },
+    {
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestCode || ''
+    },
+    {
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
+    },
+  ]
+})
+
+const orgsTableData = (queryResult?): Table.Props => ({
+  $thead: [
+    {
+      style: {
+        backgroundColor: '#1e3f96',
+      },
+      color: Base.Color.WHITE,
+      $cells: [
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'STT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Trạng thái điểm dừng',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Loại điểm dừng',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Tên điểm đi',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Địa chỉ điểm đi',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Tên điểm đến',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Địa chỉ điểm đến',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Khoảng cách số PYC HT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mô hình điều quỹ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Số dư HĐB',
+        },
+      ],
+    },
+  ],
+  $rows: queryResult ? queryResult : [],
+})
+
+const orgsMapResponseToData = (handleRowClick) => (item, index) => ({
+  isSelected: item.isSelected ?? false,
+  onClick: handleRowClick(item, 4),
+  $cells: [
+    {
+      children: index + 1,
+    },
+    {
+      children: item.orgsName,
+    },
+    {
+      children: item.orgsAddress,
+    },
+  ]
+})
 Element.displayName = 'DetailPopup'

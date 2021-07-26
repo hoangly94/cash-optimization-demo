@@ -9,10 +9,9 @@ import * as Block from '~commons/block';
 import * as Table from '~commons/table';
 import * as Title from '~commons/title';
 import * as Button from '~commons/button';
+import * as Pagination from '~commons/pagination';
 import { useDispatch, useSelector } from 'react-redux';
 import { _Array, _Date } from '@utils';
-import { useComponentClickOutside } from '@hooks';
-import { HANDLE_DUALTABLE_MOVE, SELECT_DUALTABLE_CONTENT_ROW } from '~/stores/authority/registration/constants';
 
 export enum Type {
   DEFAULT = 'dualtable',
@@ -58,6 +57,7 @@ export type Props = Base.Props & {
       disabled: boolean,
     },
   },
+  pagination?: Pagination.Props,
 }
 
 type Store = {
@@ -81,6 +81,7 @@ export const Element = (props: Props) => {
     titleCallback1,
     titleCallback2,
     actionButtons,
+    pagination,
   } = props;
   const dispatch = useDispatch();
   const table1DataSelector = store && store.selector1Keys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selector1Keys as string[])) : [];
@@ -108,6 +109,9 @@ export const Element = (props: Props) => {
   }
 
   if (type === Type.BLOCK) {
+    const paginationElement = pagination? <Pagination.Element
+    {...pagination}
+  /> : null;
     return (
       <Block.Element {...componentProps}>
         <Block.Element>
@@ -119,6 +123,9 @@ export const Element = (props: Props) => {
           >
             <Table.Element {...table1Props} />
           </Block.Element>
+            
+          {paginationElement}
+          
           <Block.Element
             flex={Base.Flex.BETWEEN}
             padding={Base.PaddingV.PX_18}

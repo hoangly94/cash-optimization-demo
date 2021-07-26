@@ -29,7 +29,6 @@ function* fetchRolesSaga() {
 function* fetchUserSaga() {
     // yield put({ type: FETCH_USER });
     const responseData = yield call(getUser, Config.url + '/api/cashoptimization/user/getInfoAccount');
-    // console.log(responseData);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         // return yield spawn(addNoti, 'error', responseData?.data?.message);
         return ;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { HANDLE_DUALTABLE_MOVE, SELECT_COMBOX, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, REQUEST_CREATING, REQUEST_QUERY, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, CHANGE_CREATING_INPUT, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_CREATING_CANCEL, FETCH_PYC, } from '~stores/routeManagement/normal/constants';
+import { HANDLE_DUALTABLE_MOVE, SELECT_COMBOX, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, REQUEST_CREATING, REQUEST_QUERY, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, CHANGE_CREATING_INPUT, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_CREATING_CANCEL, FETCH_PYC, CHANGE_VEHICLE_INPUT, REQUEST_PERS, } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -110,6 +110,17 @@ export const Element = (props: Popup.Props) => {
           },
         }}
         margin={Base.MarginBottom.PX_28}
+        pagination={{
+          store:{
+            totalSelectorKeys: ['routeManagement', 'creatingPopup'],
+            action: {
+              type: REQUEST_PERS,
+            }
+          },
+          style:{
+            marginTop: '5px',
+          }
+        }}
       />
 
       <Block.Element {...inputWrapperProps}>
@@ -119,7 +130,7 @@ export const Element = (props: Popup.Props) => {
           {...inputProps}
           store={{
             selectorKeys: ['routeManagement', 'creatingPopup', 'startTime'],
-            reducerType: CHANGE_CREATING_INPUT,
+            reducerType: CHANGE_VEHICLE_INPUT,
           }}
         />
       </Block.Element>

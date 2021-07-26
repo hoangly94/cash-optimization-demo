@@ -44,7 +44,6 @@ export const Element = (props: Props): React.ReactElement => {
   const total = store && store.totalSelectorKeys  ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.totalSelectorKeys as string[], 'total'])) : totalItems;
   const [currrentPage, setCurrentPage] = useState(0);
   const maxPage = Math.ceil((total as number ?? 1) / numberOfItemsPerPage);
-
   //create props
   const componentProps = {
     classNames: Classnames(
@@ -73,7 +72,7 @@ export const Element = (props: Props): React.ReactElement => {
 
   return (
     <Block.Element {...componentProps}>
-      {itemElements}
+      {itemElements.length > 1 && itemElements}
     </Block.Element>
   )
 }

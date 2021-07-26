@@ -105,7 +105,7 @@ export default (state: State = initState, action) => {
         case REQUEST_QUERY:
             return state
         case UPDATE_DATA:
-            const data = action.data?.data ? action.data.data.map(preprocessQueryResult) : [];
+            const data = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
 
             return {
                 ...state,
@@ -157,7 +157,7 @@ export default (state: State = initState, action) => {
                 },
             }
         case UPDATE_HISTORY:
-            const historyData = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
+            const historyData = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
             return {
                 ...state,
                 isLoading: false,
@@ -462,7 +462,7 @@ export default (state: State = initState, action) => {
                     cashOptimizatioDetailModelList: [
                         ...state[key].cashOptimizatioDetailModelList,
                         {
-                            key: cashOptimizatioDetailModelList.length ? cashOptimizatioDetailModelList[cashOptimizatioDetailModelList.length - 1]['key'] + 1 : 0,
+                            key: cashOptimizatioDetailModelList.length ? cashOptimizatioDetailModelList[cashOptimizatioDetailModelList.length - 1]['key'] + 1 : 1,
                             type: popupTypeData.type?.value,
                             currencyType: popupTypeData.currencyType?.value,
                             goldType: popupTypeData.goldType?.value,

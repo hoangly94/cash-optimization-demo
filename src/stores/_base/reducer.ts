@@ -544,10 +544,19 @@ const initState: State = {
             'special': {
                 isShown: false,
             },
-            'searchVehiclePers': {
+            'searchVehiclePersPopup': {
                 isShown: false,
             },
-            'organizeRoute': {
+            'organizingPopup': {
+                isShown: false,
+            },
+            'vehiclePopup': {
+                isShown: false,
+            },
+            'persPopup': {
+                isShown: false,
+            },
+            'destinationPointPopup': {
                 isShown: false,
             },
         },

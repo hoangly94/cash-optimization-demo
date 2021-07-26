@@ -28,6 +28,7 @@ const initState: State = {
     reasonTypes: [],
     routeStatuses: [],
     routeTransportTypes: [],
+    stopPointTypes: [],
 }
 
 export default (state: State = initState, action) => {
@@ -51,7 +52,8 @@ export default (state: State = initState, action) => {
                 const reasonTypes = action.data.filter(item => item.type === 'CASH_OPTIMIZATION_REASON_TYPE');
                 const routeStatuses = action.data.filter(item => item.type === 'ROUTE_STATUS');
                 const routeTransportTypes = action.data.filter(item => item.type === 'ROUTE_TRANSPORT_TYPE');
-                
+                const stopPointTypes = action.data.filter(item => item.type === 'ROUTE_OGANIZE_STOP_POINT_TYPE').map(item => ({ ...item, value: item.value || 'All' }));
+
                 return {
                     ...state,
                     atmcdmStatuses,
@@ -71,6 +73,7 @@ export default (state: State = initState, action) => {
                     reasonTypes,
                     routeStatuses,
                     routeTransportTypes,
+                    stopPointTypes,
                 }
             }
             return state;

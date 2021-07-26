@@ -52,6 +52,7 @@ export type State = {
     reasonTypes: any[],
     routeStatuses: any[],
     routeTransportTypes: any[],
+    stopPointTypes: any[],
 }
 
 

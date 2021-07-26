@@ -31,7 +31,7 @@ function* createDataSaga() {
     const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createCategoryRegion', state.region.creatingPopup);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
     yield put({ type: DONE_CREATING });
@@ -46,7 +46,7 @@ function* editDataSaga() {
     const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/updateCategoryRegion', state.region.selectedItem);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
     yield put({ type: DONE_CREATING });

@@ -32,7 +32,7 @@ export default (state: State = initState, action) => {
                 },
             }
         case UPDATE_DATA:
-            const data = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
+            const data = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
             return {
                 ...state,
                 isLoading: false,

@@ -81,9 +81,48 @@ export const UPDATE_ORGSSEARCHING_DISTANCE = root + 'UPDATE_ORGSSEARCHING_DISTAN
 export const FETCH_PYC = root + 'FETCH_PYC';
 export const UPDATE_PYC = root + 'UPDATE_PYC';
 
-export const REQUEST_SEACHVEHICLEPERS = root + 'REQUEST_SEACHVEHICLEPERS';
 export const REQUEST_SEACHVEHICLEPERS_CANCEL = root + 'REQUEST_SEACHVEHICLEPERS_CANCEL';
+export const REQUEST_SEACHVEHICLEPERS_UPDATE = root + 'REQUEST_SEACHVEHICLEPERS_UPDATE';
 export const REQUEST_SEACHVEHICLEPERS_CONTINUE = root + 'REQUEST_SEACHVEHICLEPERS_CONTINUE';
+export const REQUEST_SEACHVEHICLEPERS_BACK = root + 'REQUEST_SEACHVEHICLEPERS_BACK';
+export const SELECT_COMBOX_SEARCHVEHICLEPERS = root + 'SELECT_COMBOX_SEARCHVEHICLEPERS';
+export const CHANGE_VEHICLE_INPUT = root + 'CHANGE_VEHICLE_INPUT';
+export const CHANGE_PERS_INPUT = root + 'CHANGE_PERS_INPUT';
+export const REQUEST_VEHICLE = root + 'REQUEST_VEHICLE';
+export const REQUEST_VEHICLE_CANCEL = root + 'REQUEST_VEHICLE_CANCEL';
+export const REQUEST_PERS = root + 'REQUEST_PERS';
+export const REQUEST_PERS_CANCEL = root + 'REQUEST_PERS_CANCEL';
+export const UPDATE_VEHICLE_DATA = root + 'UPDATE_VEHICLE_DATA';
+export const UPDATE_PERS_DATA = root + 'UPDATE_PERS_DATA';
+
+export const SELECT_VEHICLE = root + 'SELECT_VEHICLE';
+export const SELECT_PERS = root + 'SELECT_PERS';
+
+export const REQUEST_ORGANIZING_UPDATE = root + 'REQUEST_ORGANIZING_UPDATE';
+export const REQUEST_ORGANIZING_URGENT_UPDATE = root + 'REQUEST_ORGANIZING_URGENT_UPDATE';
+export const REQUEST_ORGANIZING_CONTINUE = root + 'REQUEST_ORGANIZING_CONTINUE';
+export const REQUEST_ORGANIZING_BACK = root + 'REQUEST_ORGANIZING_BACK';
+export const REQUEST_ORGANIZING_CANCEL = root + 'REQUEST_ORGANIZING_CANCEL';
+
+export const REQUEST_ORGANIZING = root + 'REQUEST_ORGANIZING';
+export const REQUEST_ORGANIZING_CHECK_STOP_POINT = root + 'REQUEST_ORGANIZING_CHECK_STOP_POINT';
+export const REQUEST_ORGANIZING_SEARCH_DESTINATION = root + 'REQUEST_ORGANIZING_SEARCH_DESTINATION';
+export const REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT = root + 'REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT';
+export const REQUEST_ORGANIZING_ADD_HDB = root + 'REQUEST_ORGANIZING_ADD_HDB';
+export const REQUEST_ORGANIZING_INSERT = root + 'REQUEST_ORGANIZING_INSERT';
+export const REQUEST_ORGANIZING_CHECK_BALANCE_HDB = root + 'REQUEST_ORGANIZING_CHECK_BALANCE_HDB';
+export const REQUEST_ORGANIZING_UPDATE_ORDER = root + 'REQUEST_ORGANIZING_UPDATE_ORDER';
+export const REQUEST_ORGANIZING_GET_KC = root + 'REQUEST_ORGANIZING_GET_KC';
+
+export const UPDATE_ORGANIZING = root + 'UPDATE_ORGANIZING';
+export const UPDATE_ORGANIZING_STOP_POINT = root + 'UPDATE_ORGANIZING_STOP_POINT';
+export const CHANGE_ORGANIZING_INPUT = root + 'CHANGE_ORGANIZING_INPUT';
+export const UPDATE_ORGANIZING_INSERT = root + 'UPDATE_ORGANIZING_INSERT';
+
+export const REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL = root + 'REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL';
+
+export const SELECT_ROW_DESTINATION_POINT = root + 'SELECT_ROW_DESTINATION_POINT';
+export const SELECT_DESTINATION_POINT = root + 'SELECT_DESTINATION_POINT';
 
 export type State = {
     history: any,
@@ -128,6 +167,11 @@ export type State = {
         tableContent1: any[],
         tableContent2: any[],
         startTime: string,
+        reasonType: {
+            text: string,
+            value: string,
+        },
+        rejectReason:string,
     },
     orgsSearchingPopup: {
         isShown: boolean,
@@ -154,16 +198,80 @@ export type State = {
     orgsChildren: any[],
     distanceOrgsToOrgsRequest: string,
     pyc: any[],
-    searchVehiclePersPopup:{
-        vehicles:any[],
-        pers:any[],
-        startTime: string,
+    searchVehiclePersPopup: {
+        transportType: {
+            text: string,
+            value: string,
+        },
+        vehicles: any[],
+        pers: any[],
     },
-    organizeRoutePopup:{
+    view: {
 
     },
-    view:{
-
+    vehiclePopup: {
+        routeId: string,
+        searchType: {
+            text: string,
+            value: string,
+        },
+        searchValue: string,
+        tableContent1: any[],
+        tableContent2: any[],
+    },
+    persPopup: {
+        routeId: string,
+        searchType: {
+            text: string,
+            value: string,
+        },
+        searchValue: string,
+        tableContent1: any[],
+        tableContent2: any[],
+    },
+    vehicleComboxFilter: any[],
+    persComboxFilter: any[],
+    organizingPopup: {
+        stopPointType: {
+            text: string,
+            value: string,
+        },
+        routeDetailOganize: any[],
+        departurePointName: string,
+        departurePointAddress: string,
+        destinationPointName: string,
+        destinationPointAddress: string,
+        cashOptimizationId: string,
+        kcDepartureToDestination: string,
+        objectType: {
+            text: string,
+            value: string,
+        },
+        type: {
+            text: string,
+            value: string,
+        },
+        currencyType: {
+            text: string,
+            value: string,
+        },
+        goldType: {
+            text: string,
+            value: string,
+        },
+        quanlity: string,
+        attribute: {
+            text: string,
+            value: string,
+        },
+        cashOptimizatioDetailModelList: {
+            type: string,
+            currencyType: string,
+            goldType: string,
+            quanlity: string,
+            attribute: string,
+        }[],
+        routes: any[],
     },
 }
 

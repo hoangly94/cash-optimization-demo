@@ -72,7 +72,7 @@ export const Element = (props: Props) => {
   const inputTextRef = useRef((defaultText as any)?.text);
   const inputPlaceholderRef = useRef((defaultText as any)?.text);
   useEffect(() => {
-    if (inputTextRef.current || (defaultText as any)?.value || (defaultText as any)?.text === 'Tất cả') {
+    if (inputTextRef.current || (defaultText as any)?.value  === '' || (defaultText as any)?.value || (defaultText as any)?.text === 'Tất cả') {
       inputTextRef.current = (defaultText as any)?.text;
       forceRender();
     }

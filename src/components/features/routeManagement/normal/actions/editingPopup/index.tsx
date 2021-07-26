@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { HANDLE_DUALTABLE_MOVE, SELECT_COMBOX, REQUEST_QUERY, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_EDITING_CANCEL, REQUEST_EDITING, CHANGE_EDITING_INPUT, REQUEST_UPDATE_CONTINUE, } from '~stores/routeManagement/normal/constants';
+import { HANDLE_DUALTABLE_MOVE, SELECT_COMBOX, REQUEST_QUERY, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_EDITING_CANCEL, REQUEST_EDITING, CHANGE_EDITING_INPUT, REQUEST_UPDATE_CONTINUE, REQUEST_PERS, } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -125,6 +125,17 @@ export const Element = (props: Popup.Props) => {
           },
         }}
         margin={Base.MarginBottom.PX_28}
+        pagination={{
+          store:{
+            totalSelectorKeys: ['routeManagement', 'editingPopup'],
+            action: {
+              type: REQUEST_PERS,
+            }
+          },
+          style:{
+            marginTop: '5px',
+          }
+        }}
       />
 
       <Block.Element {...inputWrapperProps}>
@@ -231,7 +242,7 @@ const titleCallback = () => ([
     children: 'Trạng thái PYC',
     sort: {
       type: REQUEST_QUERY,
-      data: 'id',
+      data: 'status',
     }
   },
   {
@@ -239,7 +250,7 @@ const titleCallback = () => ([
     children: 'Mức độ ưu tiên',
     sort: {
       type: REQUEST_QUERY,
-      data: 'co_orgs_name',
+      data: 'priority_level_name',
     }
   },
   {
@@ -247,7 +258,7 @@ const titleCallback = () => ([
     children: 'Khoảng cách ĐVĐQ với ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'pers_fullname',
+      data: '',
     }
   },
   {
@@ -255,7 +266,7 @@ const titleCallback = () => ([
     children: 'Mô hình điều quỹ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'receiver_pers_fullname',
+      data: 'model',
     }
   },
   {
@@ -263,7 +274,7 @@ const titleCallback = () => ([
     children: 'Tên ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_from_date',
+      data: 'orgs_name',
     }
   },
   {
@@ -271,7 +282,7 @@ const titleCallback = () => ([
     children: 'Họ và tên thủ quỹ ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_to_date',
+      data: 'orgs_holder_name',
     }
   },
   {
@@ -279,7 +290,7 @@ const titleCallback = () => ([
     children: 'SĐT Thủ quỹ ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: 'orgs_holder_mobile',
     }
   },
   {

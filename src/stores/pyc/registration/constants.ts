@@ -227,12 +227,12 @@ export type State = {
             text: string,
             value: string,
         },
-        rejectReason:string,
         isDisabledGoldTypes: boolean,
         reasonType: {
             text: string,
             value: string,
         },
+        rejectReason:string,
     },
     orgsSearchingPopup:{
         isShown:boolean,

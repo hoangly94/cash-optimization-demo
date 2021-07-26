@@ -30,7 +30,7 @@ function* createDataSaga() {
     const state = yield select();
     const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createCategoryVehicle', state.vehicle.creatingPopup);
     if(!responseData || !responseData?.data || responseData.data.resultCode != 0){
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield put({ type: DONE_CREATING });
     yield fetchDataSaga();
@@ -44,7 +44,7 @@ function* editDataSaga() {
     const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/updateCategoryVehicle', state.vehicle.selectedItem);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
-        return yield spawn(addNoti, 'error');
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
     yield put({ type: DONE_CREATING });

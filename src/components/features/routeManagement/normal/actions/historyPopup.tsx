@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { FETCH_HISTORY, GET_PYC_HISTORY_EXCEL, SELECT_HISTORY_ROW, SELECT_ROW } from '~stores/pyc/registration/constants';
+import { FETCH_HISTORY, GET_HISTORY_EXCEL, SELECT_HISTORY_ROW, SELECT_ROW } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -8,18 +8,13 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
+import { REQUEST_QUERY } from '_/stores/routeManagement/normal/constants';
 
 export type Props = Popup.Props;
 
 export const Element = (props: Popup.Props) => {
-  const historySelector = useSelector(state => state['pycRegistration'].history);
+  const historySelector = useSelector(state => state['routeManagement'].history);
   const dispatch = useDispatch();
-  // const tableProps: Table.Props = {
-  //   ...tableData(historySelector.data?.map(mapResponseToData)),
-  //   // height: Base.Height.PX_300,
-  //   backgroundColor: Base.BackgroundColor.WHITE,
-  //   margin: Base.MarginBottom.PX_18,
-  // }
   const tableProps: Table.Props = {
     ...tableData(historySelector?.data?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
@@ -50,7 +45,7 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...actionsWrapperProps}>
         <Pagination.Element
           store={{
-            totalSelectorKeys: ['pycRegistration', 'history'],
+            totalSelectorKeys: ['routeManagement', 'history'],
             action: {
               type: FETCH_HISTORY,
             }
@@ -66,16 +61,16 @@ export const Element = (props: Popup.Props) => {
             backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
             margin={Base.MarginRight.PX_18}
             store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'historyDetail'],
+              isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'historyDetail'],
               action: {
                 type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'history', 'isShown'],
+                keys: ['routeManagement', 'history', 'isShown'],
                 value: false,
               }
             }}
             onClick={() => dispatch({
                 type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'detail', 'isShown'],
+                keys: ['routeManagement', 'detail', 'isShown'],
                 value: true,
                 popupType: 3,
             })}
@@ -85,7 +80,7 @@ export const Element = (props: Popup.Props) => {
             text='Excel'
             backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
             margin={Base.MarginRight.PX_18}
-            onClick={() => dispatch({ type: GET_PYC_HISTORY_EXCEL })}
+            onClick={() => dispatch({ type: GET_HISTORY_EXCEL })}
           />
           <Button.Element
             {...buttonProps}
@@ -94,7 +89,7 @@ export const Element = (props: Popup.Props) => {
             store={{
               action: {
                 type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'history', 'isShown'],
+                keys: ['routeManagement', 'history', 'isShown'],
                 value: false,
               }
             }}
@@ -121,7 +116,7 @@ const tableData_$rows_$cells_title = {
   
 const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_HISTORY_ROW, data: item });
-  dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'historyDetail', 'isDisabled'], value: false });
+  dispatch({ type: HANDLE_BUTTON, keys: ['routeManagement', 'historyDetail', 'isDisabled'], value: false });
 }
 
 
@@ -141,7 +136,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Ngày tạo PYC',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'createddate',
           }
         },
@@ -149,7 +144,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Số PYC HT',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'id',
           }
         },
@@ -157,7 +152,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Số PYC ĐV',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'orgs_request_id',
           }
         },
@@ -165,7 +160,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Mã ĐVYCĐQ ',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'orgs_code',
           }
         },
@@ -173,7 +168,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Tên ĐVYCĐQ',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'orgs_name',
           }
         },
@@ -181,7 +176,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Mã ĐVĐQ',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'coo_orgs_dest_code',
           }
         },
@@ -189,7 +184,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Tên ĐVĐQ',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'coo_orgs_dest_name',
           }
         },
@@ -197,7 +192,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Trạng thái PYC',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'cash_optimization_status',
           }
         },
@@ -205,7 +200,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Đối tượng ĐQ',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'objectType',
           }
         },
@@ -213,7 +208,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Mô hình ĐQ',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'model',
           }
         },
@@ -221,7 +216,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Mức độ ưu tiên',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'priority_level_name',
           }
         },
@@ -229,7 +224,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Số LT',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'route_id',
           }
         },
@@ -237,7 +232,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Trạng thái LT',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'route_status',
           }
         },
@@ -245,7 +240,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Mã ATM',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'coo_atm_cdm_code',
           }
         },
@@ -253,7 +248,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Tên ATM',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'coo_atm_cdm_name',
           }
         },
@@ -261,7 +256,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Mã NH đối tác KPP mở TK',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'coo_nnhn_tctd_code',
           }
         },
@@ -269,7 +264,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Tên NH đối tác KPP mở TK',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'coo_nnhn_tctd_name',
           }
         },
@@ -277,7 +272,7 @@ const tableData = (queryResult?): Table.Props => ({
           ...tableData_$rows_$cells_title,
           children: 'Datelastmaint',
           sort: {
-            type: FETCH_HISTORY,
+            type: REQUEST_QUERY,
             data: 'updateddate',
           }
         },
@@ -346,7 +341,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.cashOptimizationOrgsDetailModel?.nnhnTctdName,
     },
     {
-      children: item.updateddate,
+      children: item.updateddate?.substring(0,10)?.split('-').join('/'),
     },
   ]
 })

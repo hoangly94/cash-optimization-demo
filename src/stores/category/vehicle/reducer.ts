@@ -70,7 +70,7 @@ export default (state: State = initState, action) => {
         case REQUEST_QUERY:
             return state
         case UPDATE_DATA:
-            const data = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
+            const data = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
             return {
                 ...state,
                 isLoading: false,
@@ -207,7 +207,7 @@ export default (state: State = initState, action) => {
                 }
             }
         case UPDATE_HISTORY_DETAIL:
-            const historyDetailData = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
+            const historyDetailData = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
             return {
                 ...state,
                 isLoading: false,
@@ -218,7 +218,7 @@ export default (state: State = initState, action) => {
                 }
             }
         case UPDATE_HISTORY:
-            const historyData = action.data.data ? action.data.data.map(preprocessQueryResult) : [];
+            const historyData = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
             return {
                 ...state,
                 isLoading: false,
