@@ -146,8 +146,8 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector) => {
-  if (!popupSelector.regionCode)
-    return false;
+  // if (!popupSelector.regionCode)
+  //   return false;
   return true;
 }
 

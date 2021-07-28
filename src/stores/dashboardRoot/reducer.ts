@@ -53,7 +53,7 @@ export default (state: State = initState, action) => {
                 const routeStatuses = action.data.filter(item => item.type === 'ROUTE_STATUS');
                 const routeTransportTypes = action.data.filter(item => item.type === 'ROUTE_TRANSPORT_TYPE');
                 const stopPointTypes = action.data.filter(item => item.type === 'ROUTE_OGANIZE_STOP_POINT_TYPE').map(item => ({ ...item, value: item.value || 'All' }));
-
+                console.log(stopPointTypes);
                 return {
                     ...state,
                     atmcdmStatuses,

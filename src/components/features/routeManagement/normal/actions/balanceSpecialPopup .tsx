@@ -5,15 +5,15 @@ import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
-import * as Pagination from "~commons/pagination";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
+import { FETCH_BALANCE_SPECIAL } from '_/stores/routeManagement/normal/constants';
 
 export type Props = Popup.Props & {
   selector?: any,
 };
 
 export const Element = (props: Props) => {
-  const selector = useSelector(state => state['routeManagement'].special);
+  const selector = useSelector(state => state['routeManagement'].balanceSpecial);
   const dispatch = useDispatch();
   const tableProps: Table.Props = {
     ...tableData(selector?.map(mapResponseToData(handleRowClick(dispatch)))),
@@ -51,7 +51,7 @@ export const Element = (props: Props) => {
             store={{
               action: {
                 type: HANDLE_POPUP,
-                keys: ['routeManagement', 'special', 'isShown'],
+                keys: ['routeManagement', 'balanceSpecial', 'isShown'],
                 value: false,
               }
             }}

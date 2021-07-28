@@ -559,6 +559,17 @@ const initState: State = {
             'destinationPointPopup': {
                 isShown: false,
             },
+            'mapPopup': {
+                isShown: false,
+            },
+            'balanceSpecial': {
+                isShown: false,
+            },
+        },
+        'routeTracking': {
+            'mapPopup': {
+                isShown: false,
+            },
         },
     },
     notis: [],

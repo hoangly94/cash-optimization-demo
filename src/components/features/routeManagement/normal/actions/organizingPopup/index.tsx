@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_VEHICLE, REQUEST_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, REQUEST_ORGANIZING_GET_KC, SELECT_COMBOX, HANDLE_SPECIAL_ADD, HANDLE_SPECIAL_DELETE, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_ADD_HDB, } from '~stores/routeManagement/normal/constants';
+import { REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_VEHICLE, REQUEST_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, REQUEST_ORGANIZING_GET_KC, SELECT_COMBOX, HANDLE_SPECIAL_ADD, HANDLE_SPECIAL_DELETE, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, FETCH_BALANCE_SPECIAL, } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -27,7 +27,7 @@ export const Element = (props: Popup.Props) => {
   const handleSpecialAddButtonClick = () => {
     const isValidForm = validateSpecialForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_ORGANIZING_ADD_HDB });
+      dispatch({ type: HANDLE_SPECIAL_ADD });
     }
   }
 
@@ -182,6 +182,20 @@ export const Element = (props: Popup.Props) => {
             backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
             onClick={() => dispatch({ type: REQUEST_ORGANIZING_GET_KC })}
           />
+          <a
+            style={{
+              color: 'blue',
+              cursor: 'pointer',
+            }}
+            onClick={() => {
+              dispatch({
+                type: HANDLE_POPUP,
+                keys: ['routeManagement', 'balanceSpecial', 'isShown'],
+                value: true,
+              });
+              dispatch({ type: FETCH_BALANCE_SPECIAL })
+            }}
+          >Số dư HĐB</a>
         </Block.Element>
       </Block.Element>
 
@@ -282,13 +296,12 @@ export const Element = (props: Popup.Props) => {
             width={Base.Width.PX_200}
             color={Base.Color.WHITE}
             border={Base.Border.NONE}
+            backgroundColor={Base.BackgroundColor.RED}
             store={{
               // isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'specialDeleteEditing'],
               action: { type: HANDLE_SPECIAL_DELETE }
             }}
-            style={{
-              backgroundColor: '#c72626',
-            }}
+            isDisabled={!(selector?.selectedSpecial)}
           // onClick={() => dispatch({ type: HANDLE_BUTTON, keys: ['routeManagement', 'specialDeleteEditing', 'isDisabled'], value: true })}
           />
         </Block.Element>
@@ -327,13 +340,12 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             border={Base.Border.NONE}
             margin={Base.MarginRight.PX_8}
+            backgroundColor={Base.BackgroundColor.RED}
             store={{
               // isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'specialDeleteEditing'],
-              action: { type: HANDLE_SPECIAL_DELETE }
+              action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'DELETE' }
             }}
-            style={{
-              backgroundColor: '#c72626',
-            }}
+            isDisabled={!(selector?.selectedRouteDetailOganize)}
           />
           <Button.Element
             text='Up'
@@ -344,8 +356,9 @@ export const Element = (props: Popup.Props) => {
             margin={Base.MarginRight.PX_8}
             store={{
               // isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'specialDeleteEditing'],
-              action: { type: HANDLE_SPECIAL_DELETE }
+              action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'UP' }
             }}
+            isDisabled={!(selector?.selectedRouteDetailOganize)}
           />
           <Button.Element
             text='Down'
@@ -355,8 +368,9 @@ export const Element = (props: Popup.Props) => {
             backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
             store={{
               // isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'specialDeleteEditing'],
-              action: { type: HANDLE_SPECIAL_DELETE }
+              action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'DOWN' }
             }}
+            isDisabled={!(selector?.selectedRouteDetailOganize)}
           />
         </Block.Element>
       </Block.Element>
@@ -375,13 +389,13 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             flexGrow={Base.FlexGrow.G1}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['routeManagement', 'organizingPopup', 'isShown'],
-                value: false,
-              }
-            }}
+            // store={{
+            //   action: {
+            //     type: HANDLE_POPUP,
+            //     keys: ['routeManagement', 'organizingPopup', 'isShown'],
+            //     value: false,
+            //   }
+            // }}
             onClick={() => dispatch({ type: REQUEST_ORGANIZING_UPDATE })}
           />
           <Button.Element
@@ -391,13 +405,13 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             flexGrow={Base.FlexGrow.G1}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['routeManagement', 'organizingPopup', 'isShown'],
-                value: false,
-              }
-            }}
+            // store={{
+            //   action: {
+            //     type: HANDLE_POPUP,
+            //     keys: ['routeManagement', 'organizingPopup', 'isShown'],
+            //     value: false,
+            //   }
+            // }}
             onClick={() => dispatch({ type: REQUEST_ORGANIZING_CONTINUE })}
           />
           <Button.Element
@@ -407,14 +421,29 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             flexGrow={Base.FlexGrow.G1}
+            // store={{
+            //   action: {
+            //     type: HANDLE_POPUP,
+            //     keys: ['routeManagement', 'organizingPopup', 'isShown'],
+            //     value: false,
+            //   }
+            // }}
+            onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK })}
+          />
+          <Button.Element
+            text='PREVIEW'
+            margin={Base.MarginRight.PX_28}
+            width={Base.Width.PX_200}
+            color={Base.Color.WHITE}
+            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+            flexGrow={Base.FlexGrow.G1}
             store={{
               action: {
                 type: HANDLE_POPUP,
-                keys: ['routeManagement', 'organizingPopup', 'isShown'],
-                value: false,
+                keys: ['routeManagement', 'mapPopup', 'isShown'],
+                value: true,
               }
             }}
-            onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK })}
           />
 
           <Button.Element

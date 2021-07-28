@@ -39,7 +39,7 @@ export type Props = Base.Props & {
 
 type Store = {
   selectorKeys: string[],
-  reducerType: any,
+  reducerType?: any,
   reducerKey?: any,
 }
 

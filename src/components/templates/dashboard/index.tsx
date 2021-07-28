@@ -31,6 +31,8 @@ import * as AssignRole from '~features/user/assignRole';
 import * as ResetPassword from '~features/user/resetPassword';
 import * as RouteManagementNormal from '~features/routeManagement/normal';
 import * as RouteManagementUrgent from '~features/routeManagement/normal/urgent';
+import * as RouteTrackingCar1 from '~features/routeTracking/car1';
+import * as RouteTrackingCar2 from '~features/routeTracking/car2';
 import { FETCH_ROLES, FETCH_USER } from '~/stores/auth/constants';
 import { useCooke } from '~/hooks';
 
@@ -118,7 +120,8 @@ const DashboardComponent = (userSelector) => () => {
                     <RoleRoute path="/pyc/approval" component={PYCApproval.Element} accessedRole='1B' roles={userSelector.viewList} />
                     <RoleRoute path="/route-management/normal" component={RouteManagementNormal.Element} accessedRole='11A' roles={userSelector.viewList} />
                     <RoleRoute path="/route-management/urgent" component={RouteManagementUrgent.Element} accessedRole='11B' roles={userSelector.viewList} />
-                    
+                    <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRole='11B' roles={userSelector.viewList} />
+                    <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRole='11B' roles={userSelector.viewList} />
                 </Switch>
             </Main.Element>
         </>
@@ -165,6 +168,12 @@ const breadcrumbsMapper = {
         _name: 'Quản lý Lộ trình',
         'normal': { _url: '/route-management/normal', _name: 'Lộ trình Bình thường', },
         'urgent': { _url: '/route-management/urgent', _name: 'Lộ trình Khẩn cấp', },
+    },
+    'route-tracking': {
+        _url: '',
+        _name: 'Theo dõi Lộ trình',
+        'car1': { _url: '/route-tracking/car1', _name: 'PTVC là xe chuyên dùng', },
+        'car2': { _url: '/route-tracking/car2', _name: 'PTVC KHÁC xe chuyên dùng', },
     },
 }
                     
@@ -307,6 +316,24 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'Lộ trình Khẩn cấp',
                         url: '/route-management/urgent',
+                        accessedRole: '11B',
+                    },
+                ]
+            },
+            {
+                text: 'Theo dõi Lộ trình',
+                $icon: {
+                    name: 'documentCheck',
+                },
+                $subs: [
+                    {
+                        text: 'PTVC là xe chuyên dùng',
+                        url: '/route-tracking/car1',
+                        accessedRole: '11A',
+                    },
+                    {
+                        text: 'PTVC KHÁC xe chuyên dùng',
+                        url: '/route-tracking/car2',
                         accessedRole: '11B',
                     },
                 ]

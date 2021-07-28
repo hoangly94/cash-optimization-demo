@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ORGS_CODE_CREATING, REQUEST_CREATING, REQUEST_CREATING_CANCEL, CHANGE_CREATING_INPUT, SELECT_TITLE_CREATING,SELECT_STATUS_CREATING } from '~stores/category/person/constants';
+import { SELECT_ORGS_CODE_CREATING, REQUEST_CREATING, REQUEST_CREATING_CANCEL, CHANGE_CREATING_INPUT, SELECT_TITLE_CREATING, SELECT_STATUS_CREATING } from '~stores/category/person/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -10,7 +10,7 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { getCurrentDate, isMatchDateDD_MM_YYYY } from "@utils";
 import { comboxProps } from "./";
-import { HANDLE_POPUP } from '~/stores/_base/constants';
+import { ADD_NOTI, HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -24,9 +24,8 @@ export const Element = (props: Popup.Props) => {
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(creatingPopupSelector, setErrorMsg);
+    const isValidForm = validateForm(creatingPopupSelector, dispatch);
     if (isValidForm) {
-      setErrorMsg('');
       dispatch({ type: REQUEST_CREATING });
       if (setIsShown)
         setIsShown(false)
@@ -256,7 +255,7 @@ const actionsProps: Block.Props = {
 }
 
 
-const validateForm = (popupSelector, setErrorMsg) => {
+const validateForm = (popupSelector, dispatch) => {
   // if (!popupSelector.persCode) {
   //   setErrorMsg('Persnbr không được để trống');
   //   return false;
@@ -278,25 +277,26 @@ const validateForm = (popupSelector, setErrorMsg) => {
   //   return false;
   // }
   if (!isMatchDateDD_MM_YYYY(popupSelector.persCmndCccdYear)) {
-    setErrorMsg('Ngày cấp CMND/CCCD sai định dạng');
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Ngày cấp CMND/CCCD sai định dạng' } });
+
     return false;
   }
-  if (!popupSelector.persCmndCccdPlace){
-    setErrorMsg('Nơi cấp không được để trống');
-    return false;
-  }
-  if (!popupSelector.orgsSelected.value) {
-    setErrorMsg('Tên DVQL không được để trống');
-    return false;
-  }
-  if (!popupSelector.persEmail) {
-    setErrorMsg('Email không được để trống');
-    return false;
-  }
-  if (!popupSelector.persStatusSelected.value) {
-    setErrorMsg('Trạng thái không được để trống');
-    return false;
-  }
+  // if (!popupSelector.persCmndCccdPlace){
+  //   setErrorMsg('Nơi cấp không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.orgsSelected.value) {
+  //   setErrorMsg('Tên DVQL không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persEmail) {
+  //   setErrorMsg('Email không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persStatusSelected.value) {
+  //   setErrorMsg('Trạng thái không được để trống');
+  //   return false;
+  // }
   return true;
 }
 

@@ -11,7 +11,7 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { comboxProps } from ".";
 import { getCurrentDate, isMatchDateDD_MM_YYYY } from "@utils";
-import { HANDLE_POPUP } from '~/stores/_base/constants';
+import { ADD_NOTI, HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -25,7 +25,7 @@ export const Element = (props: Popup.Props) => {
   const selectedItemSelector = useSelector(state => state['person'].selectedItem);
 
   const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(selectedItemSelector, setErrorMsg);
+    const isValidForm = validateForm(selectedItemSelector, dispatch);
     if (isValidForm) {
       setErrorMsg('');
       dispatch({ type: REQUEST_EDITING });
@@ -260,47 +260,48 @@ const actionsProps: Block.Props = {
   width: Base.Width.PER_70,
 }
 
-const validateForm = (popupSelector, setErrorMsg) => {
-  if (!popupSelector.persCode) {
-    setErrorMsg('Persnbr không được để trống');
-    return false;
-  }
-  if (!popupSelector.persFullname) {
-    setErrorMsg('Họ và tên không được để trống');
-    return false;
-  }
-  if (!popupSelector.persTitleSelected.value) {
-    setErrorMsg('Chức danh không được để trống');
-    return false;
-  }
-  if (!popupSelector.persMobile) {
-    setErrorMsg('Số điện thoại không được để trống');
-    return false;
-  }
-  if (!popupSelector.persCmndCccd) {
-    setErrorMsg('CMND/CCCD không được để trống');
-    return false;
-  }
+const validateForm = (popupSelector, dispatch) => {
+  // if (!popupSelector.persCode) {
+  //   setErrorMsg('Persnbr không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persFullname) {
+  //   setErrorMsg('Họ và tên không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persTitleSelected.value) {
+  //   setErrorMsg('Chức danh không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persMobile) {
+  //   setErrorMsg('Số điện thoại không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persCmndCccd) {
+  //   setErrorMsg('CMND/CCCD không được để trống');
+  //   return false;
+  // }
   if (!isMatchDateDD_MM_YYYY(popupSelector.persCmndCccdYear)) {
-    setErrorMsg('Ngày cấp CMND/CCCD sai định dạng');
+    
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Ngày cấp CMND/CCCD sai định dạng' } });
     return false;
   }
-  if (!popupSelector.persCmndCccdPlace){
-    setErrorMsg('Nơi cấp không được để trống');
-    return false;
-  }
-  if (!popupSelector.orgsSelected.value) {
-    setErrorMsg('Tên DVQL không được để trống');
-    return false;
-  }
-  if (!popupSelector.persEmail) {
-    setErrorMsg('Email không được để trống');
-    return false;
-  }
-  if (!popupSelector.persStatusSelected.value) {
-    setErrorMsg('Trạng thái không được để trống');
-    return false;
-  }
+  // if (!popupSelector.persCmndCccdPlace){
+  //   setErrorMsg('Nơi cấp không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.orgsSelected.value) {
+  //   setErrorMsg('Tên DVQL không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persEmail) {
+  //   setErrorMsg('Email không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.persStatusSelected.value) {
+  //   setErrorMsg('Trạng thái không được để trống');
+  //   return false;
+  // }
   return true;
 }
 

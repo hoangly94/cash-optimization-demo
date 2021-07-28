@@ -9,6 +9,7 @@ import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 import { REQUEST_QUERY } from '_/stores/routeManagement/normal/constants';
+import { _Date } from '_/utils';
 
 export type Props = Popup.Props;
 
@@ -134,7 +135,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Ngày tạo PYC',
+          children: 'Ngày tạo LT',
           sort: {
             type: REQUEST_QUERY,
             data: 'createddate',
@@ -142,7 +143,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Số PYC HT',
+          children: 'Số lộ trình',
           sort: {
             type: REQUEST_QUERY,
             data: 'id',
@@ -150,82 +151,18 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Số PYC ĐV',
+          children: 'Mã ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgs_request_id',
+            data: 'orgsCode',
           }
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã ĐVYCĐQ ',
+          children: 'Tên ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgs_code',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên ĐVYCĐQ',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'orgs_name',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mã ĐVĐQ',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'coo_orgs_dest_code',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên ĐVĐQ',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'coo_orgs_dest_name',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Trạng thái PYC',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'cash_optimization_status',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Đối tượng ĐQ',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'objectType',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mô hình ĐQ',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'model',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mức độ ưu tiên',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'priority_level_name',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Số LT',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'route_id',
+            data: 'orgsname',
           }
         },
         {
@@ -233,39 +170,31 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Trạng thái LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'route_status',
+            data: 'routeStatus',
           }
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã ATM',
+          children: 'Version LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'coo_atm_cdm_code',
+            data: 'orgs_code',
           }
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên ATM',
+          children: 'Tên thủ quỹ ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'coo_atm_cdm_name',
+            data: 'tqDltltName',
           }
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã NH đối tác KPP mở TK',
+          children: 'Thời gian bắt đầu LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'coo_nnhn_tctd_code',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên NH đối tác KPP mở TK',
-          sort: {
-            type: REQUEST_QUERY,
-            data: 'coo_nnhn_tctd_name',
+            data: 'startTime',
           }
         },
         {
@@ -290,13 +219,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.createddate.split('-').join('/'),
+      children: _Date.getDate(item.startTime),
     },
     {
       children: item.id,
-    },
-    {
-      children: item.orgsRequestId,
     },
     {
       children: item.orgsCode,
@@ -305,43 +231,19 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.orgsName,
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.orgsDestCode || '',
-    },
-    {
-      children: item.cashOptimizationOrgsDetailModel?.orgsDestName,
-    },
-    {
-      children: item.cashOptimizationStatus,
-    },
-    {
-      children: item.objectType,
-    },
-    {
-      children: item.model,
-    },
-    {
-      children: item.priorityLevelName,
-    },
-    {
-      children: item.routeId || '',
-    },
-    {
       children: item.routeStatus,
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.atmCdmCode || '',
+      children: item.routeVersion,
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.atmCdmName,
+      children: item.tqDltltName,
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.nnhnTctdCode || '',
+      children: _Date.getDate(item.startTime),
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.nnhnTctdName,
-    },
-    {
-      children: item.updateddate?.substring(0,10)?.split('-').join('/'),
+      children: _Date.getDate(item.updateddate),
     },
   ]
 })

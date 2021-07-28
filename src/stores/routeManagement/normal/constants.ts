@@ -119,10 +119,19 @@ export const UPDATE_ORGANIZING_STOP_POINT = root + 'UPDATE_ORGANIZING_STOP_POINT
 export const CHANGE_ORGANIZING_INPUT = root + 'CHANGE_ORGANIZING_INPUT';
 export const UPDATE_ORGANIZING_INSERT = root + 'UPDATE_ORGANIZING_INSERT';
 
+export const UPDATE_ORGANIZING_DISTANCE = root + 'UPDATE_ORGANIZING_DISTANCE';
+
 export const REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL = root + 'REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL';
 
 export const SELECT_ROW_DESTINATION_POINT = root + 'SELECT_ROW_DESTINATION_POINT';
 export const SELECT_DESTINATION_POINT = root + 'SELECT_DESTINATION_POINT';
+export const SELECT_ROUTE_ROW = root + 'SELECT_ROUTE_ROW';
+
+export const FETCH_MAP = root + 'FETCH_MAP';
+export const UPDATE_MAP = root + 'UPDATE_MAP';
+
+export const FETCH_BALANCE_SPECIAL = root + 'FETCH_BALANCE_SPECIAL';
+export const UPDATE_BALANCE_SPECIAL = root + 'UPDATE_BALANCE_SPECIAL';
 
 export type State = {
     history: any,
@@ -264,14 +273,14 @@ export type State = {
             text: string,
             value: string,
         },
-        cashOptimizatioDetailModelList: {
+        cashOptimizatioDetailModelList?: {
             type: string,
             currencyType: string,
             goldType: string,
             quanlity: string,
             attribute: string,
         }[],
-        routes: any[],
+        routes?: any[],
     },
 }
 

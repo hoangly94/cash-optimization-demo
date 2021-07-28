@@ -146,8 +146,8 @@ const actionsProps: Block.Props = {
 
 
 const validateForm = (creatingPopupSelector) => {
-  if (!creatingPopupSelector.functionCode)
-    return false;
+  // if (!creatingPopupSelector.functionCode)
+  //   return false;
   return true;
 }
 

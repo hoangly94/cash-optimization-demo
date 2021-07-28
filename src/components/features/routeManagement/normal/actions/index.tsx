@@ -10,6 +10,7 @@ import * as EditingPopup from "./editingPopup";
 import * as DetailPopup from "./detailPopup";
 import * as DeletePopup from "./deletePopup";
 import * as SpecialPopup from "./specialPopup";
+import * as BalanceSpecialPopup from "./balanceSpecialPopup ";
 import * as OrgsSearchingPopup from "./orgsSearchingPopup";
 import * as HistoryPopup from "./historyPopup";
 import * as SearchVehiclePersPopup from "./searchVehiclePersPopup";
@@ -17,6 +18,7 @@ import * as VehiclePopup from "./vehiclePopup";
 import * as PersPopup from "./persPopup";
 import * as OrganizingPopup from "./organizingPopup";
 import * as DestinationPointPopup from "./destinationPointPopup";
+import * as MapPopup from "./mapPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_QUERY, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, GET_EXCEL, FETCH_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL } from '~stores/routeManagement/normal/constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -226,6 +228,7 @@ export const Element = (props: Props) => {
         useEffect={{
           callback: () => {
             dispatch({ type: FETCH_PYC });
+            dispatch({ type: REQUEST_CREATING_CANCEL });
           },
         }}
       />
@@ -358,11 +361,17 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'destinationPointPopup'],
         }}
-        // useEffect={{
-        //   callback: () => {
-        //     dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL });
-        //   },
-        // }}
+      // useEffect={{
+      //   callback: () => {
+      //     dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL });
+      //   },
+      // }}
+      />
+
+      <MapPopup.Element
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'mapPopup'],
+        }}
       />
 
       <SpecialPopup.Element
@@ -375,6 +384,17 @@ export const Element = (props: Props) => {
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'special'],
         }}
       />
+      <BalanceSpecialPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'Số dư Hàng đặc biệt'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'balanceSpecial'],
+        }}
+      />
+
     </>
 
   )

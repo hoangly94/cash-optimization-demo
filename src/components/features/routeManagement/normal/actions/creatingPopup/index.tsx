@@ -23,6 +23,7 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const selector = useSelector(state => state['routeManagement'].creatingPopup);
+
   const dispatch = useDispatch();
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
@@ -130,7 +131,7 @@ export const Element = (props: Popup.Props) => {
           {...inputProps}
           store={{
             selectorKeys: ['routeManagement', 'creatingPopup', 'startTime'],
-            reducerType: CHANGE_VEHICLE_INPUT,
+            reducerType: CHANGE_CREATING_INPUT,
           }}
         />
       </Block.Element>
@@ -400,13 +401,13 @@ const cellMapping = (dispatch) => (item, index) => ([
     children: item.orgsHolderMobile,
   },
   {
-    children: item.orgsDestName,
+    children: item.cashOptimizationOrgsDetailModel?.orgsDestName,
   },
   {
-    children: item.tqDvdqName,
+    children: item.cashOptimizationOrgsDetailModel?.tqDvdqName,
   },
   {
-    children: item.tqDvdqMobile,
+    children: item.cashOptimizationOrgsDetailModel?.tqDvdqMobile,
   },
   {
     children: <a
@@ -447,6 +448,7 @@ const cellMapping = (dispatch) => (item, index) => ([
 ]);
 
 const validateForm = (dispatch, selector) => {
+  console.log(selector.startTime);
   if (!moment(selector.startTime, 'DD/MM/YYYY hh:mm:ss A', true).isValid()) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss AM/PM)' } });
     return false;

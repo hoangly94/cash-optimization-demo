@@ -169,7 +169,7 @@ export const Element = (props: Props) => {
           }}
         />
         <Input.Element
-          placeholder='Số PYC HT'
+          placeholder='Số Lộ trình'
           {...filter2Props}
           store={{
             selectorKeys: ['routeManagement', 'filters', 'id'],

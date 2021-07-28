@@ -587,7 +587,7 @@ body {
     background-color:green;
   }
   &-red{
-    background-color:red;
+    background-color:rgb(199, 38, 38);
   }
   &-classic-blue{
     background-color:#34568B;

@@ -237,18 +237,18 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  if (!popupSelector.vehicleCode) {
-    setErrorMsg('Biển số xe không được để trống');
-    return false;
-  }
-  if (!popupSelector.vehicleFunctionSelected.value){
-    setErrorMsg('Phải chọn Chức năng');
-    return false;
-  }
-  if (!popupSelector.orgsSelected.value){
-    setErrorMsg('Phải chọn DVQL');
-    return false;
-  }
+  // if (!popupSelector.vehicleCode) {
+  //   setErrorMsg('Biển số xe không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.vehicleFunctionSelected.value){
+  //   setErrorMsg('Phải chọn Chức năng');
+  //   return false;
+  // }
+  // if (!popupSelector.orgsSelected.value){
+  //   setErrorMsg('Phải chọn DVQL');
+  //   return false;
+  // }
   return true;
 }
 

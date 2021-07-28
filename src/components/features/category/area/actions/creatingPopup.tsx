@@ -163,14 +163,14 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  if (!popupSelector.areaCode) {
-    setErrorMsg('Mã cụm không được để trống');
-    return false;
-  }
-  if (!popupSelector.regionSelected.value){
-    setErrorMsg('Phải chọn Vùng');
-    return false;
-  }
+  // if (!popupSelector.areaCode) {
+  //   setErrorMsg('Mã cụm không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.regionSelected.value){
+  //   setErrorMsg('Phải chọn Vùng');
+  //   return false;
+  // }
   return true;
 }
 

@@ -1,10 +1,8 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_SEARCHVEHICLEPERS, CHANGE_VEHICLE_INPUT, CHANGE_PERS_INPUT, UPDATE_VEHICLE_DATA, SELECT_VEHICLE, UPDATE_PERS_DATA, SELECT_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, UPDATE_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, UPDATE_ORGANIZING_STOP_POINT, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_CANCEL, UPDATE_ORGANIZING_INSERT, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_SEARCHVEHICLEPERS, CHANGE_VEHICLE_INPUT, CHANGE_PERS_INPUT, UPDATE_VEHICLE_DATA, SELECT_VEHICLE, UPDATE_PERS_DATA, SELECT_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, UPDATE_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, UPDATE_ORGANIZING_STOP_POINT, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_CANCEL, UPDATE_ORGANIZING_INSERT, SELECT_ROUTE_ROW, UPDATE_ORGANIZING_DISTANCE, UPDATE_MAP, UPDATE_BALANCE_SPECIAL, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
-import { UPDATE_CONFIG } from '~stores/dashboardRoot/constants';
 import { HANDLE_POPUP } from '~stores/_base/constants';
-import { ItemChildrenType } from '~/components/commons/list';
 import moment from 'moment';
 
 const initState: State = {
@@ -91,6 +89,7 @@ export default (state: State = initState, action) => {
                 creatingPopup: {
                     ...getDefaultPopupActions(),
                     tableContent1: state.pyc,
+                    tableContent2: [],
                 },
             }
         case DONE_CREATING:
@@ -166,15 +165,6 @@ export default (state: State = initState, action) => {
                 },
             }
         case CHANGE_EDITING_INPUT:
-            console.log('==============');
-            console.log(action);
-            console.log({
-                ...state,
-                editingPopup: {
-                    ...state.editingPopup,
-                    ...action.data,
-                },
-            });
             return {
                 ...state,
                 editingPopup: {
@@ -488,8 +478,17 @@ export default (state: State = initState, action) => {
             }
         case SELECT_ROW:
             const newQueryResult = state.queryResult.data.map(mapToNewQueryResult(action.data))
-            const newData = mapToNewData(action.data, state);
-
+            const newData = {
+                ...mapToNewData(action.data, state),
+                cashOptimizatioDetailModelList: action.data?.routeDetailHdb?.map((item) => ({
+                    ...item,
+                    key: item.id,
+                })),
+                routeDetailOganize: action.data?.routeDetailOganize?.map((item) => ({
+                    ...item,
+                    key: item.id,
+                })),
+            };
             return {
                 ...state,
                 selectedItem: newData,
@@ -660,6 +659,7 @@ export default (state: State = initState, action) => {
                     ...state.organizingPopup,
                     ...getDefaultOrganizingPopup(),
                     stopPointType: action.data,
+                    routeDetailOganize: state.organizingPopup.routeDetailOganize,
                 },
             }
         case UPDATE_ORGANIZING_STOP_POINT:
@@ -670,6 +670,7 @@ export default (state: State = initState, action) => {
                     ...action.data?.data,
                     id: state.organizingPopup['id'],
                     stopPointType: state.organizingPopup.stopPointType,
+                    routeDetailOganize: state.organizingPopup.routeDetailOganize,
                 },
             }
         case SELECT_ROW_DESTINATION_POINT:
@@ -684,30 +685,38 @@ export default (state: State = initState, action) => {
                 if (action.tableType === 1) {
                     data.routeDetailVehicle = data.routeDetailVehicle?.map(mapToNewQueryResult(action.data));
                     data['selectedItem'] = {
+                        tableType: action.tableType,
                         destinationPointName: action.data.categoryVehicle?.categoryOrgs?.orgsName,
                         destinationPointAddress: action.data.categoryVehicle?.categoryOrgs?.orgsAddress,
+                        selectedData: action.data,
                     }
                 }
                 if (action.tableType === 2) {
                     data.routeDetailPers = data.routeDetailPers?.map(mapToNewQueryResult(action.data));
                     data['selectedItem'] = {
+                        tableType: action.tableType,
                         destinationPointName: action.data.categoryPers?.categoryOrgs?.orgsName,
                         destinationPointAddress: action.data.categoryPers?.categoryOrgs?.orgsAddress,
+                        selectedData: action.data,
                     }
                 }
                 if (action.tableType === 3) {
                     data.routeCashOptimization = data.routeCashOptimization?.map(mapToNewQueryResult(action.data));
                     data['selectedItem'] = {
+                        tableType: action.tableType,
                         destinationPointName: action.data.cashOptimization?.orgsName,
                         destinationPointAddress: action.data.cashOptimization?.orgsName,
                         cashOptimizationId: action.data.cashOptimization?.id,
+                        selectedData: action.data,
                     }
                 }
                 if (action.tableType === 4) {
                     data.categoryOrgs.isSelected = true;
                     data['selectedItem'] = {
+                        tableType: action.tableType,
                         destinationPointName: action.data.orgsName,
                         destinationPointAddress: action.data.orgsAddress,
+                        selectedData: action.data,
                     }
                 }
                 return data;
@@ -741,32 +750,12 @@ export default (state: State = initState, action) => {
             }
 
         case UPDATE_SPECIAL_DATA:
-            // const key = state.popupType == 1 ? 'creatingPopup' : 'selectedItem';
-            const cashOptimizatioDetailModelList = state.organizingPopup?.cashOptimizatioDetailModelList;
             return {
                 ...state,
                 organizingPopup: {
                     ...state.organizingPopup,
-                    cashOptimizatioDetailModelList: [
-                        ...state.organizingPopup?.cashOptimizatioDetailModelList,
-                        {
-                            key: cashOptimizatioDetailModelList.length ? cashOptimizatioDetailModelList[cashOptimizatioDetailModelList.length - 1]['key'] + 1 : 1,
-                            type: state.organizingPopup?.type?.value,
-                            currencyType: state.organizingPopup?.currencyType?.value,
-                            goldType: state.organizingPopup?.goldType?.value,
-                            quanlity: state.organizingPopup?.quanlity,
-                            attribute: state.organizingPopup?.attribute?.value,
-                        },
-                    ],
+                    cashOptimizatioDetailModelList: action.data,
                 },
-            }
-        case HANDLE_SPECIAL_DELETE:
-            return {
-                ...state,
-                organizingPopup: {
-                    ...state.organizingPopup,
-                    cashOptimizatioDetailModelList: state.organizingPopup.cashOptimizatioDetailModelList.filter(item => !item['isSelected']),
-                }
             }
 
         case CHANGE_ORGANIZING_INPUT:
@@ -782,7 +771,17 @@ export default (state: State = initState, action) => {
                 ...state,
                 organizingPopup: {
                     ...state.organizingPopup,
+                    selectedSpecial: action.data,
                     cashOptimizatioDetailModelList: state.organizingPopup.cashOptimizatioDetailModelList?.map(mapToNewQueryResult(action.data))
+                }
+            }
+        case SELECT_ROUTE_ROW:
+            return {
+                ...state,
+                organizingPopup: {
+                    ...state.organizingPopup,
+                    selectedRouteDetailOganize: action.data,
+                    routeDetailOganize: state.organizingPopup.routeDetailOganize?.map(mapToNewQueryResult(action.data))
                 }
             }
         case REQUEST_ORGANIZING_CANCEL:
@@ -794,38 +793,30 @@ export default (state: State = initState, action) => {
                 },
             }
         case UPDATE_ORGANIZING_INSERT:
-            console.log('======');
-            console.log([
-                ...state.organizingPopup.routes,
-                {
-                    routeStatus: state.organizingPopup['routeStatus'],
-                    stopPointType: state.organizingPopup.stopPointType,
-                    departurePointName: state.organizingPopup.departurePointName,
-                    departurePointAddress: state.organizingPopup.departurePointAddress,
-                    destinationPointName: state.organizingPopup.destinationPointName,
-                    destinationPointAddress: state.organizingPopup.destinationPointAddress,
-                    kcDepartureToDestination: state.organizingPopup.kcDepartureToDestination,
-                    model: state.organizingPopup['routeCashOptimization'][0]?.cashOptimization.model,
-                },
-            ]);
             return {
                 ...state,
                 organizingPopup: {
                     ...state.organizingPopup,
-                    routes: [
-                        ...state.organizingPopup.routes,
-                        {
-                            routeStatus: state.organizingPopup['routeStatus'],
-                            stopPointType: state.organizingPopup.stopPointType,
-                            departurePointName: state.organizingPopup.departurePointName,
-                            departurePointAddress: state.organizingPopup.departurePointAddress,
-                            destinationPointName: state.organizingPopup.destinationPointName,
-                            destinationPointAddress: state.organizingPopup.destinationPointAddress,
-                            kcDepartureToDestination: state.organizingPopup.kcDepartureToDestination,
-                            model: state.organizingPopup['routeCashOptimization'][0]?.cashOptimization.model,
-                        },
-                    ],
+                    routeDetailOganize: action.data,
                 },
+            }
+        case UPDATE_ORGANIZING_DISTANCE:
+            return {
+                ...state,
+                organizingPopup: {
+                    ...state.organizingPopup,
+                    kcDepartureToDestination: action.data?.data?.distance,
+                },
+            }
+        case UPDATE_MAP:
+            return {
+                ...state,
+                mapHtml: action.data,
+            }
+        case UPDATE_BALANCE_SPECIAL:
+            return {
+                ...state,
+                balanceSpecial: action.data?.data,
             }
         default:
             return state
@@ -903,8 +894,8 @@ function getDefaultOrganizingPopup() {
             text: 'Đặc điểm',
             value: '',
         },
-        cashOptimizatioDetailModelList: [],
-        routes: [],
+        // cashOptimizatioDetailModelList: [],
+        // routes: [],
     }
 }
 function getDefaultVehiclePopup() {

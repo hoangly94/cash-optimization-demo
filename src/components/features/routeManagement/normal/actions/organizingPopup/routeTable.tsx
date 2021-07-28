@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_SPECIAL_ROW } from '~stores/routeManagement/normal/constants';
+import { SELECT_ROUTE_ROW, SELECT_SPECIAL_ROW } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import { HANDLE_BUTTON } from "~stores/_base/constants";
@@ -10,7 +10,7 @@ import { _Date, getCurrentDate } from '@utils';
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  const queryResult = useSelector(state => state['routeManagement'].organizingPopup.routes);const queryResult2 = useSelector(state => state['routeManagement'].organizingPopup);
+  const queryResult = useSelector(state => state['routeManagement'].organizingPopup.routeDetailOganize);
   const dispatch = useDispatch();
   //create props
   const componentWrapperProps = {
@@ -22,9 +22,12 @@ export const Element = (props: Props) => {
     },
     ...props,
   };
-
   const tableProps: Table.Props = {
-    ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch)))),
+    ...tableData(queryResult?.map(item=>({
+      ...item,
+      stopPointType: item.stopPointType?.text ?? item.stopPointType,
+    }))
+    ?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
     style: {
       minWidth: '600px',
@@ -42,8 +45,7 @@ const tableData_$rows_$cells_title = {
 }
 
 const handleRowClick = (dispatch) => (item) => (e) => {
-  dispatch({ type: SELECT_SPECIAL_ROW, data: item });
-  dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'specialDeleteCreating'], value: false });
+  dispatch({ type: SELECT_ROUTE_ROW, data: item });
 }
 
 const tableData = (queryResult?): Table.Props => ({
@@ -108,10 +110,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: index + 1,
     },
     {
-      children: item.routeStatus,
+      children: item.routeDetailOganizeStatus,
     },
     {
-      children: item.stopPointType?.text,
+      children: item.stopPointType,
     },
     {
       children: item.departurePointName,

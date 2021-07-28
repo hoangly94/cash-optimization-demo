@@ -1,0 +1,52 @@
+
+.component{
+    padding: 28px 68px 28px 288px;
+    width:800px;
+}
+.single-col{
+    &{
+        overflow: hidden;
+        width:800px;
+        display:flex !important;
+        align-items: center;
+        justify-content:space-between !important;
+        margin-bottom:18px !important;
+    }
+    &>div{
+        width:200px;
+    }
+    &>input{
+        width:600px;
+    }
+}
+.double-col{
+    &{
+        overflow: hidden;
+        width:800px;
+        display:flex !important;
+        justify-content:space-between !important;
+        align-items: center;
+        margin-bottom:18px !important;
+    }
+    &>div{
+        display:flex !important;
+        align-items: center;
+        justify-content:space-between !important;
+        width:50% !important;
+    }
+    &>div:first-child{
+        margin-right:18px !important;
+    }
+    &>div>*{
+        width:200px;
+    }
+}
+
+.row{
+    &>div{
+        width:200px !important;
+    }
+    &>input{
+        width:calc(100% - 200px) !important;
+    }
+}

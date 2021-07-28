@@ -145,8 +145,8 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector) => {
-  if (!popupSelector.priorityLevelCode)
-    return false;
+  // if (!popupSelector.priorityLevelCode)
+  //   return false;
   return true;
 }
 

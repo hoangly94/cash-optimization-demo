@@ -12665,6 +12665,11 @@ react-sizeme@^3.0.1:
     shallowequal "^1.1.0"
     throttle-debounce "^3.0.1"
 
+react-srcdoc-iframe@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-srcdoc-iframe/-/react-srcdoc-iframe-1.0.2.tgz#d0590813cf44287e69e988ae813c6602fcb68bad"
+  integrity sha512-MVdmer6rDTirr4Rjd7dYBYK73E70F/hqd4sQ+JmTUSgJVlKgSqlet4zGzs24XQ7dN8wK5M0H+4KcUjz0/k69vg==
+
 react-syntax-highlighter@^13.5.3:
   version "13.5.3"
   resolved "https://registry.yarnpkg.com/react-syntax-highlighter/-/react-syntax-highlighter-13.5.3.tgz#9712850f883a3e19eb858cf93fad7bb357eea9c6"

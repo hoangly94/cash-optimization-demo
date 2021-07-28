@@ -156,8 +156,8 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector) => {
-  if (!popupSelector.currencyType)
-    return false;
+  // if (!popupSelector.currencyType)
+  //   return false;
   return true;
 }
 

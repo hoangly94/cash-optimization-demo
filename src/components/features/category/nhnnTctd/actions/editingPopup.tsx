@@ -81,7 +81,6 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Mã NHNN/TCTD' {...inputTitleProps} />
         <Input.Element
-          valueType={Input.ValueType.NUMBER}
           placeholder='Mã NHNN/TCTD'
           {...inputProps}
           store={{
@@ -89,6 +88,7 @@ export const Element = (props: Popup.Props) => {
             reducerType: CHANGE_EDITING_INPUT,
           }}
           isDisabled={true}
+          max={22}
         />
       </Block.Element>
 
@@ -200,14 +200,14 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  if (!popupSelector.nnhnTctdCode) {
-    setErrorMsg('Mã NHNN/TCTD không được để trống');
-    return false;
-  }
-  if (!popupSelector.orgsSelected.value){
-    setErrorMsg('Phải chọn DVQL');
-    return false;
-  }
+  // if (!popupSelector.nnhnTctdCode) {
+  //   setErrorMsg('Mã NHNN/TCTD không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.orgsSelected.value){
+  //   setErrorMsg('Phải chọn DVQL');
+  //   return false;
+  // }
   return true;
 }
 

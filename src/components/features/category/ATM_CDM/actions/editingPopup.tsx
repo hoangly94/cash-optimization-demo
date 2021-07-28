@@ -213,14 +213,14 @@ const actionsProps: Block.Props = {
 }
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  if (!popupSelector.atmCdmCode) {
-    setErrorMsg('Mã ATM/CDM không được để trống');
-    return false;
-  }
-  if (!popupSelector.orgsSelected.value){
-    setErrorMsg('Phải chọn đơn vị quản lý');
-    return false;
-  }
+  // if (!popupSelector.atmCdmCode) {
+  //   setErrorMsg('Mã ATM/CDM không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.orgsSelected.value){
+  //   setErrorMsg('Phải chọn đơn vị quản lý');
+  //   return false;
+  // }
   return true;
 }
 

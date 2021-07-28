@@ -222,14 +222,14 @@ const dropdownProps: Dropdown.Props = {
 
 
 const validateForm = (popupSelector, setErrorMsg) => {
-  if (!popupSelector.orgsCode) {
-    setErrorMsg('Mã đơn vị không được để trống');
-    return false;
-  }
-  if (!popupSelector.orgsParentSelected.value) {
-    setErrorMsg('DVQL phải được chọn');
-    return false;
-  }
+  // if (!popupSelector.orgsCode) {
+  //   setErrorMsg('Mã đơn vị không được để trống');
+  //   return false;
+  // }
+  // if (!popupSelector.orgsParentSelected.value) {
+  //   setErrorMsg('DVQL phải được chọn');
+  //   return false;
+  // }
   return true;
 }
 
