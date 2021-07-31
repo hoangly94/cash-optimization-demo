@@ -18,7 +18,7 @@ export const Element = (props: Props) => {
     dispatch({ type: FETCH_PYC });
     dispatch({ type: FETCH_ORGS_CHILDREN });
     dispatch({ type: RESET_FILTER });
-    dispatch({ type: REQUEST_QUERY });
+    // dispatch({ type: REQUEST_QUERY });
   });
 
   const dispatch = useDispatch();

@@ -147,7 +147,7 @@ export const Element = (props: Props) => {
       </Block.Element>
       <Block.Element {...optionsWrapperProps}>
         {store.defaultOptions?.map(mapFunctionsToDefaultItemElement(props, dispatch))}
-        {options.filter(item =>
+        {options?.filter(item =>
           !optionsFilter || ~(item[store.reducerKeys.text] as any)?.toLowerCase().search(optionsFilter.toLowerCase()))
           .map(mapFunctionsToItemElement(props, dispatch))}
       </Block.Element>

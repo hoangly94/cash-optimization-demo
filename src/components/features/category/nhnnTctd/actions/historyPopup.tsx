@@ -113,7 +113,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã NHNN/TCTD',
+          children: 'Mã TCTD/NHNN',
           sort: {
             type: FETCH_HISTORY,
             data: 'nnhnTctdCode',
@@ -121,7 +121,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên NHNN/TCTD',
+          children: 'Tên TCTD/NHNN',
           sort: {
             type: FETCH_HISTORY,
             data: 'nnhnTctdName',
@@ -129,7 +129,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Địa chỉ NHNN/TCTD',
+          children: 'Địa chỉ TCTD/NHNN',
           sort: {
             type: FETCH_HISTORY,
             data: 'nnhnTctdAddress',
@@ -137,7 +137,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Phân loại NHNN/TCTD',
+          children: 'Phân loại TCTD/NHNN',
           sort: {
             type: FETCH_HISTORY,
             data: 'nnhnTctdType',
@@ -195,7 +195,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.nnhnTctdCode,

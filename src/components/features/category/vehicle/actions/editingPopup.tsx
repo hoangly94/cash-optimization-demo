@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import debounce from 'lodash.debounce';
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ORGS_CODE_EDITING, REQUEST_EDITING, REQUEST_EDITING_CANCEL, CHANGE_EDITING_INPUT } from '~stores/category/vehicle/constants';
+import { SELECT_ORGS_CODE_EDITING, REQUEST_EDITING, REQUEST_EDITING_CANCEL, CHANGE_EDITING_INPUT, REQUEST_PERS } from '~stores/category/vehicle/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -22,6 +22,9 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const dispatch = useDispatch();
+  useEffect(()=>{
+    dispatch({type: REQUEST_PERS, popupType: 2});
+  });
   const [errorMsg, setErrorMsg] = useState('');
   const selectedItemSelector = useSelector(state => state['vehicle'].selectedItem);
 
@@ -88,6 +91,7 @@ export const Element = (props: Popup.Props) => {
             reducerType: CHANGE_EDITING_INPUT,
           }}
           isDisabled={true}
+          max={4}
         />
       </Block.Element>
 
@@ -100,7 +104,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['vehicle', 'selectedItem', 'vehicleType'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
-          max={50}
+          max={15}
         />
       </Block.Element>
 
@@ -114,7 +118,7 @@ export const Element = (props: Popup.Props) => {
             reducerType: SELECT_FUNCTIONS_EDITING,
             reducerKeys: {
               text: 'functionName',
-              value: 'functionCode',
+              value: 'id',
             },
           }}
         />
@@ -135,7 +139,7 @@ export const Element = (props: Popup.Props) => {
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên DVQL' {...inputTitleProps} />
+        <Title.Element text='Tên ĐVQL' {...inputTitleProps} />
         <Combox.Element
           {...comboxProps}
           store={{
@@ -184,7 +188,7 @@ export const Element = (props: Popup.Props) => {
           {...comboxProps}
           store={{
             defaultSelectorKeys: ['vehicle', 'selectedItem', 'driverCodeSelected'],
-            selectorKeys: ['root', 'pers'],
+            selectorKeys: ['vehicle', 'pers'],
             reducerType: SELECT_PERS_EDITING,
             reducerKeys: {
               text: 'persFullname',

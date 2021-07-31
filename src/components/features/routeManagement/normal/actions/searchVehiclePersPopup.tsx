@@ -146,13 +146,6 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             flexGrow={Base.FlexGrow.G1}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'],
-                value: false,
-              }
-            }}
             onClick={() => dispatch({ type: REQUEST_SEACHVEHICLEPERS_UPDATE })}
           />
           <Button.Element
@@ -162,13 +155,6 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             flexGrow={Base.FlexGrow.G1}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'],
-                value: false,
-              }
-            }}
             onClick={() => dispatch({ type: REQUEST_SEACHVEHICLEPERS_CONTINUE })}
           />
           <Button.Element
@@ -178,13 +164,6 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             flexGrow={Base.FlexGrow.G1}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'],
-                value: false,
-              }
-            }}
             onClick={() => dispatch({ type: REQUEST_SEACHVEHICLEPERS_BACK })}
           />
 
@@ -312,7 +291,7 @@ const vehicleMapResponseToData = () => (item, index) => ({
   isSelected: item.isSelected ?? false,
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.vehicleStatus,
@@ -424,7 +403,7 @@ const persMapResponseToData = () => (item, index) => ({
   isSelected: item.isSelected ?? false,
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.id,
@@ -433,7 +412,7 @@ const persMapResponseToData = () => (item, index) => ({
       children: item.persFullname,
     },
     {
-      children: item.persTitle,
+      children: item.categoryTitle?.titleName,
     },
     {
       children: item.persMobile,
@@ -455,8 +434,8 @@ const persMapResponseToData = () => (item, index) => ({
 
 
 const validateForm = (dispatch, selector) => {
-  if (!moment(selector.startTime, 'DD/MM/YYYY hh:mm:ss A', true).isValid()) {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss AM/PM)' } });
+  if (!moment(selector.startTime, 'DD/MM/YYYY HH:mm:ss', true).isValid()) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss)' } });
     return false;
   }
   return true;

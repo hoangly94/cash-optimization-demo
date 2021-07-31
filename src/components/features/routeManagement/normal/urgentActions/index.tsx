@@ -5,7 +5,7 @@ import * as Title from "~commons/title";
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
 import * as Pagination from "~commons/pagination";
-import * as CreatingPopup from "../actions/creatingPopup";
+import * as EditingPopup from "../actions/editingPopup";
 import * as DetailPopup from "../actions/detailPopup";
 import * as SpecialPopup from "../actions/specialPopup";
 import * as OrgsSearchingPopup from "../actions/orgsSearchingPopup";
@@ -70,7 +70,7 @@ export const Element = (props: Props) => {
     },
     $title: {
       tagType: Title.TagType.H2,
-      text: 'CREATE'
+      text: 'Đăng ký PYC bổ sung'
     },
   }
   const editingPopupComponentProps: Popup.Props = {
@@ -107,14 +107,16 @@ export const Element = (props: Props) => {
             <Button.Element
               {...creatingButtonComponentProps}
               store={{
+                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'edit'],
                 action: {
                   type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'create', 'isShown'],
+                  keys: ['routeManagement', 'edit', 'isShown'],
                   value: true,
                   popupType: 1,
                 }
               }}
-              isDisabled={!userSelector.viewList.includes('5')}
+              isDisabled={!userSelector.viewList.includes('6')}
+              onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
             />
             <Button.Element
               {...buttonProps}
@@ -174,10 +176,11 @@ export const Element = (props: Props) => {
         </Block.Element>
 
       </Block.Element >
-      <CreatingPopup.Element
+      <EditingPopup.Element
         {...creatingPopupComponentProps}
+        popupType='urgent'
         store={{
-          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'create'],
+          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'edit'],
         }}
         useEffect={{
           callback: () => {
@@ -256,6 +259,7 @@ export const Element = (props: Props) => {
 
       <OrganizingPopup.Element
         {...historyPopupComponentProps}
+        popupType='urgent'
         $title={{
           tagType: Title.TagType.H2,
           text: 'Sắp xếp lộ trình'

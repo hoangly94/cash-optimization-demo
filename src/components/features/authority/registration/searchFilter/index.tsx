@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { REQUEST_QUERY, REQUEST_RESET, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, SELECT_STATUS_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO } from '~stores/authority/registration/constants';
+import { REQUEST_QUERY as REQUEST_QUERY_ORGS, RESET_SEARCHORGS_FILTER } from '~stores/authority/searchOrgs/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
@@ -12,7 +13,7 @@ import * as Title from "~commons/title";
 import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchPersPopup from "./searchPersPopup";
-import { HANDLE_POPUP } from '~/stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Base.Props;
 
@@ -23,7 +24,6 @@ export const Element = (props: Props) => {
   const radioSelector = useSelector(state => state['registration'].filters.radio);
   const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
-
   //create props
   const componentWrapperProps = {
     flex: Base.Flex.START,
@@ -43,7 +43,7 @@ export const Element = (props: Props) => {
     ...buttonProps,
     text: 'Reset',
     backgroundColor: Base.BackgroundColor.ULTIMATE_GRAY,
-    onClick: () => dispatch({ type: REQUEST_RESET }),
+    onClick: () => dispatch({ type: REQUEST_RESET, user: userSelector }),
   }
 
   const filter1Props = {
@@ -75,7 +75,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Từ ngày(dd/mm/yyy)',
+            placeholder: 'Từ ngày(dd/mm/yyyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['registration', 'filters', 'dateFrom'],
@@ -95,7 +95,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Đến ngày(dd/mm/yyy)',
+            placeholder: 'Đến ngày(dd/mm/yyyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['registration', 'filters', 'dateTo'],
@@ -130,6 +130,11 @@ export const Element = (props: Props) => {
             color: '#828282',
           }}
           isDisabled={radioSelector !== '1' || userSelector.orgsCode != 9}
+          onClick={() => {
+            dispatch({ type: RESET_SEARCHORGS_FILTER });
+            dispatch({ type: REQUEST_QUERY_ORGS });
+            dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
+          }}
         />
         <Combox.Element
           {...filter1Props}
@@ -173,7 +178,6 @@ export const Element = (props: Props) => {
         <Button.Element
           {...queryButtonProps}
           store={{
-            isLoadingSelectorKeys: ['base', 'buttons', 'registration', 'query'],
             action: { type: REQUEST_QUERY },
           }}
         />

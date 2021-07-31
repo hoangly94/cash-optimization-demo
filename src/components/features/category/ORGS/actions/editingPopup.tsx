@@ -11,7 +11,9 @@ import * as Block from "~commons/block";
 import * as Dropdown from "~commons/dropdown";
 import { comboxProps } from "./";
 import * as Combox from "~commons/combox";
-import { HANDLE_POPUP } from '~/stores/_base/constants';
+import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
+import { REQUEST_QUERY as REQUEST_QUERY_ORGS, RESET_SEARCHORGS_FILTER } from '_/stores/authority/searchOrgs/constants';
+import { thousandSeparator } from '_/utils';
 
 export type Props = Popup.Props;
 
@@ -25,12 +27,9 @@ export const Element = (props: Popup.Props) => {
   const selectedItemSelector = useSelector(state => state['orgs'].selectedItem);
 
   const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(selectedItemSelector, setErrorMsg);
+    const isValidForm = validateForm(selectedItemSelector, dispatch);
     if (isValidForm) {
-      setErrorMsg('');
       dispatch({ type: REQUEST_EDITING });
-      if (setIsShown)
-        setIsShown(false)
     }
   }
 
@@ -87,6 +86,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['orgs', 'selectedItem', 'orgsCode'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
+          max={4}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
@@ -125,19 +125,15 @@ export const Element = (props: Popup.Props) => {
             reducerType: SELECT_AREA_EDITING,
             reducerKeys: {
               text: 'areaName',
-              value: 'id',
+              value: 'areaCode',
             },
-            defaultOptions: [{
-              text: '',
-              value: 0,
-            }],
           }}
         />
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên DVQL' {...inputTitleProps} />
-        <Combox.Element
+        <Title.Element text='Tên ĐVQL' {...inputTitleProps} />
+        {/* <Combox.Element
           {...comboxProps}
           store={{
             defaultSelectorKeys: ['orgs', 'selectedItem', 'orgsParentSelected'],
@@ -152,7 +148,38 @@ export const Element = (props: Popup.Props) => {
               value: 0,
             }],
           }}
-        />
+        /> */}
+        <Block.Element
+          width={Base.Width.PER_70}
+          flex={Base.Flex.BETWEEN}
+        >
+          <Input.Element
+            width={Base.Width.PER_80}
+            defaultValue={selectedItemSelector?.orgsParentSelected?.text}
+            isDisabled={true}
+          />
+          <Button.Element
+            width={Base.Width.PX_200}
+            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+            color={Base.Color.WHITE}
+            border={Base.Border.SOLID}
+            textAlign={Base.TextAlign.CENTER}
+            text='Search'
+            store={{
+              textSelectorKeys: ['registration', 'filters', 'orgs', 'text'],
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['orgs', 'searchOrgs', 'isShown'],
+                value: true,
+              }
+            }}
+            onClick={() => {
+              dispatch({ type: RESET_SEARCHORGS_FILTER });
+              dispatch({ type: REQUEST_QUERY_ORGS });
+              dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
+            }}
+          />
+        </Block.Element>
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
@@ -160,17 +187,18 @@ export const Element = (props: Popup.Props) => {
         <Input.Element
           placeholder='Khoảng cách đến ĐVQL'
           {...inputProps}
-          valueType={Input.ValueType.NUMBER}
           store={{
             selectorKeys: ['orgs', 'selectedItem', 'dvqlKc'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
+          keyPressPattern='^[0-9\.]$'
+          valueMapper={thousandSeparator}
         />
       </Block.Element>
 
       <Block.Element {...actionsWrapperProps}>
         <Block.Element >
-          <Title.Element text={errorMsg} color={Base.Color.RED}/>
+          <Title.Element text={errorMsg} color={Base.Color.RED} />
         </Block.Element>
         <Block.Element {...actionsProps}>
           <Button.Element {...submitButtonProps} />
@@ -221,17 +249,13 @@ const dropdownProps: Dropdown.Props = {
 }
 
 
-const validateForm = (popupSelector, setErrorMsg) => {
-  // if (!popupSelector.orgsCode) {
-  //   setErrorMsg('Mã đơn vị không được để trống');
-  //   return false;
-  // }
-  // if (!popupSelector.orgsParentSelected.value) {
-  //   setErrorMsg('DVQL phải được chọn');
-  //   return false;
-  // }
+const validateForm = (selector, dispatch) => {
+  const dvqlKc = selector.dvqlKc?.toString().replaceAll(',', '');
+  if (selector.dvqlKc && !(!isNaN(parseFloat(dvqlKc)) && isFinite(dvqlKc))) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai format Khoảng cách đến ĐVQL' } });
+    return false;
+  }
   return true;
 }
-
 export default Element;
 Element.displayName = 'Actions_Button'

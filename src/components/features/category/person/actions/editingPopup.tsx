@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import debounce from 'lodash.debounce';
 import { useDispatch, useSelector } from 'react-redux';
 import { SELECT_ORGS_CODE_EDITING, REQUEST_EDITING, REQUEST_EDITING_CANCEL, CHANGE_EDITING_INPUT, SELECT_TITLE_EDITING, SELECT_STATUS_EDITING } from '~stores/category/person/constants';
@@ -9,6 +9,7 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
+import * as Datepicker from "~commons/datepicker";
 import { comboxProps } from ".";
 import { getCurrentDate, isMatchDateDD_MM_YYYY } from "@utils";
 import { ADD_NOTI, HANDLE_POPUP } from '~/stores/_base/constants';
@@ -127,7 +128,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['person', 'selectedItem', 'persMobile'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
-          max={20}
+          max={32}
         />
       </Block.Element>
 
@@ -146,12 +147,23 @@ export const Element = (props: Popup.Props) => {
 
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Ngày cấp' {...inputTitleProps} />
-        <Input.Element
-          placeholder='dd/mm/yyyy'
-          {...inputProps}
-          store={{
-            selectorKeys: ['person', 'selectedItem', 'persCmndCccdYear'],
-            reducerType: CHANGE_EDITING_INPUT,
+        <Datepicker.Element
+          flexGrow={Base.FlexGrow.G1}
+          margin={Base.MarginRight.PX_18}
+          $input={{
+            placeholder: 'dd/mm/yyyy',
+            width: Base.Width.FULL,
+            store: {
+              selectorKeys: ['person', 'selectedItem', 'persCmndCccdYear'],
+              reducerType: CHANGE_EDITING_INPUT,
+            },
+            max: 10,
+          }}
+          $datepicker={{
+            store: {
+              selectorKeys: ['person', 'selectedItem', 'persCmndCccdYear'],
+              action: { type: CHANGE_EDITING_INPUT },
+            },
           }}
         />
       </Block.Element>
@@ -165,6 +177,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['person', 'selectedItem', 'persCmndCccdPlace'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
+          max={30}
         />
       </Block.Element>
 
@@ -192,6 +205,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['person', 'selectedItem', 'persEmail'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
+          max={30}
         />
       </Block.Element>
 
@@ -281,6 +295,11 @@ const validateForm = (popupSelector, dispatch) => {
   //   setErrorMsg('CMND/CCCD không được để trống');
   //   return false;
   // }
+  if (!popupSelector.persCmndCccdYear) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Bạn phải nhập ngày cấp' } });
+
+    return false;
+  }
   if (!isMatchDateDD_MM_YYYY(popupSelector.persCmndCccdYear)) {
     
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Ngày cấp CMND/CCCD sai định dạng' } });

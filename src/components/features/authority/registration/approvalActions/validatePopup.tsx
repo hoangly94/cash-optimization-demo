@@ -199,7 +199,7 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Họ và tên người UQ' {...inputTitleProps} />
+        <Title.Element text='Họ và tên người nhận UQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           store={{
@@ -391,7 +391,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'STT',
         },
         {
-          children: 'Ngày tạo',
+          children: 'Nội Dung Ủy Quyền',
         },
       ],
     },
@@ -404,7 +404,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.name,

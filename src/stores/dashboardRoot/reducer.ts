@@ -1,5 +1,6 @@
 import { State, UPDATE_CONFIG, UPDATE_AREAS, UPDATE_ATMCDMS, UPDATE_ORGS, UPDATE_REGIONS, UPDATE_FUNCTIONS, UPDATE_PERS, UPDATE_TITLES, UPDATE_CURRENCIES, UPDATE_PRIORITIES, UPDATE_NHNNTCTDS } from './constants'
 
+import Config from '@config';
 const initState: State = {
     regions: [],
     areas: [],
@@ -53,7 +54,6 @@ export default (state: State = initState, action) => {
                 const routeStatuses = action.data.filter(item => item.type === 'ROUTE_STATUS');
                 const routeTransportTypes = action.data.filter(item => item.type === 'ROUTE_TRANSPORT_TYPE');
                 const stopPointTypes = action.data.filter(item => item.type === 'ROUTE_OGANIZE_STOP_POINT_TYPE').map(item => ({ ...item, value: item.value || 'All' }));
-                console.log(stopPointTypes);
                 return {
                     ...state,
                     atmcdmStatuses,

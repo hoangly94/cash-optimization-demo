@@ -85,6 +85,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['area', 'creatingPopup', 'areaCode'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={4}
         />
       </Block.Element>
 
@@ -97,7 +98,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['area', 'creatingPopup', 'areaName'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
-          max={50}
+          max={30}
         />
       </Block.Element>
 

@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { REQUEST_QUERY, SELECT_ROW } from '~stores/authority/registration/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
-import {HANDLE_BUTTON} from "~stores/_base/constants";
+import { HANDLE_BUTTON } from "~stores/_base/constants";
 import * as Table from "~commons/table";
 import { _Date, getCurrentDate, getCurrentDateTime } from '@utils';
+import moment from 'moment';
 
 export type Props = Base.Props;
 
@@ -15,7 +16,7 @@ export const Element = (props: Props) => {
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_28,
-    width:Base.Width.FULL,
+    width: Base.Width.FULL,
     style: {
       // maxHeight: '500px',
       overflow: 'auto',
@@ -26,7 +27,7 @@ export const Element = (props: Props) => {
   const tableProps: Table.Props = {
     ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
-    style:{
+    style: {
       minWidth: '1200px',
     }
   }
@@ -50,7 +51,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 const tableData = (queryResult?): Table.Props => ({
   $thead: [
     {
-      style:{
+      style: {
         backgroundColor: '#1e3f96',
       },
       color: Base.Color.WHITE,
@@ -123,9 +124,25 @@ const tableData = (queryResult?): Table.Props => ({
             data: 'authority_status',
           }
         },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Nhân viên Đăng Ký',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'createdby_name',
+          }
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Datelastmaint',
+          sort: {
+            type: REQUEST_QUERY,
+            data: 'datelastmaint',
+          }
+        },
       ],
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 
@@ -134,10 +151,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
-      children: item.createddate.split('-').join('/'),
+      children: item.createddate,
     },
     {
       children: item.id,
@@ -152,13 +169,19 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.receiverPersFullname,
     },
     {
-      children: getCurrentDateTime(item.authorityFromDate).split('-').join('/'),
+      children: getCurrentDate(item.authorityFromDate).split('-').join('/'),
     },
     {
-      children: getCurrentDateTime(item.authorityToDate).split('-').join('/'),
+      children: getCurrentDate(item.authorityToDate).split('-').join('/'),
     },
     {
       children: item.authorityStatus,
+    },
+    {
+      children: item.createdbyName,
+    },
+    {
+      children: item.datelastmaint && moment(item.datelastmaint, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     },
   ]
 })

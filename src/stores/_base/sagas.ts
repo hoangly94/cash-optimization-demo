@@ -13,7 +13,7 @@ export function* addNoti(type, message?: string) {
     }
     if (type == 'error') {
         yield spawn(removeLastNoti);
-        yield put({ type: ADD_NOTI_ERROR, data: message });
+        return yield put({ type: ADD_NOTI_ERROR, data: message });
     }
 }
 

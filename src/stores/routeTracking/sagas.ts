@@ -22,7 +22,14 @@ function* saga() {
 function* fetchDataSaga(action?) {
     const state = yield select();
     const responseData = yield call(getData, state.routeTracking.filters);
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    if (!responseData.data?.data) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+    }
+
+    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
 }
 
 function getData(filters) {
@@ -44,7 +51,7 @@ function* fetchMapSaga(action?) {
 
 function getMap(data) {
     const url = Config.url + '/api/cashoptimization/route/getRouteMap?routeId=' + data.id;
-    
+
     return axios.get(url)
         .catch(error => console.log(error));
 }
@@ -124,7 +131,7 @@ function* requestRouteConfirm3KCDSaga(action?) {
 }
 
 function requestRouteSubmit(api, data, order) {
-    const url = Config.url + '/api/cashoptimization/route/'+api;
+    const url = Config.url + '/api/cashoptimization/route/' + api;
     const postData = {
         data: {
             routeId: data.id,

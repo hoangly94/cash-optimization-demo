@@ -1,10 +1,12 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_SEARCHVEHICLEPERS, CHANGE_VEHICLE_INPUT, CHANGE_PERS_INPUT, UPDATE_VEHICLE_DATA, SELECT_VEHICLE, UPDATE_PERS_DATA, SELECT_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, UPDATE_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, UPDATE_ORGANIZING_STOP_POINT, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_CANCEL, UPDATE_ORGANIZING_INSERT, SELECT_ROUTE_ROW, UPDATE_ORGANIZING_DISTANCE, UPDATE_MAP, UPDATE_BALANCE_SPECIAL, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_SEARCHVEHICLEPERS, CHANGE_VEHICLE_INPUT, CHANGE_PERS_INPUT, UPDATE_VEHICLE_DATA, SELECT_VEHICLE, UPDATE_PERS_DATA, SELECT_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, UPDATE_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, UPDATE_ORGANIZING_STOP_POINT, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_CANCEL, UPDATE_ORGANIZING_INSERT, SELECT_ROUTE_ROW, UPDATE_ORGANIZING_DISTANCE, UPDATE_MAP, UPDATE_BALANCE_SPECIAL, SEARCHORGS_SELECT_UPDATE, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
 
+import Config from '@config';
+import { ItemChildrenType } from '_/components/commons/list';
 const initState: State = {
     history: [],
     pycTypes: [],
@@ -122,13 +124,17 @@ export default (state: State = initState, action) => {
         case REQUEST_QUERY:
             return state
         case UPDATE_DATA:
-            const data = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
+            const data = action.data?.data ? action.data.data?.map(preprocessQueryResult(state)) : [];
             return {
                 ...state,
                 isLoading: false,
                 queryResult: {
                     ...state.queryResult,
-                    data: data,
+                    data: data.map((item, index) => ({
+                        ...item,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
+                    currentPage: action.page || 0,
                     total: action.data.total,
                 }
             }
@@ -189,7 +195,8 @@ export default (state: State = initState, action) => {
                 },
             }
         case UPDATE_HISTORY:
-            const historyData = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
+            const historyData = action.data?.data ? action.data.data?.map(preprocessQueryResult(state)) : [];
+            console.log(action);
             return {
                 ...state,
                 isLoading: false,
@@ -291,13 +298,22 @@ export default (state: State = initState, action) => {
                 },
             }
         case SEARCHORGS_SELECT_ROW:
-            if (action.searchOrgsType === 2) {
+            return {
+                ...state,
+                selectedOrgs: {
+                    searchOrgsType: action.searchOrgsType,
+                    orgsName: action.data.orgsName,
+                    orgsCode: action.data.orgsCode,
+                },
+            }
+        case SEARCHORGS_SELECT_UPDATE:
+            if (state['selectedOrgs']?.searchOrgsType === 2) {
                 return {
                     ...state,
                     orgsSearchingPopup: {
                         ...state.orgsSearchingPopup,
-                        orgsDestCode: action.data.orgsCode,
-                        orgsDestName: action.data.orgsName,
+                        orgsDestCode: state['selectedOrgs']?.orgsCode,
+                        orgsDestName: state['selectedOrgs']?.orgsName,
                     },
                 }
             }
@@ -307,8 +323,8 @@ export default (state: State = initState, action) => {
                     filters: {
                         ...state.filters,
                         orgs: {
-                            text: action.data.orgsName,
-                            value: action.data.orgsCode,
+                            text: state['selectedOrgs']?.orgsName,
+                            value: state['selectedOrgs']?.orgsCode,
                         },
                     },
                 }
@@ -487,8 +503,9 @@ export default (state: State = initState, action) => {
                 routeDetailOganize: action.data?.routeDetailOganize?.map((item) => ({
                     ...item,
                     key: item.id,
-                })),
+                })).sort((p, n) => +!n.order - +!(p.order) || n?.order - p?.order),
             };
+
             return {
                 ...state,
                 selectedItem: newData,
@@ -525,10 +542,10 @@ export default (state: State = initState, action) => {
                 searchVehiclePersPopup: {
                     ...state.searchVehiclePersPopup,
                     transportType: {
-                        text: state.selectedItem.transportType.toUpperCase(),
-                        value: state.selectedItem.transportType,
+                        text: state.selectedItem?.transportType?.toUpperCase(),
+                        value: state.selectedItem?.transportType,
                     },
-                    vehicles: state.selectedItem.routeDetailVehicle.map(item =>
+                    vehicles: state.selectedItem?.routeDetailVehicle.map(item =>
                     ({
                         ...item,
                         key: item.id,
@@ -537,7 +554,7 @@ export default (state: State = initState, action) => {
                         ...item.categoryPers,
                         ...item.categoryFunction,
                     })),
-                    pers: state.selectedItem.routeDetailPers.map(item =>
+                    pers: state.selectedItem?.routeDetailPers?.map(item =>
                     ({
                         ...item,
                         key: item.id,
@@ -546,7 +563,7 @@ export default (state: State = initState, action) => {
                 },
             }
         case SELECT_HISTORY_ROW:
-            const newQueryResultHistory = state.history.data.map(mapToNewQueryResult(action.data))
+            const newQueryResultHistory = state.history?.data?.map(mapToNewQueryResult(action.data))
             const newDataHistory = mapToNewData(action.data, state);
             return {
                 ...state,
@@ -704,8 +721,8 @@ export default (state: State = initState, action) => {
                     data.routeCashOptimization = data.routeCashOptimization?.map(mapToNewQueryResult(action.data));
                     data['selectedItem'] = {
                         tableType: action.tableType,
-                        destinationPointName: action.data.cashOptimization?.orgsName,
-                        destinationPointAddress: action.data.cashOptimization?.orgsName,
+                        destinationPointName: action.data.destinationName,
+                        destinationPointAddress: action.data.destinationAddress,
                         cashOptimizationId: action.data.cashOptimization?.id,
                         selectedData: action.data,
                     }
@@ -793,11 +810,25 @@ export default (state: State = initState, action) => {
                 },
             }
         case UPDATE_ORGANIZING_INSERT:
+            const selectedRouteDetailOganizeOrder = state.organizingPopup['selectedRouteDetailOganize']?.order;
+            if(state.organizingPopup['selectedRouteDetailOganize']){
+                if (action.buttonType === 'UP' && selectedRouteDetailOganizeOrder > 1) {
+                    state.organizingPopup['selectedRouteDetailOganize'].order-=1;
+                }
+                if (action.buttonType === 'DOWN' && selectedRouteDetailOganizeOrder < state.organizingPopup['routeDetailOganize']?.length) {
+                    state.organizingPopup['selectedRouteDetailOganize'].order+=1;
+                }
+            }
             return {
                 ...state,
                 organizingPopup: {
                     ...state.organizingPopup,
-                    routeDetailOganize: action.data,
+                    selectedRouteDetailOganize: state.organizingPopup['selectedRouteDetailOganize'],
+                    routeDetailOganize: action.data?.map(item => ({
+                        ...item,
+                        key: item.id,
+                        routeDetailOganizeStatus: 'ACT',
+                    })),
                 },
             }
         case UPDATE_ORGANIZING_DISTANCE:
@@ -1007,7 +1038,7 @@ const mapToNewData = (item, state) => {
         // tableContent1: state.pyc.filter(item1 =>
         //     tableContent2.filter(item2 => item2.id == item1.id).length == 0),
         // tableContent2,
-        startTime: moment(item.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY hh:mm:ss A'),
+        startTime: moment(item.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     }
 }
 
@@ -1028,7 +1059,7 @@ const mapToNewQueryResult = (selectedItem) => (item, index) => {
     }
 }
 
-const preprocessQueryResult = (data, index) => ({
+const preprocessQueryResult = (state) => (data, index) => ({
     ...data,
     key: data.id ?? index,
     createddate: getCurrentDate(data.createddate),
@@ -1042,6 +1073,11 @@ const preprocessQueryResult = (data, index) => ({
         value: data.cashOptimizationOrgsDetailModel?.nnhnTctdCode,
     },
     distanceOrgsToOrgsRequest: data.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,
+    tableContent1: state?.pyc?.filter(item1 =>
+        data?.routeCashOptimization?.filter(item2 => item2.id == item1.id).length == 0)
+        .map(item => ({ ...item, key: item.id })).map(item => ({ ...item, key: item.key })),
+    tableContent2: data?.routeCashOptimization?.map(item => ({ ...item, ...item.cashOptimization, key: item.key })),
+    // routeDetailOganize: data.routeDetailOganize?.map(item=>)
 })
 
 const currencyTypeCheckData = (type, value) => {

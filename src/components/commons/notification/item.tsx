@@ -4,6 +4,8 @@ import styles from './_styles.css'
 import * as Base from '~/_settings';
 import { useSelector } from 'react-redux';
 import * as Block from '~commons/block';
+import CheckCircle from '../svg/checkCircle';
+import ExclamationCircle from '../svg/exclamationCircle';
 
 export enum Type {
   SUCCESS = 'notification-success',
@@ -36,9 +38,14 @@ export const Element = (props: Props): React.ReactElement => {
     ),
     ...props,
   };
+  const iconElement = type === Type.SUCCESS ? 
+  <CheckCircle fill='white' margin={Base.MarginRight.PX_8}/> : 
+  <ExclamationCircle fill='white' margin={Base.MarginRight.PX_8}/>;
+
   return (
     <Block.Element {...componentProps}>
-      {text || (type === Type.SUCCESS ? 'SUCCESS': 'ERROR')}
+      {iconElement}
+      {text || (type === Type.SUCCESS ? 'SUCCESS' : 'ERROR')}
     </Block.Element>
   )
 }

@@ -26,8 +26,14 @@ function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(getData, state.registration.filters, state.auth, action);
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    if (!responseData.data?.data) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+    }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'continue', 'isDisabled'], value: true });
@@ -44,7 +50,7 @@ function* createDataSaga() {
 
     yield put({ type: DONE_CREATING });
     yield fetchDataSaga();
-    yield spawn(addNoti, 'success', `Create success ID ${responseData.data.data.id}`);
+    yield spawn(addNoti, 'success', `Tạo thành công ID ${responseData?.data?.data.id}`);
     yield put({ type: HANDLE_POPUP, keys: ['registration', 'create', 'isShown'], value: false });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
@@ -125,12 +131,12 @@ function getData(filters, auth, action) {
     const {
         page = 0,
         sort = '',
-    } = action ?? {};const url = Config.url + '/api/cashoptimization/authority/search';
+    } = action ?? {}; const url = Config.url + '/api/cashoptimization/authority/search';
     const data = filters.radio === '1'
         ? {
             orgsId: auth.user.orgsCode == 9 ? filters.orgs.value : auth.user.orgsId,
-            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom),
-            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo),
+            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom) + ' 00:00:00',
+            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo) + ' 23:59:59.00',
             authorityStatus: filters.status.value,
         }
         : {
@@ -158,8 +164,8 @@ function requestCreating(url: string, data, auth) {
             orgsId: auth.user.orgsId,
             createdbyCode: auth.user.code,
             createdbyName: auth.user.name,
-            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateFrom),
-            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateTo),
+            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateFrom) + ' 00:00:00',
+            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateTo) + ' 00:00:00',
             persId: data.sendId,
             persCode: data.sendCode,
             persFullname: data.sendName,
@@ -170,7 +176,7 @@ function requestCreating(url: string, data, auth) {
             receiverPersFullname: data.recvName,
             receiverPersTitle: data.recvTitle,
             receiverPersCmndCccd: data.recvCmnd,
-            receiverPersCmndCccdYear: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.recvCmndyear)+ ' 00:00:00',
+            receiverPersCmndCccdYear: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.recvCmndyear) + ' 00:00:00',
             receiverPersCmndCccdPlace: data.recvCmndPlace,
             receiverPersMobile: data.recvPhone,
             authorityDetail: data.authorityContent2.map(item => ({
@@ -190,8 +196,8 @@ function requestEditing(url: string, data, auth) {
             createdbyCode: auth.user.code,
             createdbyName: auth.user.name,
             orgsId: data.orgsId,
-            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateFrom),
-            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateTo),
+            authorityFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateFrom) + ' 00:00:00',
+            authorityToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.dateTo) + ' 00:00:00',
             persId: data.sendId,
             persCode: data.sendCode,
             persFullname: data.sendName,
@@ -202,7 +208,7 @@ function requestEditing(url: string, data, auth) {
             receiverPersFullname: data.recvName,
             receiverPersTitle: data.recvTitle,
             receiverPersCmndCccd: data.recvCmnd,
-            receiverPersCmndCccdYear: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.recvCmndyear)+ ' 00:00:00',
+            receiverPersCmndCccdYear: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(data.recvCmndyear) + ' 00:00:00',
             receiverPersCmndCccdPlace: data.recvCmndPlace,
             receiverPersMobile: data.recvPhone,
             authorityDetail: data.authorityContent2.map(item => ({

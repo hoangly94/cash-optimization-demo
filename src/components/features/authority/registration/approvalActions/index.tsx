@@ -16,9 +16,6 @@ export type Props = Base.Props;
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const userSelector = useSelector(state => state['auth'].user);
-  // React.useEffect(()=>{
-  //   dispatch({ type: FETCH_HISTORY })
-  // },[]);
   
   //create props
   const componentWrapperProps = {
@@ -130,6 +127,15 @@ export const Element = (props: Props) => {
                 popupType: 3,
               }
             }}
+          />
+          <Button.Element
+            {...detailButtonComponentProps}
+            text='Print'
+          // store={{
+          //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+          // }}
+          // onClick={() => dispatch({ type: HANDLE_CONTINUE_ACTION })}
+
           />
           {/* <Button.Element
             {...deleteButtonComponentProps}

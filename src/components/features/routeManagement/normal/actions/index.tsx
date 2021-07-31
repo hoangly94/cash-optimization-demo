@@ -119,6 +119,7 @@ export const Element = (props: Props) => {
                 }
               }}
               isDisabled={!userSelector.viewList.includes('5')}
+              onClick={()=>dispatch({type: REQUEST_CREATING_CANCEL})}
             />
             <Button.Element
               {...editingButtonComponentProps}
@@ -132,6 +133,7 @@ export const Element = (props: Props) => {
                 }
               }}
               isDisabled={!userSelector.viewList.includes('6')}
+              onClick={()=>dispatch({type: REQUEST_EDITING_CANCEL})}
             />
             <Button.Element
               {...deleteButtonComponentProps}
@@ -234,6 +236,7 @@ export const Element = (props: Props) => {
       />
       <EditingPopup.Element
         {...editingPopupComponentProps}
+        popupType='normal'
         $title={{
           tagType: Title.TagType.H2,
           text: 'EDIT'
@@ -336,6 +339,7 @@ export const Element = (props: Props) => {
 
       <OrganizingPopup.Element
         {...historyPopupComponentProps}
+        popupType='normal'
         $title={{
           tagType: Title.TagType.H2,
           text: 'Sắp xếp lộ trình'

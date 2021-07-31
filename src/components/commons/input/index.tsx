@@ -34,7 +34,9 @@ export type Props = Base.Props & {
   // value?: string,
   isDisabled?: boolean,
   pattern?: string,
+  keyPressPattern?: string,
   max?: number,
+  valueMapper?: Function,
 }
 
 type Store = {
@@ -55,8 +57,10 @@ export const Element = (props: Props) => {
     refs,
     defaultValue = '',
     pattern,
+    keyPressPattern,
     max,
     valueType,
+    valueMapper,
   } = props
   const dispatch = useDispatch();
   const value = store?.selectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : null;
@@ -67,6 +71,8 @@ export const Element = (props: Props) => {
       validateNumber(e);
     if (max)
       validateMax(e, max);
+    if (keyPressPattern)
+      validatePattern(e, keyPressPattern);
   }
 
   const handleChange = (e) => {
@@ -76,15 +82,20 @@ export const Element = (props: Props) => {
     if (onChange)
       onChange(e);
   }
-  
+
   if (ref?.current) {
     (ref as any).current.value = value || defaultValue;
   }
-
-  const valueProp = ref?.current ? null : { value: value || defaultValue };
+  const valueProp = (() => {
+    const newValue = ref?.current && (value || defaultValue );
+    if (newValue && valueMapper)
+      return valueMapper(newValue);
+    return newValue;
+  })();
+  
   //create props
   const componentProps = {
-    name:name,
+    name: name,
     type: valueType === ValueType.PASSWORD ? 'password' : '',
     padding: Base.Padding.PX_8,
     ...Base.mapProps(props, styles, ['input', size, disabled]),
@@ -93,7 +104,7 @@ export const Element = (props: Props) => {
     placeholder: placeholder,
     disabled: isDisabled,
     ref: ref,
-    ...valueProp,
+    value:valueProp,
     onKeyPress: handleKeyPress,
   };
 
@@ -107,12 +118,16 @@ const handleDispatchWhenInputChange = (dispatch, store: Store) => (e) => {
 }
 
 const validateNumber = (e) => {
-  if (isNaN(e.key))
+  if (isNaN(e.key) || isNaN(parseFloat(e.key)))
     e.preventDefault();
 }
 
 const validateMax = (e, max) => {
   if (e.target.value.length >= max)
+    e.preventDefault();
+}
+const validatePattern = (e, pattern) => {
+  if (!(new RegExp(pattern)).test(e.key))
     e.preventDefault();
 }
 

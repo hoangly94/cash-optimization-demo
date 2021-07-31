@@ -615,7 +615,7 @@ export const Element = (props: Props) => {
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='SĐT Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
+        <Title.Element text='Đối tượng điều quỹ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           defaultValue={popupSelector.objectType.text}
@@ -792,7 +792,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.name,

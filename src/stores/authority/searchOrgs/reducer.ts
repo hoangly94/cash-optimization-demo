@@ -1,12 +1,10 @@
-import { State, UPDATE_DATA, SELECT_ROW, SELECT_REGION_TYPE_FILTER, SELECT_AREA_TYPE_FILTER, INPUT_ORGS_VALUE_FILTER, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER } from './constants'
+import { State, UPDATE_DATA, SELECT_ROW, SELECT_REGION_TYPE_FILTER, SELECT_AREA_TYPE_FILTER, INPUT_ORGS_VALUE_FILTER, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, RESET_SEARCHORGS_FILTER } from './constants'
 import { _Date, getCurrentDate } from '@utils';
 
+import Config from '@config';
 const initState: State = {
     filters: {
         ...getDefaultFilters(),
-        queryButton: {
-            isLoading: false,
-        },
     },
     queryResult: {
         total: 0,
@@ -46,7 +44,11 @@ export default (state: State = initState, action) => {
                 isLoading: false,
                 queryResult: {
                     ...state.queryResult,
-                    data: data,
+                    data: data.map((item, index) => ({
+                        ...item,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
+                    currentPage: action.page || 0,
                     total: action.data.total,
                 }
             }
@@ -73,6 +75,13 @@ export default (state: State = initState, action) => {
                 filters: {
                     ...state.filters,
                     areaType: action.data,
+                },
+            }
+        case RESET_SEARCHORGS_FILTER:
+            return {
+                ...state,
+                filters: {
+                    ...getDefaultFilters(),
                 },
             }
         default:

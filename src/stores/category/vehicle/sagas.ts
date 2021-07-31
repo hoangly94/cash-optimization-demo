@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
-import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL } from './constants';
+import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL, UPDATE_DATA_PERS, REQUEST_PERS, SELECT_ORGS_CODE_CREATING } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_POPUP } from '~stores/_base/constants';
@@ -8,10 +8,15 @@ import { HANDLE_POPUP } from '~stores/_base/constants';
 function* saga() {
     yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
     yield takeLatest(REQUEST_QUERY, fetchDataSaga);
+    yield takeLatest(REQUEST_PERS, fetchPersDataSaga);
     yield takeLatest(REQUEST_CREATING, createDataSaga);
     yield takeLatest(REQUEST_EDITING, editDataSaga);
+    yield takeLatest(SELECT_ORGS_CODE_CREATING, selectOrgsCodeSaga);
 }
 
+function* selectOrgsCodeSaga(action?) {
+    // yield put({ type: REQUEST_PERS});    
+}
 function* fetchHistorySaga(action?) {
     const state = yield select();
     const responseData = yield call(getHistory, action, state.vehicle.selectedItem);
@@ -22,8 +27,14 @@ function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(getData, state.vehicle.filters, action);
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    if (!responseData.data?.data) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+    }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
 }
 
 function* createDataSaga() {
@@ -63,7 +74,7 @@ function getHistory(action, data) {
         data: {
             sort: sort,
             page: page,
-            atmCdmCode: data?.vehicleCode,
+            vehicleCode: data?.vehicleCode,
             size: Config.numberOfItemsPerPage,
         }
     }
@@ -72,6 +83,26 @@ function getHistory(action, data) {
 }
 
 
+
+function* fetchPersDataSaga(action?) {
+    const state = yield select();
+    const responseData = yield call(getPersData, action?.popupType === 2? state.vehicle.selectedItem: state.vehicle.creatingPopup, action);
+
+    yield put({ type: UPDATE_DATA_PERS, data: responseData.data, page:action?.page });
+}
+
+function getPersData(data, action) {
+    const url = Config.url + '/api/cashoptimization/findCategoryPers';
+    const postData = {
+        data: {
+            orgsId: data.orgsSelected?.value ? parseInt(data.orgsSelected.value) : 0,
+            persCode: 0,
+            persTitle: 'LXE',
+        },
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
+}
 function getData(filters, action) {
     const {
         page = 0,
@@ -97,13 +128,13 @@ function requestCreating(url: string, data) {
         data: {
             vehicleCode: data.vehicleCode,
             vehicleType: data.vehicleType,
-            functionId: data.vehicleFunctionSelected.value,
+            functionId: data.vehicleFunctionSelected?.value,
             vehicleYearManufacture: data.vehicleYearManufacture,
             orgsId: data.orgsSelected.value,
             region: data.region,
             vehicleStatus: data.vehicleStatusSelected.value,
-            driverCode: data.driverCodeSelected.value,
-            driverName: data.driverCodeSelected.text,
+            driverCode: data.driverCodeSelected?.value,
+            driverName: data.driverCodeSelected?.text,
         },
     }
     return axios.post(url, { ...postData })
@@ -116,13 +147,13 @@ function requestEditing(url: string, data) {
             id: parseInt(data.id),
             vehicleCode: data.vehicleCode,
             vehicleType: data.vehicleType,
-            functionId: data.vehicleFunctionSelected.value,
+            functionId: data.vehicleFunctionSelected?.value,
             vehicleYearManufacture: data.vehicleYearManufacture,
             orgsId: data.orgsSelected.value,
             region: data.region,
             vehicleStatus: data.vehicleStatusSelected.value,
-            driverCode: data.driverCodeSelected.value,
-            driverName: data.driverCodeSelected.text,
+            driverCode: data.driverCodeSelected?.value,
+            driverName: data.driverCodeSelected?.text,
         },
     }
     return axios.post(url, { ...postData })

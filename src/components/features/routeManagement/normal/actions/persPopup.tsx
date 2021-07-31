@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_PERS_INPUT, HANDLE_DUALTABLE_MOVE, REQUEST_PERS, REQUEST_PERS_CANCEL, REQUEST_QUERY, SELECT_COMBOX_FILTER, SELECT_DUALTABLE_CONTENT_ROW, SELECT_PERS, SELECT_ROW } from '~stores/routeManagement/normal/constants';
+import { CHANGE_PERS_INPUT, HANDLE_DUALTABLE_MOVE, REQUEST_PERS, REQUEST_PERS_CANCEL, REQUEST_QUERY, REQUEST_VEHICLE, SELECT_COMBOX_FILTER, SELECT_DUALTABLE_CONTENT_ROW, SELECT_PERS, SELECT_ROW } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Popup from "~commons/popup";
@@ -19,7 +19,7 @@ export const Element = (props: Popup.Props) => {
   return (
     <Popup.Element
       {...props}
-    closePopUpCallback={() => dispatch({ type: REQUEST_PERS_CANCEL })}
+      closePopUpCallback={() => dispatch({ type: REQUEST_PERS_CANCEL })}
     >
       <Block.Element
         flex={Base.Flex.START}
@@ -70,10 +70,12 @@ export const Element = (props: Popup.Props) => {
           oneRightToLeft: {
             text: 'Add',
             disabled: false,
+            onClick: () => dispatch({type: REQUEST_PERS}),
           },
           oneLeftToRight: {
             text: 'Remove',
             disabled: false,
+            onClick: () => dispatch({type: REQUEST_PERS}),
           },
           allRightToLeft: {
             disabled: true,
@@ -84,13 +86,13 @@ export const Element = (props: Popup.Props) => {
         }}
         margin={Base.MarginBottom.PX_28}
         pagination={{
-          store:{
+          store: {
             totalSelectorKeys: ['routeManagement', 'persPopup'],
             action: {
               type: REQUEST_PERS,
             }
           },
-          style:{
+          style: {
             marginTop: '5px',
           }
         }}
@@ -117,8 +119,8 @@ export const Element = (props: Popup.Props) => {
                 value: false,
               }
             }}
-            onClick={() => dispatch({type: SELECT_PERS})}
-            isDisabled={selector.tableContent2?.length === 0}
+            onClick={() => dispatch({ type: SELECT_PERS })}
+          // isDisabled={selector.tableContent2?.length === 0}
           />
           <Button.Element
             text='Close'
@@ -226,7 +228,7 @@ const cellMapping = (dispatch) => (item, index) => ([
     children: item.persFullname,
   },
   {
-    children: item.persTitle,
+    children: item.categoryTitle?.titleName,
   },
   {
     children: item.persMobile,

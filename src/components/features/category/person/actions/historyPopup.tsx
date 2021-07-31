@@ -234,7 +234,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.persCode,
@@ -243,7 +243,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.persFullname,
     },
     {
-      children: item.persTitle
+      children: item.categoryTitle?.titleName
     },
     {
       children: item.persMobile,

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import { BrowserRouter as Router, Route, Link, NavLink, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link, NavLink, Switch, Redirect } from "react-router-dom";
 import { FETCH_AREAS, FETCH_CONFIG, FETCH_FUNCTIONS, FETCH_ORGS, FETCH_PERS, FETCH_REGIONS } from '~/stores/dashboardRoot/constants';
 import { AuthRoute, RoleRoute } from '@hocs';
 import * as Base from '~/_settings';
@@ -57,7 +57,6 @@ export const Element = (props: Props) => {
     }, []);
     const userSelector = useSelector(state => state['auth'].user);
     const isAuthenticated = userSelector.isAuthenticated || accessToken;
-
     return (
         <Router >
             <Notification.Element />
@@ -143,25 +142,25 @@ const breadcrumbsMapper = {
     },
     'category': {
         _url: '',
-        _name: 'Categories',
-        'area': { _url: '/category/area', _name: 'Area', },
-        'atm-cdm': { _url: '/category/atm-cdm', _name: 'ATM/CDM', },
-        'currency': { _url: '/category/currency', _name: 'Currency', },
-        'function': { _url: '/category/function', _name: 'Function', },
-        'nhnn-tctd': { _url: '/category/nhnn-tctd', _name: 'NHNN/TCTD', },
-        'orgs': { _url: '/category/orgs', _name: 'ORGS', },
-        'pers': { _url: '/category/pers', _name: 'Pers', },
-        'priority': { _url: '/category/priority', _name: 'Priority', },
-        'region': { _url: '/category/region', _name: 'Region', },
-        'title': { _url: '/category/title', _name: 'Title', },
-        'vehicle': { _url: '/category/vehicle', _name: 'Vehicle', },
+        _name: 'Danh mục',
+        'area': { _url: '/category/area', _name: 'Danh mục cụm', },
+        'atm-cdm': { _url: '/category/atm-cdm', _name: 'Danh mục ATM/CDM', },
+        'currency': { _url: '/category/currency', _name: 'Danh mục tiền tệ', },
+        'function': { _url: '/category/function', _name: 'Danh mục chức năng', },
+        'nhnn-tctd': { _url: '/category/nhnn-tctd', _name: 'Danh mục TCTD/NHNN', },
+        'orgs': { _url: '/category/orgs', _name: 'Danh mục đơn vị', },
+        'pers': { _url: '/category/pers', _name: 'Danh mục nhân viên', },
+        'priority': { _url: '/category/priority', _name: 'Danh mục mức độ ưu tiên', },
+        'region': { _url: '/category/region', _name: 'Danh mục vùng', },
+        'title': { _url: '/category/title', _name: 'Danh mục chức danh nhân viên', },
+        'vehicle': { _url: '/category/vehicle', _name: 'Danh mục xe', },
     },
     'user': {
         _url: '',
         _name: 'User',
-        'change-password': { _url: '/user/change-password', _name: 'Change password', },
-        'assign-role': { _url: '/user/assign-role', _name: 'Assign role', },
-        'reset-password': { _url: '/user/reset-password', _name: 'Reset password', },
+        'change-password': { _url: '/user/change-password', _name: 'Đổi mật khẩu', },
+        'assign-role': { _url: '/user/assign-role', _name: 'Cấp quyền', },
+        'reset-password': { _url: '/user/reset-password', _name: 'Đặt lại mật khẩu', },
     },
     'route-management': {
         _url: '',

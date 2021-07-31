@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { HANDLE_DUALTABLE_MOVE, SELECT_COMBOX, REQUEST_QUERY, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_EDITING_CANCEL, REQUEST_EDITING, CHANGE_EDITING_INPUT, REQUEST_UPDATE_CONTINUE, REQUEST_PERS, } from '~stores/routeManagement/normal/constants';
+import { HANDLE_DUALTABLE_MOVE, SELECT_COMBOX, REQUEST_QUERY, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, HANDLE_SPECIAL_DELETE, HANDLE_SPECIAL_ADD, REQUEST_EDITING_CANCEL, REQUEST_EDITING, CHANGE_EDITING_INPUT, REQUEST_UPDATE_CONTINUE, REQUEST_PERS, REQUEST_CREATING_PYC_BS, } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -9,33 +9,41 @@ import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import * as DualTable from "~commons/dualTable";
+import * as Datepicker from "~commons/datepicker";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
 
-export type Props = Popup.Props;
+export type Props = Popup.Props & {
+  popupType: string,
+};
 
-export const Element = (props: Popup.Props) => {
+export const Element = (props: Props) => {
   const {
     setIsShown,
+    popupType,
   } = props;
 
   const selector = useSelector(state => state['routeManagement'].editingPopup);
+  const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_EDITING });
-      if (setIsShown)
-        setIsShown(false)
+      if (popupType === 'normal')
+        dispatch({ type: REQUEST_EDITING });
+      if (popupType === 'urgent')
+        dispatch({ type: REQUEST_CREATING_PYC_BS });
+      // if (setIsShown)
+      //   setIsShown(false)
     }
   }
   const handleContinueButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
       dispatch({ type: REQUEST_UPDATE_CONTINUE });
-      if (setIsShown)
-        setIsShown(false)
+      // if (setIsShown)
+      //   setIsShown(false)
     }
   }
 
@@ -64,13 +72,110 @@ export const Element = (props: Popup.Props) => {
   }
 
 
+  const html1 = popupType === 'urgent' ? (
+    <>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Trạng thái LT' {...inputTitleProps} />
+        <Input.Element
+          valueType={Input.ValueType.NUMBER}
+          placeholder=''
+          {...inputProps}
+          isDisabled={true}
+          store={{
+            selectorKeys: ['routeManagement', 'editingPopup', 'routeStatus'],
+            reducerType: '',
+          }}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Phương tiện vận chuyển' {...inputTitleProps} />
+        <Input.Element
+          valueType={Input.ValueType.NUMBER}
+          placeholder=''
+          {...inputProps}
+          isDisabled={true}
+          store={{
+            selectorKeys: ['routeManagement', 'editingPopup', 'transportType'],
+            reducerType: '',
+          }}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời gian bắt đầu lộ trình' {...inputTitleProps} />
+        <Input.Element
+          valueType={Input.ValueType.NUMBER}
+          placeholder=''
+          {...inputProps}
+          isDisabled={true}
+          store={{
+            selectorKeys: ['routeManagement', 'editingPopup', 'startTime'],
+            reducerType: '',
+          }}
+        />
+      </Block.Element>
+    </>
+  ) : null;
+
+  const html2 = popupType === 'urgent' ? (
+    <>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên NV bổ sung PYC' {...inputTitleProps} />
+        <Input.Element
+          valueType={Input.ValueType.NUMBER}
+          placeholder=''
+          {...inputProps}
+          isDisabled={true}
+          defaultValue={userSelector.fullname}
+        />
+      </Block.Element>
+    </>
+  ) : (
+    <>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss)' {...inputTitleProps} />
+        <Datepicker.Element
+          flexGrow={Base.FlexGrow.G1}
+          margin={Base.MarginRight.PX_18}
+          $input={{
+            placeholder: 'dd/mm/yyyy hh/mm/ss',
+            width: Base.Width.FULL,
+            store: {
+              selectorKeys: ['routeManagement', 'editingPopup', 'startTime'],
+              reducerType: CHANGE_EDITING_INPUT,
+            },
+            max: 19,
+          }}
+          $datepicker={{
+            store: {
+              selectorKeys: ['routeManagement', 'editingPopup', 'startTime'],
+              action: { type: CHANGE_EDITING_INPUT },
+            },
+          }}
+          dateFormat='DD/MM/YYYY HH:mm:ss'
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên thủ quỹ ĐVTLT' {...inputTitleProps} />
+        <Input.Element
+          valueType={Input.ValueType.NUMBER}
+          placeholder=''
+          {...inputProps}
+          isDisabled={true}
+          store={{
+            selectorKeys: ['routeManagement', 'editingPopup', 'tqDltltName'],
+            reducerType: '',
+          }}
+        />
+      </Block.Element>
+    </>
+  );
   return (
     <Popup.Element
       {...props}
       closePopUpCallback={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
     >
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số PYC HT' {...inputTitleProps} />
+        <Title.Element text='Số Lộ trình' {...inputTitleProps} />
         <Input.Element
           valueType={Input.ValueType.NUMBER}
           {...inputProps}
@@ -94,7 +199,7 @@ export const Element = (props: Popup.Props) => {
           }}
         />
       </Block.Element>
-
+      {html1}
       <DualTable.Element
         type={DualTable.Type.BLOCK}
         titleCallback1={titleCallback}
@@ -126,44 +231,19 @@ export const Element = (props: Popup.Props) => {
         }}
         margin={Base.MarginBottom.PX_28}
         pagination={{
-          store:{
+          store: {
             totalSelectorKeys: ['routeManagement', 'editingPopup'],
             action: {
               type: REQUEST_PERS,
             }
           },
-          style:{
+          style: {
             marginTop: '5px',
           }
         }}
       />
 
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss AM/PM)' {...inputTitleProps} />
-        <Input.Element
-          placeholder=''
-          {...inputProps}
-          store={{
-            selectorKeys: ['routeManagement', 'editingPopup', 'startTime'],
-            reducerType: CHANGE_EDITING_INPUT,
-          }}
-        />
-      </Block.Element>
-
-
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên thủ quỹ ĐVTLT' {...inputTitleProps} />
-        <Input.Element
-          valueType={Input.ValueType.NUMBER}
-          placeholder=''
-          {...inputProps}
-          isDisabled={true}
-          store={{
-            selectorKeys: ['routeManagement', 'editingPopup', 'tqDltltName'],
-            reducerType: '',
-          }}
-        />
-      </Block.Element>
+      {html2}
 
       <Block.Element
         {...actionsWrapperProps}
@@ -420,13 +500,13 @@ const cellMapping = (dispatch) => (item, index) => ([
     children: item.orgsHolderMobile,
   },
   {
-    children: item.orgsDestName,
+    children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
   },
   {
-    children: item.tqDvdqName,
+    children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.tqDvdqName,
   },
   {
-    children: item.tqDvdqMobile,
+    children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.tqDvdqMobile,
   },
   {
     children: <a
@@ -467,8 +547,8 @@ const cellMapping = (dispatch) => (item, index) => ([
 ]);
 
 const validateForm = (dispatch, selector) => {
-  if (!moment(selector.startTime, 'DD/MM/YYYY hh:mm:ss A', true).isValid()) {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss AM/PM)' } });
+  if (!moment(selector.startTime, 'DD/MM/YYYY HH:mm:ss', true).isValid()) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss)' } });
     return false;
   }
   return true;

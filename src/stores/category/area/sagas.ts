@@ -23,8 +23,14 @@ function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(getData, state.area.filters, action);
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    if (!responseData.data?.data) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+    }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
 }
 
 function* createDataSaga() {
@@ -79,10 +85,9 @@ function getData(filters, action) {
         sort = '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/findCategoryArea';
-    const areaCode = parseInt(filters.areaCode);
     const postData = {
         data: {
-            areaCode: areaCode ? '' + areaCode : 0,
+            areaName: filters.areaCode ?? null,
             sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,

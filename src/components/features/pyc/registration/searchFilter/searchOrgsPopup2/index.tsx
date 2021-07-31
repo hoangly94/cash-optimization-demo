@@ -12,7 +12,7 @@ import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { INPUT_ORGS_VALUE_FILTER, REQUEST_QUERY, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, SELECT_ROW } from '~stores/pyc/searchOrgs/constants';
 import * as RegionAreaFilter from './regionAreaFilter';
-import { FETCH_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL } from '~/stores/pyc/registration/constants';
+import { FETCH_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, SEARCHORGS_SELECT_UPDATE2 } from '~/stores/pyc/registration/constants';
 
 export type Props = Popup.Props;
 
@@ -151,11 +151,14 @@ export const Element = (props: Popup.Props) => {
                 value: false,
               }
             }}
-            onClick={() => dispatch({
-              type: HANDLE_POPUP,
-              keys: ['pycRegistration', 'orgsSearching', 'isShown'],
-              value: true,
-            })}
+            onClick={() => {
+              dispatch({ type: SEARCHORGS_SELECT_UPDATE2 });
+              dispatch({
+                type: HANDLE_POPUP,
+                keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+                value: true,
+              });
+            }}
           />
           <Button.Element
             text='Close'
@@ -228,7 +231,7 @@ const tableData = (queryResult): Table.Props => ({
         },
       ],
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 
@@ -237,7 +240,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.orgsCode,

@@ -19,11 +19,12 @@ export const SELECT_AREA_CREATING = root + 'select_area_creating';
 export const SELECT_AREA_EDITING = root + 'select_area_editing';
 export const SELECT_ORGS_PARENT_CREATING = root + 'select_orgs_parent_creating';
 export const SELECT_ORGS_PARENT_EDITING = root + 'select_orgs_parent_edtiting';
-export const SELECT_ROW = root + 'select_row';
+export const SELECT_ROW = root + 'SELECT_ROW';
 export const SELECT_HISTORY_ROW = root + 'SELECT_HISTORY_ROW';
 export const FETCH_HISTORY_DETAIL = root + 'FETCH_HISTORY_DETAIL';
 export const UPDATE_HISTORY_DETAIL = root + 'UPDATE_HISTORY_DETAIL';
-export const CHANGE_ORGS_CODE_FILTER = root + 'change_orgs_code_filter';
+export const CHANGE_ORGS_CODE_FILTER = root + 'CHANGE_ORGS_CODE_FILTER';
+export const SEARCHORGS_SELECT_UPDATE = root + 'SEARCHORGS_SELECT_UPDATE';
 
 export type State = {
     history: any,

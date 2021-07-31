@@ -325,7 +325,7 @@ const vehicleMapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item, 1),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.categoryVehicle?.categoryOrgs?.orgsName,
@@ -412,7 +412,7 @@ const persMapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item, 2),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.persCode,
@@ -421,7 +421,7 @@ const persMapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.persName,
     },
     {
-      children: item.categoryPers?.persTitle,
+      children: item.categoryPers?.categoryTitle?.titleName,
     },
     {
       children: item.categoryPers?.persMobile,
@@ -496,7 +496,7 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
   onClick: handleRowClick(item, 3),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.cashOptimization?.id,
@@ -584,7 +584,7 @@ const orgsMapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item, 4),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.orgsName,

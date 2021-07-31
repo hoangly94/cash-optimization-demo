@@ -1,6 +1,7 @@
 import { State, SELECT_TYPE_FILTER, INPUT_VALUE_FILTER, UPDATE_DATA, SELECT_ROW } from './constants'
 import { getCurrentDate, _Date } from '@utils';
 
+import Config from '@config';
 const initState: State = {
     filters: {
         ...getDefaultFilters(),
@@ -38,7 +39,11 @@ export default (state: State = initState, action) => {
                 isLoading: false,
                 queryResult: {
                     ...state.queryResult,
-                    data: data,
+                    data: data.map((item, index) => ({
+                        ...item,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
+                    currentPage: action.page || 0,
                     total: action.data.total,
                 }
             }

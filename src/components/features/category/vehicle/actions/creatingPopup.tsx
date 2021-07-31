@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ORGS_CODE_CREATING, REQUEST_CREATING, REQUEST_CREATING_CANCEL, CHANGE_CREATING_INPUT, SELECT_FUNCTIONS_CREATING, SELECT_STATUS_CREATING, SELECT_PERS_CREATING } from '~stores/category/vehicle/constants';
+import { SELECT_ORGS_CODE_CREATING, REQUEST_CREATING, REQUEST_CREATING_CANCEL, CHANGE_CREATING_INPUT, SELECT_FUNCTIONS_CREATING, SELECT_STATUS_CREATING, SELECT_PERS_CREATING, REQUEST_PERS } from '~stores/category/vehicle/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -18,10 +18,12 @@ export const Element = (props: Popup.Props) => {
   const {
     setIsShown,
   } = props;
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: REQUEST_PERS });
+  });
   const [errorMsg, setErrorMsg] = useState('');
   const creatingPopupSelector = useSelector(state => state['vehicle'].creatingPopup);
-  const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(creatingPopupSelector, setErrorMsg);
@@ -33,7 +35,7 @@ export const Element = (props: Popup.Props) => {
     }
   }
 
-  
+
   const submitButtonProps: Button.Props = {
     text: 'Create',
     margin: Base.MarginRight.PX_28,
@@ -85,6 +87,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['vehicle', 'creatingPopup', 'vehicleCode'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={10}
         />
       </Block.Element>
 
@@ -97,7 +100,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['vehicle', 'creatingPopup', 'vehicleType'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
-          max={50}
+          max={30}
         />
       </Block.Element>
 
@@ -132,7 +135,7 @@ export const Element = (props: Popup.Props) => {
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên DVQL' {...inputTitleProps} />
+        <Title.Element text='Tên ĐVQL' {...inputTitleProps} />
         <Combox.Element
           {...comboxProps}
           store={{
@@ -181,7 +184,7 @@ export const Element = (props: Popup.Props) => {
           {...comboxProps}
           store={{
             defaultSelectorKeys: ['vehicle', 'creatingPopup', 'driverCodeSelected'],
-            selectorKeys: ['root', 'pers'],
+            selectorKeys: ['vehicle', 'pers'],
             reducerType: SELECT_PERS_CREATING,
             reducerKeys: {
               text: 'persFullname',

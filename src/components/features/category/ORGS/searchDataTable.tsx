@@ -8,7 +8,7 @@ import * as Block from "~commons/block";
 import * as Button from "~commons/button";
 import * as DropDown from "~commons/dropdown";
 import * as Table from "~commons/table";
-import { _Date, getCurrentDate } from '@utils';
+import { _Date, getCurrentDate, thousandSeparator } from '@utils';
 import {HANDLE_BUTTON} from "~stores/_base/constants";
 
 export type Props = Base.Props;
@@ -163,7 +163,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.orgsCode,
@@ -187,7 +187,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.categoryOrgsParent?.orgsName,
     },
     {
-      children: item.dvqlKc,
+      children: item.dvqlKc && thousandSeparator(item.dvqlKc.toFixed(2)),
     },
     {
       children: item.createddate,//item.createddate.split('-').join('/'),

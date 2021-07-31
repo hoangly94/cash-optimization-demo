@@ -48,7 +48,14 @@ function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(getData, state.pycRegistration.filters, state.auth, action);
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    if (!responseData.data?.data) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+    }
+
+    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'continue', 'isDisabled'], value: true });
@@ -70,7 +77,7 @@ function* createDataSaga() {
 
     yield put({ type: DONE_CREATING });
     yield fetchDataSaga();
-    yield spawn(addNoti, 'success', `Create success ID ${responseData.data.data.id}`);
+    yield spawn(addNoti, 'success', `Tạo thành công ID ${responseData?.data?.data.id}`);
     yield put({ type: HANDLE_POPUP, keys: ['pycRegistration', 'create', 'isShown'], value: false });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'specialDeleteCreating', 'isDisabled'], value: true });
 }
@@ -322,8 +329,8 @@ function getData(filters, auth, action) {
         ? {
             pers_code: auth.user?.code,
             orgs_code: filters.orgs?.value,
-            from_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom),
-            to_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo),
+            from_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom)+' 00:00:00',
+            to_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo)+' 23:59:59.00',
             orgs_role: filters.orgsRole?.value,
             object_type: filters.objectType?.value,
             status: filters.status?.value,

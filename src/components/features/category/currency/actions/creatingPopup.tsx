@@ -83,6 +83,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['currency', 'creatingPopup', 'currencyType'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={4}
         />
       </Block.Element>
 
@@ -95,6 +96,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['currency', 'creatingPopup', 'currencyDescription'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={30}
         />
       </Block.Element>
 
@@ -107,6 +109,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['currency', 'creatingPopup', 'currencyUnit'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={4}
         />
       </Block.Element>
 

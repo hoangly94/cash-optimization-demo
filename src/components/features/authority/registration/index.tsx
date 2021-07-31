@@ -6,7 +6,7 @@ import * as Block from "~commons/block";
 import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as Actions from "./actions";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FETCH_CONFIG } from '~/stores/dashboardRoot/constants';
 import { REQUEST_QUERY, RESET_FILTER_REGISTRATION } from '~/stores/authority/registration/constants';
 
@@ -14,8 +14,9 @@ export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const type = 'component';
+  const userSelector = useSelector(state => state['auth'].user);
   useEffect(() => {
-    dispatch({ type: RESET_FILTER_REGISTRATION });
+    dispatch({ type: RESET_FILTER_REGISTRATION, user: userSelector });
     dispatch({ type: REQUEST_QUERY });
   });
 

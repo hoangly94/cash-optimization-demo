@@ -6,16 +6,17 @@ import * as Block from "~commons/block";
 import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as ApprovalActions from "./approvalActions";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FETCH_CONFIG } from '~/stores/dashboardRoot/constants';
-import { REQUEST_QUERY, RESET_FILTER_APPROVAL } from '~/stores/authority/registration/constants';
+import { REQUEST_QUERY, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION } from '~/stores/authority/registration/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const type = 'component';
+  const userSelector = useSelector(state => state['auth'].user);
   useEffect(() => {
-    dispatch({ type: RESET_FILTER_APPROVAL });
+    dispatch({ type: RESET_FILTER_APPROVAL, user: userSelector });
     dispatch({ type: REQUEST_QUERY });
   });
 

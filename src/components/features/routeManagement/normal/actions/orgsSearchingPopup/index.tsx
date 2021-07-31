@@ -258,7 +258,7 @@ const validateForm = (dispatch, selector) => {
     return false;
   }
   if (selector.objectType.text === 'TCTD/NHNN' && !selector.nhnnTctd.value) {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Tên ATM' } });
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'C hưa chọn Tên NH đối tác KPP mở TK' } });
     return false;
   }
   return true;

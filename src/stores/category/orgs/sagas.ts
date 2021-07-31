@@ -15,7 +15,7 @@ function* saga() {
 function* fetchHistorySaga(action?) {
     const state = yield select();
     const responseData = yield call(getHistory, action, state.orgs.selectedItem);
-    yield put({ type: UPDATE_HISTORY, data: responseData.data});
+    yield put({ type: UPDATE_HISTORY, data: responseData.data });
 }
 
 
@@ -23,8 +23,14 @@ function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(getData, state.orgs.filters, action);
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    if (!responseData.data?.data) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+    }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
 }
 
 function* createDataSaga() {
@@ -78,7 +84,7 @@ function getData(filters, action) {
     const {
         page = 0,
         sort = '',
-    } = action ?? {};const url = Config.url + '/api/cashoptimization/findCategoryOrgs';
+    } = action ?? {}; const url = Config.url + '/api/cashoptimization/findCategoryOrgs';
     const orgsCode = parseInt(filters.orgsCode);
     const postData = {
         data: {
@@ -94,6 +100,7 @@ function getData(filters, action) {
 }
 
 function requestCreating(url: string, data) {
+    const dvqlKc = data.dvqlKc?.toString().replaceAll(',', '');
     const postData = {
         data: {
             orgsCode: parseInt(data.orgsCode),
@@ -103,7 +110,7 @@ function requestCreating(url: string, data) {
             areaCode: data.areaSelected.value,
             areaName: data.areaSelected.text,
             orgsParentId: data.orgsParentSelected.value,
-            dvqlKc: data.dvqlKc,
+            dvqlKc: (dvqlKc && Math.trunc(parseFloat(dvqlKc) * 100) / 100) || 0,
         },
     }
     return axios.post(url, { ...postData })
@@ -111,6 +118,7 @@ function requestCreating(url: string, data) {
 }
 
 function requestEditing(url: string, data) {
+    const dvqlKc = data.dvqlKc?.toString().replaceAll(',', '');
     const postData = {
         data: {
             id: data.id,
@@ -121,7 +129,7 @@ function requestEditing(url: string, data) {
             areaCode: data.areaSelected.value,
             areaName: data.areaSelected.text,
             orgsParentId: data.orgsParentSelected.value,
-            dvqlKc: data.dvqlKc,
+            dvqlKc: (dvqlKc && Math.trunc(parseFloat(dvqlKc) * 100) / 100) || 0,
         },
     }
     return axios.post(url, { ...postData })

@@ -9,17 +9,21 @@ import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
 import * as HistoryPopup from "./historyPopup";
 import * as DetailPopup from "./detailPopup";
-import { HANDLE_POPUP } from '~/stores/_base/constants';
-import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '~/stores/category/orgs/constants';
+import * as SearchOrgsPopup from "./searchOrgsPopup";
+
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
+import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, REQUEST_QUERY } from '~/stores/category/orgs/constants';
 import { useDispatch } from 'react-redux';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
-  // React.useEffect(()=>{
-  //   dispatch({ type: FETCH_HISTORY })
-  // },[]);
+  React.useEffect(() => {
+    dispatch({ type: REQUEST_QUERY });
+    dispatch({ type: HANDLE_BUTTON, keys: ['orgs', 'edit', 'isDisabled'], value: true });
+    dispatch({ type: HANDLE_BUTTON, keys: ['orgs', 'history', 'isDisabled'], value: true });
+  });
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -93,6 +97,7 @@ export const Element = (props: Props) => {
                 value: true,
               }
             }}
+            onClick={() => dispatch({ type: REQUEST_CREATING_CANCEL })}
           />
           <Button.Element
             {...editingButtonComponentProps}
@@ -104,10 +109,12 @@ export const Element = (props: Props) => {
                 value: true,
               }
             }}
+            onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
           />
           <Button.Element
             {...historyButtonComponentProps}
             store={{
+              isDisabledSelectorKeys: ['base', 'buttons', 'orgs', 'edit'],
               action: {
                 type: HANDLE_POPUP,
                 keys: ['orgs', 'history', 'isShown'],
@@ -150,6 +157,15 @@ export const Element = (props: Props) => {
         }}
         useEffect={{
           callback: () => dispatch({ type: FETCH_HISTORY_DETAIL }),
+        }}
+      />
+      <SearchOrgsPopup.Element
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'Tìm đơn vị',
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'orgs', 'searchOrgs'],
         }}
       />
     </>

@@ -22,8 +22,14 @@ function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(getData, state.function.filters, action);
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    if (!responseData.data?.data) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+    }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
 }
 
 function* createDataSaga() {
@@ -81,7 +87,7 @@ function getData(filters, action) {
     const functionCode = filters.functionCode;
     const postData = {
         data: {
-            functionCode: functionCode || null,
+            functionName: functionCode || null,
             sort,
             page,
             size: Config.numberOfItemsPerPage,

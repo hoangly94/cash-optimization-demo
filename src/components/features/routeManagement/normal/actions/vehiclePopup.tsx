@@ -70,10 +70,12 @@ export const Element = (props: Popup.Props) => {
           oneRightToLeft: {
             text: 'Add',
             disabled: false,
+            onClick: () => dispatch({type: REQUEST_VEHICLE}),
           },
           oneLeftToRight: {
             text: 'Remove',
             disabled: false,
+            onClick: () => dispatch({type: REQUEST_VEHICLE}),
           },
           allRightToLeft: {
             disabled: true,

@@ -13,7 +13,7 @@ export type Props = Base.Props;
 export const Element = (props: Props) => {
   useEffect(() => {
     dispatch({ type: REQUEST_RESET })
-    dispatch({ type: REQUEST_QUERY });
+    // dispatch({ type: REQUEST_QUERY });
   })
 
   //create props
@@ -93,7 +93,6 @@ export const Element = (props: Props) => {
       <Button.Element
         {...queryButtonProps}
         store={{
-          isLoadingSelectorKeys: ['base', 'buttons', 'atmCdm', 'query'],
           action: { type: REQUEST_QUERY },
         }}
       />

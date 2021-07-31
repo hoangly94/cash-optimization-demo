@@ -41,6 +41,9 @@ export const RESET_FILTER_APPROVAL = root + 'RESET_FILTER_APPROVAL';
 
 export const HANDLE_CONTINUE_ACTION = root + 'HANDLE_CONTINUE_ACTION';
 
+export const SEARCHORGS_SELECT_UPDATE = root + 'SEARCHORGS_SELECT_UPDATE';
+export const SEARCHPERS_SELECT_UPDATE = root + 'SEARCHPERS_SELECT_UPDATE';
+
 
 export type State = {
     history: any,

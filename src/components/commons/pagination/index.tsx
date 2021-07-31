@@ -41,8 +41,9 @@ export const Element = (props: Props): React.ReactElement => {
     numberOfItemsPerPage = Config.numberOfItemsPerPage,
   } = props;
   const dispatch = useDispatch();
-  const total = store && store.totalSelectorKeys  ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.totalSelectorKeys as string[], 'total'])) : totalItems;
-  const [currrentPage, setCurrentPage] = useState(0);
+  const selector = store && store.totalSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.totalSelectorKeys ?? [])) : null;
+  const total = selector?.total || totalItems;
+  const currentPage = selector?.currentPage;
   const maxPage = Math.ceil((total as number ?? 1) / numberOfItemsPerPage);
   //create props
   const componentProps = {
@@ -59,14 +60,14 @@ export const Element = (props: Props): React.ReactElement => {
   };
 
   const itemElements = Array(maxPage).fill(0).map((item, index) => {
-    const style = currrentPage === index ? { style: { border: '1px solid #cdcdcd' } } : {};
+    const style = currentPage === index ? { style: { border: '1px solid #cdcdcd' } } : {};
     return <Button.Element
       key={index}
       border={Base.Border.NONE}
       {...pageButtonProps}
       text={'' + (index + 1)}
       {...style}
-      onClick={handlePageButtonClick(setCurrentPage, dispatch, store, index)}
+      onClick={handlePageButtonClick(dispatch, store, index)}
     />;
   });
 
@@ -77,8 +78,7 @@ export const Element = (props: Props): React.ReactElement => {
   )
 }
 
-const handlePageButtonClick = (setCurrentPage, dispatch, store: Store, page) => () => {
-  setCurrentPage(page);
+const handlePageButtonClick = (dispatch, store: Store, page) => () => {
   dispatch({ ...store.action, page: page });
 }
 

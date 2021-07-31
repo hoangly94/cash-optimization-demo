@@ -4,6 +4,7 @@ export const SELECT_TYPE_FILTER= root + 'SELECT_TYPE_FILTER';
 export const INPUT_VALUE_FILTER = root + 'INPUT_VALUE_FILTER';
 export const REQUEST_QUERY = root + 'REQUEST_QUERY';
 export const UPDATE_DATA = root + 'UPDATE_DATA';
+export const REQUEST_PERS_CANCEL = root + 'REQUEST_PERS_CANCEL';
 
 export type State = {
     filters: {

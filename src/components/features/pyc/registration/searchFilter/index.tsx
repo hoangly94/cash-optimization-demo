@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { REQUEST_QUERY, REQUEST_RESET, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_COMBOX_FILTER } from '~stores/pyc/registration/constants';
+import { REQUEST_QUERY, REQUEST_RESET, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_COMBOX_FILTER, RESET_FILTER_REGISTRATION } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
@@ -13,15 +13,13 @@ import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchOrgsPopup2 from "./searchOrgsPopup2";
 import * as SearchPersPopup from "./searchPersPopup";
-import { HANDLE_POPUP } from '~stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
+import { RESET_SEARCHORGS_FILTER } from '_/stores/authority/searchOrgs/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  useEffect(() => {
-    // dispatch({ type: UPDATE_CONFIG })
-    // dispatch({ type: REQUEST_QUERY });
-  })
+  const dispatch = useDispatch();
   const radioSelector = useSelector(state => state['pycRegistration'].filters.radio);
   const userSelector = useSelector(state => state['auth'].user);
 
@@ -68,7 +66,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Từ ngày(dd/mm/yyy)',
+            placeholder: 'Từ ngày(dd/mm/yyyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['pycRegistration', 'filters', 'dateFrom'],
@@ -88,7 +86,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Đến ngày(dd/mm/yyy)',
+            placeholder: 'Đến ngày(dd/mm/yyyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['pycRegistration', 'filters', 'dateTo'],
@@ -123,7 +121,7 @@ export const Element = (props: Props) => {
           {...filter1Props}
           border={Base.Border.SOLID}
           textAlign={Base.TextAlign.LEFT}
-          text='ĐVUQ'
+          text={userSelector.orgsName}
           store={{
             textSelectorKeys: ['pycRegistration', 'filters', 'orgs', 'text'],
             action: {
@@ -137,6 +135,11 @@ export const Element = (props: Props) => {
             display: userSelector.orgsCode === 9 ? 'block' : 'none'
           }}
           isDisabled={radioSelector !== '1'}
+          onClick={() => {
+            dispatch({ type: RESET_SEARCHORGS_FILTER });
+            // dispatch({ type: REQUEST_QUERY_ORGS });
+            dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
+          }}
         />
         <Combox.Element
           {...filter1Props}
@@ -215,7 +218,6 @@ export const Element = (props: Props) => {
         <Button.Element
           {...queryButtonProps}
           store={{
-            isLoadingSelectorKeys: ['base', 'buttons', 'pycRegistration', 'query'],
             action: { type: REQUEST_QUERY },
           }}
         />

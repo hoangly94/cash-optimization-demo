@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { SELECT_AREA_CREATING, SELECT_ORGS_PARENT_CREATING, REQUEST_CREATING, REQUEST_CREATING_CANCEL, CHANGE_CREATING_INPUT } from '~stores/category/orgs/constants';
+import { REQUEST_QUERY as REQUEST_QUERY_ORGS, RESET_SEARCHORGS_FILTER } from '~stores/authority/searchOrgs/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -8,9 +9,9 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
-import { _Date, getCurrentDate } from "@utils";
+import { _Date, getCurrentDate, thousandSeparator } from "@utils";
 import { comboxProps } from "./";
-import { HANDLE_POPUP } from '~/stores/_base/constants';
+import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Popup.Props;
 
@@ -21,15 +22,13 @@ export const Element = (props: Popup.Props) => {
 
   const [errorMsg, setErrorMsg] = useState('');
   const creatingPopupSelector = useSelector(state => state['orgs'].creatingPopup);
+  // const orgsFilterSelector = useSelector(state => state['registration'].filters.orgs);
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(creatingPopupSelector, setErrorMsg);
+    const isValidForm = validateForm(creatingPopupSelector, dispatch);
     if (isValidForm) {
-      setErrorMsg('');
       dispatch({ type: REQUEST_CREATING });
-      if (setIsShown)
-        setIsShown(false)
     }
   }
 
@@ -86,6 +85,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['orgs', 'creatingPopup', 'orgsCode'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={4}
         />
       </Block.Element>
 
@@ -98,7 +98,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['orgs', 'creatingPopup', 'orgsName'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
-          max={50}
+          max={60}
         />
       </Block.Element>
 
@@ -125,19 +125,15 @@ export const Element = (props: Popup.Props) => {
             reducerType: SELECT_AREA_CREATING,
             reducerKeys: {
               text: 'areaName',
-              value: 'id',
+              value: 'areaCode',
             },
-            defaultOptions: [{
-              text: '',
-              value: 0,
-            }],
           }}
         />
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên DVQL' {...inputTitleProps} />
-        <Combox.Element
+        <Title.Element text='Tên ĐVQL' {...inputTitleProps} />
+        {/* <Combox.Element
           {...comboxProps}
           store={{
             defaultSelectorKeys: ['orgs', 'creatingPopup', 'orgsParentSelected'],
@@ -152,7 +148,41 @@ export const Element = (props: Popup.Props) => {
               value: 0,
             }],
           }}
-        />
+        /> */}
+        <Block.Element
+          width={Base.Width.PER_70}
+          flex={Base.Flex.BETWEEN}
+        >
+          <Input.Element
+            width={Base.Width.PER_80}
+            store={{
+              selectorKeys: ['orgs', 'creatingPopup', 'orgsParentSelected', 'text'],
+              reducerType: '',
+            }}
+            isDisabled={true}
+          />
+          <Button.Element
+            width={Base.Width.PX_200}
+            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+            color={Base.Color.WHITE}
+            border={Base.Border.SOLID}
+            textAlign={Base.TextAlign.CENTER}
+            text='Search'
+            store={{
+              textSelectorKeys: ['registration', 'filters', 'orgs', 'text'],
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['orgs', 'searchOrgs', 'isShown'],
+                value: true,
+              }
+            }}
+            onClick={() => {
+              dispatch({ type: RESET_SEARCHORGS_FILTER });
+              dispatch({ type: REQUEST_QUERY_ORGS });
+              dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
+            }}
+          />
+        </Block.Element>
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
@@ -160,11 +190,12 @@ export const Element = (props: Popup.Props) => {
         <Input.Element
           placeholder='Khoảng cách đến ĐVQL'
           {...inputProps}
-          valueType={Input.ValueType.NUMBER}
           store={{
             selectorKeys: ['orgs', 'creatingPopup', 'dvqlKc'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          keyPressPattern='^[0-9\.]$'
+          valueMapper={thousandSeparator}
         />
       </Block.Element>
 
@@ -214,15 +245,17 @@ const actionsProps: Block.Props = {
 }
 
 
-const validateForm = (popupSelector, setErrorMsg) => {
-  // if (!popupSelector.orgsCode) {
-  //   setErrorMsg('Mã đơn vị không được để trống');
+const validateForm = (selector, dispatch) => {
+  const dvqlKc = selector.dvqlKc?.toString().replaceAll(',', '');
+  // if (selector.dvqlKc) {
+  //   dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa nhập Khoảng cách đến ĐVQL' } });
   //   return false;
   // }
-  // if (!popupSelector.orgsParentSelected.value) {
-  //   setErrorMsg('DVQL phải được chọn');
-  //   return false;
-  // }
+
+  if (selector.dvqlKc && !(!isNaN(parseFloat(dvqlKc)) && isFinite(dvqlKc))) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai format Khoảng cách đến ĐVQL' } });
+    return false;
+  }
   return true;
 }
 

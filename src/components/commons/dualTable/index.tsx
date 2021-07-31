@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { MouseEventHandler, useState } from 'react';
 import Classnames from 'classnames';
 import styles from './_styles.css'
 import { Link } from "react-router-dom";
@@ -43,18 +43,22 @@ export type Props = Base.Props & {
     oneRightToLeft?: {
       text?: string,
       disabled: boolean,
+      onClick?: MouseEventHandler,
     },
     oneLeftToRight?: {
       text?: string,
       disabled: boolean,
+      onClick?: MouseEventHandler,
     },
     allRightToLeft?: {
       text?: string,
       disabled: boolean,
+      onClick?: MouseEventHandler,
     },
     allLeftToRight?: {
       text?: string,
       disabled: boolean,
+      onClick?: MouseEventHandler,
     },
   },
   pagination?: Pagination.Props,
@@ -109,9 +113,9 @@ export const Element = (props: Props) => {
   }
 
   if (type === Type.BLOCK) {
-    const paginationElement = pagination? <Pagination.Element
-    {...pagination}
-  /> : null;
+    const paginationElement = pagination ? <Pagination.Element
+      {...pagination}
+    /> : null;
     return (
       <Block.Element {...componentProps}>
         <Block.Element>
@@ -123,9 +127,9 @@ export const Element = (props: Props) => {
           >
             <Table.Element {...table1Props} />
           </Block.Element>
-            
+
           {paginationElement}
-          
+
           <Block.Element
             flex={Base.Flex.BETWEEN}
             padding={Base.PaddingV.PX_18}
@@ -142,6 +146,10 @@ export const Element = (props: Props) => {
               store={{
                 action: { type: store.handleMoveActionType, moveType: 'ONE_LEFT_TO_RIGHT' },
               }}
+              onClick={(e) => {
+                if (actionButtons?.oneRightToLeft?.onClick)
+                  actionButtons?.oneRightToLeft?.onClick(e);
+              }}
             />
             <Button.Element
               {...buttonProps}
@@ -152,6 +160,10 @@ export const Element = (props: Props) => {
               text={actionButtons?.allRightToLeft?.text || '>>'}
               store={{
                 action: { type: store.handleMoveActionType, moveType: 'ALL_LEFT_TO_RIGHT' },
+              }}
+              onClick={(e) => {
+                if (actionButtons?.allRightToLeft?.onClick)
+                  actionButtons?.allRightToLeft?.onClick(e);
               }}
             />
             <Button.Element
@@ -164,6 +176,10 @@ export const Element = (props: Props) => {
               store={{
                 action: { type: store.handleMoveActionType, moveType: 'ALL_RIGHT_TO_LEFT' },
               }}
+              onClick={(e) => {
+                if (actionButtons?.allLeftToRight?.onClick)
+                  actionButtons?.allLeftToRight?.onClick(e);
+              }}
             />
             <Button.Element
               {...buttonProps}
@@ -174,6 +190,10 @@ export const Element = (props: Props) => {
               text={actionButtons?.oneLeftToRight?.text || '<'}
               store={{
                 action: { type: store.handleMoveActionType, moveType: 'ONE_RIGHT_TO_LEFT' },
+              }}
+              onClick={(e) => {
+                if (actionButtons?.oneLeftToRight?.onClick)
+                  actionButtons?.oneLeftToRight?.onClick(e);
               }}
             />
 

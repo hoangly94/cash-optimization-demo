@@ -79,9 +79,9 @@ export const Element = (props: Popup.Props) => {
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Mã NHNN/TCTD' {...inputTitleProps} />
+        <Title.Element text='Mã TCTD/NHNN' {...inputTitleProps} />
         <Input.Element
-          placeholder='Mã NHNN/TCTD'
+          placeholder='Mã TCTD/NHNN'
           {...inputProps}
           store={{
             selectorKeys: ['nhnnTctd', 'selectedItem', 'nnhnTctdCode'],
@@ -93,22 +93,22 @@ export const Element = (props: Popup.Props) => {
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên NHNN/TCTD' {...inputTitleProps} />
+        <Title.Element text='Tên TCTD/NHNN' {...inputTitleProps} />
         <Input.Element
-          placeholder='Tên NHNN/TCTD'
+          placeholder='Tên TCTD/NHNN'
           {...inputProps}
           store={{
             selectorKeys: ['nhnnTctd', 'selectedItem', 'nnhnTctdName'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
-          max={50}
+          max={60}
         />
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Địa chỉ NHNN/TCTD' {...inputTitleProps} />
+        <Title.Element text='Địa chỉ TCTD/NHNN' {...inputTitleProps} />
         <Input.Element
-          placeholder='Địa chỉ NHNN/TCTD'
+          placeholder='Địa chỉ TCTD/NHNN'
           {...inputProps}
           store={{
             selectorKeys: ['nhnnTctd', 'selectedItem', 'nnhnTctdAddress'],
@@ -119,7 +119,7 @@ export const Element = (props: Popup.Props) => {
       </Block.Element>
         
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Phân loại NHNN/TCTD' {...inputTitleProps} />
+        <Title.Element text='Phân loại TCTD/NHNN' {...inputTitleProps} />
         <Combox.Element
           {...comboxProps}
           store={{
@@ -201,7 +201,7 @@ const actionsProps: Block.Props = {
 
 const validateForm = (popupSelector, setErrorMsg) => {
   // if (!popupSelector.nnhnTctdCode) {
-  //   setErrorMsg('Mã NHNN/TCTD không được để trống');
+  //   setErrorMsg('Mã TCTD/NHNN không được để trống');
   //   return false;
   // }
   // if (!popupSelector.orgsSelected.value){

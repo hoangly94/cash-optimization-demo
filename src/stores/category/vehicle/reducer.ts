@@ -1,7 +1,8 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_FUNCTIONS_CREATING, SELECT_FUNCTIONS_EDITING, SELECT_PERS_CREATING, SELECT_PERS_EDITING, SELECT_STATUS_CREATING, SELECT_STATUS_EDITING, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_FUNCTIONS_CREATING, SELECT_FUNCTIONS_EDITING, SELECT_PERS_CREATING, SELECT_PERS_EDITING, SELECT_STATUS_CREATING, SELECT_STATUS_EDITING, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL, UPDATE_DATA_PERS } from './constants'
 import * as Base from '~/_settings';
 import { _Date, getCurrentDate } from '@utils';
 
+import Config from '@config';
 const initState: State = {
     history: [],
     detailPopup: [],
@@ -76,7 +77,11 @@ export default (state: State = initState, action) => {
                 isLoading: false,
                 queryResult: {
                     ...state.queryResult,
-                    data: data,
+                    data: data.map((item, index) => ({
+                        ...item,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
+                    currentPage: action.page || 0,
                     total: action.data.total,
                 }
             }
@@ -126,6 +131,10 @@ export default (state: State = initState, action) => {
                 creatingPopup: {
                     ...state.creatingPopup,
                     orgsSelected: action.data,
+                    driverCodeSelected:{
+                        text: 'Họ và tên lái xe',
+                        value:'',
+                    }
                 },
             }
         case SELECT_ORGS_CODE_EDITING:
@@ -134,6 +143,10 @@ export default (state: State = initState, action) => {
                 selectedItem: {
                     ...state.selectedItem,
                     orgsSelected: action.data,
+                    driverCodeSelected:{
+                        text: 'Họ và tên lái xe',
+                        value:'',
+                    }
                 },
             }
         case SELECT_FUNCTIONS_CREATING:
@@ -235,6 +248,11 @@ export default (state: State = initState, action) => {
                     ...state.filters,
                     vehicleCode: action.data.vehicleCode,
                 },
+            }
+        case UPDATE_DATA_PERS:
+            return {
+                ...state,
+                pers:action.data?.data,
             }
         default:
             return state

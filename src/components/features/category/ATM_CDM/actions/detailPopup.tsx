@@ -195,7 +195,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   isSelected: item.isSelected ?? false,
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.atmCdmCode,

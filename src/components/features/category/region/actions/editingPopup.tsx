@@ -96,7 +96,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['region', 'selectedItem', 'regionName'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
-          max={50}
+          max={30}
         />
       </Block.Element>
 

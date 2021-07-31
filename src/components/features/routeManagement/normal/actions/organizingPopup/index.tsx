@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_VEHICLE, REQUEST_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, REQUEST_ORGANIZING_GET_KC, SELECT_COMBOX, HANDLE_SPECIAL_ADD, HANDLE_SPECIAL_DELETE, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, FETCH_BALANCE_SPECIAL, } from '~stores/routeManagement/normal/constants';
+import { REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_VEHICLE, REQUEST_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, REQUEST_ORGANIZING_GET_KC, SELECT_COMBOX, HANDLE_SPECIAL_ADD, HANDLE_SPECIAL_DELETE, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, FETCH_BALANCE_SPECIAL, REQUEST_ORGANIZING_URGENT_UPDATE, REQUEST_ORGANIZING_SEARCH_DESTINATION, } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -14,9 +14,12 @@ import * as RouteTable from "./routeTable";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_CURRENCIES } from '~/stores/dashboardRoot/constants';
 
-export type Props = Popup.Props;
+export type Props = Popup.Props & {
+  popupType: string,
+};
 
-export const Element = (props: Popup.Props) => {
+export const Element = (props: Props) => {
+  const { popupType } = props;
   const selector = useSelector(state => state['routeManagement'].organizingPopup);
   const dispatch = useDispatch();
 
@@ -129,6 +132,8 @@ export const Element = (props: Popup.Props) => {
                 popupType: 3,
               }
             }}
+            
+            onClick={() => dispatch({ type: REQUEST_ORGANIZING_SEARCH_DESTINATION })}
           // onClick={() => dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL })}
           />
         </Block.Element>
@@ -332,7 +337,14 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             margin={Base.MarginRight.PX_8}
-            onClick={() => dispatch({ type: REQUEST_ORGANIZING_INSERT })}
+            store={{
+              isLoadingSelectorKeys: ['base', 'buttons', 'routeManagement', 'routeDetailOganizeInsert'],
+              action: { type: REQUEST_ORGANIZING_INSERT }
+            }}
+            onClick={() => {
+              dispatch({ type: REQUEST_ORGANIZING_CANCEL });
+              dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL })
+            }}
           />
           <Button.Element
             text='Delete'
@@ -342,7 +354,7 @@ export const Element = (props: Popup.Props) => {
             margin={Base.MarginRight.PX_8}
             backgroundColor={Base.BackgroundColor.RED}
             store={{
-              // isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'specialDeleteEditing'],
+              isLoadingSelectorKeys: ['base', 'buttons', 'routeManagement', 'routeDetailOganizeInsert'],
               action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'DELETE' }
             }}
             isDisabled={!(selector?.selectedRouteDetailOganize)}
@@ -355,7 +367,7 @@ export const Element = (props: Popup.Props) => {
             backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
             margin={Base.MarginRight.PX_8}
             store={{
-              // isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'specialDeleteEditing'],
+              isLoadingSelectorKeys: ['base', 'buttons', 'routeManagement', 'routeDetailOganizeInsert'],
               action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'UP' }
             }}
             isDisabled={!(selector?.selectedRouteDetailOganize)}
@@ -367,7 +379,7 @@ export const Element = (props: Popup.Props) => {
             border={Base.Border.NONE}
             backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
             store={{
-              // isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'specialDeleteEditing'],
+              isLoadingSelectorKeys: ['base', 'buttons', 'routeManagement', 'routeDetailOganizeInsert'],
               action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'DOWN' }
             }}
             isDisabled={!(selector?.selectedRouteDetailOganize)}
@@ -396,7 +408,12 @@ export const Element = (props: Popup.Props) => {
             //     value: false,
             //   }
             // }}
-            onClick={() => dispatch({ type: REQUEST_ORGANIZING_UPDATE })}
+            onClick={() => {
+              if (popupType == 'normal')
+                dispatch({ type: REQUEST_ORGANIZING_UPDATE });
+              if (popupType == 'urgent')
+                dispatch({ type: REQUEST_ORGANIZING_URGENT_UPDATE });
+            }}
           />
           <Button.Element
             text='Continue'
@@ -491,223 +508,6 @@ const actionsProps: Block.Props = {
 const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
-
-const vehicleTableData = (queryResult?): Table.Props => ({
-  $thead: [
-    {
-      style: {
-        backgroundColor: '#1e3f96',
-      },
-      color: Base.Color.WHITE,
-      $cells: [
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'STT',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Trạng thái xe',
-          sort: {
-            type: REQUEST_VEHICLE,
-            data: 'vehicle_status',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Biển số xe',
-          sort: {
-            type: REQUEST_VEHICLE,
-            data: 'vehicle_code',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mã đơn vị quản lý xe',
-          sort: {
-            type: REQUEST_VEHICLE,
-            data: 'orgs_code',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên đơn bị quản lý xe',
-          sort: {
-            type: REQUEST_VEHICLE,
-            data: 'orgs_name',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Họ và tên Lái xe',
-          sort: {
-            type: REQUEST_VEHICLE,
-            data: 'driver_name',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'SĐT Lái xe',
-          sort: {
-            type: REQUEST_VEHICLE,
-            data: 'pers_mobile',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Vị trí GPS của xe',
-          sort: {
-            type: REQUEST_VEHICLE,
-            data: 'vehicle_gps',
-          }
-        },
-      ]
-    },
-  ],
-  $rows: queryResult ? queryResult : [],
-})
-
-const vehicleMapResponseToData = () => (item, index) => ({
-  isSelected: item.isSelected ?? false,
-  $cells: [
-    {
-      children: index + 1,
-    },
-    {
-      children: item.vehicleStatus,
-    },
-    {
-      children: item.vehicleCode,
-    },
-    {
-      children: item.categoryOrgs?.orgsCode,
-    },
-    {
-      children: item.categoryOrgs?.orgsName,
-    },
-    {
-      children: item.driverName,
-    },
-    {
-      children: item.categoryPers?.persMobile,
-    },
-    {
-      children: item.vehicleGps,
-    },
-  ]
-})
-
-const persTableData = (queryResult?): Table.Props => ({
-  $thead: [
-    {
-      style: {
-        backgroundColor: '#1e3f96',
-      },
-      color: Base.Color.WHITE,
-      $cells: [
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'STT',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mã nhân viên',
-          sort: {
-            type: REQUEST_PERS,
-            data: 'id',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Họ và tên nhân viên',
-          sort: {
-            type: REQUEST_PERS,
-            data: 'pers_fullname',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Chức danh',
-          sort: {
-            type: REQUEST_PERS,
-            data: 'pers_title',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'SĐT Nhân viên',
-          sort: {
-            type: REQUEST_PERS,
-            data: 'pers_mobile ',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mã đơn vị quản lý NV',
-          sort: {
-            type: REQUEST_PERS,
-            data: 'orgs_code',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên đơn vị quản lý NV',
-          sort: {
-            type: REQUEST_PERS,
-            data: 'orgs_name',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Địa chỉ NV',
-          sort: {
-            type: REQUEST_PERS,
-            data: '',
-          }
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Trạng thái NV',
-          sort: {
-            type: REQUEST_PERS,
-            data: 'persStatus',
-          }
-        },
-      ]
-    },
-  ],
-  $rows: queryResult ? queryResult : [],
-})
-
-const persMapResponseToData = () => (item, index) => ({
-  isSelected: item.isSelected ?? false,
-  $cells: [
-    {
-      children: index + 1,
-    },
-    {
-      children: item.id,
-    },
-    {
-      children: item.persFullname,
-    },
-    {
-      children: item.persTitle,
-    },
-    {
-      children: item.persMobile,
-    },
-    {
-      children: item.categoryOrgs?.orgsCode,
-    },
-    {
-      children: item.categoryOrgs?.orgsName,
-    },
-    {
-      children: item.persStatus,
-    },
-  ]
-})
-
 
 
 const validateSpecialForm = (dispatch, selector) => {

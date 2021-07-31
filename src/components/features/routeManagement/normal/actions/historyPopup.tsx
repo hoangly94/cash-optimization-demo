@@ -216,13 +216,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
-      children: _Date.getDate(item.startTime),
+      children: item.createddate.split('-').join('/'),
     },
     {
-      children: item.id,
+      children: item.routeId,
     },
     {
       children: item.orgsCode,
@@ -240,7 +240,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.tqDltltName,
     },
     {
-      children: _Date.getDate(item.startTime),
+      children: _Date.getDateTime(item.startTime),
     },
     {
       children: _Date.getDate(item.updateddate),

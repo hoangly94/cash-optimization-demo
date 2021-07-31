@@ -11,7 +11,7 @@ export type Props = Base.Props;
 export const Element = (props: Props) => {
   useEffect(() => {
     dispatch({ type: REQUEST_RESET })
-    dispatch({ type: REQUEST_QUERY });
+    // dispatch({ type: REQUEST_QUERY });
   })
 
   //create props
@@ -60,7 +60,7 @@ export const Element = (props: Props) => {
   return (
     <Block.Element {...componentWrapperProps}>
       <Input.Element
-        placeholder='Mã cụm'
+        placeholder='Tên cụm'
         {...orgsCodeProps}
         store={{
           selectorKeys: ['area', 'filters', 'areaCode'],
@@ -72,7 +72,6 @@ export const Element = (props: Props) => {
       <Button.Element
         {...queryButtonProps}
         store={{
-          isLoadingSelectorKeys: ['base', 'buttons', 'area', 'query'],
           action: { type: REQUEST_QUERY },
         }}
       />

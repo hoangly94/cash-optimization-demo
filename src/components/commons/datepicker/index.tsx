@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { _Array, _Date } from '@utils';
 import { HANDLE_BUTTON } from "~stores/_base/constants";
 import { useComponentClickOutside } from '@hooks';
+import moment from 'moment';
 
 export enum Type {
   DEFAULT = 'datepicker',
@@ -39,6 +40,7 @@ export type Props = Base.Props & {
     monthLabels?: string[],
     isDisabled?: boolean,
   },
+  dateFormat?: string;
 }
 
 type Store = {
@@ -52,6 +54,7 @@ export const Element = (props: Props) => {
     size = Size.M,
     $datepicker,
     $input,
+    dateFormat='DD/MM/YYYY',
   } = props;
   const {
     store,
@@ -110,7 +113,7 @@ export const Element = (props: Props) => {
 
   const labelRowProps = dayLabels.map(mapToLabelRows);
   const tableFromData = getTableData(currentDate);
-  const tableFromProps = tableFromData.reduce(reduceToRows(dispatch, setClickData)(props, currentDate, dateSelector), []);
+  const tableFromProps = tableFromData.reduce(reduceToRows(dispatch, setClickData, dateFormat)(props, currentDate, dateSelector), []);
   const currentMonthYearString = `${String(currentDate.getMonth() + 1).padStart(2, '0')}/${currentDate.getFullYear()}`;
 
   const tableProps = {
@@ -163,7 +166,7 @@ const mapToLabelRows = (label) => (
   }
 )
 
-const reduceToRows = (dispatch, setClickData) => (props: Props, currentDate: Date, activeDay?: string) => {
+const reduceToRows = (dispatch, setClickData, dateFormat) => (props: Props, currentDate: Date, activeDay?: string) => {
   const activeDate = activeDay ? new Date(_Date.convertDateTimeDDMMYYYtoYYYYMMDD(activeDay)) : new Date();
   let i = -1;
   return (result, next) => {
@@ -180,7 +183,7 @@ const reduceToRows = (dispatch, setClickData) => (props: Props, currentDate: Dat
           dispatch({
             ...store.action,
             data: {
-              [store.selectorKeys[store.selectorKeys.length - 1]]: selectedDateTime,
+              [store.selectorKeys[store.selectorKeys.length - 1]]: moment(selectedDateTime, 'DD/MM/YYYY HH:mm:ss').format(dateFormat),
             }
           });
         }

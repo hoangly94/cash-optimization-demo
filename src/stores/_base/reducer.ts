@@ -1,5 +1,6 @@
 import { State, HANDLE_BUTTON, HANDLE_POPUP, ADD_NOTI_ERROR, ADD_NOTI_SUCCESS, REMOVE_LAST_NOTI, REQUEST_NEW_BREACURMBS } from './constants'
 
+import Config from '@config';
 const initState: State = {
     buttons: {
         'orgs': {
@@ -252,9 +253,21 @@ const initState: State = {
             },
             'specialDeleteEditing': {
                 isDisabled: true,
-            },
+            }, 
             'orgsSearching': {
                 isDisabled: true,
+            },
+            'routeDetailOganizeInsert': {
+                isLoading: false,
+            },
+            'routeDetailOganizeDelete': {
+                isLoading: false,
+            },
+            'routeDetailOganizeUp': {
+                isLoading: false,
+            },
+            'routeDetailOganizeDown': {
+                isLoading: false,
             },
         },
     },
@@ -271,6 +284,9 @@ const initState: State = {
             },
             'historyDetail': {
                 isDisabled: true,
+            },
+            'searchOrgs': {
+                isShown: false,
             },
         },
         'atmCdm': {
@@ -635,7 +651,7 @@ export default (state: State = initState, action) => {
         case REMOVE_LAST_NOTI:
             return {
                 ...state,
-                notis: state.notis.slice(0, state.notis.length - 2),
+                notis: state.notis.slice(0, state.notis.length - 1),
             };
         case REQUEST_NEW_BREACURMBS:
             return {

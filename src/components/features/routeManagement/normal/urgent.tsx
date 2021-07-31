@@ -20,7 +20,7 @@ export const Element = (props: Props) => {
   }, []);
   useLayoutEffect(() => {
     dispatch({ type: FETCH_ORGS_CHILDREN });
-    dispatch({ type: REQUEST_QUERY });
+    // dispatch({ type: REQUEST_QUERY });
   });
 
   const dispatch = useDispatch();

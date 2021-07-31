@@ -2,6 +2,7 @@ import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
 import { REQUEST_QUERY, UPDATE_DATA, } from './constants';
 import Config from '@config';
+import { addNoti } from '_/stores/_base/sagas';
 
 function* saga() {
     // yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
@@ -10,8 +11,14 @@ function* saga() {
 function* fetchDataSaga(action?) {
     const state = yield select();
     const responseData = yield call(getData, state.searchOrgs.filters, action);
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    if (!responseData.data?.data) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+    }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
 }
 
 function getData(filters, action) {
@@ -25,7 +32,7 @@ function getData(filters, action) {
         : { regionId: filters.regionType.value ? filters.regionType.value : 0 };
     const orgsDataValue = filters.orgsType.value === 'name'
         ? { orgsName: filters.orgsValue ? filters.orgsValue : null }
-        : { orgsCode: filters.orgsValue ? filters.orgsValue : 0 };
+        : { orgsCode: filters.orgsValue ? (parseInt(filters.orgsValue) ? filters.orgsValue : -1) : 0 };
 
     const postData = {
         data: {

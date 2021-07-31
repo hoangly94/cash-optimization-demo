@@ -11,7 +11,6 @@ export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const queryResult = useSelector(state => state['area'].queryResult.data);
-  console.log(queryResult);
   const dispatch = useDispatch();
   //create props
   const componentWrapperProps = {
@@ -126,7 +125,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.areaCode,

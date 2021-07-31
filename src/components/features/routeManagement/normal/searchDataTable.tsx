@@ -142,10 +142,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
-      children: _Date.getDate(item.startTime),
+      children: _Date.getDate(item.createddate),
     },
     {
       children: item.id,

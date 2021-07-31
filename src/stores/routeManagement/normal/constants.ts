@@ -133,6 +133,11 @@ export const UPDATE_MAP = root + 'UPDATE_MAP';
 export const FETCH_BALANCE_SPECIAL = root + 'FETCH_BALANCE_SPECIAL';
 export const UPDATE_BALANCE_SPECIAL = root + 'UPDATE_BALANCE_SPECIAL';
 
+export const SEARCHORGS_SELECT_UPDATE = root + 'SEARCHORGS_SELECT_UPDATE';
+
+export const REQUEST_CREATING_PYC_BS = root + 'REQUEST_CREATING_PYC_BS';
+export const UPDATE_DATA_DESTINATION_POINT = root + 'UPDATE_DATA_DESTINATION_POINT';
+
 export type State = {
     history: any,
 

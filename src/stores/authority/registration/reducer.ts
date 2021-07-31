@@ -1,11 +1,12 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, } from './constants'
-import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/authority/searchOrgs/constants'
+import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SEARCHORGS_SELECT_UPDATE, SEARCHPERS_SELECT_UPDATE, } from './constants'
+import { RESET_SEARCHORGS_FILTER, SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/authority/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/authority/searchPers/constants'
-import * as Base from '~/_settings';
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
 import { UPDATE_CONFIG } from '~/stores/dashboardRoot/constants';
 import { HANDLE_POPUP } from '~/stores/_base/constants';
+import moment from 'moment';
 
+import Config from '@config';
 const initState: State = {
     history: [],
     filters: {
@@ -68,15 +69,17 @@ export default (state: State = initState, action) => {
         case REQUEST_EDITING_CANCEL:
             return {
                 ...state,
-                editingPopup: state.selectedItem,
+                editingPopup: {
+                    ...state.selectedItem,
+                    authorityContent1: state.authorityContents.filter(item1 =>
+                        state.selectedItem.authorityContent2.filter(item2 => item2.id == item1.id).length == 0),
+                },
             }
         case FETCH_DATA:
             return {
                 ...state,
                 isLoading: true,
             }
-        case REQUEST_QUERY:
-            return state
         case UPDATE_DATA:
             const data = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
 
@@ -85,7 +88,11 @@ export default (state: State = initState, action) => {
                 isLoading: false,
                 queryResult: {
                     ...state.queryResult,
-                    data: data,
+                    data: data.map((item, index) => ({
+                        ...item,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
+                    currentPage: action.page || 0,
                     total: action.data.total,
                 }
             }
@@ -106,6 +113,7 @@ export default (state: State = initState, action) => {
                 },
             }
         case REQUEST_RESET:
+
             return {
                 ...state,
                 filters: {
@@ -255,13 +263,25 @@ export default (state: State = initState, action) => {
         case SEARCHORGS_SELECT_ROW:
             return {
                 ...state,
+                selectedOrgs: {
+                    text: action.data.orgsName,
+                    value: action.data.id,
+                },
+            }
+        case SEARCHORGS_SELECT_UPDATE:
+            return {
+                ...state,
                 filters: {
                     ...state.filters,
                     orgs: {
-                        text: action.data.orgsName,
-                        value: action.data.id,
+                        ...state['selectedOrgs'],
                     },
                 },
+            }
+        case RESET_SEARCHORGS_FILTER:
+            return {
+                ...state,
+                selectedOrgs: undefined,
             }
         case SEARCH_PERS:
             return {
@@ -269,23 +289,28 @@ export default (state: State = initState, action) => {
                 ...action.data,
             }
         case SEARCHPERS_SELECT_ROW:
+            return {
+                ...state,
+                selectedPers: action.data,
+            }
+        case SEARCHPERS_SELECT_UPDATE:
             const selectPersData = state.searchPersType === 1
                 ? {
-                    sendId: action.data.id,
-                    sendCode: action.data.persCode,
-                    sendName: action.data.persFullname,
-                    sendCmnd: action.data.persCmndCccd,
-                    sendTitle: action.data.persTitle,
+                    sendId: state['selectedPers']?.id,
+                    sendCode: state['selectedPers']?.persCode,
+                    sendName: state['selectedPers']?.persFullname,
+                    sendCmnd: state['selectedPers']?.persCmndCccd,
+                    sendTitle: state['selectedPers']?.categoryTitle?.titleName,
                 }
                 : {
-                    recvId: action.data.id,
-                    recvCode: action.data.persCode,
-                    recvName: action.data.persFullname,
-                    recvCmnd: action.data.persCmndCccd,
-                    recvCmndyear: _Date.getDate(action.data.persCmndCccdYear),
-                    recvCmndPlace: action.data.persCmndCccdPlace,
-                    recvTitle: action.data.persTitle,
-                    recvPhone: action.data.persMobile,
+                    recvId: state['selectedPers']?.id,
+                    recvCode: state['selectedPers']?.persCode,
+                    recvName: state['selectedPers']?.persFullname,
+                    recvCmnd: state['selectedPers']?.persCmndCccd,
+                    recvCmndyear: _Date.getDate(state['selectedPers']?.persCmndCccdYear),
+                    recvCmndPlace: state['selectedPers']?.persCmndCccdPlace,
+                    recvTitle: state['selectedPers']?.categoryTitle?.titleName,
+                    recvPhone: state['selectedPers']?.persMobile,
                 };
             const selectRowData = state.popupType === 1
                 ? {
@@ -399,36 +424,29 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 filters: {
-                    radio: '1',
-                    dateFrom: '',
-                    dateTo: '',
+                    ...getDefaultFilters(),
                     orgs: {
-                        text: '',
-                        value: '',
+                        text: action.user?.orgsName,
+                        value: action.user?.orgsId,
                     },
-                    status: {
-                        text: 'ALL',
-                        value: 'ALL',
-                    },
-                    id: '',
                 },
+                // queryResult: {
+                //     total: 0,
+                // },
             }
         case RESET_FILTER_APPROVAL:
             return {
                 ...state,
                 filters: {
-                    radio: '1',
-                    dateFrom: '',
-                    dateTo: '',
-                    orgs: {
-                        text: '',
-                        value: '',
-                    },
+                    ...getDefaultFilters(),
                     status: {
                         text: 'Pending_A',
                         value: 'Pending_A',
                     },
-                    id: '',
+                    orgs: {
+                        text: action.user?.orgsName,
+                        value: action.user?.orgsId,
+                    },
                 },
             }
         case HANDLE_POPUP:
@@ -482,15 +500,15 @@ function getDefaultPopupActions() {
 function getDefaultFilters() {
     return {
         radio: '1',
-        dateFrom: '',
-        dateTo: '',
+        dateFrom: moment().format('DD/MM/YYYY'),
+        dateTo: moment().format('DD/MM/YYYY'),
         orgs: {
             text: '',
             value: '',
         },
         status: {
-            text: 'Trạng thái',
-            value: '',
+            text: 'ALL',
+            value: 'ALL',
         },
         id: '',
     }
@@ -501,8 +519,8 @@ const mapToNewData = (item) => {
         id: item.id,
         orgsId: item.categoryOrgs?.id,
         orgsName: item.categoryOrgs?.orgsName,
-        dateFrom: _Date.getCurrentDateTime(item.authorityFromDate),
-        dateTo: _Date.getCurrentDateTime(item.authorityToDate),
+        dateFrom: moment(item.authorityFromDate, 'YYYY-MM-DD HH:mm:ss A').format('DD/MM/YYYY'),
+        dateTo: moment(item.authorityToDate, 'YYYY-MM-DD HH:mm:ss A').format('DD/MM/YYYY'),
         sendId: item.persId,
         sendCode: item.persCode,
         sendName: item.persFullname,
@@ -548,6 +566,6 @@ const mapToNewQueryResult = (selectedItem) => (item, index) => {
 const preprocessQueryResult = (data, index) => ({
     ...data,
     key: data.id ?? index,
-    createddate: getCurrentDate(data.createddate),
-    updateddate: getCurrentDateTime(data.updateddate),
+    createddate: _Date.getDate(data.createddate),
+    updateddate: _Date.getDateTime(data.updateddate),
 })

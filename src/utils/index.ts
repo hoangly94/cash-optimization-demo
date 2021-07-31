@@ -164,3 +164,11 @@ export const convertDataToYYYY_MM_DD = (dateString?: string) => {
 export const convertDateDDMMYYYtoYYYYMMDD = (dateString?: string) => {
     return dateString?.slice(6, dateString.length) + '-' + dateString?.slice(3, 5) + '-' + dateString?.slice(0, 2);
 };
+
+export function thousandSeparator(v) {
+    if (!v)
+        return v;
+    var numParts = v?.toString().replaceAll(',', '')?.toString().split(".");
+    numParts[0] = numParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return numParts.join(".");
+}

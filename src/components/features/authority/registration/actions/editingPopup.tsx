@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { HANDLE_DUALTABLE_MOVE, INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, REQUEST_EDITING_CANCEL, REQUEST_QUERY, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
+import { HANDLE_CONTINUE_ACTION, HANDLE_DUALTABLE_MOVE, INPUT_DATE_FROM_CREATING, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_CREATING, INPUT_DATE_TO_EDITING, REQUEST_CREATING, REQUEST_EDITING, REQUEST_EDITING_CANCEL, REQUEST_QUERY, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, SET_POPUP_TYPE, } from '~stores/authority/registration/constants';
+import { REQUEST_QUERY as REQUEST_QUERY_PERS } from '~/stores/authority/searchPers/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -11,7 +12,8 @@ import * as Combox from "~commons/combox";
 import * as Datepicker from "~commons/datepicker";
 import * as DualTable from "~commons/dualTable";
 import { getCurrentDate, isMatchDateTimeDD_MM_YYY } from "@utils";
-import { HANDLE_POPUP } from '~/stores/_base/constants';
+import { ADD_NOTI, HANDLE_POPUP } from '~/stores/_base/constants';
+import moment from 'moment';
 
 export type Props = Popup.Props;
 
@@ -26,11 +28,10 @@ export const Element = (props: Popup.Props) => {
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(popupSelector, setErrorMsg);
+    const isValidForm = validateForm(popupSelector, dispatch);
     if (isValidForm) {
       setErrorMsg('');
       dispatch({ type: REQUEST_EDITING });
-      dispatch({ type: REQUEST_EDITING_CANCEL })
       if (setIsShown)
         setIsShown(false)
     }
@@ -113,7 +114,7 @@ export const Element = (props: Popup.Props) => {
             flexGrow={Base.FlexGrow.G1}
             margin={Base.MarginRight.PX_18}
             $input={{
-              placeholder: 'Đến ngày(dd/mm/yyy)',
+              placeholder: 'Đến ngày(dd/mm/yyyy)',
               width: Base.Width.FULL,
               store: {
                 selectorKeys: ['registration', 'editingPopup', 'dateFrom'],
@@ -131,7 +132,7 @@ export const Element = (props: Popup.Props) => {
           <Datepicker.Element
             flexGrow={Base.FlexGrow.G1}
             $input={{
-              placeholder: 'Đến ngày(dd/mm/yyy)',
+              placeholder: 'Đến ngày(dd/mm/yyyy)',
               width: Base.Width.FULL,
               store: {
                 selectorKeys: ['registration', 'editingPopup', 'dateTo'],
@@ -187,6 +188,7 @@ export const Element = (props: Popup.Props) => {
                 popupType: 2,
               },
             });
+            dispatch({ type: REQUEST_QUERY_PERS });
           }}
         />
       </Block.Element>
@@ -263,11 +265,12 @@ export const Element = (props: Popup.Props) => {
                 popupType: 2,
               },
             });
+            dispatch({ type: REQUEST_QUERY_PERS });
           }}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Họ và tên người UQ' {...inputTitleProps} />
+        <Title.Element text='Họ và tên người nhận UQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           store={{
@@ -370,6 +373,15 @@ export const Element = (props: Popup.Props) => {
             }}
           />
           <Button.Element
+            {...submitButtonProps}
+            text='Continue'
+            store={{
+              isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+              action:{ type: HANDLE_CONTINUE_ACTION }
+            }}
+            onClick={() => dispatch({ type: REQUEST_QUERY })}
+          />
+          <Button.Element
             {...closeButtonProps}
             flexGrow={Base.FlexGrow.G1}
             store={{
@@ -408,22 +420,23 @@ const actionsProps: Block.Props = {
   width: Base.Width.PER_70,
 }
 
-const validateForm = (popupSelector, setErrorMsg) => {
-  if (!isMatchDateTimeDD_MM_YYY(popupSelector.dateFrom)) {
-    setErrorMsg('UQ từ ngày sai định dạng');
+const validateForm = (selector, dispatch) => {
+  const format = 'DD/MM/YYYY';
+  if (!moment(selector.dateFrom, 'DD/MM/YYYY', true).isValid()) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'UQ từ ngày sai định dạng' } });
     return false;
   }
-  if (!isMatchDateTimeDD_MM_YYY(popupSelector.dateTo)) {
-    setErrorMsg('UQ đến ngày sai định dạng');
+  if (moment(selector.dateFrom, format).isBefore(moment().format('YYYY-MM-DD'))) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'UQ từ ngày không được nhỏ hơn ngày hiện tại' } });
     return false;
   }
 
-  if (!popupSelector.sendId) {
-    setErrorMsg('Chưa chọn người UQ');
+  if (!moment(selector.dateTo, 'DD/MM/YYYY', true).isValid()) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'UQ đến ngày sai định dạng' } });
     return false;
   }
-  if (!popupSelector.sendId) {
-    setErrorMsg('Chưa chọn người nhận UQ');
+  if (moment(selector.dateTo, 'DD/MM/YYYY').isBefore(moment(selector.dateFrom, format).format('YYYY-MM-DD'))) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'UQ từ ngày không được lớn hơn UQ đến ngày' } });
     return false;
   }
   return true;

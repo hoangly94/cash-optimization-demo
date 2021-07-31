@@ -21,6 +21,8 @@ export const Element = (props: Props) => {
     dispatch({ type: FETCH_HISTORY })
   }, []);
   const userSelector = useSelector(state => state['auth'].user);
+  const selectedItemSelector = useSelector(state => state['registration'].selectedItem);
+  
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -130,7 +132,8 @@ export const Element = (props: Props) => {
                   popupType: 2,
                 }
               }}
-              isDisabled={!userSelector.viewList.includes('35')}
+              isDisabled={!userSelector.viewList.includes('35') || !['Originating_A', 'Rejected_A'].includes(selectedItemSelector?.authorityStatus)}
+              onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
             />
             <Button.Element
               {...detailButtonComponentProps}
@@ -157,20 +160,12 @@ export const Element = (props: Props) => {
 
             />
             <Button.Element
-              {...continueButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-                action:{ type: HANDLE_CONTINUE_ACTION }
-              }}
-              onClick={() => dispatch({ type: REQUEST_QUERY })}
-            />
-            <Button.Element
               {...deleteButtonComponentProps}
               store={{
                 isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-                action:{ type: HANDLE_DELETE_ACTION }
-             }}
-             onClick={() => dispatch({ type: REQUEST_QUERY })}
+                action: { type: HANDLE_DELETE_ACTION }
+              }}
+              onClick={() => dispatch({ type: REQUEST_QUERY })}
             />
           </Block.Element>
         </Block.Element>
@@ -181,27 +176,27 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'registration', 'create'],
         }}
-        // useEffect={{
-        //   callback: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
-        // }}
+      // useEffect={{
+      //   callback: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
+      // }}
       />
       <EditingPopup.Element
         {...editingPopupComponentProps}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'registration', 'edit'],
         }}
-        // useEffect={{
-        //   callback: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
-        // }}
+      // useEffect={{
+      //   callback: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
+      // }}
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'registration', 'detail'],
         }}
-        // useEffect={{
-        //   callback: () => dispatch({ type: FETCH_HISTORY }),
-        // }}
+      // useEffect={{
+      //   callback: () => dispatch({ type: FETCH_HISTORY }),
+      // }}
       />
     </>
   )

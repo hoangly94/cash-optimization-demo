@@ -1,10 +1,12 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, SEARCHORGS_SELECT_UPDATE, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
 import { UPDATE_CONFIG } from '~stores/dashboardRoot/constants';
 import { HANDLE_POPUP } from '~stores/_base/constants';
+import moment from 'moment';
 
+import Config from '@config';
 const initState: State = {
     history: [],
     pycTypes: [],
@@ -54,7 +56,7 @@ const initState: State = {
     distanceOrgsToOrgsRequest: '',
 }
 
-function getDefaultObjectTypes(){
+function getDefaultObjectTypes() {
     return [
         {
             name: 'KPP',
@@ -112,7 +114,11 @@ export default (state: State = initState, action) => {
                 isLoading: false,
                 queryResult: {
                     ...state.queryResult,
-                    data: data,
+                    data: data.map((item, index) => ({
+                        ...item,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
+                    currentPage: action.page || 0,
                     total: action.data.total,
                 }
             }
@@ -138,6 +144,10 @@ export default (state: State = initState, action) => {
                 filters: {
                     ...state.filters,
                     ...getDefaultFilters(),
+                    orgs: {
+                        text: action.user?.orgsName,
+                        value: action.user?.orgsCode,
+                    },
                 },
             }
         case CHANGE_CREATING_INPUT:
@@ -259,13 +269,22 @@ export default (state: State = initState, action) => {
                 },
             }
         case SEARCHORGS_SELECT_ROW:
-            if (action.searchOrgsType === 2) {
+            return {
+                ...state,
+                selectedOrgs: {
+                    searchOrgsType:action.searchOrgsType,
+                    orgsName: action.data.orgsName,
+                    orgsCode: action.data.orgsCode,
+                },
+            }
+        case SEARCHORGS_SELECT_UPDATE:
+            if (state['selectedOrgs']?.searchOrgsType === 2) {
                 return {
                     ...state,
                     orgsSearchingPopup: {
                         ...state.orgsSearchingPopup,
-                        orgsDestCode: action.data.orgsCode,
-                        orgsDestName: action.data.orgsName,
+                        orgsDestCode: state['selectedOrgs']?.orgsCode,
+                        orgsDestName: state['selectedOrgs']?.orgsName,
                     },
                 }
             }
@@ -275,8 +294,8 @@ export default (state: State = initState, action) => {
                     filters: {
                         ...state.filters,
                         orgs: {
-                            text: action.data.orgsName,
-                            value: action.data.orgsCode,
+                            text: state['selectedOrgs']?.orgsName,
+                            value: state['selectedOrgs']?.orgsCode,
                         },
                     },
                 }
@@ -417,12 +436,27 @@ export default (state: State = initState, action) => {
         case RESET_FILTER_REGISTRATION:
             return {
                 ...state,
-                filters: getDefaultFilters(),
+                filters: {
+                    ...getDefaultFilters(),
+                    orgs: {
+                        text: action.user?.orgsName,
+                        value: action.user?.orgsCode,
+                    },
+                },
+                queryResult: {
+                    total: 0,
+                },
             }
         case RESET_FILTER_APPROVAL:
             return {
                 ...state,
-                filters: getDefaultFilters(),
+                filters: {
+                    ...getDefaultFilters(),
+                    orgs: {
+                        text: action.user?.orgsName,
+                        value: action.user?.orgsId,
+                    },
+                },
             }
         case HANDLE_POPUP:
             return {
@@ -637,23 +671,23 @@ function getDefaultPopupActions() {
 function getDefaultFilters() {
     return {
         radio: '1',
-        dateFrom: '',
-        dateTo: '',
+        dateFrom: moment().format('DD/MM/YYYY'),
+        dateTo: moment().format('DD/MM/YYYY'),
         orgsRole: {
-            text: 'Vai trò của ĐV',
-            value: '',
+            text: 'ALL',
+            value: 'ALL',
         },
         orgs: {
-            text: 'Đơn vị',
+            text: '',
             value: '',
         },
         objectType: {
-            text: 'Đối tượng ĐQ',
+            text: 'ALL',
             value: 'ALL',
         },
         status: {
-            text: 'Trạng thái PYC',
-            value: '',
+            text: 'ALL',
+            value: 'ALL',
         },
         id: '',
     }

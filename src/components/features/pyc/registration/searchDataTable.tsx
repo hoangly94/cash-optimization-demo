@@ -6,6 +6,7 @@ import * as Block from "~commons/block";
 import {HANDLE_BUTTON} from "~stores/_base/constants";
 import * as Table from "~commons/table";
 import { _Date, getCurrentDate } from '@utils';
+import moment from 'moment';
 
 export type Props = Base.Props;
 
@@ -214,10 +215,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
-      children: item.createddate.split('-').join('/'),
+      children: item.createddate && moment(item.createddate, 'DD-MM-YYYY').format('DD/MM/YYYY'),
     },
     {
       children: item.id,
@@ -268,7 +269,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.cashOptimizationOrgsDetailModel?.nnhnTctdName,
     },
     {
-      children: item.updateddate?.substring(0,10)?.split('-').join('/'),
+      children: item.updateddate && moment(item.updateddate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     },
   ]
 })

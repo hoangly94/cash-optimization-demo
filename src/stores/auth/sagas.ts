@@ -23,17 +23,18 @@ function* fetchRolesSaga() {
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return;
     }
-    yield put({ type: UPDATE_ROLES, data: responseData.data.data });
+    yield put({ type: UPDATE_ROLES, data: responseData?.data?.data });
 }
 
 function* fetchUserSaga() {
     // yield put({ type: FETCH_USER });
     const responseData = yield call(getUser, Config.url + '/api/cashoptimization/user/getInfoAccount');
+    
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        // return yield spawn(addNoti, 'error', responseData?.data?.message);
+        yield document.cookie = `accessToken=;`;  
         return ;
     }
-    yield put({ type: UPDATE_USER, data: responseData.data.data });
+    yield put({ type: UPDATE_USER, data: responseData?.data?.data });
 
     // const state = yield select();
     // const responseData2 = yield call(getUser2, Config.url + '/api/cashoptimization/user/getUserByUsername', state.auth.user);
@@ -55,7 +56,7 @@ function* queryAssignRoleSaga() {
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield put({ type: UPDATE_ASSIGN_ROLE, data: responseData.data.data });
+    yield put({ type: UPDATE_ASSIGN_ROLE, data: responseData?.data?.data });
 }
 
 function* requestAssignRoleSaga() {
@@ -85,7 +86,7 @@ function* loginSaga() {
         }
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    document.cookie = `accessToken=${responseData.data.data.access_token};${expires};path=/;`;
+    document.cookie = `accessToken=${responseData?.data?.data.access_token};${expires};path=/;`;
     yield put({ type: UPDATE_LOGIN, data: responseData.data });
     yield put({ type: FETCH_USER });
 

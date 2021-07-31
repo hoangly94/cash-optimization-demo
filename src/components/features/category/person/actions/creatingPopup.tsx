@@ -8,6 +8,7 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
+import * as Datepicker from "~commons/datepicker";
 import { getCurrentDate, isMatchDateDD_MM_YYYY } from "@utils";
 import { comboxProps } from "./";
 import { ADD_NOTI, HANDLE_POPUP } from '~/stores/_base/constants';
@@ -125,7 +126,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['person', 'creatingPopup', 'persMobile'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
-          max={20}
+          max={32}
         />
       </Block.Element>
 
@@ -144,12 +145,23 @@ export const Element = (props: Popup.Props) => {
 
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Ngày cấp' {...inputTitleProps} />
-        <Input.Element
-          placeholder='dd/mm/yyy'
-          {...inputProps}
-          store={{
-            selectorKeys: ['person', 'creatingPopup', 'persCmndCccdYear'],
-            reducerType: CHANGE_CREATING_INPUT,
+        <Datepicker.Element
+          flexGrow={Base.FlexGrow.G1}
+          margin={Base.MarginRight.PX_18}
+          $input={{
+            placeholder: 'dd/mm/yyyy',
+            width: Base.Width.FULL,
+            store: {
+              selectorKeys: ['person', 'creatingPopup', 'persCmndCccdYear'],
+              reducerType: CHANGE_CREATING_INPUT,
+            },
+            max: 10,
+          }}
+          $datepicker={{
+            store: {
+              selectorKeys: ['person', 'creatingPopup', 'persCmndCccdYear'],
+              action: { type: CHANGE_CREATING_INPUT },
+            },
           }}
         />
       </Block.Element>
@@ -163,6 +175,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['person', 'creatingPopup', 'persCmndCccdPlace'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={30}
         />
       </Block.Element>
 
@@ -190,6 +203,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['person', 'creatingPopup', 'persEmail'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={30}
         />
       </Block.Element>
 
@@ -276,6 +290,11 @@ const validateForm = (popupSelector, dispatch) => {
   //   setErrorMsg('CMND/CCCD không được để trống');
   //   return false;
   // }
+  if (!popupSelector.persCmndCccdYear) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Bạn phải nhập ngày cấp' } });
+
+    return false;
+  }
   if (!isMatchDateDD_MM_YYYY(popupSelector.persCmndCccdYear)) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Ngày cấp CMND/CCCD sai định dạng' } });
 

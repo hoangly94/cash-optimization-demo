@@ -10,7 +10,7 @@ function* saga() {
 function* fetchDataSaga(action?) {
     const state = yield select();
     const responseData = yield call(getData, state.pycSearchOrgs.filters, action);
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
 }
 
 function getData(filters, action) {
@@ -24,7 +24,7 @@ function getData(filters, action) {
         : { regionId: filters.regionType.value ? filters.regionType.value : 0 };
     const orgsDataValue = filters.orgsType.value === 'name'
         ? { orgsName: filters.orgsValue ? filters.orgsValue : null }
-        : { orgsCode: filters.orgsValue ? filters.orgsValue : 0 };
+        : { orgsCode: filters.orgsValue ? (parseInt(filters.orgsValue) ? filters.orgsValue : -1) : 0 };
 
     const postData = {
         data: {

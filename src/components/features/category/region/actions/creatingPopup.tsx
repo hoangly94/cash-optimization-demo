@@ -96,7 +96,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['region', 'creatingPopup', 'regionName'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
-          max={50}
+          max={30}
         />
       </Block.Element>
 

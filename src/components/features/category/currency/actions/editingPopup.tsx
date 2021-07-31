@@ -83,6 +83,7 @@ export const Element = (props: Popup.Props) => {
             reducerType: CHANGE_EDITING_INPUT,
           }}
           isDisabled={true}
+          max={4}
         />
       </Block.Element>
 
@@ -95,6 +96,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['currency', 'selectedItem', 'currencyDescription'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
+          max={30}
         />
       </Block.Element>
 
@@ -107,6 +109,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['currency', 'selectedItem', 'currencyUnit'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
+          max={4}
         />
       </Block.Element>
 

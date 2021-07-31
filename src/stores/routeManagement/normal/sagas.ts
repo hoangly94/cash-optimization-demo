@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, FETCH_PYC, GET_EXCEL, GET_HISTORY_EXCEL, REQUEST_UPDATE_CONTINUE, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_PYC, UPDATE_SPECIAL_DATA, REQUEST_VEHICLE, REQUEST_PERS, UPDATE_VEHICLE_DATA, UPDATE_PERS_DATA, REQUEST_SEACHVEHICLEPERS_CONTINUE, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_SEARCH_DESTINATION, REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_CHECK_BALANCE_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, REQUEST_ORGANIZING_GET_KC, UPDATE_ORGANIZING, UPDATE_ORGANIZING_STOP_POINT, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_URGENT_UPDATE, UPDATE_ORGANIZING_INSERT, SELECT_DESTINATION_POINT, HANDLE_SPECIAL_DELETE, UPDATE_ORGANIZING_DISTANCE, FETCH_MAP, UPDATE_MAP, FETCH_BALANCE_SPECIAL, UPDATE_BALANCE_SPECIAL, } from './constants';
+import { DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, FETCH_PYC, GET_EXCEL, GET_HISTORY_EXCEL, REQUEST_UPDATE_CONTINUE, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_PYC, UPDATE_SPECIAL_DATA, REQUEST_VEHICLE, REQUEST_PERS, UPDATE_VEHICLE_DATA, UPDATE_PERS_DATA, REQUEST_SEACHVEHICLEPERS_CONTINUE, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_SEARCH_DESTINATION, REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_CHECK_BALANCE_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, REQUEST_ORGANIZING_GET_KC, UPDATE_ORGANIZING, UPDATE_ORGANIZING_STOP_POINT, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_URGENT_UPDATE, UPDATE_ORGANIZING_INSERT, SELECT_DESTINATION_POINT, HANDLE_SPECIAL_DELETE, UPDATE_ORGANIZING_DISTANCE, FETCH_MAP, UPDATE_MAP, FETCH_BALANCE_SPECIAL, UPDATE_BALANCE_SPECIAL, REQUEST_CREATING_PYC_BS, } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
@@ -44,6 +44,7 @@ function* saga() {
     yield takeLatest(REQUEST_ORGANIZING_CONTINUE, requestOrganizingContinueSaga);
     yield takeLatest(REQUEST_ORGANIZING_BACK, requestOrganizingBackSaga);
     yield takeLatest(REQUEST_ORGANIZING_URGENT_UPDATE, requestOrganizingUrgentUpdateSaga);
+    yield takeLatest(REQUEST_CREATING_PYC_BS, createPYCBSDataSaga);
 
     yield takeLatest(FETCH_MAP, fetchMapSaga);
     yield takeLatest(FETCH_BALANCE_SPECIAL, fetchBalanceSpecialSaga);
@@ -58,22 +59,27 @@ function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(getData, state.routeManagement.filters, state.auth, action);
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'continue', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'searchVehiclePersPopup', 'isDisabled'], value: true });
 }
 
 function* fetchVehicleSaga(action?) {
     const state = yield select();
-    const responseData = yield call(getVehicleData, state.routeManagement.vehiclePopup, state.auth, action);
+    const responseData = yield call(getVehicleData, state.routeManagement.vehiclePopup, state.routeManagement.selectedItem, action);
     yield put({ type: UPDATE_VEHICLE_DATA, data: responseData.data });
 }
 
 function* fetchPersSaga(action?) {
     const state = yield select();
-    const responseData = yield call(getPersData, state.routeManagement.persPopup, state.auth, action);
+    const responseData = yield call(getPersData, state.routeManagement.persPopup, state.routeManagement.selectedItem, action);
     yield put({ type: UPDATE_PERS_DATA, data: responseData.data });
 }
 
@@ -92,7 +98,20 @@ function* createDataSaga() {
 
     yield put({ type: DONE_CREATING });
     yield fetchDataSaga();
-    yield spawn(addNoti, 'success', `Create success ID ${responseData.data.data.id}`);
+    yield spawn(addNoti, 'success', `Tạo thành công ID ${responseData?.data?.data.id}`);
+    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'create', 'isShown'], value: false });
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'specialDeleteCreating', 'isDisabled'], value: true });
+}
+
+function* createPYCBSDataSaga() {
+    const state = yield select();
+    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/route/dkPycBs', state.routeManagement.creatingPopup, state.auth);
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+
+    yield fetchDataSaga();
+    yield spawn(addNoti, 'success', `Tạo thành công ID ${responseData?.data?.data.id}`);
     yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'create', 'isShown'], value: false });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'specialDeleteCreating', 'isDisabled'], value: true });
 }
@@ -291,7 +310,8 @@ function* searchVehiclePersUpdateSaga() {
 
     yield fetchDataSaga();
     yield spawn(addNoti, 'success');
-    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'edit', 'isShown'], value: false });
+    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'], value: false });
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'searchVehiclePersPopup', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
@@ -306,7 +326,8 @@ function* searchVehiclePersContinueSaga() {
 
     yield fetchDataSaga();
     yield spawn(addNoti, 'success');
-    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'edit', 'isShown'], value: false });
+    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'], value: false });
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'searchVehiclePersPopup', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
@@ -321,7 +342,8 @@ function* searchVehiclePersBackSaga() {
 
     yield fetchDataSaga();
     yield spawn(addNoti, 'success');
-    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'edit', 'isShown'], value: false });
+    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'], value: false });
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'searchVehiclePersPopup', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
@@ -377,7 +399,7 @@ function* requestOrganizingSearchDestinationSaga(action?) {
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_ORGANIZING, data: responseData.data, page: action?.page });
 }
 function requestOrganizingSearchDestination(data, action) {
     const url = Config.url + '/api/cashoptimization/route/oganize_search_destination';
@@ -446,7 +468,7 @@ function* requestOrganizingCheckBalanceHdbSaga(action?) {
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield put({ type: UPDATE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
 }
 function requestOrganizingCheckBalanceHdb(data, action) {
     const url = Config.url + '/api/cashoptimization/route/organize_check_balance_hdb';
@@ -461,10 +483,10 @@ function requestOrganizingCheckBalanceHdb(data, action) {
 
 
 function* requestOrganizingInsertSaga(action?) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'routeDetailOganizeInsert', 'isLoading'], value: true });
     const state = yield select();
     const organizingPopup = state.routeManagement.organizingPopup;
     const routeDetailOganizeItem = {
-        key: 'organizingPopup' + (organizingPopup?.routeDetailOganize?.length + 1 || 1),
         order: organizingPopup?.routeDetailOganize?.length + 1 || 1,
         routeStatus: organizingPopup.routeStatus,
         stopPointType: organizingPopup.stopPointType?.text ?? organizingPopup.stopPointType,
@@ -475,17 +497,21 @@ function* requestOrganizingInsertSaga(action?) {
         kcDepartureToDestination: organizingPopup.kcDepartureToDestination,
         model: organizingPopup.routeCashOptimization[0]?.cashOptimization.model,
     };
-    const data = [
-        ...organizingPopup?.routeDetailOganize ?? [],
-        routeDetailOganizeItem,
-    ];
 
     const responseData = yield call(requestOrganizingInsert, state.routeManagement.organizingPopup, routeDetailOganizeItem);
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'routeDetailOganizeInsert', 'isLoading'], value: false });
+    yield put({ type: REQUEST_ORGANIZING});
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-
-    yield put({ type: UPDATE_ORGANIZING_INSERT, data });
+    const data = [
+        ...organizingPopup?.routeDetailOganize ?? [],
+        {
+            ...routeDetailOganizeItem,
+            id: responseData?.data?.data?.id,
+        },
+    ];
+    // yield put({ type: UPDATE_ORGANIZING_INSERT, data });
 }
 function requestOrganizingInsert(data, routeDetailOganizeItem) {
     const url = Config.url + '/api/cashoptimization/route/organize_insert';
@@ -500,6 +526,7 @@ function requestOrganizingInsert(data, routeDetailOganizeItem) {
 }
 
 function* requestOrganizingUpdateOrderSaga(action) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'routeDetailOganizeInsert', 'isLoading'], value: true });
     const state = yield select();
     const organizingPopup = state.routeManagement.organizingPopup;
     const data = (() => {
@@ -517,21 +544,24 @@ function* requestOrganizingUpdateOrderSaga(action) {
         }
         if (action.buttonType === 'DOWN') {
             const order = organizingPopup?.selectedRouteDetailOganize?.order - 1;
-            if (order + 1 < organizingPopup?.selectedRouteDetailOganize?.length) {
+            if (order + 1 < organizingPopup?.routeDetailOganize?.length) {
                 const t = organizingPopup.routeDetailOganize[order];
                 organizingPopup.routeDetailOganize[order] = organizingPopup.routeDetailOganize[order + 1];
                 organizingPopup.routeDetailOganize[order + 1] = t;
             }
+            
             return organizingPopup.routeDetailOganize;
         }
     })()?.map((item, index) => ({ ...item, order: index + 1 }));
 
     const responseData = yield call(requestOrganizingUpdateOrder, state.routeManagement.organizingPopup, data, action.buttonType);
+    yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'routeDetailOganizeInsert', 'isLoading'], value: false });
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield put({ type: UPDATE_ORGANIZING_INSERT, organizingPopup, data });
+    // yield put({ type: UPDATE_ORGANIZING_INSERT, organizingPopup, data, buttonType:action.buttonType });
+    yield put({ type: REQUEST_ORGANIZING, data });
 }
 function requestOrganizingUpdateOrder(data, routeDetailOganize, buttonType) {
     const url = Config.url + '/api/cashoptimization/route/organize_update_order';
@@ -695,8 +725,8 @@ function getData(filters, auth, action) {
     const data = filters.radio === '1'
         ? {
             orgsCode: filters.orgs?.value,
-            routeFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom),
-            routeToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo),
+            routeFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom) + ' 00:00:00',
+            routeToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo) + ' 23:59:59.00',
             routeStatus: filters.status?.value,
         }
         : {
@@ -714,7 +744,7 @@ function getData(filters, auth, action) {
         .catch(error => console.log(error));
 }
 
-function getVehicleData(filters, auth, action) {
+function getVehicleData(filters, selectedItem, action) {
     const {
         page = 0,
         sort = '',
@@ -722,7 +752,7 @@ function getVehicleData(filters, auth, action) {
 
     const postData = {
         data: {
-            routeId: filters.routeId,
+            routeId: selectedItem.id,
             searchType: filters.searchType?.value,
             searchValue: filters.searchValue,
             sort: sort,
@@ -734,7 +764,7 @@ function getVehicleData(filters, auth, action) {
         .catch(error => console.log(error));
 }
 
-function getPersData(filters, auth, action) {
+function getPersData(filters, selectedItem, action) {
     const {
         page = 0,
         sort = '',
@@ -742,7 +772,7 @@ function getPersData(filters, auth, action) {
 
     const postData = {
         data: {
-            routeId: filters.routeId,
+            routeId: selectedItem.id,
             searchType: filters.searchType?.value,
             searchValue: filters.searchValue,
             sort: sort,
@@ -811,7 +841,7 @@ function requestCreating(url: string, data, auth) {
         data: {
             orgsCode: auth.orgsCode,
             orgsName: auth.orgsName,
-            startTime: moment(data.startTime, 'DD/MM/YYYY hh:mm:ss A').format('YYYY-MM-DD HH:mm:ss'),
+            startTime: moment(data.startTime, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
             routeCashOptimization: data.tableContent2.map(item => ({
                 cashOptimizationId: item.id,
             })),
@@ -827,7 +857,7 @@ function requestEditing(url: string, data, auth) {
             id: data.id,
             orgsCode: auth.orgsCode,
             orgsName: auth.orgsName,
-            startTime: moment(data.startTime, 'DD/MM/YYYY hh:mm:ss A').format('YYYY-MM-DD HH:mm:ss'),
+            startTime: moment(data.startTime, 'DD/MM/YYYY HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'),
             routeCashOptimization: data.tableContent2.map(item => ({
                 cashOptimizationId: item.id,
             })),
@@ -839,7 +869,6 @@ function requestEditing(url: string, data, auth) {
 
 
 function requestSearchVehiclePersUpdate(url: string, data, auth) {
-    console.log(data);
     const postData = {
         data: {
             id: data.id,

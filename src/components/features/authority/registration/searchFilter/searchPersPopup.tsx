@@ -10,7 +10,8 @@ import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
-import { INPUT_VALUE_FILTER, REQUEST_QUERY, SELECT_ROW, SELECT_TYPE_FILTER } from '~/stores/authority/searchPers/constants';
+import { INPUT_VALUE_FILTER, REQUEST_PERS_CANCEL, REQUEST_QUERY, SELECT_ROW, SELECT_TYPE_FILTER } from '~/stores/authority/searchPers/constants';
+import { SEARCHPERS_SELECT_UPDATE } from '_/stores/authority/registration/constants';
 
 export type Props = Popup.Props;
 
@@ -18,6 +19,7 @@ export const Element = (props: Popup.Props) => {
   const dispatch = useDispatch();
   const queryResultSelector = useSelector(state => state['searchPers'].queryResult.data);
   const popupTypeSelector = useSelector(state => state['registration'].popupType);
+
   useLayoutEffect(() => {
     dispatch({ type: REQUEST_QUERY });
   }, []);
@@ -135,11 +137,14 @@ export const Element = (props: Popup.Props) => {
                 value: false,
               }
             }}
-            onClick={() => dispatch({
-              type: HANDLE_POPUP,
-              keys: ['registration', popupTypeSelector == 1 ? 'create' : 'edit', 'isShown'],
-              value: true,
-            })}
+            onClick={() => {
+              dispatch({
+                type: HANDLE_POPUP,
+                keys: ['registration', popupTypeSelector == 1 ? 'create' : 'edit', 'isShown'],
+                value: true,
+              });
+              dispatch({ type: SEARCHPERS_SELECT_UPDATE });
+            }}
           />
           <Button.Element
             text='Close'
@@ -264,7 +269,7 @@ const tableData = (queryResult): Table.Props => ({
         },
       ],
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 
@@ -273,7 +278,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.persCode,
@@ -285,7 +290,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.persCmndCccd,
     },
     {
-      children: item.persTitle,
+      children: item.categoryTitle?.titleName,
     },
     {
       children: item.persMobile,

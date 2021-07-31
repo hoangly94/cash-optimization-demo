@@ -12,11 +12,13 @@ import * as Title from "~commons/title";
 import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchOrgsPopup2 from "./searchOrgsPopup2";
-import { HANDLE_POPUP } from '~stores/_base/constants';
+import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
+import { RESET_SEARCHORGS_FILTER } from '_/stores/authority/searchOrgs/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
+  const dispatch = useDispatch();
   useEffect(() => {
     // dispatch({ type: UPDATE_CONFIG })
     // dispatch({ type: REQUEST_QUERY });
@@ -67,7 +69,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Từ ngày(dd/mm/yyy)',
+            placeholder: 'Từ ngày(dd/mm/yyyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['routeManagement', 'filters', 'dateFrom'],
@@ -87,7 +89,7 @@ export const Element = (props: Props) => {
         <Datepicker.Element
           {...filter1Props}
           $input={{
-            placeholder: 'Đến ngày(dd/mm/yyy)',
+            placeholder: 'Đến ngày(dd/mm/yyyy)',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['routeManagement', 'filters', 'dateTo'],
@@ -122,6 +124,11 @@ export const Element = (props: Props) => {
             display: userSelector.orgsCode === 9 ? 'block' : 'none'
           }}
           isDisabled={radioSelector !== '1'}
+          onClick={() => {
+            dispatch({ type: RESET_SEARCHORGS_FILTER });
+            // dispatch({ type: REQUEST_QUERY_ORGS });
+            dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
+          }}
         />
         <Combox.Element
           {...filter1Props}
@@ -182,7 +189,6 @@ export const Element = (props: Props) => {
         <Button.Element
           {...queryButtonProps}
           store={{
-            isLoadingSelectorKeys: ['base', 'buttons', 'routeManagement', 'query'],
             action: { type: REQUEST_QUERY },
           }}
         />

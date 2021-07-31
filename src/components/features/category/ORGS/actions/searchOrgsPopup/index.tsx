@@ -10,15 +10,15 @@ import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
-import { INPUT_ORGS_VALUE_FILTER, REQUEST_QUERY, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, SELECT_ROW } from '~stores/pyc/searchOrgs/constants';
+import { INPUT_ORGS_VALUE_FILTER, REQUEST_QUERY, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, SELECT_ROW } from '~stores/authority/searchOrgs/constants';
 import * as RegionAreaFilter from './regionAreaFilter';
-import { SEARCHORGS_SELECT_UPDATE } from '_/stores/pyc/registration/constants';
+import { SEARCHORGS_SELECT_UPDATE } from '_/stores/category/orgs/constants';
 
 export type Props = Popup.Props;
 
 export const Element = (props: Popup.Props) => {
   const dispatch = useDispatch();
-  const queryResultSelector = useSelector(state => state['pycSearchOrgs'].queryResult.data);
+  const queryResultSelector = useSelector(state => state['searchOrgs'].queryResult.data);
   useLayoutEffect(() => {
     dispatch({ type: REQUEST_QUERY });
   }, []);
@@ -57,8 +57,8 @@ export const Element = (props: Popup.Props) => {
             }}
             width={Base.Width.PX_80}
             store={{
-              defaultSelectorKeys: ['pycSearchOrgs', 'filters', 'locationType'],
-              selectorKeys: ['pycSearchOrgs', 'filters', 'locationTypes'],
+              defaultSelectorKeys: ['searchOrgs', 'filters', 'locationType'],
+              selectorKeys: ['searchOrgs', 'filters', 'locationTypes'],
               reducerType: SELECT_LOCATION_TYPE_FILTER,
               reducerKeys: {
                 text: 'text',
@@ -70,6 +70,14 @@ export const Element = (props: Popup.Props) => {
           <RegionAreaFilter.Element
             width={Base.Width.PX_150}
           />
+          {/* <Input.Element
+            width={Base.Width.PX_150}
+            store={{
+              selectorKeys: ['searchOrgs', 'filters', 'locationValue'],
+              reducerType: INPUT_VALUE_FILTER,
+            }}
+            max={200}
+          /> */}
         </Block.Element>
 
         <Block.Element
@@ -84,8 +92,8 @@ export const Element = (props: Popup.Props) => {
             }}
             width={Base.Width.PX_100}
             store={{
-              defaultSelectorKeys: ['pycSearchOrgs', 'filters', 'orgsType'],
-              selectorKeys: ['pycSearchOrgs', 'filters', 'orgsTypes'],
+              defaultSelectorKeys: ['searchOrgs', 'filters', 'orgsType'],
+              selectorKeys: ['searchOrgs', 'filters', 'orgsTypes'],
               reducerType: SELECT_ORGS_TYPE_FILTER,
               reducerKeys: {
                 text: 'text',
@@ -99,7 +107,7 @@ export const Element = (props: Popup.Props) => {
             placeholder='Nhập giá trị...'
             width={Base.Width.PX_150}
             store={{
-              selectorKeys: ['pycSearchOrgs', 'filters', 'orgsValue'],
+              selectorKeys: ['searchOrgs', 'filters', 'orgsValue'],
               reducerType: INPUT_ORGS_VALUE_FILTER,
             }}
             max={200}
@@ -123,7 +131,7 @@ export const Element = (props: Popup.Props) => {
       <Block.Element {...actionsWrapperProps}>
         <Pagination.Element
           store={{
-            totalSelectorKeys: ['pycSearchOrgs', 'queryResult'],
+            totalSelectorKeys: ['searchOrgs', 'queryResult'],
             action: {
               type: REQUEST_QUERY,
             }
@@ -144,10 +152,10 @@ export const Element = (props: Popup.Props) => {
             backgroundColor={Base.BackgroundColor.TIGERLILY}
             margin={Base.MarginRight.PX_18}
             store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'pycSearchOrgs', 'select'],
+              isDisabledSelectorKeys: ['base', 'buttons', 'searchOrgs', 'select'],
               action: {
                 type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'pycSearchOrgs', 'isShown'],
+                keys: ['orgs', 'searchOrgs', 'isShown'],
                 value: false,
               }
             }}
@@ -161,7 +169,7 @@ export const Element = (props: Popup.Props) => {
             store={{
               action: {
                 type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'pycSearchOrgs', 'isShown'],
+                keys: ['orgs', 'searchOrgs', 'isShown'],
                 value: false,
               }
             }}
@@ -181,10 +189,9 @@ const tableData_$rows_$cells_title = {
 }
 
 const handleRowClick = (dispatch) => (item) => (e) => {
-  dispatch({ type: SELECT_ROW, data: item, searchOrgsType: 1 });
-  dispatch({ type: HANDLE_BUTTON, keys: ['pycSearchOrgs', 'select', 'isDisabled'], value: false });
+  dispatch({ type: SELECT_ROW, data: item });
+  dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: false });
 }
-
 
 const tableData = (queryResult): Table.Props => ({
   $thead: [

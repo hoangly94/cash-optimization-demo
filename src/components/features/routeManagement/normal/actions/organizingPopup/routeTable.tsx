@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_ROUTE_ROW, SELECT_SPECIAL_ROW } from '~stores/routeManagement/normal/constants';
+import { FETCH_BALANCE_SPECIAL, SELECT_ROUTE_ROW, SELECT_SPECIAL_ROW } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
-import { HANDLE_BUTTON } from "~stores/_base/constants";
+import { HANDLE_BUTTON, HANDLE_POPUP } from "~stores/_base/constants";
 import * as Table from "~commons/table";
 import { _Date, getCurrentDate } from '@utils';
 
@@ -23,11 +23,11 @@ export const Element = (props: Props) => {
     ...props,
   };
   const tableProps: Table.Props = {
-    ...tableData(queryResult?.map(item=>({
+    ...tableData(queryResult?.map(item => ({
       ...item,
       stopPointType: item.stopPointType?.text ?? item.stopPointType,
     }))
-    ?.map(mapResponseToData(handleRowClick(dispatch)))),
+      ?.map(mapResponseToData(dispatch, handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
     style: {
       minWidth: '600px',
@@ -86,28 +86,36 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Khoảng cách số PYC HT',
+          children: 'Khoảng cách',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Số PYC HT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mức độ ưu tiên',
         },
         {
           ...tableData_$rows_$cells_title,
           children: 'Mô hình điều quỹ',
         },
-        // {
-        //   ...tableData_$rows_$cells_title,
-        //   children: 'Số dư HĐB',
-        // },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Số dư HĐB',
+        },
       ],
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 
-const mapResponseToData = (handleRowClick) => (item, index) => ({
+const mapResponseToData = (dispatch, handleRowClick) => (item, index) => ({
   isSelected: item.isSelected ?? false,
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.routeDetailOganizeStatus,
@@ -131,7 +139,28 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.kcDepartureToDestination,
     },
     {
-      children: item.model,
+      children: item.cashOptimizationId,
+    },
+    {
+      children: item.cashOptimization?.priorityLevelName,
+    },
+    {
+      children: item.cashOptimization?.model,
+    },
+    {
+      children: <a
+        style={{
+          color: 'blue',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'balanceSpecial', 'isShown'],
+            value: true,
+          });
+          dispatch({ type: FETCH_BALANCE_SPECIAL , routeDetailOganizeId:item.id})
+        }} >Link</a>,
     },
   ]
 })

@@ -83,6 +83,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['priority', 'creatingPopup', 'priorityLevelCode'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={4}
         />
       </Block.Element>
 
@@ -95,7 +96,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['priority', 'creatingPopup', 'priorityLevelName'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
-          max={50}
+          max={15}
         />
       </Block.Element>
 

@@ -38,7 +38,7 @@ function* fetchAreas() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_AREAS, data: responseData.data.data });
+    yield put({ type: UPDATE_AREAS, data: responseData?.data?.data });
 }
 
 function* fetchOrgs() {
@@ -51,7 +51,7 @@ function* fetchOrgs() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_ORGS, data: responseData.data.data });
+    yield put({ type: UPDATE_ORGS, data: responseData?.data?.data });
 }
 
 function* fetchAtmCdms() {
@@ -63,7 +63,7 @@ function* fetchAtmCdms() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_ATMCDMS, data: responseData.data.data });
+    yield put({ type: UPDATE_ATMCDMS, data: responseData?.data?.data });
 }
 
 
@@ -77,7 +77,7 @@ function* fetchNhnnTctds() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_NHNNTCTDS, data: responseData.data.data });
+    yield put({ type: UPDATE_NHNNTCTDS, data: responseData?.data?.data });
 }
 
 function* fetchFunctions() {
@@ -89,7 +89,7 @@ function* fetchFunctions() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_FUNCTIONS, data: responseData.data.data });
+    yield put({ type: UPDATE_FUNCTIONS, data: responseData?.data?.data });
 }
 
 function* fetchPers() {
@@ -102,7 +102,7 @@ function* fetchPers() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_PERS, data: responseData.data.data });
+    yield put({ type: UPDATE_PERS, data: responseData?.data?.data });
 }
 
 function* fetchTitle() {
@@ -115,7 +115,7 @@ function* fetchTitle() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_TITLES, data: responseData.data.data });
+    yield put({ type: UPDATE_TITLES, data: responseData?.data?.data });
 }
 
 function* fetchRegion() {
@@ -128,7 +128,7 @@ function* fetchRegion() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_REGIONS, data: responseData.data.data });
+    yield put({ type: UPDATE_REGIONS, data: responseData?.data?.data });
 }
 
 
@@ -140,7 +140,7 @@ function* fetchCurrencies() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_CURRENCIES, data: responseData.data.data });
+    yield put({ type: UPDATE_CURRENCIES, data: responseData?.data?.data });
 }
 function* fetchPriorities() {
     const path = '/api/cashoptimization/findCategoryPriorityLevel';
@@ -150,7 +150,7 @@ function* fetchPriorities() {
         },
     }
     const responseData = yield call(callApi, path, postData);
-    yield put({ type: UPDATE_PRIORITIES, data: responseData.data.data });
+    yield put({ type: UPDATE_PRIORITIES, data: responseData?.data?.data });
 }
 
 const callApi = (path, postData?) => {

@@ -7,6 +7,7 @@ export const REQUEST_QUERY = root + 'REQUEST_QUERY';
 export const UPDATE_DATA = root + 'UPDATE_DATA';
 export const SELECT_REGION_TYPE_FILTER= root + 'SELECT_REGION_TYPE_FILTER';
 export const SELECT_AREA_TYPE_FILTER= root + 'SELECT_AREA_TYPE_FILTER';
+export const RESET_SEARCHORGS_FILTER= root + 'RESET_SEARCHORGS_FILTER';
 
 export type State = {
     filters: {
@@ -30,9 +31,6 @@ export type State = {
         orgsTypes: any[],
         locationValue: string,
         orgsValue: string,
-        queryButton: {
-            isLoading: boolean,
-        }
     },
     queryResult: any,
 }

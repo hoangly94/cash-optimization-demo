@@ -1,7 +1,9 @@
-import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_HISTORY, FETCH_DATA, UPDATE_DATA, SELECT_AREA_FILTER, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_AREA_CREATING, SELECT_AREA_EDITING, SELECT_ORGS_PARENT_CREATING, SELECT_ORGS_PARENT_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, CHANGE_ORGS_CODE_FILTER, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_HISTORY, FETCH_DATA, UPDATE_DATA, SELECT_AREA_FILTER, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_AREA_CREATING, SELECT_AREA_EDITING, SELECT_ORGS_PARENT_CREATING, SELECT_ORGS_PARENT_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, CHANGE_ORGS_CODE_FILTER, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL, SEARCHORGS_SELECT_UPDATE } from './constants'
+import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/authority/searchOrgs/constants'
 import * as Base from '~/_settings';
 import { getCurrentDate, _Date } from '@utils';
 
+import Config from '@config';
 const initState: State = {
     history: [],
     detailPopup: [],
@@ -76,7 +78,11 @@ export default (state: State = initState, action) => {
                 isLoading: false,
                 queryResult: {
                     ...state.queryResult,
-                    data: data,
+                    data: data.map((item, index) => ({
+                        ...item,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
+                    currentPage: action.page || 0,
                     total: action.data.total,
                 }
             }
@@ -204,6 +210,36 @@ export default (state: State = initState, action) => {
                     total: action.data.total,
                 }
             }
+        case SEARCHORGS_SELECT_ROW:
+            return {
+                ...state,
+                selectedOrgs: {
+                    text: action.data.orgsName,
+                    value: action.data.id,
+                },
+            }
+        case SEARCHORGS_SELECT_UPDATE:
+            return {
+                ...state,
+                creatingPopup: {
+                    ...state.creatingPopup,
+                    orgsParentSelected: {
+                        ...state['selectedOrgs'],
+                    }
+                },
+                editingPopup: {
+                    ...state.editingPopup,
+                    orgsParentSelected: {
+                        ...state['selectedOrgs'],
+                    }
+                },
+                selectedItem: {
+                    ...state.selectedItem,
+                    orgsParentSelected: {
+                        ...state['selectedOrgs'],
+                    }
+                },
+            }
         default:
             return state
     }
@@ -216,7 +252,7 @@ function getDefaultPopupActions() {
             value: '',
         },
         orgsParentSelected: {
-            text: 'Tên ĐVQL',
+            text: '',
             value: '',
         },
     }

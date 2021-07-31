@@ -254,15 +254,15 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Tên Chi nhánh quản lý xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mã Chi nhánh quản lý xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Họ và tên Lái xe',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mã đơn vị quản lý xe',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên đơn bị quản lý xe',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -274,7 +274,7 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Trạng thái xe',
+          children: 'Trạng thái',
         },
       ]
     },
@@ -287,25 +287,16 @@ const vehicleMapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item, 1),
   $cells: [
     {
-      children: index + 1,
-    },
-    {
-      children: item.categoryVehicle?.categoryOrgs?.orgsName,
-    },
-    {
-      children: item.categoryVehicle?.categoryOrgs?.orgsAddress,
+      children: item.index || index + 1,
     },
     {
       children: item.vehicleCode,
     },
     {
-      children: item.categoryVehicle?.vehicleStatus,
+      children: item.categoryVehicle?.categoryOrgs?.orgsName,
     },
     {
       children: item.categoryVehicle?.categoryOrgs?.orgsCode,
-    },
-    {
-      children: item.categoryVehicle?.categoryOrgs?.orgsName,
     },
     {
       children: item.categoryVehicle?.driverName,
@@ -315,6 +306,9 @@ const vehicleMapResponseToData = (handleRowClick) => (item, index) => ({
     },
     {
       children: item.gps,
+    },
+    {
+      children: item.categoryVehicle?.vehicleStatus,
     },
   ]
 })
@@ -374,7 +368,7 @@ const persMapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item, 2),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.persCode,
@@ -383,7 +377,7 @@ const persMapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.persName,
     },
     {
-      children: item.categoryPers?.persTitle,
+      children: item.categoryPers?.categoryTitle?.titleName,
     },
     {
       children: item.categoryPers?.persMobile,
@@ -458,7 +452,7 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
   onClick: handleRowClick(item, 3),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.cashOptimization?.id,
@@ -546,7 +540,7 @@ const orgsMapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item, 4),
   $cells: [
     {
-      children: index + 1,
+      children: item.index || index + 1,
     },
     {
       children: item.orgsName,

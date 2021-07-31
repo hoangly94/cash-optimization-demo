@@ -60,7 +60,6 @@ export const Element = (props: Props) => {
     border: Base.Border.SOLID,
     ...props,
   }
-
   const child = isLoadingSelector ? <ThreeDotsLoader size={Svg.Size.L2} fill='#fff' /> : textSelector ? textSelector : text;
   const disabled = isDisabledSelector ? 'disabled' : '';
 

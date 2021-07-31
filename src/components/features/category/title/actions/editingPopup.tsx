@@ -84,6 +84,7 @@ export const Element = (props: Popup.Props) => {
             reducerType: CHANGE_EDITING_INPUT,
           }}
           isDisabled={true}
+          max={4}
         />
       </Block.Element>
 
@@ -96,7 +97,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['title', 'selectedItem', 'titleName'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
-          max={50}
+          max={15}
         />
       </Block.Element>
 

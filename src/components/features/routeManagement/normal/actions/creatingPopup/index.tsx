@@ -125,14 +125,26 @@ export const Element = (props: Popup.Props) => {
       />
 
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss AM/PM)' {...inputTitleProps} />
-        <Input.Element
-          placeholder=''
-          {...inputProps}
-          store={{
-            selectorKeys: ['routeManagement', 'creatingPopup', 'startTime'],
-            reducerType: CHANGE_CREATING_INPUT,
+        <Title.Element text='Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss)' {...inputTitleProps} />
+        <Datepicker.Element
+          flexGrow={Base.FlexGrow.G1}
+          margin={Base.MarginRight.PX_18}
+          $input={{
+            placeholder: 'dd/mm/yyyy hh/mm/ss',
+            width: Base.Width.FULL,
+            store: {
+              selectorKeys: ['routeManagement', 'creatingPopup', 'startTime'],
+              reducerType: CHANGE_CREATING_INPUT,
+            },
+            max: 19,
           }}
+          $datepicker={{
+            store: {
+              selectorKeys: ['routeManagement', 'creatingPopup', 'startTime'],
+              action: { type: CHANGE_CREATING_INPUT },
+            },
+          }}
+          dateFormat='DD/MM/YYYY HH:mm:ss'
         />
       </Block.Element>
 
@@ -448,9 +460,8 @@ const cellMapping = (dispatch) => (item, index) => ([
 ]);
 
 const validateForm = (dispatch, selector) => {
-  console.log(selector.startTime);
-  if (!moment(selector.startTime, 'DD/MM/YYYY hh:mm:ss A', true).isValid()) {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss AM/PM)' } });
+  if (!moment(selector.startTime, 'DD/MM/YYYY HH:mm:ss', true).isValid()) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss)' } });
     return false;
   }
   return true;

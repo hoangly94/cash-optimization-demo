@@ -124,7 +124,7 @@ export const Element = (props: Popup.Props) => {
           {...inputProps}
           store={{
             selectorKeys: ['pycRegistration', 'editingPopup', 'orgsHolderMobile'],
-            reducerType: '',
+            reducerType: CHANGE_EDITING_INPUT,
           }}
         />
       </Block.Element>
