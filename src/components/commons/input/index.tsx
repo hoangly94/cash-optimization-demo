@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import styles from './_styles.css'
 import * as Base from '~/_settings';
 import { useDispatch, useSelector } from 'react-redux';
@@ -64,6 +64,14 @@ export const Element = (props: Props) => {
   } = props
   const dispatch = useDispatch();
   const value = store?.selectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys)) : null;
+  // useEffect(() => {
+  //   if(store && defaultValue){
+  //     const type = store.reducerType;
+  //     const key = store.reducerKey ?? store.selectorKeys[store.selectorKeys.length - 1];
+  //     dispatch({ type: type, data: { [key]: defaultValue } });
+  //     console.log({ type: type, data: { [key]: defaultValue } });
+  //   }
+  // },[]);
   const ref = refs ?? useRef(null);
   const disabled = isDisabled ? 'disabled' : '';
   const handleKeyPress = (e) => {
@@ -87,12 +95,12 @@ export const Element = (props: Props) => {
     (ref as any).current.value = value || defaultValue;
   }
   const valueProp = (() => {
-    const newValue = ref?.current && (value || defaultValue );
+    const newValue = (value || defaultValue);
     if (newValue && valueMapper)
       return valueMapper(newValue);
     return newValue;
   })();
-  
+
   //create props
   const componentProps = {
     name: name,
@@ -104,7 +112,7 @@ export const Element = (props: Props) => {
     placeholder: placeholder,
     disabled: isDisabled,
     ref: ref,
-    value:valueProp,
+    value: valueProp,
     onKeyPress: handleKeyPress,
   };
 

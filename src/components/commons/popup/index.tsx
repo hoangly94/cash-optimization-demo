@@ -25,6 +25,7 @@ export type Props = Base.Props & {
   onClick?: React.MouseEventHandler,
   closePopUpCallback?: Function,
   useEffect?: UseEffect,
+  extractHtml?: React.ReactNode,
 }
 
 type Store = {
@@ -44,14 +45,16 @@ export const Element = (props: Props) => {
     $background,
     $content,
     $title,
+    isShown = false,
     setIsShown,
     store,
     children,
     useEffect,
     closePopUpCallback,
+    extractHtml,
   } = props;
   const dispatch = useDispatch();
-  const shown = store && store.isShownSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isShownSelectorKeys as string[], 'isShown'])) : false;
+  const shown = store && store.isShownSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isShownSelectorKeys as string[], 'isShown'])) : isShown;
 
   React.useEffect(() => {
     if ((useEffect?.params || shown) && useEffect?.callback) {
@@ -102,6 +105,7 @@ export const Element = (props: Props) => {
         {$title ? <Title.Element {...titleProps} /> : null}
         {children}
       </Block.Element>
+      {extractHtml}
     </Block.Element>
   )
 }

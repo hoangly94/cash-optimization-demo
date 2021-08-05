@@ -20,7 +20,7 @@ export const Element = (props: Popup.Props) => {
     <Popup.Element
       {...props}
     >
-      {selector?.mapHtml && <ReactSrcDocIframe srcDoc={selector?.mapHtml} style={{ width: '500px', height: '500px', boxSizing: 'border-box' }} />}
+      {selector?.mapHtml && <ReactSrcDocIframe srcDoc={selector?.mapHtml} style={{ width: '100%', height: '500px', boxSizing: 'border-box' }} />}
       <Block.Element
         flex={Base.Flex.END}
       >

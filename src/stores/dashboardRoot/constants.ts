@@ -24,6 +24,8 @@ export const UPDATE_TITLES = 'UPDATE_TITLES';
 export const UPDATE_CURRENCIES = 'UPDATE_CURRENCIES';
 export const UPDATE_PRIORITIES = 'UPDATE_PRIORITIES';
 
+export const REPORT_PRINT = 'REPORT_PRINT';
+
 export type State = {
     regions: any[],
     areas: any[],

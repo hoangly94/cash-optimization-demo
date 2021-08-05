@@ -26,3 +26,11 @@
     overflow: auto;
     box-sizing:border-box;
 }
+
+
+@media (max-width: 768px){
+    .popup-content{
+        width:90% !important;
+        padding:2% !important;
+    }
+}

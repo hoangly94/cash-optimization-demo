@@ -92,12 +92,12 @@ const getHtml = (routeTracking, user) => {
     }
   };
   const routeStatus = route.routeStatus;
-  if(route.transportType == 'Xe chuyên dùng')
+  if (route.transportType == 'Xe chuyên dùng')
     return;
   if (persCode === route.tqDltltCode) {
     if (routeStatus === 'Beginning')
       return html30_1(route, 1);
-    if (routeStatus === 'Working_i')
+    if (routeStatus.includes("Going_"))
       return html30_2(route, ['Điểm dừng xử lý NV theo PYC']);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
       return html30_3(route, ['Điểm kết thúc lộ trình']);
@@ -107,11 +107,11 @@ const getHtml = (routeTracking, user) => {
 
     if (persTitle === 'ATAI' || persTitle === 'TQUY') {
       if (routeStatus === 'Beginning')
-      return html28_1(route, 1);
-      if (routeStatus === 'Working_i')
+        return html28_1(route, 1);
+      if (routeStatus.includes("Going_"))
         return html28_2(route, ['Điểm dừng xử lý NV theo PYC']);
-        if (routeStatus === 'Finishing' || routeStatus === 'Finished')
-          return html28_3(route, ['Điểm kết thúc lộ trình']);
+      if (routeStatus === 'Finishing' || routeStatus === 'Finished')
+        return html28_3(route, ['Điểm kết thúc lộ trình']);
     }
   }
 
@@ -146,7 +146,7 @@ const html28_1 = (route, order) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -228,7 +228,7 @@ const html28_2 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -383,7 +383,7 @@ const html28_3 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -461,7 +461,7 @@ const html30_1 = (route, order) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -547,7 +547,7 @@ const html30_2 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -690,7 +690,7 @@ const html30_3 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,

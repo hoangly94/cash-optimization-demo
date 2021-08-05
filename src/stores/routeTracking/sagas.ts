@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { FETCH_DATA, FETCH_MAP, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_1_KCD, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD, UPDATE_DATA, UPDATE_MAP } from './constants';
+import { FETCH_DATA, FETCH_MAP, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_1_KCD, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD, SEARCH_TQUY, UPDATE_DATA, UPDATE_MAP } from './constants';
 import Config from '@config';
 import { _Date, getCurrentDate } from '@utils';
 import _ from 'lodash';
@@ -17,7 +17,31 @@ function* saga() {
     yield takeLatest(REQUEST_ROUTE_START_KCD, requestRouteStartKCDSaga);
     yield takeLatest(REQUEST_ROUTE_CONFIRM_2_KCD, requestRouteConfirm2KCDSaga);
     yield takeLatest(REQUEST_ROUTE_CONFIRM_3_KCD, requestRouteConfirm3KCDSaga);
+    yield takeLatest(SEARCH_TQUY, searchTquySaga);
 }
+function* searchTquySaga(action?) {
+    const state = yield select();
+    const responseData = yield call(searchTquy, state.routeManagement.organizingPopup, action);
+    console.log('=================');
+    console.log(state.routeManagement.organizingPopup);
+    // if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+    //     return yield spawn(addNoti, 'error', responseData?.data?.message);
+    // }
+    // yield put({ type: UPDATE_ORGANIZE_URGENT_CHECKBYID, data: responseData.data, page: action?.page });
+}
+
+function searchTquy(data, action) {
+    // const url = Config.url + '/api/cashoptimization/route/searchTQUY';
+
+    // const postData = {
+    //     data: {
+    //         routeId: '' + data.id,
+    //     },
+    // }
+    // return axios.post(url, postData)
+    //     .catch(error => console.log(error));
+}
+
 
 function* fetchDataSaga(action?) {
     const state = yield select();
@@ -28,8 +52,9 @@ function* fetchDataSaga(action?) {
     if (!responseData.data?.data) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
-
+    
     yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
+    yield put({ type: SEARCH_TQUY});
 }
 
 function getData(filters) {

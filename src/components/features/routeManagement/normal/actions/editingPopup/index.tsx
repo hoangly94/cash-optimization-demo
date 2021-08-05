@@ -12,6 +12,8 @@ import * as DualTable from "~commons/dualTable";
 import * as Datepicker from "~commons/datepicker";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
+import { useEffect } from '@storybook/addons';
+import { useConfirmationDialog } from '_/hooks';
 
 export type Props = Popup.Props & {
   popupType: string,
@@ -22,28 +24,69 @@ export const Element = (props: Props) => {
     setIsShown,
     popupType,
   } = props;
-
   const selector = useSelector(state => state['routeManagement'].editingPopup);
   const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
 
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      if (popupType === 'normal')
-        dispatch({ type: REQUEST_EDITING });
-      if (popupType === 'urgent')
-        dispatch({ type: REQUEST_CREATING_PYC_BS });
-      // if (setIsShown)
-      //   setIsShown(false)
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
+        description: 'Vui lòng nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          if (popupType === 'normal')
+            dispatch({ type: REQUEST_EDITING });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'edit', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
+      });
     }
   }
   const handleContinueButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_UPDATE_CONTINUE });
-      // if (setIsShown)
-      //   setIsShown(false)
+      if (popupType == 'normal') {
+        setConfirmationDialog({
+          title: 'Bạn có muốn lưu thông tin và chuyển trạng thái sang Adding?',
+          description: 'Vui lòng nhấn YES để đồng ý và chuyển qua MH sắp xếp, nhấn NO để quay lại',
+          onConfirmClick: () => {
+            dispatch({ type: REQUEST_UPDATE_CONTINUE, popupType });
+          },
+          onDismissClick: () => {
+            dispatch({
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'edit', 'isShown'],
+              value: false,
+            })
+          },
+          isShown: true,
+        });
+      }
+      if (popupType == 'urgent') {
+        setConfirmationDialog({
+          title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
+          description: 'Vui lòng nhấn YES để đồng ý và chuyển qua MH sắp xếp, nhấn NO để quay lại',
+          onConfirmClick: () => {
+            dispatch({ type: REQUEST_CREATING_PYC_BS });
+          },
+          onDismissClick: () => {
+            dispatch({
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'edit', 'isShown'],
+              value: false,
+            })
+          },
+          isShown: true,
+        });
+      }
     }
   }
 
@@ -173,6 +216,7 @@ export const Element = (props: Props) => {
     <Popup.Element
       {...props}
       closePopUpCallback={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+      extractHtml={confirmationDialog}
     >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số Lộ trình' {...inputTitleProps} />
@@ -255,10 +299,12 @@ export const Element = (props: Props) => {
           <Button.Element
             {...submitButtonProps}
             flexGrow={Base.FlexGrow.G1}
+            isDisabled={popupType === 'urgent'}
           />
           <Button.Element
             {...continueButtonProps}
             flexGrow={Base.FlexGrow.G1}
+            isDisabled={popupType === 'urgent' && ['Originating_R', 'Adding', 'Organizing', 'Canceled-R', 'Finishing', 'Finished'].includes(selector.routeStatus)}
           />
 
           <Button.Element

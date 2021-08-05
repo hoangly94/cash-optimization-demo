@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_VEHICLE, REQUEST_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, REQUEST_ORGANIZING_GET_KC, SELECT_COMBOX, HANDLE_SPECIAL_ADD, HANDLE_SPECIAL_DELETE, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, FETCH_BALANCE_SPECIAL, REQUEST_ORGANIZING_URGENT_UPDATE, REQUEST_ORGANIZING_SEARCH_DESTINATION, } from '~stores/routeManagement/normal/constants';
+import { REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_VEHICLE, REQUEST_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, REQUEST_ORGANIZING_GET_KC, SELECT_COMBOX, HANDLE_SPECIAL_ADD, HANDLE_SPECIAL_DELETE, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, FETCH_BALANCE_SPECIAL, REQUEST_ORGANIZING_URGENT_UPDATE, REQUEST_ORGANIZING_SEARCH_DESTINATION, FETCH_BALANCE_SPECIAL_TOTAL, } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -13,6 +13,8 @@ import * as SpecialTable from "./specialTable";
 import * as RouteTable from "./routeTable";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_CURRENCIES } from '~/stores/dashboardRoot/constants';
+import { thousandSeparator } from '_/utils';
+import { useConfirmationDialog } from '_/hooks';
 
 export type Props = Popup.Props & {
   popupType: string,
@@ -21,8 +23,13 @@ export type Props = Popup.Props & {
 export const Element = (props: Props) => {
   const { popupType } = props;
   const selector = useSelector(state => state['routeManagement'].organizingPopup);
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
   const dispatch = useDispatch();
+  const stopPointType = selector.stopPointType.value;
+  const stopPointTypeAllowed = 'Điểm dừng nhận quỹ của ĐVTLT';
 
+  const prevSelectedOrder = (selector.selectedRouteDetailOganize?.order || 0) - 1;
+  const preRouteDetailOganize = selector.routeDetailOganizeTemp?.filter(item => item.order === prevSelectedOrder)[0];
   useLayoutEffect(() => {
     dispatch({ type: FETCH_CURRENCIES });
   }, []);
@@ -37,7 +44,11 @@ export const Element = (props: Props) => {
   return (
     <Popup.Element
       {...props}
-      closePopUpCallback={() => dispatch({ type: REQUEST_ORGANIZING_CANCEL })}
+      closePopUpCallback={() => {
+        dispatch({ type: REQUEST_ORGANIZING_BACK, confirm:'NO', noti:true });
+        dispatch({ type: REQUEST_ORGANIZING_CANCEL });
+      }}
+      extractHtml={confirmationDialog}
     >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số lộ trình' {...inputTitleProps} />
@@ -132,8 +143,8 @@ export const Element = (props: Props) => {
                 popupType: 3,
               }
             }}
-            
-            onClick={() => dispatch({ type: REQUEST_ORGANIZING_SEARCH_DESTINATION })}
+
+          // onClick={() => dispatch({ type: REQUEST_ORGANIZING_SEARCH_DESTINATION })}
           // onClick={() => dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL })}
           />
         </Block.Element>
@@ -198,7 +209,7 @@ export const Element = (props: Props) => {
                 keys: ['routeManagement', 'balanceSpecial', 'isShown'],
                 value: true,
               });
-              dispatch({ type: FETCH_BALANCE_SPECIAL })
+              dispatch({ type: FETCH_BALANCE_SPECIAL_TOTAL })
             }}
           >Số dư HĐB</a>
         </Block.Element>
@@ -220,13 +231,15 @@ export const Element = (props: Props) => {
           margin={Base.MarginRight.PX_18}
           store={{
             defaultSelectorKeys: ['routeManagement', 'organizingPopup', 'type'],
-            selectorKeys: ['root', 'pycTypes'],
+            selectorKeys: ['routeManagement', 'pycTypes'],
             reducerType: SELECT_COMBOX,
             reducerKeys: {
               text: 'name',
               value: 'value',
             },
           }}
+          isDisabled={stopPointType !== stopPointTypeAllowed}
+          isInputDisabled={stopPointType !== stopPointTypeAllowed}
         />
         <Combox.Element
           width={Base.Width.PX_300}
@@ -240,6 +253,8 @@ export const Element = (props: Props) => {
               value: 'currencyType',
             },
           }}
+          isDisabled={stopPointType !== stopPointTypeAllowed}
+          isInputDisabled={stopPointType !== stopPointTypeAllowed}
         />
         <Combox.Element
           width={Base.Width.PX_300}
@@ -265,6 +280,9 @@ export const Element = (props: Props) => {
             selectorKeys: ['routeManagement', 'organizingPopup', 'quanlity'],
             reducerType: CHANGE_ORGANIZING_INPUT,
           }}
+          isDisabled={stopPointType !== stopPointTypeAllowed}
+          valueMapper={thousandSeparator}
+          max={50}
         />
         <Combox.Element
           width={Base.Width.PX_300}
@@ -277,6 +295,8 @@ export const Element = (props: Props) => {
               value: 'value',
             },
           }}
+          isDisabled={stopPointType !== stopPointTypeAllowed}
+          isInputDisabled={stopPointType !== stopPointTypeAllowed}
         />
       </Block.Element>
 
@@ -295,6 +315,7 @@ export const Element = (props: Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             onClick={handleSpecialAddButtonClick}
+            isDisabled={stopPointType !== stopPointTypeAllowed}
           />
           <Button.Element
             text='Delete'
@@ -306,7 +327,10 @@ export const Element = (props: Props) => {
               // isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'specialDeleteEditing'],
               action: { type: HANDLE_SPECIAL_DELETE }
             }}
-            isDisabled={!(selector?.selectedSpecial)}
+            isDisabled={
+              !(selector?.selectedSpecial)
+              || stopPointType !== stopPointTypeAllowed
+            }
           // onClick={() => dispatch({ type: HANDLE_BUTTON, keys: ['routeManagement', 'specialDeleteEditing', 'isDisabled'], value: true })}
           />
         </Block.Element>
@@ -357,7 +381,8 @@ export const Element = (props: Props) => {
               isLoadingSelectorKeys: ['base', 'buttons', 'routeManagement', 'routeDetailOganizeInsert'],
               action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'DELETE' }
             }}
-            isDisabled={!(selector?.selectedRouteDetailOganize)}
+            isDisabled={!(selector?.selectedRouteDetailOganize)
+              || selector.selectedRouteDetailOganize?.routeDetailOganizeStatus != 'ACT'}
           />
           <Button.Element
             text='Up'
@@ -370,7 +395,8 @@ export const Element = (props: Props) => {
               isLoadingSelectorKeys: ['base', 'buttons', 'routeManagement', 'routeDetailOganizeInsert'],
               action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'UP' }
             }}
-            isDisabled={!(selector?.selectedRouteDetailOganize)}
+            isDisabled={!(selector?.selectedRouteDetailOganize)
+              || selector.selectedRouteDetailOganize?.routeDetailOganizeStatus != 'ACT' || preRouteDetailOganize?.routeDetailOganizeStatus != 'ACT'}
           />
           <Button.Element
             text='Down'
@@ -382,7 +408,8 @@ export const Element = (props: Props) => {
               isLoadingSelectorKeys: ['base', 'buttons', 'routeManagement', 'routeDetailOganizeInsert'],
               action: { type: REQUEST_ORGANIZING_UPDATE_ORDER, buttonType: 'DOWN' }
             }}
-            isDisabled={!(selector?.selectedRouteDetailOganize)}
+            isDisabled={!(selector?.selectedRouteDetailOganize)
+              || selector.selectedRouteDetailOganize?.routeDetailOganizeStatus != 'ACT'}
           />
         </Block.Element>
       </Block.Element>
@@ -409,10 +436,24 @@ export const Element = (props: Props) => {
             //   }
             // }}
             onClick={() => {
-              if (popupType == 'normal')
-                dispatch({ type: REQUEST_ORGANIZING_UPDATE });
-              if (popupType == 'urgent')
-                dispatch({ type: REQUEST_ORGANIZING_URGENT_UPDATE });
+              setConfirmationDialog({
+                title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống',
+                description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+                onConfirmClick: () => {
+                  if (popupType == 'normal')
+                    dispatch({ type: REQUEST_ORGANIZING_UPDATE });
+                  if (popupType == 'urgent')
+                    dispatch({ type: REQUEST_ORGANIZING_URGENT_UPDATE });
+                },
+                onDismissClick: () => {
+                  dispatch({
+                    type: HANDLE_POPUP,
+                    keys: ['routeManagement', 'organizingPopup', 'isShown'],
+                    value: false,
+                  })
+                },
+                isShown: true,
+              });
             }}
           />
           <Button.Element
@@ -429,7 +470,24 @@ export const Element = (props: Props) => {
             //     value: false,
             //   }
             // }}
-            onClick={() => dispatch({ type: REQUEST_ORGANIZING_CONTINUE })}
+            onClick={() => {
+              setConfirmationDialog({
+                title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống',
+                description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+                onConfirmClick: () => {
+                  dispatch({ type: REQUEST_ORGANIZING_CONTINUE });
+                },
+                onDismissClick: () => {
+                  dispatch({
+                    type: HANDLE_POPUP,
+                    keys: ['routeManagement', 'organizingPopup', 'isShown'],
+                    value: false,
+                  })
+                },
+                isShown: true,
+              });
+            }}
+            isDisabled={!(selector.routeStatus === 'Organizing')}
           />
           <Button.Element
             text='Back'
@@ -445,7 +503,25 @@ export const Element = (props: Props) => {
             //     value: false,
             //   }
             // }}
-            onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK })}
+            onClick={() => {
+              setConfirmationDialog({
+                title: 'Trạng thái lộ trình sẽ chuyển về Adding và thông tin sắp xếp lộ trình sẽ bị xóa. Bạn có muốn thực hiện không?',
+                description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+                onConfirmClick: () => {
+                  dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'YES' });
+                },
+                onDismissClick: () => {
+                  dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'NO' });
+                  dispatch({
+                    type: HANDLE_POPUP,
+                    keys: ['routeManagement', 'organizingPopup', 'isShown'],
+                    value: false,
+                  })
+                },
+                isShown: true,
+              });
+            }}
+            isDisabled={!(selector.routeStatus === 'Organizing')}
           />
           <Button.Element
             text='PREVIEW'
@@ -476,6 +552,7 @@ export const Element = (props: Props) => {
                 value: false,
               }
             }}
+            onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'NO', noti:true })}
           />
         </Block.Element>
       </Block.Element>
@@ -523,7 +600,7 @@ const validateSpecialForm = (dispatch, selector) => {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại vàng' } });
     return false;
   }
-  if (!selector.quanlity || selector.quanlity == '0') {
+  if (!selector.quanlity) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Số lượng' } });
     return false;
   }

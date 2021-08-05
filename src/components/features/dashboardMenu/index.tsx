@@ -61,10 +61,11 @@ export const Element = (props: Props) => {
 }
 
 const handleLogoutClick = () => {
-  new Promise(function (resolve, reject) {
-    document.cookie = `accessToken=;`;
-    resolve(document.cookie);
-  }).then(() => { window.location.href = '/'; });
+  window.location.href = '/login'; 
+  // new Promise(function (resolve, reject) {
+  //   document.cookie = `accessToken=;`;
+  //   resolve(document.cookie);
+  // }).then(() => { window.location.href = '/login'; });
 }
 
 Element.displayName = 'DashboardMenu';

@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, FETCH_PYC, GET_EXCEL, GET_HISTORY_EXCEL, REQUEST_UPDATE_CONTINUE, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_PYC, UPDATE_SPECIAL_DATA, REQUEST_VEHICLE, REQUEST_PERS, UPDATE_VEHICLE_DATA, UPDATE_PERS_DATA, REQUEST_SEACHVEHICLEPERS_CONTINUE, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_SEARCH_DESTINATION, REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_CHECK_BALANCE_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, REQUEST_ORGANIZING_GET_KC, UPDATE_ORGANIZING, UPDATE_ORGANIZING_STOP_POINT, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_URGENT_UPDATE, UPDATE_ORGANIZING_INSERT, SELECT_DESTINATION_POINT, HANDLE_SPECIAL_DELETE, UPDATE_ORGANIZING_DISTANCE, FETCH_MAP, UPDATE_MAP, FETCH_BALANCE_SPECIAL, UPDATE_BALANCE_SPECIAL, REQUEST_CREATING_PYC_BS, } from './constants';
+import { SELECT_ROUTE_ROW, DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, FETCH_PYC, GET_EXCEL, GET_HISTORY_EXCEL, REQUEST_UPDATE_CONTINUE, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_PYC, UPDATE_SPECIAL_DATA, REQUEST_VEHICLE, REQUEST_PERS, UPDATE_VEHICLE_DATA, UPDATE_PERS_DATA, REQUEST_SEACHVEHICLEPERS_CONTINUE, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_SEARCH_DESTINATION, REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_CHECK_BALANCE_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, REQUEST_ORGANIZING_GET_KC, UPDATE_ORGANIZING, UPDATE_ORGANIZING_STOP_POINT, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_URGENT_UPDATE, UPDATE_ORGANIZING_INSERT, SELECT_DESTINATION_POINT, HANDLE_SPECIAL_DELETE, UPDATE_ORGANIZING_DISTANCE, FETCH_MAP, UPDATE_MAP, FETCH_BALANCE_SPECIAL, UPDATE_BALANCE_SPECIAL, REQUEST_CREATING_PYC_BS, REQUEST_ORGANIZE_URGENT_CHECKBYID, UPDATE_ORGANIZE_URGENT_CHECKBYID, FETCH_BALANCE_SPECIAL_TOTAL, UPDATE_BALANCE_SPECIAL_TOTAL, } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
@@ -48,7 +48,12 @@ function* saga() {
 
     yield takeLatest(FETCH_MAP, fetchMapSaga);
     yield takeLatest(FETCH_BALANCE_SPECIAL, fetchBalanceSpecialSaga);
+    yield takeLatest(FETCH_BALANCE_SPECIAL_TOTAL, fetchBalanceSpecialTotalSaga);
+
+    yield takeLatest(REQUEST_ORGANIZE_URGENT_CHECKBYID, requestOrganizeUrgentCheckByIdSaga);
+    
 }
+
 
 // function* fetchHistorySaga(action?) {
 //     const responseData = yield call(getHistory, action);
@@ -70,6 +75,16 @@ function* fetchDataSaga(action?) {
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'searchVehiclePersPopup', 'isDisabled'], value: true });
 }
+function* requestOrganizeUrgentCheckByIdSaga(action?) {
+    const state = yield select();
+    const responseData = yield call(requestOrganizeUrgentCheckById, state.routeManagement.selectedItem, action);
+
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        return yield spawn(addNoti, 'error', responseData?.data?.message);
+    }
+    yield put({ type: UPDATE_ORGANIZE_URGENT_CHECKBYID, data: responseData.data, page: action?.page });
+}
+
 
 function* fetchVehicleSaga(action?) {
     const state = yield select();
@@ -105,7 +120,7 @@ function* createDataSaga() {
 
 function* createPYCBSDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/route/dkPycBs', state.routeManagement.creatingPopup, state.auth);
+    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/route/dkPycBs', state.routeManagement.editingPopup, state.auth);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -114,6 +129,9 @@ function* createPYCBSDataSaga() {
     yield spawn(addNoti, 'success', `Tạo thành công ID ${responseData?.data?.data.id}`);
     yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'create', 'isShown'], value: false });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'specialDeleteCreating', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'edit', 'isShown'], value: false });
+    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'create', 'isShown'], value: false });
+    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'organizingPopup', 'isShown'], value: true });
 }
 
 function* updateDataSaga() {
@@ -132,7 +150,7 @@ function* updateDataSaga() {
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
 }
 
-function* updateContinueSaga() {
+function* updateContinueSaga(action?) {
     const state = yield select();
     const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/route/continue', state.routeManagement.editingPopup, state.auth);
 
@@ -148,6 +166,10 @@ function* updateContinueSaga() {
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'searchVehiclePersPopup', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'organizingPopup', 'isDisabled'], value: true });
     yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'edit', 'isShown'], value: false });
+    if (action.popupType === 'normal')
+        yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'], value: true });
+    if (action.popupType === 'urgent')
+        yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'organizingPopup', 'isShown'], value: true });
 
 }
 
@@ -210,14 +232,13 @@ function* deleteDataSaga() {
 
 function* specialAddSaga() {
     const state = yield select();
-
-    const cashOptimizatioDetailModelList = state.routeManagement.organizingPopup?.cashOptimizatioDetailModelList;
+    const routeDetailHdbTemp2 = state.routeManagement.organizingPopup?.routeDetailHdbTemp2;
     const organizingPopup = state.routeManagement.organizingPopup;
     const newItem = {
         type: state.routeManagement.organizingPopup?.type,
         currencyType: state.routeManagement.organizingPopup?.currencyType,
         goldType: state.routeManagement.organizingPopup?.goldType,
-        quanlity: state.routeManagement.organizingPopup?.quanlity,
+        quanlity: state.routeManagement.organizingPopup?.quanlity?.toString().replaceAll(',', ''),
         attribute: state.routeManagement.organizingPopup?.attribute,
     }
     const filterSameSpecialData = (newItem) => (item) => {
@@ -231,15 +252,15 @@ function* specialAddSaga() {
         }
         return false;
     }
-    if (_.isEmpty(cashOptimizatioDetailModelList?.filter(filterSameSpecialData(newItem)))) {
+    if (_.isEmpty(routeDetailHdbTemp2?.filter(filterSameSpecialData(newItem)))) {
         const data = [
-            ...cashOptimizatioDetailModelList,
+            ...routeDetailHdbTemp2,
             {
-                key: cashOptimizatioDetailModelList.length ? cashOptimizatioDetailModelList[cashOptimizatioDetailModelList.length - 1]['key'] + 1 : 1,
+                key: routeDetailHdbTemp2.length ? routeDetailHdbTemp2[routeDetailHdbTemp2.length - 1]['key'] + 1 : 1,
                 type: organizingPopup?.type?.value,
                 currencyType: organizingPopup?.currencyType?.value,
                 goldType: organizingPopup?.goldType?.value,
-                quanlity: organizingPopup?.quanlity,
+                quanlity: organizingPopup?.quanlity?.toString().replaceAll(',', ''),
                 attribute: organizingPopup?.attribute?.value,
             },
         ];
@@ -247,29 +268,31 @@ function* specialAddSaga() {
         if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
             return yield spawn(addNoti, 'error', responseData?.data?.message);
         }
-        return yield put({ type: UPDATE_SPECIAL_DATA, data });
+        yield put({ type: UPDATE_SPECIAL_DATA, data });
+        return yield put({ type: REQUEST_ORGANIZING });
     }
     return yield spawn(addNoti, 'error', 'Yêu cầu điều quỹ đã tồn tại');
 }
 function* specialDeleteSaga() {
     const state = yield select();
     const organizingPopup = state.routeManagement.organizingPopup;
-    const cashOptimizatioDetailModelList = organizingPopup.cashOptimizatioDetailModelList;
+    const routeDetailHdbTemp = organizingPopup.routeDetailHdbTemp;
 
-    const data = cashOptimizatioDetailModelList.filter(item => !item['isSelected']);
+    const data = routeDetailHdbTemp.filter(item => !item['isSelected']);
     const responseData = yield call(requestOrganizingAddHdb, organizingPopup, data);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    return yield put({ type: UPDATE_SPECIAL_DATA, data });
+    yield put({ type: UPDATE_SPECIAL_DATA, data });
+    yield put({ type: REQUEST_ORGANIZING });
 }
-function requestOrganizingAddHdb(data, cashOptimizatioDetailModelList) {
+function requestOrganizingAddHdb(data, routeDetailHdbTemp) {
     const url = Config.url + '/api/cashoptimization/route/organize_add_hdb';
     const postData = {
         data: {
             routeId: data.id,
             stopPointType: data.stopPointType?.value,
-            routeDetailHdbModel: cashOptimizatioDetailModelList,
+            routeDetailHdbModel: routeDetailHdbTemp,
         }
     }
     return axios.post(url, postData)
@@ -359,6 +382,8 @@ function* requestOrganizingSaga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield put({ type: UPDATE_ORGANIZING, data: responseData.data });
+    yield put({ type: REQUEST_ORGANIZING_SEARCH_DESTINATION });
+    
 }
 function requestOrganizing(data, action) {
     const url = Config.url + '/api/cashoptimization/route/oganize_find_by_id';
@@ -379,6 +404,7 @@ function* requestOrganizingCheckStopPointSaga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield put({ type: UPDATE_ORGANIZING_STOP_POINT, data: responseData.data });
+    yield put({ type: REQUEST_ORGANIZING });
 }
 function requestOrganizingCheckStopPoint(data, action) {
     const url = Config.url + '/api/cashoptimization/route/route_organize_check_stop_point';
@@ -487,7 +513,7 @@ function* requestOrganizingInsertSaga(action?) {
     const state = yield select();
     const organizingPopup = state.routeManagement.organizingPopup;
     const routeDetailOganizeItem = {
-        order: organizingPopup?.routeDetailOganize?.length + 1 || 1,
+        order: organizingPopup?.routeDetailOganizeTemp?.length + 1 || 1,
         routeStatus: organizingPopup.routeStatus,
         stopPointType: organizingPopup.stopPointType?.text ?? organizingPopup.stopPointType,
         departurePointName: organizingPopup.departurePointName,
@@ -496,21 +522,21 @@ function* requestOrganizingInsertSaga(action?) {
         destinationPointAddress: organizingPopup.destinationPointAddress,
         kcDepartureToDestination: organizingPopup.kcDepartureToDestination,
         model: organizingPopup.routeCashOptimization[0]?.cashOptimization.model,
+        cashOptimizationId: organizingPopup.cashOptimizationId,
     };
-
     const responseData = yield call(requestOrganizingInsert, state.routeManagement.organizingPopup, routeDetailOganizeItem);
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'routeDetailOganizeInsert', 'isLoading'], value: false });
-    yield put({ type: REQUEST_ORGANIZING});
+    yield put({ type: REQUEST_ORGANIZING });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    const data = [
-        ...organizingPopup?.routeDetailOganize ?? [],
-        {
-            ...routeDetailOganizeItem,
-            id: responseData?.data?.data?.id,
-        },
-    ];
+    // const data = [
+    //     ...organizingPopup?.routeDetailOganize ?? [],
+    //     {
+    //         ...routeDetailOganizeItem,
+    //         id: responseData?.data?.data?.id,
+    //     },
+    // ];
     // yield put({ type: UPDATE_ORGANIZING_INSERT, data });
 }
 function requestOrganizingInsert(data, routeDetailOganizeItem) {
@@ -531,26 +557,26 @@ function* requestOrganizingUpdateOrderSaga(action) {
     const organizingPopup = state.routeManagement.organizingPopup;
     const data = (() => {
         if (action.buttonType === 'DELETE') {
-            return organizingPopup?.routeDetailOganize?.filter(item => !item['isSelected']);
+            return organizingPopup?.routeDetailOganizeTemp?.filter(item => !item['isSelected']);
         }
         if (action.buttonType === 'UP') {
             const order = organizingPopup?.selectedRouteDetailOganize?.order - 1;
             if (order > 0) {
-                const t = organizingPopup.routeDetailOganize[order];
-                organizingPopup.routeDetailOganize[order] = organizingPopup.routeDetailOganize[order - 1];
-                organizingPopup.routeDetailOganize[order - 1] = t;
+                const t = organizingPopup.routeDetailOganizeTemp[order];
+                organizingPopup.routeDetailOganizeTemp[order] = organizingPopup.routeDetailOganizeTemp[order - 1];
+                organizingPopup.routeDetailOganizeTemp[order - 1] = t;
             }
-            return organizingPopup.routeDetailOganize;
+            return organizingPopup.routeDetailOganizeTemp;
         }
         if (action.buttonType === 'DOWN') {
             const order = organizingPopup?.selectedRouteDetailOganize?.order - 1;
-            if (order + 1 < organizingPopup?.routeDetailOganize?.length) {
-                const t = organizingPopup.routeDetailOganize[order];
-                organizingPopup.routeDetailOganize[order] = organizingPopup.routeDetailOganize[order + 1];
-                organizingPopup.routeDetailOganize[order + 1] = t;
+            if (order + 1 < organizingPopup?.routeDetailOganizeTemp?.length) {
+                const t = organizingPopup.routeDetailOganizeTemp[order];
+                organizingPopup.routeDetailOganizeTemp[order] = organizingPopup.routeDetailOganizeTemp[order + 1];
+                organizingPopup.routeDetailOganizeTemp[order + 1] = t;
             }
-            
-            return organizingPopup.routeDetailOganize;
+
+            return organizingPopup.routeDetailOganizeTemp;
         }
     })()?.map((item, index) => ({ ...item, order: index + 1 }));
 
@@ -565,11 +591,13 @@ function* requestOrganizingUpdateOrderSaga(action) {
 }
 function requestOrganizingUpdateOrder(data, routeDetailOganize, buttonType) {
     const url = Config.url + '/api/cashoptimization/route/organize_update_order';
+    const selectedRouteDetailOganizeTemp = data?.routeDetailOganizeTemp?.filter(item => item['isSelected'])[0];
     const postData = {
         data: {
             routeId: data.id,
             action: buttonType,
-            routeDetailOganize: routeDetailOganize,
+            routeDetailOganizeTemp: routeDetailOganize,
+            cashOptimizationId: buttonType === 'DELETE' ? selectedRouteDetailOganizeTemp.cashOptimizationId : undefined,
         }
     }
     return axios.post(url, postData)
@@ -631,10 +659,11 @@ function* requestOrganizingContinueSaga() {
 }
 
 
-function* requestOrganizingBackSaga() {
+function* requestOrganizingBackSaga(action?) {
     const state = yield select();
-    const responseData = yield call(requestOrganizingUpdate, Config.url + '/api/cashoptimization/route/organize_back', state.routeManagement.organizingPopup, state.auth);
+    const responseData = yield call(requestOrganizingUpdate, Config.url + '/api/cashoptimization/route/organize_back', state.routeManagement.organizingPopup, state.auth, action);
 
+    if (action?.noti) return;
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -664,10 +693,11 @@ function* requestOrganizingUrgentUpdateSaga() {
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
 }
 
-function requestOrganizingUpdate(url: string, data, auth) {
+function requestOrganizingUpdate(url: string, data, auth, action?) {
     const postData = {
         data: {
             routeId: data.id,
+            action: action?.confirm,
         },
     }
     return axios.post(url, { ...postData })
@@ -696,13 +726,13 @@ function getHistoryExcel(data) {
     const url = Config.url + '/api/cashoptimization/route/exportExcelHistory';
     const postData = {
         data: {
-            cash_optimization_id: data.id,
+            routeId: data.id,
         }
     }
     return axios.post(url, postData, { responseType: 'arraybuffer' })
         .then((response) => {
             var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            FileSaver.saveAs(blob, `Lịch sử số PYC HT ${data.id}.xlsx`);
+            FileSaver.saveAs(blob, `Lịch sử Lộ trình số ${data.id}.xlsx`);
         });
 }
 
@@ -738,6 +768,18 @@ function getData(filters, auth, action) {
             sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
+        },
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
+}
+
+function requestOrganizeUrgentCheckById(data, action) {
+    const url = Config.url + '/api/cashoptimization/route/organize_urgent_checkById';
+
+    const postData = {
+        data: {
+            routeId: '' + data.id,
         },
     }
     return axios.post(url, postData)
@@ -802,24 +844,17 @@ function getExcel(filters, auth, action) {
     const {
         page = 0,
         sort = '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/exportExcel';
+    } = action ?? {};
+    const url = Config.url + '/api/cashoptimization/route/exportExcel';
     const data = filters.radio === '1'
         ? {
-            pers_code: auth.user?.code,
-            orgs_code: filters.orgs?.value,
-            from_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom),
-            to_date: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo),
-            orgs_role: filters.orgsRole?.value,
-            object_type: filters.objectType?.value,
-            status: filters.status?.value,
+            orgsCode: filters.orgs?.value,
+            routeFromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom) + ' 00:00:00',
+            routeToDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo) + ' 23:59:59.00',
+            routeStatus: filters.status?.value,
         }
         : {
-            id: filters.id,
-            pers_code: '0',
-            orgs_code: '0',
-            orgs_role: '',
-            object_type: '',
-            status: '',
+            routeId: '' + filters.id,
         };
     const postData = {
         data: {
@@ -832,7 +867,7 @@ function getExcel(filters, auth, action) {
     return axios.post(url, postData, { responseType: 'arraybuffer' })
         .then((response) => {
             var blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-            FileSaver.saveAs(blob, 'Danh sách PYC ĐQ.xlsx');
+            FileSaver.saveAs(blob, 'Danh sách Lộ trình.xlsx');
         });
 }
 
@@ -905,7 +940,7 @@ function requestOrgsSearching(url: string, routeManagement, data, auth, type?) {
                 type: item.type,
                 currencyType: item.currencyType,
                 goldType: item.goldType,
-                quanlity: item.quanlity,
+                quanlity: item.quanlity?.toString().replaceAll(',', ''),
                 attribute: item.attribute,
             })),
             cashOptimizationOrgsDetailModel: {
@@ -954,14 +989,32 @@ function* fetchBalanceSpecialSaga(action?) {
     const responseData = yield call(getBalanceSpecial, state.routeManagement.organizingPopup, action.routeDetailOganizeId);
     yield put({ type: UPDATE_BALANCE_SPECIAL, data: responseData.data });
 }
+function* fetchBalanceSpecialTotalSaga(action?) {
+    const state = yield select();
+    const responseData = yield call(getBalanceSpecialTotal, state.routeManagement.organizingPopup);
+    yield put({ type: UPDATE_BALANCE_SPECIAL_TOTAL, data: responseData.data });
+}
 
 function getBalanceSpecial(data, routeDetailOganizeId) {
     const url = Config.url + '/api/cashoptimization/route/organize_check_balance_hdb';
-    const routeDetailOganize = data.routeDetailOganize;
+    const routeDetailOganize = data.routeDetailOganizeTemp;
     const postData = {
         data: {
             routeId: data.id,
             routeDetailOganizeId: routeDetailOganizeId || routeDetailOganize[routeDetailOganize.length - 1]?.id,
+        },
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
+}
+
+function getBalanceSpecialTotal(data) {
+    const url = Config.url + '/api/cashoptimization/route/organize_check_hdb_v1';
+    const postData = {
+        data: {
+            routeId: data.id,
+            cashOptimizeId: data.cashOptimizationId || 0,
+            stopPointType: data.stopPointType?.value,
         },
     }
     return axios.post(url, postData)

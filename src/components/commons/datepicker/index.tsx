@@ -70,7 +70,7 @@ export const Element = (props: Props) => {
   } = useComponentClickOutside();
   const dispatch = useDispatch();
   const dateSelector = store && store.selectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selectorKeys as string[])) : '';
-
+  
   const [currentDate, setCurrentDate] = useState(_Date.isMatchDateTimeDD_MM_YYY(dateSelector)
     ? new Date(dateSelector)
     : (activeDay ? new Date(activeDay) : new Date()));

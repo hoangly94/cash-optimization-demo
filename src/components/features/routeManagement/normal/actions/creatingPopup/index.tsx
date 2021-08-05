@@ -14,6 +14,7 @@ import { getCurrentDate } from "@utils";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
 import { color } from '@storybook/theming';
+import { useConfirmationDialog } from '_/hooks';
 
 export type Props = Popup.Props;
 
@@ -23,13 +24,30 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const selector = useSelector(state => state['routeManagement'].creatingPopup);
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
 
   const dispatch = useDispatch();
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_CREATING });
+
       // dispatch({ type: REQUEST_CREATING_CANCEL });
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
+        description: 'Vui lòng nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: REQUEST_CREATING });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'create', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
+      });
+
       if (setIsShown)
         setIsShown(false)
     }
@@ -57,6 +75,7 @@ export const Element = (props: Popup.Props) => {
     <Popup.Element
       {...props}
       closePopUpCallback={() => dispatch({ type: REQUEST_CREATING_CANCEL })}
+      extractHtml={confirmationDialog}
     >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
@@ -112,13 +131,13 @@ export const Element = (props: Popup.Props) => {
         }}
         margin={Base.MarginBottom.PX_28}
         pagination={{
-          store:{
+          store: {
             totalSelectorKeys: ['routeManagement', 'creatingPopup'],
             action: {
               type: REQUEST_PERS,
             }
           },
-          style:{
+          style: {
             marginTop: '5px',
           }
         }}

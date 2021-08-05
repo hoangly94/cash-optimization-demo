@@ -12,19 +12,35 @@ import * as Combox from "~commons/combox";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import { _Date } from '~/utils';
 import { CHANGE_EDITING_INPUT, REQUEST_DELETE, SELECT_COMBOX, REQUEST_EDITING_CANCEL } from '~/stores/routeManagement/normal/constants';
+import { useConfirmationDialog } from '_/hooks';
 
 export const Element = (props: Popup.Props) => {
   const {
     setIsShown,
   } = props;
   const selector = useSelector(state => state['routeManagement'].editingPopup);
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
   // const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_DELETE });
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
+        description: 'Vui lòng nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: REQUEST_DELETE });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'delete', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
+      });
       if (setIsShown)
         setIsShown(false)
     }
@@ -33,6 +49,7 @@ export const Element = (props: Popup.Props) => {
     <Popup.Element
       {...props}
       closePopUpCallback={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+      extractHtml={confirmationDialog}
     >
       <Title.Element
         tagType={Title.TagType.H3}

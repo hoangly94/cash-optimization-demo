@@ -7,9 +7,10 @@ import * as Input from "~commons/input";
 import * as Button from "~commons/button";
 import * as Title from "~commons/title";
 import * as MapPopup from "./mapPopup";
+import _ from "lodash";
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_CODE_FILTER, FETCH_DATA, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_START } from '~stores/routeTracking/constants';
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { ADD_NOTI, HANDLE_POPUP } from '_/stores/_base/constants';
 
 export type Props = Base.Props;
 let dispatch;
@@ -18,7 +19,15 @@ export const Element = (props: Props) => {
   const selector = useSelector(state => state['routeTracking']);
   const userSelector = useSelector(state => state['auth'].user);
   const type = 'component';
-
+  const html = getHtml(selector, userSelector);
+  useEffect(() => {
+    if (_.isEmpty(selector?.route)) {
+      // console.log('===========');
+      // console.log(html);
+      // if (!html)
+      //   dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Bạn không có quyền theo dõi lộ trình này' } });
+    }
+  }, [selector?.route]);
   //create props
   const componentWrapperProps = {
     classNames: Classnames(
@@ -58,7 +67,7 @@ export const Element = (props: Props) => {
           />
         </Block.Element>
         {
-          getHtml(selector, userSelector)
+          html
         }
       </Block.Element >
       <MapPopup.Element
@@ -72,8 +81,9 @@ export const Element = (props: Props) => {
 
 const getHtml = (routeTracking, user) => {
   const persCode = user.persCode;
-  // const persCode = 1950015;
+  // const persCode = 136000;
 
+  const perLXE = routeTracking.route?.routeDetailVehicle?.filter(item => item.categoryVehicle?.driverCode === persCode);
   const pers = routeTracking.route?.routeDetailPers?.filter(item => item.persCode === persCode);
   const bve = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'BVE').map(item => ({ ...item, ...item.categoryPers }))[0];
   const lxe = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'LXE').map(item => ({ ...item, ...item.categoryPers }))[0];
@@ -91,62 +101,73 @@ const getHtml = (routeTracking, user) => {
       atm,
     }
   };
+  console.log('---------------pers');
+  console.log(persCode);
+  console.log(routeTracking.route?.routeDetailVehicle);
+  console.log(pers);
+  console.log(perLXE);
+  console.log({
+    bve,
+    lxe,
+    atai,
+    tquy,
+    atm,
+  });
   const routeStatus = route.routeStatus;
-  if(route.transportType != 'Xe chuyên dùng')
-    return;
+  if (route.transportType != 'Xe chuyên dùng')
+    return false;
   if (persCode === route.tqDltltCode) {
     if (routeStatus === 'Beginning')
       return html27_1(route, 1);
     if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-      return html27_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ']);
+      return html27_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ'], routeStatus);
     if (routeStatus === 'Pickingup_ATM')
       return html27_3(route, ['Điểm đón NV tiếp quỹ ATM"']);
-    if (routeStatus === 'Going_i')
+    if (routeStatus === 'Going_1')
       return html27_4(route, ['Điểm dừng nhận quỹ của ĐVTLT', 'Điểm dừng trả quỹ của ĐVTLT']);
-    if (routeStatus === 'Working_i')
+    if (routeStatus === 'Working_1')
       return html27_5(route, ['Điểm dừng xử lý NV theo PYC']);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
       return html27_6(route, ['Điểm kết thúc lộ trình']);
   }
-  else if (pers?.length > 0) {
+  if (perLXE.length > 0) {
+    if (routeStatus === 'Beginning')
+      return html24_1(route, 1);
+    if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
+      return html24_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ'], routeStatus);
+    if (routeStatus === 'Pickingup_ATM')
+      return html24_3(route, ['Điểm đón NV tiếp quỹ ATM"']);
+    if (routeStatus.includes("Going_"))
+      return html24_4(route, ['Điểm dừng nhận quỹ của ĐVTLT', 'Điểm dừng trả quỹ của ĐVTLT'], '4. Di chuyển đến điểm dừng xử lý nghiệp vụ');
+    if (routeStatus === 'Working_1')
+      return html24_4(route, ['Điểm dừng xử lý NV theo PYC'], '5. Giao nhận HĐB tại điểm dừng');
+    if (routeStatus === 'Finishing' || routeStatus === 'Finished')
+      return html24_4(route, ['Điểm kết thúc lộ trình'], '6. Kết thúc lộ trình');
+  }
+  if (pers?.length > 0) {
     const persTitle = pers[0]?.categoryPers?.persTitle;
-
-    if (persTitle === 'LXE') {
-      if (routeStatus === 'Beginning')
-        return html24_1(route, 1);
-      if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-        return html24_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ']);
-      if (routeStatus === 'Pickingup_ATM')
-        return html24_3(route, ['Điểm đón NV tiếp quỹ ATM"']);
-      if (routeStatus === 'Going_i')
-        return html24_4(route, ['Điểm dừng nhận quỹ của ĐVTLT', 'Điểm dừng trả quỹ của ĐVTLT'], '4. Di chuyển đến điểm dừng xử lý nghiệp vụ');
-      if (routeStatus === 'Working_i')
-        return html24_4(route, ['Điểm dừng xử lý NV theo PYC'], '5. Giao nhận HĐB tại điểm dừng');
-      if (routeStatus === 'Finishing' || routeStatus === 'Finished')
-        return html24_4(route, ['Điểm kết thúc lộ trình'], '6. Kết thúc lộ trình');
-    }
 
     if (persTitle === 'ATAI') {
       if (routeStatus === 'Beginning')
-      return html25_1(route, 1);
+        return html25_1(route, 1);
       if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-        return html25_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ']);
+        return html25_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ'], routeStatus);
       if (routeStatus === 'Pickingup_ATM')
         return html25_3(route, ['Điểm đón NV tiếp quỹ ATM"']);
-      if (routeStatus === 'Going_i')
+      if (routeStatus.includes("Going_"))
         return html25_4(route, ['Điểm dừng nhận quỹ của ĐVTLT', 'Điểm dừng trả quỹ của ĐVTLT']);
-      if (routeStatus === 'Working_i')
+      if (routeStatus === 'Working_1')
         return html25_5(route, ['Điểm dừng xử lý NV theo PYC']);
     }
 
     if (persTitle === 'TQUY') {
-      if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Working_i'].includes(routeStatus))
-        return html26_1(route, 1);
-      if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
+      if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Working_1'].includes(routeStatus))
+        return html26_1(route, 1, routeStatus);
+      if (routeStatus === 'Finishing' || routeStatus === 'Finished')
         return html26_2(route, ['Điểm đón áp tải']);
     }
   }
-
+  return false;
 }
 
 const col1 = {
@@ -166,6 +187,8 @@ const row = {
 }
 const html24_1 = (route, order) => {
   const detail = route.routeDetailOganize?.filter(item => item.order === order)[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text='1. Bắt đầu lộ trình' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -202,7 +225,7 @@ const html24_1 = (route, order) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -245,8 +268,13 @@ const html24_1 = (route, order) => {
   )
 }
 
-const html24_2 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+const html24_2 = (route, stopPointTypes, routeStatus) => {
+  const detail = route.routeDetailOganize?.filter(item =>
+    (routeStatus === 'Pickingup_SEC' && item.stopPointType === 'Điểm đón bảo vệ')
+    || (routeStatus === 'Pickingup_ESC' && item.stopPointType === 'Điểm đón áp tải')
+  )[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
 
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc đơn áp tải' tagType={Title.TagType.H3} />
@@ -264,7 +292,7 @@ const html24_2 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -278,14 +306,14 @@ const html24_2 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeStatus === 'Pickingup_SEC' ? 'Điểm đón bảo vệ' : 'Điểm đón áp tải'}
         isDisabled={true}
       />
     </Block.Element>
@@ -355,6 +383,8 @@ const html24_2 = (route, stopPointTypes) => {
 
 const html24_3 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -371,7 +401,7 @@ const html24_3 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -385,7 +415,7 @@ const html24_3 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -494,7 +524,7 @@ const html24_4 = (route, stopPointTypes, title) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -506,7 +536,7 @@ const html24_4 = (route, stopPointTypes, title) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
-      <Title.Element text='Điểm cần đến' />
+      <Title.Element text='Điểm đến' />
       <Input.Element
         defaultValue={detail.destinationPointAddress}
         isDisabled={true}
@@ -553,6 +583,9 @@ const html24_4 = (route, stopPointTypes, title) => {
 
 const html25_1 = (route, order) => {
   const detail = route.routeDetailOganize?.filter(item => item.order === order)[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+
   return (<>
     <Title.Element text='1. Bắt đầu lộ trình' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -589,7 +622,7 @@ const html25_1 = (route, order) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -620,8 +653,14 @@ const html25_1 = (route, order) => {
   )
 }
 
-const html25_2 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+const html25_2 = (route, stopPointTypes, routeStatus) => {
+  const detail = route.routeDetailOganize?.filter(item =>
+    (routeStatus === 'Pickingup_SEC' && item.stopPointType === 'Điểm đón bảo vệ')
+    || (routeStatus === 'Pickingup_ESC' && item.stopPointType === 'Điểm đón áp tải')
+  )[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo về và áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -638,7 +677,7 @@ const html25_2 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -652,14 +691,14 @@ const html25_2 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeStatus === 'Pickingup_SEC' ? 'Điểm đón bảo vệ' : 'Điểm đón áp tải'}
         isDisabled={true}
       />
     </Block.Element>
@@ -735,6 +774,8 @@ const html25_2 = (route, stopPointTypes) => {
 
 const html25_3 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -751,7 +792,7 @@ const html25_3 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -765,7 +806,7 @@ const html25_3 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -846,6 +887,8 @@ const html25_3 = (route, stopPointTypes) => {
 
 const html25_4 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -862,7 +905,7 @@ const html25_4 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -876,7 +919,7 @@ const html25_4 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -941,8 +984,10 @@ const html25_4 = (route, stopPointTypes) => {
 
 const html25_5 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
-    <Title.Element text='5. Giờ nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
+    <Title.Element text='5. Giao \ nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -957,7 +1002,7 @@ const html25_5 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -971,7 +1016,7 @@ const html25_5 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -1096,8 +1141,16 @@ const html25_5 = (route, stopPointTypes) => {
 
 
 
-const html26_1 = (route, order) => {
+const html26_1 = (route, order, routeStatus) => {
   const detail = route.routeDetailOganize?.filter(item => item.order === order)[0];
+
+  // const detail = route.routeDetailOganize?.filter(item => 
+  //   (routeStatus==='Pickingup_SEC' && item.stopPointType === 'Điểm đón bảo vệ')
+  //   || (routeStatus==='Pickingup_ESC' && item.stopPointType === 'Điểm đón áp tải')
+  //   )[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+  
   return (<>
     <Title.Element text='Group box 1' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1119,14 +1172,14 @@ const html26_1 = (route, order) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeStatus === 'Pickingup_SEC' ? 'Điểm đón bảo vệ' : 'Điểm đón áp tải'}
         isDisabled={true}
       />
     </Block.Element>
@@ -1153,7 +1206,7 @@ const html26_1 = (route, order) => {
 const html26_2 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
   return (<>
-    <Title.Element text='5. Giờ nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
+    <Title.Element text='5. Giao nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -1164,7 +1217,7 @@ const html26_2 = (route, stopPointTypes) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
-      <Title.Element text='Điểm cần đến' />
+      <Title.Element text='Điểm đến' />
       <Input.Element
         defaultValue={detail.destinationPointAddress}
         isDisabled={true}
@@ -1294,6 +1347,8 @@ const html26_2 = (route, stopPointTypes) => {
 
 const html27_1 = (route, order) => {
   const detail = route.routeDetailOganize?.filter(item => item.order === order)[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text='1. Bắt đầu lộ trình' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1310,7 +1365,7 @@ const html27_1 = (route, order) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -1331,7 +1386,7 @@ const html27_1 = (route, order) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -1362,8 +1417,13 @@ const html27_1 = (route, order) => {
   )
 }
 
-const html27_2 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+const html27_2 = (route, stopPointTypes, routeStatus) => {
+  const detail = route.routeDetailOganize?.filter(item =>
+    (routeStatus === 'Pickingup_SEC' && item.stopPointType === 'Điểm đón bảo vệ')
+    || (routeStatus === 'Pickingup_ESC' && item.stopPointType === 'Điểm đón áp tải')
+  )[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo về và áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1380,7 +1440,7 @@ const html27_2 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -1394,14 +1454,14 @@ const html27_2 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeStatus === 'Pickingup_SEC' ? 'Điểm đón bảo vệ' : 'Điểm đón áp tải'}
         isDisabled={true}
       />
     </Block.Element>
@@ -1477,6 +1537,8 @@ const html27_2 = (route, stopPointTypes) => {
 
 const html27_3 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1493,7 +1555,7 @@ const html27_3 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -1507,7 +1569,7 @@ const html27_3 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -1588,6 +1650,8 @@ const html27_3 = (route, stopPointTypes) => {
 
 const html27_4 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1604,7 +1668,7 @@ const html27_4 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -1618,7 +1682,7 @@ const html27_4 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
@@ -1684,7 +1748,7 @@ const html27_4 = (route, stopPointTypes) => {
 const html27_5 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
   return (<>
-    <Title.Element text='5. Giờ nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
+    <Title.Element text='5. Giao nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -1699,7 +1763,7 @@ const html27_5 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -1711,7 +1775,7 @@ const html27_5 = (route, stopPointTypes) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
-      <Title.Element text='Điểm cần đến' />
+      <Title.Element text='Điểm đến' />
       <Input.Element
         defaultValue={detail.destinationPointAddress}
         isDisabled={true}
@@ -1828,6 +1892,8 @@ const html27_5 = (route, stopPointTypes) => {
 
 const html27_6 = (route, stopPointTypes) => {
   const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+  const nextOrder = detail.order + 1;
+  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
   return (<>
     <Title.Element text={'6.Kết thúc lộ trình'} tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1844,7 +1910,7 @@ const html27_6 = (route, stopPointTypes) => {
           width={Base.Width.PX_200}
           color={Base.Color.WHITE}
           backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-        
+
           store={{
             action: {
               type: HANDLE_POPUP,
@@ -1858,7 +1924,7 @@ const html27_6 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={nextDetail.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>

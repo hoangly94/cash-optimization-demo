@@ -10,7 +10,7 @@ import { _Date, getCurrentDate } from '@utils';
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  const queryResult = useSelector(state => state['routeManagement'].organizingPopup.routeDetailOganize);
+  const queryResult = useSelector(state => state['routeManagement'].organizingPopup.routeDetailOganizeTemp);
   const dispatch = useDispatch();
   //create props
   const componentWrapperProps = {

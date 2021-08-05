@@ -5,7 +5,7 @@ import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import { HANDLE_BUTTON } from "~stores/_base/constants";
 import * as Table from "~commons/table";
-import { _Date, getCurrentDate } from '@utils';
+import { _Date, getCurrentDate, thousandSeparator } from '@utils';
 
 export type Props = Base.Props;
 
@@ -101,7 +101,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.goldType,
     },
     {
-      children: item.quanlity,
+      children: thousandSeparator(item.quanlity),
     },
     {
       children: item.attribute,

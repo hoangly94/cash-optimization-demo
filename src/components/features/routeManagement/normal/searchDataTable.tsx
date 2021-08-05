@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { REQUEST_QUERY, SELECT_ROW } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
-import {HANDLE_BUTTON} from "~stores/_base/constants";
+import { HANDLE_BUTTON } from "~stores/_base/constants";
 import * as Table from "~commons/table";
 import { _Date, getCurrentDate } from '@utils';
+import moment from 'moment';
 
 export type Props = Base.Props;
 
@@ -15,7 +16,7 @@ export const Element = (props: Props) => {
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_28,
-    width:Base.Width.FULL,
+    width: Base.Width.FULL,
     style: {
       // maxHeight: '500px',
       overflow: 'auto',
@@ -26,7 +27,7 @@ export const Element = (props: Props) => {
   const tableProps: Table.Props = {
     ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
-    style:{
+    style: {
       minWidth: '1800px',
     }
   }
@@ -50,7 +51,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 const tableData = (queryResult?): Table.Props => ({
   $thead: [
     {
-      style:{
+      style: {
         backgroundColor: '#1e3f96',
       },
       color: Base.Color.WHITE,
@@ -133,7 +134,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
       ],
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 
@@ -145,7 +146,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.index || index + 1,
     },
     {
-      children: _Date.getDate(item.createddate),
+      children: item.createddate && moment(item.createddate, 'DD-MM-YYYY').format('DD/MM/YYYY'),
     },
     {
       children: item.id,
@@ -166,10 +167,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.tqDltltName,
     },
     {
-      children: _Date.getDate(item.startTime),
+      children: item.startTime && moment(item.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     },
     {
-      children: _Date.getDate(item.updateddate),
+      children: item.updateddate && moment(item.updateddate, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     },
   ]
 })

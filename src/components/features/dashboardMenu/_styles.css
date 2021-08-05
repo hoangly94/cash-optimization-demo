@@ -20,3 +20,16 @@
 .logout:hover{
     color:red;
 }
+
+@media (max-width: 768px){
+    .dashboardMenu{
+        width:250px;
+        height:100%;
+        position:fixed;
+        left: 0;
+        top:0;
+        box-sizing:border-box;
+        overflow: hidden auto;
+        padding-bottom: 68px;
+    }
+}

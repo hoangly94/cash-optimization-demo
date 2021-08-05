@@ -46,6 +46,8 @@ export const SELECT_COMBOX = root + 'SELECT_COMBOX';
 export const HANDLE_SPECIAL_DELETE = root + 'HANDLE_SPECIAL_DELETE';
 export const HANDLE_SPECIAL_ADD = root + 'HANDLE_SPECIAL_ADD';
 export const SELECT_SPECIAL_ROW = root + 'SELECT_SPECIAL_ROW';
+export const HANDLE_SPECIAL_ADD_TOTAL = root + 'HANDLE_SPECIAL_ADD_TOTAL';
+export const SELECT_SPECIAL_ROW_TOTAL = root + 'SELECT_SPECIAL_ROW_TOTAL';
 
 export const UPDATE_SPECIAL_DATA = root + 'UPDATE_SPECIAL_DATA';
 
@@ -132,11 +134,16 @@ export const UPDATE_MAP = root + 'UPDATE_MAP';
 
 export const FETCH_BALANCE_SPECIAL = root + 'FETCH_BALANCE_SPECIAL';
 export const UPDATE_BALANCE_SPECIAL = root + 'UPDATE_BALANCE_SPECIAL';
+export const FETCH_BALANCE_SPECIAL_TOTAL = root + 'FETCH_BALANCE_SPECIAL_TOTAL';
+export const UPDATE_BALANCE_SPECIAL_TOTAL = root + 'UPDATE_BALANCE_SPECIAL_TOTAL';
 
 export const SEARCHORGS_SELECT_UPDATE = root + 'SEARCHORGS_SELECT_UPDATE';
 
 export const REQUEST_CREATING_PYC_BS = root + 'REQUEST_CREATING_PYC_BS';
 export const UPDATE_DATA_DESTINATION_POINT = root + 'UPDATE_DATA_DESTINATION_POINT';
+export const REQUEST_ORGANIZE_URGENT_CHECKBYID = root + 'REQUEST_ORGANIZE_URGENT_CHECKBYID';
+export const UPDATE_ORGANIZE_URGENT_CHECKBYID = root + 'UPDATE_ORGANIZE_URGENT_CHECKBYID';
+
 
 export type State = {
     history: any,
@@ -206,7 +213,7 @@ export type State = {
     },
     queryResult: any,
     objectTypes: any[],
-    pycTypes: [],
+    pycTypes: any[],
     pycModels: any[],
     pycPlaceReceives: any[],
     orgsChildren: any[],
@@ -251,6 +258,7 @@ export type State = {
             value: string,
         },
         routeDetailOganize: any[],
+        routeDetailOganizeTemp: any[],
         departurePointName: string,
         departurePointAddress: string,
         destinationPointName: string,
@@ -286,6 +294,7 @@ export type State = {
             attribute: string,
         }[],
         routes?: any[],
+        pycTypes?: any[],
     },
 }
 

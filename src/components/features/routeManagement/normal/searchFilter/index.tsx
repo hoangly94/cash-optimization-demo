@@ -110,7 +110,7 @@ export const Element = (props: Props) => {
           {...filter1Props}
           border={Base.Border.SOLID}
           textAlign={Base.TextAlign.LEFT}
-          text='ĐVUQ'
+          text='ĐVTLT'
           store={{
             textSelectorKeys: ['routeManagement', 'filters', 'orgs', 'text'],
             action: {

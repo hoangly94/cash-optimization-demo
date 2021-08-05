@@ -10,9 +10,10 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import * as Datepicker from "~commons/datepicker";
 import * as DualTable from "~commons/dualTable";
-import { getCurrentDate } from "@utils";
+import { getCurrentDate, thousandSeparator } from "@utils";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import * as SearchDataTable from './searchDataTable';
+import { useConfirmationDialog } from '_/hooks';
 
 export type Props = Popup.Props;
 
@@ -23,13 +24,28 @@ export const Element = (props: Popup.Props) => {
 
   const selector = useSelector(state => state['pycRegistration'].creatingPopup);
   const userSelector = useSelector(state => state['auth'].user);
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_CREATING });
       // dispatch({ type: REQUEST_CREATING_CANCEL });
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống',
+        description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: REQUEST_CREATING });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['pycRegistration', 'create', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
+      });
       if (setIsShown)
         setIsShown(false)
     }
@@ -64,6 +80,7 @@ export const Element = (props: Popup.Props) => {
     <Popup.Element
       {...props}
       closePopUpCallback={() => dispatch({ type: REQUEST_CREATING_CANCEL })}
+      extractHtml={confirmationDialog}
     >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
@@ -88,6 +105,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['pycRegistration', 'creatingPopup', 'orgsRequestId'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          max={20}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
@@ -206,6 +224,8 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['pycRegistration', 'creatingPopup', 'quanlity'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
+          valueMapper={thousandSeparator}
+          max={50}
         />
         <Combox.Element
           width={Base.Width.PX_300}
@@ -407,7 +427,7 @@ const validateSpecialForm = (dispatch, selector) => {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại vàng' } });
     return false;
   }
-  if (!selector.quanlity || selector.quanlity == '0') {
+  if (!selector.quanlity) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Số lượng' } });
     return false;
   }

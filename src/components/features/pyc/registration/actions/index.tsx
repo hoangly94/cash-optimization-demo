@@ -14,6 +14,7 @@ import * as HistoryPopup from "./historyPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_QUERY, HANDLE_CONTINUE_ACTION, GET_PYC_EXCEL, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL } from '~stores/pyc/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
+import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 
@@ -24,6 +25,7 @@ export const Element = (props: Props) => {
   }, []);
   const orgsSearchingPopupSelector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   const userSelector = useSelector(state => state['auth'].user);
+  const selectedItemSelector = useSelector(state => state['registration'].selectedItem);
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -199,11 +201,15 @@ export const Element = (props: Props) => {
             <Button.Element
               {...printButtonComponentProps}
               text={'In lệnh DC HĐB'}
+              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'transfer', form: 'transfer'})}
+              isDisabled={!['Starting','Inroute','Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
             />
             <Button.Element
               {...printButtonComponentProps}
               text={'In giấy YC ĐQ'}
-            />
+              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'require', form: 'require'})}
+              isDisabled={!['Starting','Inroute','Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
+             />
             <Button.Element
               {...printButtonComponentProps}
               text={'Excel'}
@@ -219,7 +225,7 @@ export const Element = (props: Props) => {
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'create'],
         }}
         useEffect={{
-          callback: () => dispatch({ type: REQUEST_CREATING_CANCEL }),
+          callback: () => dispatch({ type: REQUEST_CREATING_CANCEL, mobile: userSelector.phone }),
         }}
       />
       <EditingPopup.Element

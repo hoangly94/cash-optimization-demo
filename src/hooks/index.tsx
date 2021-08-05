@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
+import useConfirmationDialog from './useConfirmationDialog'
 
 export const useComponentClickOutside = (initState = { isOutside: true }) => {
   const [clickData, setClickData] = useState(initState);
@@ -50,3 +51,7 @@ export const useCooke = (name: string) => {
 export const useForceRender = () => {
   return React.useState()[1].bind(null, {} as any);;
 }
+
+export {
+  useConfirmationDialog,
+};

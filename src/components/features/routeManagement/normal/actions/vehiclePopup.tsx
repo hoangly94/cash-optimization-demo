@@ -120,7 +120,7 @@ export const Element = (props: Popup.Props) => {
               }
             }}
             onClick={() => dispatch({type: SELECT_VEHICLE})}
-            isDisabled={selector.tableContent2?.length === 0}
+            // isDisabled={selector.tableContent2?.length === 0}
           />
           <Button.Element
             text='Close'

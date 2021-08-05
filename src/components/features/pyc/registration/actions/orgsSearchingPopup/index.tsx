@@ -10,6 +10,7 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_ATMCDMS, FETCH_NHNNTCTDS } from '~stores/dashboardRoot/constants';
+import { useConfirmationDialog } from '_/hooks';
 
 export type Props = Popup.Props;
 
@@ -27,14 +28,30 @@ export const Element = (props: Popup.Props) => {
 
   const selector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   const dispatch = useDispatch();
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: HANDLE_ORGSSEARCHING_UPDATE });
-      dispatch({
-        type: HANDLE_POPUP,
-        keys: ['pycRegistration', 'orgsSearching', 'isShown'],
-        value: false,
+      
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
+        description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: HANDLE_ORGSSEARCHING_UPDATE });
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+            value: false,
+          });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'orgsSearching', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
       });
       if (setIsShown)
         setIsShown(false)
@@ -44,11 +61,25 @@ export const Element = (props: Popup.Props) => {
   const handleContinueButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: HANDLE_ORGSSEARCHING_CONTINUE });
-      dispatch({
-        type: HANDLE_POPUP,
-        keys: ['pycRegistration', 'orgsSearching', 'isShown'],
-        value: false,
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký và chuyển trạng thái PYC sang trạng thái= Chờ CPD ĐVYCĐQ phê duyệt?',
+        description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: HANDLE_ORGSSEARCHING_CONTINUE });
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+            value: false,
+          });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'orgsSearching', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
       });
       if (setIsShown)
         setIsShown(false)
@@ -75,6 +106,7 @@ export const Element = (props: Popup.Props) => {
     <Popup.Element
       {...props}
       closePopUpCallback={() => dispatch({ type: REQUEST_ORGSSEARCHING_CANCEL })}
+      extractHtml={confirmationDialog}
     >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
@@ -113,7 +145,7 @@ export const Element = (props: Popup.Props) => {
           width={Base.Width.PER_70}
           border={Base.Border.SOLID}
           textAlign={Base.TextAlign.LEFT}
-          text='ĐVUQ'
+          text='ĐVĐQ'
           store={{
             textSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'orgsDestName'],
             action: {

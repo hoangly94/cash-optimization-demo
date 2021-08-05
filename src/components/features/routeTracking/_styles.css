@@ -50,3 +50,52 @@
         width:calc(100% - 200px) !important;
     }
 }
+
+
+
+@media (max-width: 768px){
+    .component{
+        text-decoration: none;
+        min-width:auto;
+        width:100%;
+        padding: 0px 18px;
+        box-sizing:border-box;
+        padding-bottom:68px;
+    }
+    .single-col{
+        &{
+            overflow: hidden;
+            width:100%;
+            display:block !important;
+        }
+        &>div{
+            margin-bottom:8px !important;
+            width:100% !important;
+        }
+        &>input{
+            width:100% !important;
+        }
+    }
+    .double-col{
+        &{
+            overflow: hidden;
+            width:100%;
+            display:block !important;
+            justify-content:space-between !important;
+            align-items: center;
+            margin-bottom:8px !important;
+        }
+        &>div{
+            display:block !important;
+            align-items: center;
+            justify-content:space-between !important;
+            width:100% !important;
+        }
+        &>div:first-child{
+            margin-bottom:8px !important;
+        }
+        &>div>*{
+            width:100%;
+        }
+    }
+}

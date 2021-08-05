@@ -11,6 +11,7 @@ import * as Table from "~commons/table";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import { getCurrentDate, getCurrentDateTime, _Date } from '~/utils';
+import { useConfirmationDialog } from '_/hooks';
 
 export type Props = Popup.Props & {
   popupType: string,
@@ -27,6 +28,7 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const approvingStatus = ['Approving_1', 'Approving_2', 'Approving_3'];
   const cancelingStatus = ['Canceling_1', 'Canceling_2', 'Canceling_3'];
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
 
   const handleSubmitButtonClick = (type) => () => {
     const isValidForm = validateForm(dispatch, popupSelector, type);
@@ -352,7 +354,7 @@ export const Element = (props: Props) => {
             />
           </Block.Element>
           <Block.Element {...inputWrapperProps}>
-            <Title.Element text='Tên CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
+            <Title.Element text='Tên CPD ĐVYCĐQ phê duyệt hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
               defaultValue={popupSelector.cpdDvycdqName}
@@ -360,7 +362,7 @@ export const Element = (props: Props) => {
             />
           </Block.Element>
           <Block.Element {...inputWrapperProps}>
-            <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
+            <Title.Element text='Thời điểm CPD ĐVYCĐQ phê duyệt hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
               defaultValue={_Date.getDateTime(popupSelector.cpdDvycdqDate)}
@@ -368,7 +370,7 @@ export const Element = (props: Props) => {
             />
           </Block.Element>
           <Block.Element {...inputWrapperProps}>
-            <Title.Element text='Tên TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
+            <Title.Element text='Tên TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
               defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckName}
@@ -376,7 +378,7 @@ export const Element = (props: Props) => {
             />
           </Block.Element>
           <Block.Element {...inputWrapperProps}>
-            <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
+            <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
               defaultValue={_Date.getDateTime(popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate)}
@@ -407,6 +409,19 @@ export const Element = (props: Props) => {
               isDisabled={true}
             />
           </Block.Element>
+
+          <Block.Element {...inputWrapperProps}>
+            <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVYCĐQ' {...inputTitleProps} />
+            <Input.Element
+              {...inputProps}
+              placeholder='Lý do từ chối phê duyệt của CPD ĐVYCĐQ'
+              store={{
+                selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
+                reducerType: CHANGE_EDITING_INPUT,
+              }}
+              max={200}
+            />
+          </Block.Element>
         </>)
 
       if (popupType === 'validate2')
@@ -427,6 +442,19 @@ export const Element = (props: Props) => {
               isDisabled={true}
             />
           </Block.Element>
+
+          <Block.Element {...inputWrapperProps}>
+            <Title.Element text='Lý do từ chối kiểm soát của TQ ĐVĐQ' {...inputTitleProps} />
+            <Input.Element
+              {...inputProps}
+              placeholder='Lý do từ chối kiểm soát của TQ ĐVĐQ'
+              store={{
+                selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
+                reducerType: CHANGE_EDITING_INPUT,
+              }}
+              max={200}
+            />
+          </Block.Element>
         </>)
 
       if (popupType === 'validate3')
@@ -445,6 +473,19 @@ export const Element = (props: Props) => {
               {...inputProps}
               defaultValue={getCurrentDateTime()}
               isDisabled={true}
+            />
+          </Block.Element>
+
+          <Block.Element {...inputWrapperProps}>
+            <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVĐQ' {...inputTitleProps} />
+            <Input.Element
+              {...inputProps}
+              placeholder='Lý do từ chối phê duyệt của CPD ĐVĐQ'
+              store={{
+                selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
+                reducerType: CHANGE_EDITING_INPUT,
+              }}
+              max={200}
             />
           </Block.Element>
         </>)
@@ -468,6 +509,19 @@ export const Element = (props: Props) => {
               isDisabled={true}
             />
           </Block.Element>
+
+          <Block.Element {...inputWrapperProps}>
+            <Title.Element text='Lý do từ chối phê duyệt hủy của CPD ĐVYCĐQ' {...inputTitleProps} />
+            <Input.Element
+              {...inputProps}
+              placeholder='Lý do từ chối phê duyệt hủy của CPD ĐVYCĐQ'
+              store={{
+                selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
+                reducerType: CHANGE_EDITING_INPUT,
+              }}
+              max={200}
+            />
+          </Block.Element>
         </>)
 
       if (popupType === 'validate2')
@@ -488,6 +542,19 @@ export const Element = (props: Props) => {
               isDisabled={true}
             />
           </Block.Element>
+
+          <Block.Element {...inputWrapperProps}>
+            <Title.Element text='Lý do từ chối kiểm soát hủy của TQ ĐVĐQ' {...inputTitleProps} />
+            <Input.Element
+              {...inputProps}
+              placeholder='Lý do từ chối kiểm soát hủy của TQ ĐVĐQ'
+              store={{
+                selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
+                reducerType: CHANGE_EDITING_INPUT,
+              }}
+              max={200}
+            />
+          </Block.Element>
         </>)
 
       if (popupType === 'validate3')
@@ -506,6 +573,19 @@ export const Element = (props: Props) => {
               {...inputProps}
               defaultValue={getCurrentDateTime()}
               isDisabled={true}
+            />
+          </Block.Element>
+
+          <Block.Element {...inputWrapperProps}>
+            <Title.Element text='Lý do từ chối phê duyệt hủy của CPD ĐVĐQ' {...inputTitleProps} />
+            <Input.Element
+              {...inputProps}
+              placeholder='Lý do từ chối phê duyệt hủy của CPD ĐVĐQ'
+              store={{
+                selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
+                reducerType: CHANGE_EDITING_INPUT,
+              }}
+              max={200}
             />
           </Block.Element>
         </>)
@@ -549,6 +629,7 @@ export const Element = (props: Props) => {
       closePopUpCallback={() => {
         dispatch({ type: REQUEST_EDITING_CANCEL });
       }}
+      extractHtml={confirmationDialog}
     >
       <Title.Element
         tagType={Title.TagType.H3}
@@ -693,19 +774,6 @@ export const Element = (props: Props) => {
 
 
 
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVYCĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          placeholder='Lý do từ chối phê duyệt của CPD ĐVYCĐQ'
-          store={{
-            selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
-            reducerType: CHANGE_EDITING_INPUT,
-          }}
-          max={200}
-        />
-      </Block.Element>
-
 
       <Block.Element
         {...actionsWrapperProps}
@@ -783,7 +851,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
       ],
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 

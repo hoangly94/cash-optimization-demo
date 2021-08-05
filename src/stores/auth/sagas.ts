@@ -31,7 +31,8 @@ function* fetchUserSaga() {
     const responseData = yield call(getUser, Config.url + '/api/cashoptimization/user/getInfoAccount');
     
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        yield document.cookie = `accessToken=;`;  
+        // yield document.cookie = `accessToken=;`;  
+        // yield window.location.href='/login';  
         return ;
     }
     yield put({ type: UPDATE_USER, data: responseData?.data?.data });

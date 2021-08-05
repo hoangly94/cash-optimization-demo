@@ -12,6 +12,7 @@ import { HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, REQUEST_QUERY } from '~stores/authority/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/authority/registration/constants';
+import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 
@@ -22,7 +23,7 @@ export const Element = (props: Props) => {
   }, []);
   const userSelector = useSelector(state => state['auth'].user);
   const selectedItemSelector = useSelector(state => state['registration'].selectedItem);
-  
+
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -153,11 +154,11 @@ export const Element = (props: Props) => {
           >
             <Button.Element
               {...printButtonComponentProps}
-            // store={{
-            //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-            // }}
-            // onClick={() => dispatch({ type: HANDLE_CONTINUE_ACTION })}
-
+              // store={{
+              //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+              // }}
+              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'authority', form: 'authority'})}
+              isDisabled={selectedItemSelector.authorityStatus !== 'Approved_A'}
             />
             <Button.Element
               {...deleteButtonComponentProps}

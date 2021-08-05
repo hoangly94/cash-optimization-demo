@@ -10,6 +10,7 @@ import * as Pagination from "~commons/pagination";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 import { REQUEST_QUERY } from '_/stores/routeManagement/normal/constants';
 import { _Date } from '_/utils';
+import moment from 'moment';
 
 export type Props = Popup.Props;
 
@@ -219,7 +220,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.index || index + 1,
     },
     {
-      children: item.createddate.split('-').join('/'),
+      children:item.createddate &&  moment(item.createddate, 'DD-MM-YYYY').format('DD/MM/YYYY'),
     },
     {
       children: item.routeId,
@@ -240,10 +241,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.tqDltltName,
     },
     {
-      children: _Date.getDateTime(item.startTime),
+      children: item.startTime && moment(item.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     },
     {
-      children: _Date.getDate(item.updateddate),
+      children: item.updateddate && moment(item.updateddate, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     },
   ]
 })

@@ -76,7 +76,6 @@ export const Element = (props: Popup.Props) => {
           valueType={Input.ValueType.NUMBER}
           placeholder=''
           {...inputProps}
-          {...inputProps}
           defaultValue={popupSelector.id}
           isDisabled={true}
         />

@@ -33,8 +33,14 @@ import * as RouteManagementNormal from '~features/routeManagement/normal';
 import * as RouteManagementUrgent from '~features/routeManagement/normal/urgent';
 import * as RouteTrackingCar1 from '~features/routeTracking/car1';
 import * as RouteTrackingCar2 from '~features/routeTracking/car2';
+import * as Block from '~commons/block';
+import * as Logo from "~commons/logo";
+import * as Button from "~commons/button";
+import styles from './_styles.css'
+import Bars from '~svg/bars';
 import { FETCH_ROLES, FETCH_USER } from '~/stores/auth/constants';
 import { useCooke } from '~/hooks';
+import classNames from 'classnames';
 
 export type Props = {
 }
@@ -42,12 +48,16 @@ export type Props = {
 export const Element = (props: Props) => {
     const {
     } = props;
-    const { cookie: accessToken } = useCooke('accessToken');
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch({ type: FETCH_CONFIG });
-        dispatch({ type: FETCH_USER });
-        dispatch({ type: FETCH_ROLES });
+        if (window.location.pathname != '/login') {
+            dispatch({ type: FETCH_CONFIG });
+            dispatch({ type: FETCH_USER });
+            dispatch({ type: FETCH_ROLES });
+        }
+        else {
+            document.cookie = `accessToken=;`;
+        }
         // dispatch({ type: FETCH_AREAS });
         // dispatch({ type: FETCH_ORGS });
         // dispatch({ type: FETCH_FUNCTIONS });
@@ -55,6 +65,7 @@ export const Element = (props: Props) => {
         // dispatch({ type: FETCH_TITLE });
         // dispatch({ type: FETCH_REGIONS });
     }, []);
+    const { cookie: accessToken } = useCooke('accessToken');
     const userSelector = useSelector(state => state['auth'].user);
     const isAuthenticated = userSelector.isAuthenticated || accessToken;
     return (
@@ -87,6 +98,70 @@ const DashboardComponent = (userSelector) => () => {
         // },
         mapper: breadcrumbsMapper,
     };
+
+    const logoutProps = {
+        classNames: classNames(
+            styles['logout'],
+        ),
+        text: 'Logout',
+        width: Base.Width.PX_80,
+        borderRadius: Base.BorderRadius.PX_3,
+        onClick: () => window.location.href = '/login',
+        size: Button.Size.S,
+    }
+
+    if (window.screen.width < 768) {
+        return (
+            <Block.Element
+                classNames={classNames(
+                    styles['mobile'],
+                )}
+            >
+                <Block.Element
+                    classNames={classNames(
+                        styles['mobile-header'],
+                    )}
+                >
+                    <Logo.Element />
+                    <Button.Element {...logoutProps} />
+                </Block.Element>
+                <Block.Element
+                    flex={Base.Flex.BETWEEN}
+                    style={{
+                        marginTop: '48px',
+                        padding: '18px',
+                    }}
+
+                >
+                    <Button.Element
+                        text='PTVC là xe chuyên dụng'
+                        width={Base.Width.PER_50}
+                        margin={Base.MarginRight.PX_5}
+                        backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+                        color={Base.Color.WHITE}
+                        borderRadius={Base.BorderRadius.PX_3}
+                        href='/route-tracking/car1'
+                    />
+                    <Button.Element
+                        text='PTVC KHÁC xe chuyên dụng'
+                        width={Base.Width.PER_50}
+                        margin={Base.MarginLeft.PX_5}
+                        backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+                        color={Base.Color.WHITE}
+                        borderRadius={Base.BorderRadius.PX_3}
+                        href='/route-tracking/car2'
+                    />
+                </Block.Element>
+
+                <Switch>
+                    <Route exact path="/">
+                    </Route>
+                    <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRole='11B' roles={userSelector.viewList} />
+                    <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRole='11B' roles={userSelector.viewList} />
+                </Switch>
+            </Block.Element>
+        )
+    }
     return (
         <>
             <DashboardMenu.Element {...dashboardMenuProps} roleCodeList={userSelector.viewList} />
@@ -175,7 +250,7 @@ const breadcrumbsMapper = {
         'car2': { _url: '/route-tracking/car2', _name: 'PTVC KHÁC xe chuyên dùng', },
     },
 }
-                    
+
 const dashboardMenuProps: DashboardMenu.Props = {
     $menu: {
         $links: [

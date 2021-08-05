@@ -133,6 +133,7 @@ export const Element = (props: Props) => {
             <Link.Element
               text='Register'
               url='/register'
+              margin={Base.MarginRight.PX_8}
             />
           </Block.Element>
           <Button.Element

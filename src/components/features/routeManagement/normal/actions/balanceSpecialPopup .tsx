@@ -7,6 +7,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 import { FETCH_BALANCE_SPECIAL } from '_/stores/routeManagement/normal/constants';
+import { thousandSeparator } from '_/utils';
 
 export type Props = Popup.Props & {
   selector?: any,
@@ -123,13 +124,13 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.index || index + 1,
     },
     {
-      children: item.currencyType
+      children: item.currencytype
     },
     {
-      children: item.goldType
+      children: item.goldtype
     },
     {
-      children: item.quanlity
+      children: thousandSeparator(item.quanlity)
     },
     {
       children: item.attribute

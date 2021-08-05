@@ -7,6 +7,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
+import { thousandSeparator } from '_/utils';
 
 export type Props = Popup.Props & {
   selector?: any,
@@ -129,7 +130,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.goldType
     },
     {
-      children: item.quanlity
+      children: thousandSeparator(item.quanlity)
     },
     {
       children: item.attribute

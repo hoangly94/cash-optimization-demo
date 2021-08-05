@@ -1,7 +1,20 @@
 
+
 .component{
     margin:auto;
     box-sizing:border-box;
     padding: 28px 68px 28px 288px;
     min-width:800px;
+}
+
+@media (max-width: 768px){
+    .component{
+        text-decoration: none;
+        min-width:auto;
+        width:100%;
+        padding: 0px 18px;
+    }
+}
+.map{
+    width:200px;
 }

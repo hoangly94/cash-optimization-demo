@@ -80,6 +80,7 @@ export default (state: State = initState, action) => {
                 ...state,
                 creatingPopup: {
                     ...getDefaultPopupActions(),
+                    orgsHolderMobile: action.mobile,
                 },
             }
         case DONE_CREATING:
@@ -272,7 +273,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 selectedOrgs: {
-                    searchOrgsType:action.searchOrgsType,
+                    searchOrgsType: action.searchOrgsType,
                     orgsName: action.data.orgsName,
                     orgsCode: action.data.orgsCode,
                 },
@@ -500,7 +501,7 @@ export default (state: State = initState, action) => {
                             type: popupTypeData.type?.value,
                             currencyType: popupTypeData.currencyType?.value,
                             goldType: popupTypeData.goldType?.value,
-                            quanlity: popupTypeData.quanlity,
+                            quanlity: popupTypeData.quanlity?.toString().replaceAll(',', ''),
                             attribute: popupTypeData.attribute?.value,
                         },
                     ],
@@ -757,7 +758,7 @@ const preprocessQueryResult = (data, index) => ({
     ...data,
     key: data.id ?? index,
     createddate: getCurrentDate(data.createddate),
-    updateddate: getCurrentDateTime(data.updateddate),
+    updateddate: data.updateddate,
     atmCdm: {
         text: data.cashOptimizationOrgsDetailModel?.atmCdmName || 'Tên ATM',
         value: data.cashOptimizationOrgsDetailModel?.atmCdmCode,

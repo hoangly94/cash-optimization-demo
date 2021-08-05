@@ -16,8 +16,7 @@ export const Element = (props: Props) => {
   const type = 'component';
   const userSelector = useSelector(state => state['auth'].user);
   useEffect(() => {
-    dispatch({ type: RESET_FILTER_REGISTRATION, user: userSelector });
-    dispatch({ type: REQUEST_QUERY });
+    // dispatch({ type: REQUEST_QUERY });
   });
 
   const dispatch = useDispatch();

@@ -240,22 +240,6 @@ export const Element = (props: Popup.Props) => {
         }}
       />
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
         <Title.Element text='Tên CPD ĐVYCĐQ phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
@@ -272,13 +256,31 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do từ chối DVYCDQ' {...inputTitleProps} />
+        <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           defaultValue={popupSelector.cpdDvycdqReason}
           isDisabled={true}
         />
       </Block.Element>
+
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
+        <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
+        <Input.Element
+          {...inputProps}
+          defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+          isDisabled={true}
+        />
+      </Block.Element>
+
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Tên TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
         <Input.Element
@@ -296,7 +298,7 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do từ chối TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
+        <Title.Element text='Lý do từ chối kiểm soát của TQ ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqCheckReason}
@@ -320,7 +322,7 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Lý do từ chối CPD ĐVĐQ' {...inputTitleProps} />
+        <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.cpdDvdqReason}
@@ -381,7 +383,7 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps} margin={Base.MarginBottom.PX_38}>
-        <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVYCĐQ' {...inputTitleProps} />
+        <Title.Element text='Lý do từ chối phê duyệt hủy của CPD ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           defaultValue={popupSelector.cpdDvycdqCancelReason}

@@ -10,6 +10,8 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import * as SearchDataTable from './searchDataTable';
+import { thousandSeparator } from '_/utils';
+import { useConfirmationDialog } from '_/hooks';
 
 export type Props = Popup.Props;
 
@@ -21,12 +23,32 @@ export const Element = (props: Popup.Props) => {
   const selector = useSelector(state => state['pycRegistration'].editingPopup);
   const dispatch = useDispatch();
 
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
 
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_EDITING });
-      dispatch({ type: REQUEST_EDITING_CANCEL });
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
+        description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: REQUEST_EDITING });
+          dispatch({ type: REQUEST_EDITING_CANCEL });
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+            value: false,
+          });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'orgsSearching', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
+      });
       if (setIsShown)
         setIsShown(false)
     }
@@ -36,7 +58,21 @@ export const Element = (props: Popup.Props) => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
       // dispatch({ type: REQUEST_EDITING });
-      dispatch({ type: HANDLE_CONTINUE_ACTION });
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký và chuyển trạng thái PYC sang trạng thái= Searching ?',
+        description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: HANDLE_CONTINUE_ACTION });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'orgsSearching', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
+      });
       if (setIsShown)
         setIsShown(false)
     }
@@ -68,6 +104,7 @@ export const Element = (props: Popup.Props) => {
     <Popup.Element
       {...props}
       closePopUpCallback={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+      extractHtml={confirmationDialog}
     >
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
@@ -78,6 +115,18 @@ export const Element = (props: Popup.Props) => {
           isDisabled={true}
           store={{
             selectorKeys: ['pycRegistration', 'editingPopup', 'id'],
+            reducerType: '',
+          }}
+        />
+      </Block.Element>
+      <Block.Element {...inputWrapperProps}>
+        <Title.Element text='Trạng thái PYC' {...inputTitleProps} />
+        <Input.Element
+          placeholder=''
+          {...inputProps}
+          isDisabled={true}
+          store={{
+            selectorKeys: ['pycRegistration', 'editingPopup', 'cashOptimizationStatus'],
             reducerType: '',
           }}
         />
@@ -208,6 +257,8 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['pycRegistration', 'editingPopup', 'quanlity'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
+          valueMapper={thousandSeparator}
+          max={50}
         />
         <Combox.Element
           width={Base.Width.PX_300}
@@ -416,7 +467,7 @@ const validateSpecialForm = (dispatch, selector) => {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Loại vàng' } });
     return false;
   }
-  if (!selector.quanlity || selector.quanlity == '0') {
+  if (!selector.quanlity) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Số lượng' } });
     return false;
   }

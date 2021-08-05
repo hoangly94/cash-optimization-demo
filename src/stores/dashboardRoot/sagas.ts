@@ -1,7 +1,9 @@
 import axios from '~utils/axios';
-import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects';
-import { FETCH_CONFIG, UPDATE_CONFIG, FETCH_AREAS, FETCH_ORGS, UPDATE_AREAS, UPDATE_ORGS, FETCH_FUNCTIONS, FETCH_PERS,UPDATE_PERS, UPDATE_FUNCTIONS, FETCH_REGIONS, UPDATE_REGIONS, UPDATE_TITLES, FETCH_TITLES, FETCH_CURRENCIES, FETCH_PRIORITIES, UPDATE_CURRENCIES, UPDATE_PRIORITIES, FETCH_ATMCDMS, FETCH_NHNNTCTDS, UPDATE_ATMCDMS, UPDATE_NHNNTCTDS } from './constants';
+import Axios from 'axios';
+import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { FETCH_CONFIG, UPDATE_CONFIG, FETCH_AREAS, FETCH_ORGS, UPDATE_AREAS, UPDATE_ORGS, FETCH_FUNCTIONS, FETCH_PERS, UPDATE_PERS, UPDATE_FUNCTIONS, FETCH_REGIONS, UPDATE_REGIONS, UPDATE_TITLES, FETCH_TITLES, FETCH_CURRENCIES, FETCH_PRIORITIES, UPDATE_CURRENCIES, UPDATE_PRIORITIES, FETCH_ATMCDMS, FETCH_NHNNTCTDS, UPDATE_ATMCDMS, UPDATE_NHNNTCTDS, REPORT_PRINT } from './constants';
 import Config from '@config';
+import FileSaver from 'file-saver';
 
 function* saga() {
     yield all([
@@ -16,13 +18,14 @@ function* saga() {
         takeEvery(FETCH_REGIONS, fetchRegion),
         takeEvery(FETCH_CURRENCIES, fetchCurrencies),
         takeEvery(FETCH_PRIORITIES, fetchPriorities),
+        takeEvery(REPORT_PRINT, reportPrintSaga),
     ]);
 }
 
 function* fetchConfig() {
     const path = '/api/cashoptimization/findConfig';
     const postData = {
-        size:0,
+        size: 0,
     }
     const responseData = yield call(callApi, path, postData);
     yield put({ type: UPDATE_CONFIG, data: responseData?.data?.data });
@@ -34,7 +37,7 @@ function* fetchAreas() {
     const postData = {
         data: {
             areaCode: 0,
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -47,7 +50,7 @@ function* fetchOrgs() {
         data: {
             areaCode: 0,
             orgsCode: 0,
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -59,7 +62,7 @@ function* fetchAtmCdms() {
     const postData = {
         data: {
             orgsId: 0,
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -73,7 +76,7 @@ function* fetchNhnnTctds() {
         data: {
             nnhnTctdCode: 0,
             orgsId: 0,
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -85,7 +88,7 @@ function* fetchFunctions() {
     const postData = {
         data: {
             functionCode: 0,
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -98,7 +101,7 @@ function* fetchPers() {
         data: {
             persCode: 0,
             orgsId: 0,
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -111,7 +114,7 @@ function* fetchTitle() {
         data: {
             atmStatus: '',
             orgsId: 0,
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -124,7 +127,7 @@ function* fetchRegion() {
         data: {
             atmStatus: '',
             orgsId: 0,
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -136,7 +139,7 @@ function* fetchCurrencies() {
     const path = '/api/cashoptimization/findCategoryCurrency';
     const postData = {
         data: {
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -146,7 +149,7 @@ function* fetchPriorities() {
     const path = '/api/cashoptimization/findCategoryPriorityLevel';
     const postData = {
         data: {
-            size:0,
+            size: 0,
         },
     }
     const responseData = yield call(callApi, path, postData);
@@ -158,5 +161,30 @@ const callApi = (path, postData?) => {
         .catch(error => console.log(error));
 }
 
+
+function* reportPrintSaga(action?) {
+    const state = yield select();
+        const data = action?.reportName === 'authority' ?
+        state.registration.selectedItem : state.pycRegistration.selectedItem;
+    const fileName = action?.reportName === 'authority' ?
+        'Giay_YC_DieuQuy' : 'Lenh_DC_HDB';
+    yield call(reportPrint, data, fileName, action?.reportName, action?.form);
+}
+
+function reportPrint(data, fileName, reportName, form) {
+    const postData = {
+        data: {
+            id: data.id,
+            reportName,
+            form,
+            type: "pdf",
+        }
+    }
+    return Axios.post(Config.url + '/api/cashoptimization/report/print', postData, { responseType: 'arraybuffer' })
+        .then((response) => {
+            var blob = new Blob([response.data], { type: 'application/pdf' });
+            FileSaver.saveAs(blob, fileName+'.pdf');
+        });
+}
 
 export default saga;

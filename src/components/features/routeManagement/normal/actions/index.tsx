@@ -32,12 +32,12 @@ export const Element = (props: Props) => {
   }, []);
   const viewSelector = useSelector(state => state['routeManagement'].view);
   const userSelector = useSelector(state => state['auth'].user);
+
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
     ...props,
   };
-
   const creatingButtonComponentProps: Button.Props = {
     ...buttonProps,
     text: 'Create',
@@ -132,7 +132,7 @@ export const Element = (props: Props) => {
                   popupType: 2,
                 }
               }}
-              isDisabled={!userSelector.viewList.includes('6')}
+              isDisabled={!(userSelector.viewList.includes('7') && viewSelector?.routeStatus === 'Originating_R')}
               onClick={()=>dispatch({type: REQUEST_EDITING_CANCEL})}
             />
             <Button.Element
@@ -146,7 +146,7 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
-              isDisabled={!userSelector.viewList.includes('64')}
+              isDisabled={!(userSelector.viewList.includes('7') && !(viewSelector?.routeStatus === 'Finished'))}
             />
             <Button.Element
               {...buttonProps}

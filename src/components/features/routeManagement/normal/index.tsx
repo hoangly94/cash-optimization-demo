@@ -6,7 +6,7 @@ import * as Block from "~commons/block";
 import * as SearchFilter from "./searchFilter";
 import * as SearchDataTable from "./searchDataTable";
 import * as Actions from "./actions";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FETCH_CONFIG, FETCH_CURRENCIES, FETCH_ORGS, FETCH_PRIORITIES } from '~/stores/dashboardRoot/constants';
 import { REQUEST_QUERY, RESET_FILTER, FETCH_ORGS_CHILDREN, FETCH_PYC } from '~stores/routeManagement/normal/constants';
 
@@ -14,10 +14,11 @@ export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const type = 'component';
+  const userSelector = useSelector(state => state['auth'].user);
   useLayoutEffect(() => {
     dispatch({ type: FETCH_PYC });
     dispatch({ type: FETCH_ORGS_CHILDREN });
-    dispatch({ type: RESET_FILTER });
+    dispatch({ type: RESET_FILTER, user: userSelector });
     // dispatch({ type: REQUEST_QUERY });
   });
 

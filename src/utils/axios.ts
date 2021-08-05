@@ -25,6 +25,9 @@ instance.interceptors.request.use((config) => {
 instance.interceptors.response.use((response) => {
     return response;
 }, (error) => {
+    if (!error.response) {
+        window.location.href = '/login';
+    }
     return Promise.reject(error);
 });
 

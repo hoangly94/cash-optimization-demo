@@ -12,6 +12,7 @@ import * as Combox from "~commons/combox";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import { getCurrentDate, getCurrentDateTime } from '~/utils';
+import { useConfirmationDialog } from '_/hooks';
 
 export const Element = (props: Popup.Props) => {
   const {
@@ -22,11 +23,31 @@ export const Element = (props: Popup.Props) => {
   const popupSelector = useSelector(state => state['pycRegistration'].editingPopup);
   const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
-
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
+  
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, popupSelector);
     if (isValidForm) {
-      dispatch({ type: REQUEST_DELETE });
+      setConfirmationDialog({
+        title: 'Bạn muốn HỦY PYC ?',
+        description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: REQUEST_DELETE });
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+            value: false,
+          });
+        },
+        onDismissClick: () => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'orgsSearching', 'isShown'],
+            value: false,
+          })
+        },
+        isShown: true,
+      });
       if (setIsShown)
         setIsShown(false)
     }
@@ -57,7 +78,8 @@ export const Element = (props: Popup.Props) => {
   }
 
   return (
-    <Popup.Element {...props}>
+    <Popup.Element {...props}
+    extractHtml={confirmationDialog}>
       <Title.Element
         tagType={Title.TagType.H3}
         text='Thông tin'
@@ -221,7 +243,7 @@ export const Element = (props: Popup.Props) => {
 
       <Block.Element {...inputWrapperProps} flex={Base.Flex.START}>
         <Title.Element
-          text='Đối tượng điều quỹ'
+          text='Lý do Hủy'
           {...inputTitleProps}
           width={Base.Width.PER_30}
         />

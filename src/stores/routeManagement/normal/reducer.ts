@@ -1,4 +1,4 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_SEARCHVEHICLEPERS, CHANGE_VEHICLE_INPUT, CHANGE_PERS_INPUT, UPDATE_VEHICLE_DATA, SELECT_VEHICLE, UPDATE_PERS_DATA, SELECT_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, UPDATE_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, UPDATE_ORGANIZING_STOP_POINT, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_CANCEL, UPDATE_ORGANIZING_INSERT, SELECT_ROUTE_ROW, UPDATE_ORGANIZING_DISTANCE, UPDATE_MAP, UPDATE_BALANCE_SPECIAL, SEARCHORGS_SELECT_UPDATE, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_SEARCHVEHICLEPERS, CHANGE_VEHICLE_INPUT, CHANGE_PERS_INPUT, UPDATE_VEHICLE_DATA, SELECT_VEHICLE, UPDATE_PERS_DATA, SELECT_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, UPDATE_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, UPDATE_ORGANIZING_STOP_POINT, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_CANCEL, UPDATE_ORGANIZING_INSERT, SELECT_ROUTE_ROW, UPDATE_ORGANIZING_DISTANCE, UPDATE_MAP, UPDATE_BALANCE_SPECIAL, SEARCHORGS_SELECT_UPDATE, UPDATE_BALANCE_SPECIAL_TOTAL, SELECT_SPECIAL_ROW_TOTAL, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
@@ -9,7 +9,6 @@ import Config from '@config';
 import { ItemChildrenType } from '_/components/commons/list';
 const initState: State = {
     history: [],
-    pycTypes: [],
     pycModels: [],
     pycPlaceReceives: [],
     filters: {
@@ -64,6 +63,12 @@ const initState: State = {
     vehicleComboxFilter: getDefaultVehicleComboxFilter(),
     persComboxFilter: getDefaultPersComboxFilter(),
     organizingPopup: getDefaultOrganizingPopup(),
+    pycTypes: [
+        {
+            name: 'Nhận quỹ ĐVTLT',
+            value: 'Nhận quỹ ĐVTLT',
+        }
+    ]
 }
 
 function getDefaultObjectTypes() {
@@ -125,6 +130,7 @@ export default (state: State = initState, action) => {
             return state
         case UPDATE_DATA:
             const data = action.data?.data ? action.data.data?.map(preprocessQueryResult(state)) : [];
+
             return {
                 ...state,
                 isLoading: false,
@@ -196,7 +202,7 @@ export default (state: State = initState, action) => {
             }
         case UPDATE_HISTORY:
             const historyData = action.data?.data ? action.data.data?.map(preprocessQueryResult(state)) : [];
-            console.log(action);
+
             return {
                 ...state,
                 isLoading: false,
@@ -373,6 +379,7 @@ export default (state: State = initState, action) => {
             }
 
         case SELECT_DUALTABLE_CONTENT_ROW:
+            console.log(action)
             const tableType = `tableContent${action.tableType}`;
             const selectDuableTableRowData = (() => {
                 if (state.popupType === 1)
@@ -464,7 +471,16 @@ export default (state: State = initState, action) => {
         case RESET_FILTER:
             return {
                 ...state,
-                filters: getDefaultFilters(),
+                filters: {
+                    ...getDefaultFilters(),
+                    orgs: {
+                        text: action.user?.orgsName,
+                        value: action.user?.orgsCode,
+                    },
+                },
+                queryResult: {
+                    total: 0,
+                },
             }
         case HANDLE_POPUP:
             return {
@@ -500,12 +516,19 @@ export default (state: State = initState, action) => {
                     ...item,
                     key: item.id,
                 })),
+                routeDetailHdbTemp: action.data?.routeDetailHdbTemp?.map((item) => ({
+                    ...item,
+                    key: item.id,
+                })),
                 routeDetailOganize: action.data?.routeDetailOganize?.map((item) => ({
                     ...item,
                     key: item.id,
                 })).sort((p, n) => +!n.order - +!(p.order) || n?.order - p?.order),
+                routeDetailOganizeTemp: action.data?.routeDetailOganizeTemp?.map((item) => ({
+                    ...item,
+                    key: item.id,
+                })).sort((p, n) => +!n.order - +!(p.order) || n?.order - p?.order),
             };
-
             return {
                 ...state,
                 selectedItem: newData,
@@ -599,7 +622,10 @@ export default (state: State = initState, action) => {
                 editingPopup: {
                     ...action.data,
                     ...state.editingPopup,
-                    tableContent2: pycData,
+                    tableContent1: pycData?.filter(item1 =>
+                        state.editingPopup.tableContent2?.filter(item2 => item2.id == item1.id).length == 0)
+                        .map(item => ({ ...item, key: item.id })).map(item => ({ ...item, key: item.key })),
+
                 },
                 pyc: pycData,
             }
@@ -658,6 +684,7 @@ export default (state: State = initState, action) => {
                 },
             }
         case UPDATE_ORGANIZING:
+            const routeDetailHdbGroupIdList = state.organizingPopup.routeDetailOganizeTemp.map(item => item.routeDetailHdbGroupId || undefined);
             return {
                 ...state,
                 organizingPopup: {
@@ -667,6 +694,14 @@ export default (state: State = initState, action) => {
                     routeDetailPers: action.data?.data?.routeDetailPers,
                     routeCashOptimization: action.data?.data?.routeCashOptimization,
                     categoryOrgs: action.data?.data?.categoryOrgs,
+                    routeDetailOganizeTemp: action.data?.data?.routeDetailOganizeTemp?.map((item) => ({
+                        ...item,
+                        key: item.id,
+                    })).sort((p, n) => +!p.order - +!(n.order) || p?.order - n?.order),
+                    routeDetailHdbTemp2: state.organizingPopup['routeDetailHdbTemp']?.filter(item=>
+                        {
+                            return !routeDetailHdbGroupIdList.includes(item.groupId)}
+                        ),
                 },
             }
         case REQUEST_ORGANIZING_CHECK_STOP_POINT:
@@ -676,7 +711,9 @@ export default (state: State = initState, action) => {
                     ...state.organizingPopup,
                     ...getDefaultOrganizingPopup(),
                     stopPointType: action.data,
-                    routeDetailOganize: state.organizingPopup.routeDetailOganize,
+                    routeDetailOganizeTemp: state.organizingPopup.routeDetailOganizeTemp,
+                    selectedRouteDetailOganize: {},
+
                 },
             }
         case UPDATE_ORGANIZING_STOP_POINT:
@@ -687,7 +724,7 @@ export default (state: State = initState, action) => {
                     ...action.data?.data,
                     id: state.organizingPopup['id'],
                     stopPointType: state.organizingPopup.stopPointType,
-                    routeDetailOganize: state.organizingPopup.routeDetailOganize,
+                    routeDetailOganizeTemp: state.organizingPopup.routeDetailOganizeTemp,
                 },
             }
         case SELECT_ROW_DESTINATION_POINT:
@@ -792,13 +829,23 @@ export default (state: State = initState, action) => {
                     cashOptimizatioDetailModelList: state.organizingPopup.cashOptimizatioDetailModelList?.map(mapToNewQueryResult(action.data))
                 }
             }
+        case SELECT_SPECIAL_ROW_TOTAL:
+            return {
+                ...state,
+                organizingPopup: {
+                    ...state.organizingPopup,
+                    selectedSpecial: action.data,
+                    routeDetailHdbTemp: state.organizingPopup['routeDetailHdbTemp']?.map(mapToNewQueryResult(action.data))
+                }
+            }
         case SELECT_ROUTE_ROW:
             return {
                 ...state,
                 organizingPopup: {
                     ...state.organizingPopup,
                     selectedRouteDetailOganize: action.data,
-                    routeDetailOganize: state.organizingPopup.routeDetailOganize?.map(mapToNewQueryResult(action.data))
+                    routeDetailHdbTemp2: state.organizingPopup['routeDetailHdbTemp']?.filter(item => item.groupId === action.data.routeDetailHdbGroupId),
+                    routeDetailOganizeTemp: state.organizingPopup.routeDetailOganizeTemp?.map(mapToNewQueryResult(action.data)).sort((p, n) => +!p.order - +!(n.order) || p?.order - n?.order)
                 }
             }
         case REQUEST_ORGANIZING_CANCEL:
@@ -811,12 +858,12 @@ export default (state: State = initState, action) => {
             }
         case UPDATE_ORGANIZING_INSERT:
             const selectedRouteDetailOganizeOrder = state.organizingPopup['selectedRouteDetailOganize']?.order;
-            if(state.organizingPopup['selectedRouteDetailOganize']){
+            if (state.organizingPopup['selectedRouteDetailOganize']) {
                 if (action.buttonType === 'UP' && selectedRouteDetailOganizeOrder > 1) {
-                    state.organizingPopup['selectedRouteDetailOganize'].order-=1;
+                    state.organizingPopup['selectedRouteDetailOganize'].order -= 1;
                 }
                 if (action.buttonType === 'DOWN' && selectedRouteDetailOganizeOrder < state.organizingPopup['routeDetailOganize']?.length) {
-                    state.organizingPopup['selectedRouteDetailOganize'].order+=1;
+                    state.organizingPopup['selectedRouteDetailOganize'].order += 1;
                 }
             }
             return {
@@ -845,6 +892,11 @@ export default (state: State = initState, action) => {
                 mapHtml: action.data,
             }
         case UPDATE_BALANCE_SPECIAL:
+            return {
+                ...state,
+                balanceSpecial: action.data?.data,
+            }
+        case UPDATE_BALANCE_SPECIAL_TOTAL:
             return {
                 ...state,
                 balanceSpecial: action.data?.data,
@@ -898,6 +950,7 @@ function getDefaultOrganizingPopup() {
             value: '',
         },
         routeDetailOganize: [],
+        routeDetailOganizeTemp: [],
         departurePointName: '',
         departurePointAddress: '',
         destinationPointName: '',
@@ -1007,19 +1060,19 @@ function getDefaultPersComboxFilter() {
 function getDefaultFilters() {
     return {
         radio: '1',
-        dateFrom: '',
-        dateTo: '',
+        dateFrom: moment().format('DD/MM/YYYY'),
+        dateTo: moment().format('DD/MM/YYYY'),
         orgsRole: {
             text: 'Vai trò của ĐV',
             value: '',
         },
         orgs: {
-            text: 'ĐVĐQ',
+            text: '',
             value: '',
         },
         status: {
-            text: 'Trạng thái LT',
-            value: '',
+            text: 'All',
+            value: 'All',
         },
         id: '',
 
@@ -1077,11 +1130,13 @@ const preprocessQueryResult = (state) => (data, index) => ({
         data?.routeCashOptimization?.filter(item2 => item2.id == item1.id).length == 0)
         .map(item => ({ ...item, key: item.id })).map(item => ({ ...item, key: item.key })),
     tableContent2: data?.routeCashOptimization?.map(item => ({ ...item, ...item.cashOptimization, key: item.key })),
-    // routeDetailOganize: data.routeDetailOganize?.map(item=>)
+
 })
 
 const currencyTypeCheckData = (type, value) => {
     if (type === 'currencyType') {
+        console.log(value);
+        console.log(['ACB', 'XAU'].includes(value));
         if (['ACB', 'XAU'].includes(value)) {
             return {
                 isDisabledGoldTypes: false,
