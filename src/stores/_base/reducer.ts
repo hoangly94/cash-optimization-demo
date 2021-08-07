@@ -270,6 +270,11 @@ const initState: State = {
                 isLoading: false,
             },
         },
+        routeTracking:{
+            confirm:{
+                isLoading: false,
+            }
+        }
     },
     popups: {
         'orgs': {

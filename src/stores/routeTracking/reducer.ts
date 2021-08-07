@@ -1,4 +1,4 @@
-import { CHANGE_CODE_FILTER, State, UPDATE_DATA, UPDATE_MAP } from './constants'
+import { CHANGE_CODE_FILTER, State, UPDATE_DATA, UPDATE_MAP, UPDATE_TQUY } from './constants'
 import moment from 'moment';
 
 import Config from '@config';
@@ -28,6 +28,16 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 mapHtml: action.data,
+            }
+        case UPDATE_TQUY:
+            const destinationTqList = action.data?.data;
+            return {
+                ...state,
+                route: {
+                    ...state.route,
+                    destinationTq: destinationTqList && destinationTqList[Math.floor(Math.random() * destinationTqList.length)],
+                    destinationTqList,
+                },
             }
         default:
             return state

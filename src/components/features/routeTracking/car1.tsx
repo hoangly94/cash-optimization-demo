@@ -11,6 +11,7 @@ import _ from "lodash";
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_CODE_FILTER, FETCH_DATA, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_START } from '~stores/routeTracking/constants';
 import { ADD_NOTI, HANDLE_POPUP } from '_/stores/_base/constants';
+import moment from 'moment';
 
 export type Props = Base.Props;
 let dispatch;
@@ -87,86 +88,94 @@ const getHtml = (routeTracking, user) => {
   const pers = routeTracking.route?.routeDetailPers?.filter(item => item.persCode === persCode);
   const bve = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'BVE').map(item => ({ ...item, ...item.categoryPers }))[0];
   const lxe = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'LXE').map(item => ({ ...item, ...item.categoryPers }))[0];
-  const atai = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'ATAI').map(item => ({ ...item, ...item.categoryPers }))[0];
+  const atai = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'ATAI').map(item => ({ ...item, ...item.categoryPers }));
   const tquy = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'TQUY').map(item => ({ ...item, ...item.categoryPers }))[0];
   const atm = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'ATM').map(item => ({ ...item, ...item.categoryPers }))[0];
+  const routeDetailOganize = routeTracking.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
 
   const route = {
     ...routeTracking.route,
     pers: {
       bve,
-      lxe,
-      atai,
+      lxe: perLXE,
+      atai: atai && atai[Math.floor(Math.random() * atai.length)],
       tquy,
       atm,
     }
   };
   console.log('---------------pers');
   console.log(persCode);
-  console.log(routeTracking.route?.routeDetailVehicle);
-  console.log(pers);
-  console.log(perLXE);
-  console.log({
-    bve,
-    lxe,
-    atai,
-    tquy,
-    atm,
-  });
+  console.log(route.tqDltltCode);
+  // console.log(routeDetailOganize);
+  // console.log(routeTracking.route?.destinationTq?.categoryOrgs?.orgsCode);
+  // console.log(routeTracking);
+  // console.log(routeTracking.route?.routeDetailVehicle);
+  // console.log(pers);
+  // console.log(perLXE);
+  // console.log({
+  //   bve,
+  //   lxe,
+  //   atai,
+  //   tquy,
+  //   atm,
+  // });
+  // console.log(routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode))
   const routeStatus = route.routeStatus;
   if (route.transportType != 'Xe chuyên dùng')
     return false;
+  if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
+    if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
+      if (routeStatus.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
+        return html26_1(route, routeDetailOganize);
+      if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus.includes("Going_") || routeStatus.includes("Working_"))
+        return html26_2(route, routeDetailOganize);
+    }
+  }
   if (persCode === route.tqDltltCode) {
     if (routeStatus === 'Beginning')
-      return html27_1(route, 1);
-    if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-      return html27_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ'], routeStatus);
+      return html27_1(route);
+    if (routeStatus === routeDetailOganize)
+      return html27_2(route, routeDetailOganize);
     if (routeStatus === 'Pickingup_ATM')
-      return html27_3(route, ['Điểm đón NV tiếp quỹ ATM"']);
-    if (routeStatus === 'Going_1')
-      return html27_4(route, ['Điểm dừng nhận quỹ của ĐVTLT', 'Điểm dừng trả quỹ của ĐVTLT']);
-    if (routeStatus === 'Working_1')
-      return html27_5(route, ['Điểm dừng xử lý NV theo PYC']);
+      return html27_3(route, routeDetailOganize);
+    if (routeStatus.includes("Going_"))
+      return html27_4(route, routeDetailOganize);
+    if (routeStatus.includes("Working_"))
+      return html27_5(route, routeDetailOganize);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
-      return html27_6(route, ['Điểm kết thúc lộ trình']);
+      return html27_6(route, routeDetailOganize);
   }
   if (perLXE.length > 0) {
     if (routeStatus === 'Beginning')
-      return html24_1(route, 1);
+      return html24_1(route);
     if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-      return html24_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ'], routeStatus);
+      return html24_2(route, routeDetailOganize);
     if (routeStatus === 'Pickingup_ATM')
-      return html24_3(route, ['Điểm đón NV tiếp quỹ ATM"']);
+      return html24_3(route, routeDetailOganize);
     if (routeStatus.includes("Going_"))
-      return html24_4(route, ['Điểm dừng nhận quỹ của ĐVTLT', 'Điểm dừng trả quỹ của ĐVTLT'], '4. Di chuyển đến điểm dừng xử lý nghiệp vụ');
-    if (routeStatus === 'Working_1')
-      return html24_4(route, ['Điểm dừng xử lý NV theo PYC'], '5. Giao nhận HĐB tại điểm dừng');
+      return html24_4(route, routeDetailOganize, 1);
+    if (routeStatus.includes("Working_"))
+      return html24_4(route, routeDetailOganize, 2);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
-      return html24_4(route, ['Điểm kết thúc lộ trình'], '6. Kết thúc lộ trình');
+      return html24_4(route, routeDetailOganize, 3);
   }
   if (pers?.length > 0) {
     const persTitle = pers[0]?.categoryPers?.persTitle;
 
     if (persTitle === 'ATAI') {
       if (routeStatus === 'Beginning')
-        return html25_1(route, 1);
+        return html25_1(route);
       if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-        return html25_2(route, ['Điểm đón áp tải', 'Điểm đón bảo vệ'], routeStatus);
+        return html25_2(route, routeDetailOganize);
       if (routeStatus === 'Pickingup_ATM')
-        return html25_3(route, ['Điểm đón NV tiếp quỹ ATM"']);
+        return html25_3(route, routeDetailOganize);
       if (routeStatus.includes("Going_"))
-        return html25_4(route, ['Điểm dừng nhận quỹ của ĐVTLT', 'Điểm dừng trả quỹ của ĐVTLT']);
-      if (routeStatus === 'Working_1')
-        return html25_5(route, ['Điểm dừng xử lý NV theo PYC']);
-    }
-
-    if (persTitle === 'TQUY') {
-      if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Working_1'].includes(routeStatus))
-        return html26_1(route, 1, routeStatus);
-      if (routeStatus === 'Finishing' || routeStatus === 'Finished')
-        return html26_2(route, ['Điểm đón áp tải']);
+        return html25_4(route, routeDetailOganize);
+      if (routeStatus.includes("Working_"))
+        return html25_5(route, routeDetailOganize);
     }
   }
+
   return false;
 }
 
@@ -185,10 +194,8 @@ const row = {
     styles['double-col'],
   )
 }
-const html24_1 = (route, order) => {
-  const detail = route.routeDetailOganize?.filter(item => item.order === order)[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html24_1 = (route) => {
+  const routeDetailOganize = route?.routeDetailOganize?.filter(item => item.order === 1)[0];
   return (<>
     <Title.Element text='1. Bắt đầu lộ trình' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -218,21 +225,21 @@ const html24_1 = (route, order) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian bắt đầu dự kiến' />
       <Input.Element
-        defaultValue={route.startTime}
+        defaultValue={route.startTime && moment(route.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -259,6 +266,9 @@ const html24_1 = (route, order) => {
         width={Base.Width.PX_200}
         color={Base.Color.WHITE}
         backgroundColor={Base.BackgroundColor.GREEN}
+        store={{
+          isLoadingSelectorKeys: ['base', 'buttons', 'routeTracking', 'confirm'],
+        }}
         onClick={() => {
           dispatch({ type: REQUEST_ROUTE_START, order: 1 });
         }}
@@ -268,14 +278,7 @@ const html24_1 = (route, order) => {
   )
 }
 
-const html24_2 = (route, stopPointTypes, routeStatus) => {
-  const detail = route.routeDetailOganize?.filter(item =>
-    (routeStatus === 'Pickingup_SEC' && item.stopPointType === 'Điểm đón bảo vệ')
-    || (routeStatus === 'Pickingup_ESC' && item.stopPointType === 'Điểm đón áp tải')
-  )[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
-
+const html24_2 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc đơn áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -306,14 +309,14 @@ const html24_2 = (route, stopPointTypes, routeStatus) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={routeStatus === 'Pickingup_SEC' ? 'Điểm đón bảo vệ' : 'Điểm đón áp tải'}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -372,8 +375,11 @@ const html24_2 = (route, stopPointTypes, routeStatus) => {
         width={Base.Width.PX_200}
         color={Base.Color.WHITE}
         backgroundColor={Base.BackgroundColor.GREEN}
+        store={{
+          isLoadingSelectorKeys: ['base', 'buttons', 'routeTracking', 'confirm'],
+        }}
         onClick={() => {
-          dispatch({ type: REQUEST_ROUTE_CONFIRM_1, order: detail.order });
+          dispatch({ type: REQUEST_ROUTE_CONFIRM_1, order: routeDetailOganize?.order });
         }}
       />
     </Block.Element>
@@ -381,10 +387,7 @@ const html24_2 = (route, stopPointTypes, routeStatus) => {
   )
 }
 
-const html24_3 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html24_3 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -415,14 +418,14 @@ const html24_3 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -497,8 +500,11 @@ const html24_3 = (route, stopPointTypes) => {
         width={Base.Width.PX_200}
         color={Base.Color.WHITE}
         backgroundColor={Base.BackgroundColor.GREEN}
+        store={{
+          isLoadingSelectorKeys: ['base', 'buttons', 'routeTracking', 'confirm'],
+        }}
         onClick={() => {
-          dispatch({ type: REQUEST_ROUTE_CONFIRM_1, order: detail.order });
+          dispatch({ type: REQUEST_ROUTE_CONFIRM_1, order: routeDetailOganize?.order });
         }}
       />
     </Block.Element>
@@ -506,8 +512,32 @@ const html24_3 = (route, stopPointTypes) => {
   )
 }
 
-const html24_4 = (route, stopPointTypes, title) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+const html24_4 = (route, routeDetailOganize, type) => {
+  const title = (() => {
+    if (type === 1)
+      return '4. Di chuyển đến điểm dừng xử lý nghiệp vụ';
+    if (type === 2)
+      return '5. Giao nhận HĐB tại điểm dừng';
+    if (type === 3)
+      return '6. Kết thúc lộ trình';
+    return '';
+  })();
+  const confirmHtml = type === 2 ? null :
+    <Block.Element {...col1}>
+      <Block.Element />
+      <Button.Element
+        text='Confirm 1'
+        width={Base.Width.PX_200}
+        color={Base.Color.WHITE}
+        backgroundColor={Base.BackgroundColor.GREEN}
+        store={{
+          isLoadingSelectorKeys: ['base', 'buttons', 'routeTracking', 'confirm'],
+        }}
+        onClick={() => {
+          dispatch({ type: REQUEST_ROUTE_CONFIRM_1, order: routeDetailOganize?.order });
+        }}
+      />
+    </Block.Element>
   return (<>
     <Title.Element text={title} tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -538,14 +568,14 @@ const html24_4 = (route, stopPointTypes, title) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -565,27 +595,15 @@ const html24_4 = (route, stopPointTypes, title) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col1}>
-      <Block.Element />
-      <Button.Element
-        text='Confirm 1'
-        width={Base.Width.PX_200}
-        color={Base.Color.WHITE}
-        backgroundColor={Base.BackgroundColor.GREEN}
-        onClick={() => {
-          dispatch({ type: REQUEST_ROUTE_CONFIRM_1, order: detail.order });
-        }}
-      />
-    </Block.Element>
+    {
+      confirmHtml
+    }
   </>
   )
 }
 
-const html25_1 = (route, order) => {
-  const detail = route.routeDetailOganize?.filter(item => item.order === order)[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
-
+const html25_1 = (route) => {
+  const routeDetailOganize = route?.routeDetailOganize?.filter(item => item.order === 1)[0];
   return (<>
     <Title.Element text='1. Bắt đầu lộ trình' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -615,36 +633,37 @@ const html25_1 = (route, order) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian bắt đầu dự kiến' />
       <Input.Element
-        defaultValue={route.startTime}
+        defaultValue={route.startTime && moment(route.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
+
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -653,14 +672,7 @@ const html25_1 = (route, order) => {
   )
 }
 
-const html25_2 = (route, stopPointTypes, routeStatus) => {
-  const detail = route.routeDetailOganize?.filter(item =>
-    (routeStatus === 'Pickingup_SEC' && item.stopPointType === 'Điểm đón bảo vệ')
-    || (routeStatus === 'Pickingup_ESC' && item.stopPointType === 'Điểm đón áp tải')
-  )[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
-
+const html25_2 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo về và áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -691,14 +703,14 @@ const html25_2 = (route, stopPointTypes, routeStatus) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={routeStatus === 'Pickingup_SEC' ? 'Điểm đón bảo vệ' : 'Điểm đón áp tải'}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -722,14 +734,14 @@ const html25_2 = (route, stopPointTypes, routeStatus) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -772,10 +784,7 @@ const html25_2 = (route, stopPointTypes, routeStatus) => {
 
 
 
-const html25_3 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html25_3 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -806,14 +815,14 @@ const html25_3 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -837,14 +846,14 @@ const html25_3 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -885,10 +894,7 @@ const html25_3 = (route, stopPointTypes) => {
   )
 }
 
-const html25_4 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html25_4 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -919,14 +925,14 @@ const html25_4 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -950,14 +956,14 @@ const html25_4 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -982,12 +988,9 @@ const html25_4 = (route, stopPointTypes) => {
   )
 }
 
-const html25_5 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html25_5 = (route, routeDetailOganize) => {
   return (<>
-    <Title.Element text='5. Giao \ nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
+    <Title.Element text='5. Giao nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -1013,17 +1016,26 @@ const html25_5 = (route, stopPointTypes) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col1}>
-      <Title.Element text='Điểm cần đến' />
-      <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
-        isDisabled={true}
-      />
+    <Block.Element {...col2}>
+      <Block.Element>
+        <Title.Element text='Tên điểm đến' />
+        <Input.Element
+          defaultValue={routeDetailOganize?.destinationPointAddress}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element>
+        <Title.Element text='Mức độ ưu tiên' />
+        <Input.Element
+          defaultValue={routeDetailOganize?.priorityLevelName}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1031,14 +1043,14 @@ const html25_5 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.tqDltltName}
+          defaultValue={route.destinationTq?.persFullname}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.categoryPers?.persMobile}
+          defaultValue={route.destinationTq?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1063,14 +1075,14 @@ const html25_5 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1095,14 +1107,14 @@ const html25_5 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Áp tải xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persName}
+          defaultValue={routeDetailOganize?.apName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='Ngày giờ áp tải xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={routeDetailOganize?.atDate && moment(routeDetailOganize?.atDate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
           isDisabled={true}
         />
       </Block.Element>
@@ -1111,14 +1123,14 @@ const html25_5 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Thủ quỹ xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persName}
+          defaultValue={routeDetailOganize?.tqName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='Ngày giờ thủ quỹ xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={routeDetailOganize?.tqDate && moment(routeDetailOganize?.tqDate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
           isDisabled={true}
         />
       </Block.Element>
@@ -1130,8 +1142,11 @@ const html25_5 = (route, stopPointTypes) => {
         width={Base.Width.PX_200}
         color={Base.Color.WHITE}
         backgroundColor={Base.BackgroundColor.GREEN}
+        store={{
+          isLoadingSelectorKeys: ['base', 'buttons', 'routeTracking', 'confirm'],
+        }}
         onClick={() => {
-          dispatch({ type: REQUEST_ROUTE_CONFIRM_2, order: detail.order });
+          dispatch({ type: REQUEST_ROUTE_CONFIRM_2, order: routeDetailOganize?.order });
         }}
       />
     </Block.Element>
@@ -1141,16 +1156,8 @@ const html25_5 = (route, stopPointTypes) => {
 
 
 
-const html26_1 = (route, order, routeStatus) => {
-  const detail = route.routeDetailOganize?.filter(item => item.order === order)[0];
+const html26_1 = (route, routeDetailOganize) => {
 
-  // const detail = route.routeDetailOganize?.filter(item => 
-  //   (routeStatus==='Pickingup_SEC' && item.stopPointType === 'Điểm đón bảo vệ')
-  //   || (routeStatus==='Pickingup_ESC' && item.stopPointType === 'Điểm đón áp tải')
-  //   )[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
-  
   return (<>
     <Title.Element text='Group box 1' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1165,21 +1172,21 @@ const html26_1 = (route, order, routeStatus) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian bắt đầu dự kiến' />
       <Input.Element
-        defaultValue={route.startTime}
+        defaultValue={route.startTime && moment(route.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={routeStatus === 'Pickingup_SEC' ? 'Điểm đón bảo vệ' : 'Điểm đón áp tải'}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1187,14 +1194,14 @@ const html26_1 = (route, order, routeStatus) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1203,10 +1210,9 @@ const html26_1 = (route, order, routeStatus) => {
   )
 }
 
-const html26_2 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+const html26_2 = (route, routeDetailOganize) => {
   return (<>
-    <Title.Element text='5. Giao nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
+    <Title.Element text='Group box 2' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -1219,14 +1225,14 @@ const html26_2 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1234,14 +1240,14 @@ const html26_2 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.tqDltltName}
+          defaultValue={route.destinationTq?.persFullname}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.categoryPers?.persMobile}
+          defaultValue={route.destinationTq?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1266,14 +1272,14 @@ const html26_2 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1298,14 +1304,14 @@ const html26_2 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Áp tải xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persName}
+          defaultValue={routeDetailOganize?.apName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='Ngày giờ áp tải xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={routeDetailOganize?.atDate && moment(routeDetailOganize?.atDate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
           isDisabled={true}
         />
       </Block.Element>
@@ -1314,14 +1320,14 @@ const html26_2 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Thủ quỹ xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persName}
+          defaultValue={routeDetailOganize?.tqName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='Ngày giờ thủ quỹ xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={routeDetailOganize?.tqDate && moment(routeDetailOganize?.tqDate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
           isDisabled={true}
         />
       </Block.Element>
@@ -1333,8 +1339,11 @@ const html26_2 = (route, stopPointTypes) => {
         width={Base.Width.PX_200}
         color={Base.Color.WHITE}
         backgroundColor={Base.BackgroundColor.GREEN}
+        store={{
+          isLoadingSelectorKeys: ['base', 'buttons', 'routeTracking', 'confirm'],
+        }}
         onClick={() => {
-          dispatch({ type: REQUEST_ROUTE_CONFIRM_3, order: detail.order });
+          dispatch({ type: REQUEST_ROUTE_CONFIRM_3, order: routeDetailOganize?.order });
         }}
       />
     </Block.Element>
@@ -1345,10 +1354,8 @@ const html26_2 = (route, stopPointTypes) => {
 
 
 
-const html27_1 = (route, order) => {
-  const detail = route.routeDetailOganize?.filter(item => item.order === order)[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html27_1 = (route) => {
+  const routeDetailOganize = route?.routeDetailOganize?.filter(item => item.order === 1)[0];
   return (<>
     <Title.Element text='1. Bắt đầu lộ trình' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1379,21 +1386,21 @@ const html27_1 = (route, order) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian bắt đầu dự kiến' />
       <Input.Element
-        defaultValue={route.startTime}
+        defaultValue={route.startTime && moment(route.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1401,14 +1408,14 @@ const html27_1 = (route, order) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1417,13 +1424,7 @@ const html27_1 = (route, order) => {
   )
 }
 
-const html27_2 = (route, stopPointTypes, routeStatus) => {
-  const detail = route.routeDetailOganize?.filter(item =>
-    (routeStatus === 'Pickingup_SEC' && item.stopPointType === 'Điểm đón bảo vệ')
-    || (routeStatus === 'Pickingup_ESC' && item.stopPointType === 'Điểm đón áp tải')
-  )[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html27_2 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo về và áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1454,14 +1455,14 @@ const html27_2 = (route, stopPointTypes, routeStatus) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={routeStatus === 'Pickingup_SEC' ? 'Điểm đón bảo vệ' : 'Điểm đón áp tải'}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1485,14 +1486,14 @@ const html27_2 = (route, stopPointTypes, routeStatus) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1535,10 +1536,7 @@ const html27_2 = (route, stopPointTypes, routeStatus) => {
 
 
 
-const html27_3 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html27_3 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1569,14 +1567,14 @@ const html27_3 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1600,14 +1598,14 @@ const html27_3 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1648,10 +1646,7 @@ const html27_3 = (route, stopPointTypes) => {
   )
 }
 
-const html27_4 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html27_4 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1682,14 +1677,14 @@ const html27_4 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1713,14 +1708,14 @@ const html27_4 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1745,8 +1740,7 @@ const html27_4 = (route, stopPointTypes) => {
   )
 }
 
-const html27_5 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
+const html27_5 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text='5. Giao nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1777,14 +1771,14 @@ const html27_5 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm đến' />
       <Input.Element
-        defaultValue={detail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1792,14 +1786,14 @@ const html27_5 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.tqDltltName}
+          defaultValue={route.destinationTq?.persFullname}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.categoryPers?.persMobile}
+          defaultValue={route.destinationTq?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1824,14 +1818,14 @@ const html27_5 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persName}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.driverName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT lái xe' />
         <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1856,14 +1850,14 @@ const html27_5 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Áp tải xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persName}
+          defaultValue={routeDetailOganize?.apName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='Ngày giờ áp tải xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={routeDetailOganize?.atDate && moment(routeDetailOganize?.atDate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
           isDisabled={true}
         />
       </Block.Element>
@@ -1872,14 +1866,14 @@ const html27_5 = (route, stopPointTypes) => {
       <Block.Element>
         <Title.Element text='Thủ quỹ xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persName}
+          defaultValue={routeDetailOganize?.tqName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='Ngày giờ thủ quỹ xác nhận' />
         <Input.Element
-          // defaultValue={route.pers?.atai?.persMobile}
+          defaultValue={routeDetailOganize?.tqDate && moment(routeDetailOganize?.tqDate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
           isDisabled={true}
         />
       </Block.Element>
@@ -1890,10 +1884,7 @@ const html27_5 = (route, stopPointTypes) => {
 
 
 
-const html27_6 = (route, stopPointTypes) => {
-  const detail = route.routeDetailOganize?.filter(item => stopPointTypes.includes(item.stopPointType))[0];
-  const nextOrder = detail.order + 1;
-  const nextDetail = route.routeDetailOganize?.filter(item => item.order === nextOrder)[0];
+const html27_6 = (route, routeDetailOganize) => {
   return (<>
     <Title.Element text={'6.Kết thúc lộ trình'} tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1924,14 +1915,14 @@ const html27_6 = (route, stopPointTypes) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={nextDetail.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={detail.stopPointType}
+        defaultValue={routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>

@@ -17,6 +17,7 @@ export const FETCH_MAP = root + 'FETCH_MAP';
 export const UPDATE_MAP = root + 'UPDATE_MAP';
 
 export const SEARCH_TQUY = root + 'SEARCH_TQUY';
+export const UPDATE_TQUY = root + 'UPDATE_TQUY';
 
 export type State = {
     filters: {

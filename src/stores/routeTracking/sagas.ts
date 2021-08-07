@@ -1,10 +1,11 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { FETCH_DATA, FETCH_MAP, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_1_KCD, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD, SEARCH_TQUY, UPDATE_DATA, UPDATE_MAP } from './constants';
+import { FETCH_DATA, FETCH_MAP, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_1_KCD, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD, SEARCH_TQUY, UPDATE_DATA, UPDATE_MAP, UPDATE_TQUY } from './constants';
 import Config from '@config';
 import { _Date, getCurrentDate } from '@utils';
 import _ from 'lodash';
 import { addNoti } from '../_base/sagas';
+import { HANDLE_BUTTON } from '../_base/constants';
 
 function* saga() {
     // yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
@@ -21,25 +22,22 @@ function* saga() {
 }
 function* searchTquySaga(action?) {
     const state = yield select();
-    const responseData = yield call(searchTquy, state.routeManagement.organizingPopup, action);
-    console.log('=================');
-    console.log(state.routeManagement.organizingPopup);
-    // if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-    //     return yield spawn(addNoti, 'error', responseData?.data?.message);
-    // }
-    // yield put({ type: UPDATE_ORGANIZE_URGENT_CHECKBYID, data: responseData.data, page: action?.page });
+    const responseData = yield call(searchTquy, action?.routeDetailOganize);
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+    }
+    yield put({ type: UPDATE_TQUY, data: responseData.data });
 }
 
-function searchTquy(data, action) {
-    // const url = Config.url + '/api/cashoptimization/route/searchTQUY';
+function searchTquy(routeDetailOganize) {
+    const url = Config.url + '/api/cashoptimization/route/searchTQUY';
 
-    // const postData = {
-    //     data: {
-    //         routeId: '' + data.id,
-    //     },
-    // }
-    // return axios.post(url, postData)
-    //     .catch(error => console.log(error));
+    const postData = {
+        data: {
+            orgsName: routeDetailOganize?.destinationPointName,
+        },
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
 }
 
 
@@ -52,9 +50,9 @@ function* fetchDataSaga(action?) {
     if (!responseData.data?.data) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
-    
-    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
-    yield put({ type: SEARCH_TQUY});
+    const routeDetailOganize = responseData.data?.data?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
+    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
+    yield put({ type: SEARCH_TQUY, routeDetailOganize });
 }
 
 function getData(filters) {
@@ -83,75 +81,96 @@ function getMap(data) {
 
 
 function* requestRouteStartSaga(action?) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: true });
     const state = yield select();
     const api = 'routeStart';
     const responseData = yield call(requestRouteSubmit, api, state.routeTracking.route, action?.order);
-    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: false });
+     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield spawn(addNoti, 'Success', 'Success');
+    yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
+    
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm1Saga(action?) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: true });
     const state = yield select();
     const api = 'routeConfirm1';
     const responseData = yield call(requestRouteSubmit, api, state.routeTracking.route, action?.order);
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: false });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield spawn(addNoti, 'Success', 'Success');
+    yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
+    
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm2Saga(action?) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: true });
     const state = yield select();
     const api = 'routeConfirm2';
     const responseData = yield call(requestRouteSubmit, api, state.routeTracking.route, action?.order);
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: false });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield spawn(addNoti, 'Success', 'Success');
+    yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
+    
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm3Saga(action?) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: true });
     const state = yield select();
     const api = 'routeConfirm3';
     const responseData = yield call(requestRouteSubmit, api, state.routeTracking.route, action?.order);
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: false });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield spawn(addNoti, 'Success', 'Success');
+    yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
+    
     yield put({ type: FETCH_DATA });
 }
 
 
 function* requestRouteStartKCDSaga(action?) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: true });
     const state = yield select();
     const api = 'routeStart_KCD';
     const responseData = yield call(requestRouteSubmit, api, state.routeTracking.route, action?.order);
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: false });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield spawn(addNoti, 'Success', 'Success');
+    yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
+    
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm2KCDSaga(action?) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: true });
     const state = yield select();
     const api = 'routeConfirm2_KCD';
     const responseData = yield call(requestRouteSubmit, api, state.routeTracking.route, action?.order);
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: false });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield spawn(addNoti, 'Success', 'Success');
+    yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
+    
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm3KCDSaga(action?) {
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: true });
     const state = yield select();
     const api = 'routeConfirm3_KCD';
     const responseData = yield call(requestRouteSubmit, api, state.routeTracking.route, action?.order);
+    yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: false });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield spawn(addNoti, 'Success', 'Success');
+    yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
+    
     yield put({ type: FETCH_DATA });
 }
 
