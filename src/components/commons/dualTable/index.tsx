@@ -42,22 +42,26 @@ export type Props = Base.Props & {
   actionButtons?: {
     oneRightToLeft?: {
       text?: string,
-      disabled: boolean,
+      isDisabled?: boolean,
+      isShown: boolean,
       onClick?: MouseEventHandler,
     },
     oneLeftToRight?: {
       text?: string,
-      disabled: boolean,
+      isDisabled?: boolean,
+      isShown: boolean,
       onClick?: MouseEventHandler,
     },
     allRightToLeft?: {
       text?: string,
-      disabled: boolean,
+      isDisabled?: boolean,
+      isShown: boolean,
       onClick?: MouseEventHandler,
     },
     allLeftToRight?: {
       text?: string,
-      disabled: boolean,
+      isDisabled?: boolean,
+      isShown: boolean,
       onClick?: MouseEventHandler,
     },
   },
@@ -90,7 +94,7 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const table1DataSelector = store && store.selector1Keys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selector1Keys as string[])) : [];
   const table2DataSelector = store && store.selector2Keys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selector2Keys as string[])) : [];
-
+  
   const table1Props = {
     ...tableData1(titleCallback1, title1, table1DataSelector?.map(mapResponseToData(cellMapping1, handleRowClick(dispatch, store.row1ClickAction)))),
   }
@@ -140,7 +144,7 @@ export const Element = (props: Props) => {
               {...buttonProps}
               margin={Base.MarginRight.PX_18}
               style={{
-                display: actionButtons?.oneRightToLeft?.disabled ? 'none' : 'block',
+                display: actionButtons?.oneRightToLeft?.isShown ? 'none' : 'block',
               }}
               text={actionButtons?.oneRightToLeft?.text || '>'}
               store={{
@@ -150,12 +154,13 @@ export const Element = (props: Props) => {
                 if (actionButtons?.oneRightToLeft?.onClick)
                   actionButtons?.oneRightToLeft?.onClick(e);
               }}
+              isDisabled={table1DataSelector?.filter(item => item.isSelected).length === 0 || actionButtons?.oneRightToLeft?.isDisabled}
             />
             <Button.Element
               {...buttonProps}
               margin={Base.MarginRight.PX_18}
               style={{
-                display: actionButtons?.allRightToLeft?.disabled ? 'none' : 'block',
+                display: actionButtons?.allRightToLeft?.isShown ? 'none' : 'block',
               }}
               text={actionButtons?.allRightToLeft?.text || '>>'}
               store={{
@@ -165,12 +170,13 @@ export const Element = (props: Props) => {
                 if (actionButtons?.allRightToLeft?.onClick)
                   actionButtons?.allRightToLeft?.onClick(e);
               }}
+              isDisabled={actionButtons?.allRightToLeft?.isDisabled}
             />
             <Button.Element
               {...buttonProps}
               margin={Base.MarginRight.PX_18}
               style={{
-                display: actionButtons?.allLeftToRight?.disabled ? 'none' : 'block',
+                display: actionButtons?.allLeftToRight?.isShown ? 'none' : 'block',
               }}
               text={actionButtons?.allLeftToRight?.text || '<<'}
               store={{
@@ -180,12 +186,13 @@ export const Element = (props: Props) => {
                 if (actionButtons?.allLeftToRight?.onClick)
                   actionButtons?.allLeftToRight?.onClick(e);
               }}
+              isDisabled={actionButtons?.allLeftToRight?.isDisabled}
             />
             <Button.Element
               {...buttonProps}
               margin={Base.MarginRight.PX_18}
               style={{
-                display: actionButtons?.oneLeftToRight?.disabled ? 'none' : 'block',
+                display: actionButtons?.oneLeftToRight?.isShown ? 'none' : 'block',
               }}
               text={actionButtons?.oneLeftToRight?.text || '<'}
               store={{
@@ -195,6 +202,7 @@ export const Element = (props: Props) => {
                 if (actionButtons?.oneLeftToRight?.onClick)
                   actionButtons?.oneLeftToRight?.onClick(e);
               }}
+              isDisabled={table2DataSelector?.filter(item => item.isSelected).length === 0 || actionButtons?.oneLeftToRight?.isDisabled}
             />
 
           </Block.Element>

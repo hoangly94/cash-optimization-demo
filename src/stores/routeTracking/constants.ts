@@ -14,6 +14,7 @@ export const REQUEST_ROUTE_CONFIRM_2_KCD = root + 'REQUEST_ROUTE_CONFIRM_2_KCD';
 export const REQUEST_ROUTE_CONFIRM_3_KCD = root + 'REQUEST_ROUTE_CONFIRM_3_KCD';
 
 export const FETCH_MAP = root + 'FETCH_MAP';
+export const FETCH_MAP_DRIVER = root + 'FETCH_MAP_DRIVER';
 export const UPDATE_MAP = root + 'UPDATE_MAP';
 
 export const SEARCH_TQUY = root + 'SEARCH_TQUY';

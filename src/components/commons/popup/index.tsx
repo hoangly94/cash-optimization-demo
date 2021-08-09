@@ -81,16 +81,16 @@ export const Element = (props: Props) => {
     onClick: handleClosePopupClick(dispatch, closePopUpCallback, store),
     ...$background,
   };
-
   const contentProps = {
-    classNames: Classnames(
-      styles['popup-content'],
-    ),
     padding: Base.Padding.PX_68,
     borderRadius: Base.BorderRadius.PX_8,
     backgroundColor: Base.BackgroundColor.WHITE,
     // onClick: handleDropdownOpenCloseClick(clickData, setClickData),
     ...$content,
+    classNames: Classnames(
+      styles['popup-content'],
+    ) + ' '+ $content?.classNames,
+    
   };
 
   const titleProps = {

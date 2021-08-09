@@ -6,15 +6,22 @@
     padding: 28px 68px 28px 288px;
     min-width:800px;
 }
+.map iframe{
+    width:800px;
+    height: 500px;
+    box-sizing: border-box;
+}
 
 @media (max-width: 768px){
+    .map  iframe{
+        height: 400px;
+        width: 100%;
+        box-sizing: border-box;
+    }
     .component{
         text-decoration: none;
         min-width:auto;
         width:100%;
         padding: 0px 18px;
     }
-}
-.map{
-    width:200px;
 }

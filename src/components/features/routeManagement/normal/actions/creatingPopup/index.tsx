@@ -116,17 +116,17 @@ export const Element = (props: Popup.Props) => {
         actionButtons={{
           oneRightToLeft: {
             text: 'Add',
-            disabled: false,
+            isShown: false,
           },
           oneLeftToRight: {
             text: 'Remove',
-            disabled: false,
+            isShown: false,
           },
           allRightToLeft: {
-            disabled: true,
+            isShown: true,
           },
           allLeftToRight: {
-            disabled: true,
+            isShown: true,
           },
         }}
         margin={Base.MarginBottom.PX_28}
@@ -134,7 +134,7 @@ export const Element = (props: Popup.Props) => {
           store: {
             totalSelectorKeys: ['routeManagement', 'creatingPopup'],
             action: {
-              type: REQUEST_PERS,
+              type: FETCH_PYC,
             }
           },
           style: {
@@ -149,7 +149,7 @@ export const Element = (props: Popup.Props) => {
           flexGrow={Base.FlexGrow.G1}
           margin={Base.MarginRight.PX_18}
           $input={{
-            placeholder: 'dd/mm/yyyy hh/mm/ss',
+            placeholder: 'dd/mm/yyyy hh:mm:ss',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['routeManagement', 'creatingPopup', 'startTime'],

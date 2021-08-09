@@ -214,11 +214,11 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên đơn bị quản lý xe',
+          children: 'Tên đơn vị quản lý xe',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'SĐT Lái xe',
+          children: 'SĐT lái xe',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -250,13 +250,13 @@ const vehicleMapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.categoryVehicle?.vehicleStatus,
     },
     {
+      children: item.categoryVehicle?.driverName,
+    },
+    {
       children: item.categoryVehicle?.categoryOrgs?.orgsCode,
     },
     {
       children: item.categoryVehicle?.categoryOrgs?.orgsName,
-    },
-    {
-      children: item.categoryVehicle?.driverName,
     },
     {
       children: item.categoryVehicle?.categoryPers?.persMobile,

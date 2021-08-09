@@ -52,8 +52,18 @@
 }
 
 
+.map iframe{
+    width:800px;
+    height: 500px;
+    box-sizing: border-box;
+}
 
 @media (max-width: 768px){
+    .map  iframe{
+        height: 400px;
+        width: 100%;
+        box-sizing: border-box;
+    }
     .component{
         text-decoration: none;
         min-width:auto;

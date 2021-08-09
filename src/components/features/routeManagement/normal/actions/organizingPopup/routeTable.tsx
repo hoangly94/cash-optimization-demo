@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { FETCH_BALANCE_SPECIAL, SELECT_ROUTE_ROW, SELECT_SPECIAL_ROW } from '~stores/routeManagement/normal/constants';
+import { FETCH_BALANCE_SPECIAL, REQUEST_ORGANIZE_GET_HDB_DETAIL, SELECT_ROUTE_ROW, SELECT_SPECIAL_ROW } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import { HANDLE_BUTTON, HANDLE_POPUP } from "~stores/_base/constants";
@@ -46,6 +46,9 @@ const tableData_$rows_$cells_title = {
 
 const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_ROUTE_ROW, data: item });
+  if (item?.stopPointType === "Điểm dừng trả quỹ của ĐVTLT")
+    dispatch({ type: REQUEST_ORGANIZE_GET_HDB_DETAIL, data: item });
+
 }
 
 const tableData = (queryResult?): Table.Props => ({
@@ -159,7 +162,7 @@ const mapResponseToData = (dispatch, handleRowClick) => (item, index) => ({
             keys: ['routeManagement', 'balanceSpecial', 'isShown'],
             value: true,
           });
-          dispatch({ type: FETCH_BALANCE_SPECIAL , routeDetailOganizeId:item.id})
+          dispatch({ type: FETCH_BALANCE_SPECIAL, routeDetailOganizeId: item.id })
         }} >Link</a>,
     },
   ]

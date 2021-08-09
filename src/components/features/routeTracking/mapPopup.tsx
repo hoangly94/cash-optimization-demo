@@ -1,27 +1,48 @@
 import * as React from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, } from 'react-redux';
 import * as Base from '~/_settings';
 import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Button from "~commons/button";
-import ReactSrcDocIframe from 'react-srcdoc-iframe';
-import { FETCH_MAP } from '_/stores/routeTracking/constants';
+import { FETCH_MAP, FETCH_MAP_DRIVER } from '_/stores/routeTracking/constants';
 import { HANDLE_POPUP } from '_/stores/_base/constants';
+import classNames from 'classnames';
+import styles from './_styles.css';
+import { useForceRender } from '_/hooks';
 
 export type Props = Base.Props;
 
 export const Element = (props: Popup.Props) => {
   const selector = useSelector(state => state['routeTracking']);
+  const isShown = useSelector(state => state['base'].popups.routeTracking.mapPopup.isShown);
+  const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
-
+  const key = React.useRef(0);
+  key.current += 1;
   React.useEffect(() => {
-    dispatch({ type: FETCH_MAP })
-  }, [selector.route.id]);
+    const perLXE = selector.route?.routeDetailVehicle?.filter(item => item.categoryVehicle?.driverCode === userSelector.persCode);
+    if (perLXE?.length)
+      dispatch({ type: FETCH_MAP_DRIVER })
+    if (!perLXE?.length)
+      dispatch({ type: FETCH_MAP })
+  }, [isShown]);
+
+  const mapHtml = React.useMemo(() => {
+    if (selector?.mapHtml)
+      return selector?.mapHtml && <iframe key={key.current} src={"data:text/html," + encodeURIComponent(selector?.mapHtml)} />
+  }, [selector?.mapHtml]);
+
+
   return (
     <Popup.Element
       {...props}
+      $content={{
+        classNames: classNames(
+          styles['map'],
+        )
+      }}
     >
-      {selector?.mapHtml && <ReactSrcDocIframe srcDoc={selector?.mapHtml} style={{ width: '100%', height: '500px', boxSizing: 'border-box' }} />}
+      {mapHtml}
       <Block.Element
         flex={Base.Flex.END}
       >

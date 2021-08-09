@@ -83,13 +83,11 @@ const getHtml = (routeTracking, user) => {
   const tquy = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'TQUY').map(item => ({ ...item, ...item.categoryPers }))[0];
   const atm = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'ATM').map(item => ({ ...item, ...item.categoryPers }))[0];
   const routeDetailOganize = (() => {
-    if (routeStatus === 'Beginning')
-      return routeTracking.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'Y')[0]
+    if (routeTracking.route?.routeStatus === 'Beginning')
+      return routeTracking.route?.routeDetailOganize?.filter(item => item.stopPointAction === 'Y')[0]
     return routeTracking.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0]
   })();
-  console.log('===================');
-  console.log(persCode);
-  console.log(routeTracking.route?.destinationTqList);
+  
   const route = {
     ...routeTracking.route,
     pers: {
@@ -104,7 +102,6 @@ const getHtml = (routeTracking, user) => {
   if (route.transportType == 'Xe chuyên dùng')
     return;
   if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
-    console.log('=================');
     if (routeStatus.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
       return html29_2(route, routeDetailOganize);
     if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus.includes("Going_") || routeStatus.includes("Working_"))
@@ -112,7 +109,7 @@ const getHtml = (routeTracking, user) => {
   }
   if (persCode === route.tqDltltCode) {
     if (routeStatus === 'Beginning')
-      return html30_1(route);
+      return html30_1(route, routeDetailOganize);
     if (routeStatus.includes("Working_"))
       return html30_2(route, routeDetailOganize);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
@@ -123,7 +120,7 @@ const getHtml = (routeTracking, user) => {
 
     if (persTitle === 'ATAI') {
       if (routeStatus === 'Beginning')
-        return html28_1(route);
+        return html28_1(route, routeDetailOganize);
       if (routeStatus.includes("Working_"))
         return html28_2(route, routeDetailOganize);
       if (routeStatus === 'Finishing' || routeStatus === 'Finished')
@@ -145,8 +142,8 @@ const col2 = {
   )
 }
 
-const html28_1 = (route) => {
-  const routeDetailOganize = route?.routeDetailOganize?.filter(item => item.order === 1)[0];
+const html28_1 = (route, routeDetailOganize) => {
+  // const routeDetailOganize = route?.routeDetailOganize?.filter(item => item.order === 1)[0];
   return (<>
     <Title.Element text='1. Bắt đầu lộ trình' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -464,8 +461,8 @@ const html28_3 = (route, routeDetailOganize) => {
 
 
 
-const html30_1 = (route) => {
-  const routeDetailOganize = route?.routeDetailOganize?.filter(item => item.order === 1)[0];
+const html30_1 = (route, routeDetailOganize) => {
+  // const routeDetailOganize = route?.routeDetailOganize?.filter(item => item.order === 1)[0];
   return (<>
     <Title.Element text='1. Bắt đầu lộ trình' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>

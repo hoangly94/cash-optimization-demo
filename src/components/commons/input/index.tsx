@@ -69,7 +69,6 @@ export const Element = (props: Props) => {
   //     const type = store.reducerType;
   //     const key = store.reducerKey ?? store.selectorKeys[store.selectorKeys.length - 1];
   //     dispatch({ type: type, data: { [key]: defaultValue } });
-  //     console.log({ type: type, data: { [key]: defaultValue } });
   //   }
   // },[]);
   const ref = refs ?? useRef(null);

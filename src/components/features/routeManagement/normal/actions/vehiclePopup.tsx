@@ -69,19 +69,19 @@ export const Element = (props: Popup.Props) => {
         actionButtons={{
           oneRightToLeft: {
             text: 'Add',
-            disabled: false,
+            isShown: false,
             onClick: () => dispatch({type: REQUEST_VEHICLE}),
           },
           oneLeftToRight: {
             text: 'Remove',
-            disabled: false,
+            isShown: false,
             onClick: () => dispatch({type: REQUEST_VEHICLE}),
           },
           allRightToLeft: {
-            disabled: true,
+            isShown: true,
           },
           allLeftToRight: {
-            disabled: true,
+            isShown: true,
           },
         }}
         margin={Base.MarginBottom.PX_28}

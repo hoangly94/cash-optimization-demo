@@ -28,7 +28,8 @@ export const Element = (props: Props) => {
   const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
   const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
-
+  const selectedContentData2 = selector.tableContent2?.filter(item => item.isSelected);
+  
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
@@ -180,7 +181,7 @@ export const Element = (props: Props) => {
           flexGrow={Base.FlexGrow.G1}
           margin={Base.MarginRight.PX_18}
           $input={{
-            placeholder: 'dd/mm/yyyy hh/mm/ss',
+            placeholder: 'dd/mm/yyyy hh:mm:ss',
             width: Base.Width.FULL,
             store: {
               selectorKeys: ['routeManagement', 'editingPopup', 'startTime'],
@@ -260,17 +261,21 @@ export const Element = (props: Props) => {
         actionButtons={{
           oneRightToLeft: {
             text: 'Add',
-            disabled: false,
+            isDisabled: false,
+            isShown: false,
           },
           oneLeftToRight: {
             text: 'Remove',
-            disabled: false,
+            isDisabled: popupType === 'urgent' && !['Approved','Processing'].includes(selectedContentData2[0]?.cashOptimizationStatus),
+            isShown: false,
           },
           allRightToLeft: {
-            disabled: true,
+            isDisabled: true,
+            isShown: true,
           },
           allLeftToRight: {
-            disabled: true,
+            isDisabled: true,
+            isShown: true,
           },
         }}
         margin={Base.MarginBottom.PX_28}

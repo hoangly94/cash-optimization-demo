@@ -1,4 +1,4 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_SEARCHVEHICLEPERS, CHANGE_VEHICLE_INPUT, CHANGE_PERS_INPUT, UPDATE_VEHICLE_DATA, SELECT_VEHICLE, UPDATE_PERS_DATA, SELECT_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, UPDATE_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, UPDATE_ORGANIZING_STOP_POINT, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_CANCEL, UPDATE_ORGANIZING_INSERT, SELECT_ROUTE_ROW, UPDATE_ORGANIZING_DISTANCE, UPDATE_MAP, UPDATE_BALANCE_SPECIAL, SEARCHORGS_SELECT_UPDATE, UPDATE_BALANCE_SPECIAL_TOTAL, SELECT_SPECIAL_ROW_TOTAL, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, RESET_FILTER, UPDATE_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, SELECT_COMBOX_SEARCHVEHICLEPERS, CHANGE_VEHICLE_INPUT, CHANGE_PERS_INPUT, UPDATE_VEHICLE_DATA, SELECT_VEHICLE, UPDATE_PERS_DATA, SELECT_PERS, REQUEST_VEHICLE_CANCEL, REQUEST_PERS_CANCEL, UPDATE_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, UPDATE_ORGANIZING_STOP_POINT, SELECT_ROW_DESTINATION_POINT, SELECT_DESTINATION_POINT, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, CHANGE_ORGANIZING_INPUT, REQUEST_ORGANIZING_CANCEL, UPDATE_ORGANIZING_INSERT, SELECT_ROUTE_ROW, UPDATE_ORGANIZING_DISTANCE, UPDATE_MAP, UPDATE_BALANCE_SPECIAL, SEARCHORGS_SELECT_UPDATE, UPDATE_BALANCE_SPECIAL_TOTAL, SELECT_SPECIAL_ROW_TOTAL, UPDATE_ORGANIZE_GET_HDB_DETAIL, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
@@ -130,7 +130,7 @@ export default (state: State = initState, action) => {
             return state
         case UPDATE_DATA:
             const data = action.data?.data ? action.data.data?.map(preprocessQueryResult(state)) : [];
-
+            console.log(data);
             return {
                 ...state,
                 isLoading: false,
@@ -379,7 +379,6 @@ export default (state: State = initState, action) => {
             }
 
         case SELECT_DUALTABLE_CONTENT_ROW:
-            console.log(action)
             const tableType = `tableContent${action.tableType}`;
             const selectDuableTableRowData = (() => {
                 if (state.popupType === 1)
@@ -523,11 +522,11 @@ export default (state: State = initState, action) => {
                 routeDetailOganize: action.data?.routeDetailOganize?.map((item) => ({
                     ...item,
                     key: item.id,
-                })).sort((p, n) => +!n.order - +!(p.order) || n?.order - p?.order),
+                })).sort((p, n) => +!p.order - +!(n.order) || p?.order - n?.order),
                 routeDetailOganizeTemp: action.data?.routeDetailOganizeTemp?.map((item) => ({
                     ...item,
                     key: item.id,
-                })).sort((p, n) => +!n.order - +!(p.order) || n?.order - p?.order),
+                })).sort((p, n) => +!p.order - +!(n.order) || p?.order - n?.order),
             };
             return {
                 ...state,
@@ -698,10 +697,10 @@ export default (state: State = initState, action) => {
                         ...item,
                         key: item.id,
                     })).sort((p, n) => +!p.order - +!(n.order) || p?.order - n?.order),
-                    routeDetailHdbTemp2: state.organizingPopup['routeDetailHdbTemp']?.filter(item=>
-                        {
-                            return !routeDetailHdbGroupIdList.includes(item.groupId)}
-                        ),
+                    routeDetailHdbTemp2: state.organizingPopup['routeDetailHdbTemp']?.filter(item => {
+                        return !routeDetailHdbGroupIdList.includes(item.groupId)
+                    }
+                    ),
                 },
             }
         case REQUEST_ORGANIZING_CHECK_STOP_POINT:
@@ -743,6 +742,9 @@ export default (state: State = initState, action) => {
                         destinationPointName: action.data.categoryVehicle?.categoryOrgs?.orgsName,
                         destinationPointAddress: action.data.categoryVehicle?.categoryOrgs?.orgsAddress,
                         selectedData: action.data,
+                        selectedAttr: {
+                            vehicleCode: action.data.categoryVehicle?.vehicleCode,
+                        }
                     }
                 }
                 if (action.tableType === 2) {
@@ -752,6 +754,9 @@ export default (state: State = initState, action) => {
                         destinationPointName: action.data.categoryPers?.categoryOrgs?.orgsName,
                         destinationPointAddress: action.data.categoryPers?.categoryOrgs?.orgsAddress,
                         selectedData: action.data,
+                        selectedAttr: {
+                            persCode: action.data.categoryPers?.persCode,
+                        }
                     }
                 }
                 if (action.tableType === 3) {
@@ -762,6 +767,8 @@ export default (state: State = initState, action) => {
                         destinationPointAddress: action.data.destinationAddress,
                         cashOptimizationId: action.data.cashOptimization?.id,
                         selectedData: action.data,
+                        selectedAttr: {
+                        }
                     }
                 }
                 if (action.tableType === 4) {
@@ -771,6 +778,9 @@ export default (state: State = initState, action) => {
                         destinationPointName: action.data.orgsName,
                         destinationPointAddress: action.data.orgsAddress,
                         selectedData: action.data,
+                        selectedAttr: {
+                            orgsCode: action.data.orgsCode,
+                        }
                     }
                 }
                 return data;
@@ -781,6 +791,7 @@ export default (state: State = initState, action) => {
                     ...state.organizingPopup,
                     ...destinationPointData,
                 },
+                special: action.data?.cashOptimization?.cashOptimizatioDetailModelList,
             }
         case SELECT_DESTINATION_POINT:
             return {
@@ -900,6 +911,14 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 balanceSpecial: action.data?.data,
+            }
+        case UPDATE_ORGANIZE_GET_HDB_DETAIL:
+            return {
+                ...state,
+                organizingPopup: {
+                    ...state.organizingPopup,
+                    routeDetailHdbTemp2: action?.data?.data?.map(item => ({ ...item, quanlity: -item?.quanlity })),
+                }
             }
         default:
             return state
@@ -1051,7 +1070,7 @@ function getDefaultPersComboxFilter() {
             value: 'TEN_DVQL',
         },
         {
-            text: 'SĐT lái xe',
+            text: 'SĐT Nhân viên',
             value: 'SDT_LX',
         },
     ]

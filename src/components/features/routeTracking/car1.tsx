@@ -21,10 +21,9 @@ export const Element = (props: Props) => {
   const userSelector = useSelector(state => state['auth'].user);
   const type = 'component';
   const html = getHtml(selector, userSelector);
+ 
   useEffect(() => {
     if (_.isEmpty(selector?.route)) {
-      // console.log('===========');
-      // console.log(html);
       // if (!html)
       //   dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Bạn không có quyền theo dõi lộ trình này' } });
     }
@@ -103,32 +102,15 @@ const getHtml = (routeTracking, user) => {
       atm,
     }
   };
-  console.log('---------------pers');
-  console.log(persCode);
-  console.log(route.tqDltltCode);
-  // console.log(routeDetailOganize);
-  // console.log(routeTracking.route?.destinationTq?.categoryOrgs?.orgsCode);
-  // console.log(routeTracking);
-  // console.log(routeTracking.route?.routeDetailVehicle);
-  // console.log(pers);
-  // console.log(perLXE);
-  // console.log({
-  //   bve,
-  //   lxe,
-  //   atai,
-  //   tquy,
-  //   atm,
-  // });
-  // console.log(routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode))
   const routeStatus = route.routeStatus;
   if (route.transportType != 'Xe chuyên dùng')
     return false;
   if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
     if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
       if (routeStatus.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
-        return html26_1(route, routeDetailOganize);
-      if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus.includes("Going_") || routeStatus.includes("Working_"))
         return html26_2(route, routeDetailOganize);
+      if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus.includes("Going_") || routeStatus.includes("Working_"))
+        return html26_1(route, routeDetailOganize);
     }
   }
   if (persCode === route.tqDltltCode) {

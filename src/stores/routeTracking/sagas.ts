@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { FETCH_DATA, FETCH_MAP, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_1_KCD, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD, SEARCH_TQUY, UPDATE_DATA, UPDATE_MAP, UPDATE_TQUY } from './constants';
+import { FETCH_DATA, FETCH_MAP, FETCH_MAP_DRIVER, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_1_KCD, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD, SEARCH_TQUY, UPDATE_DATA, UPDATE_MAP, UPDATE_TQUY } from './constants';
 import Config from '@config';
 import { _Date, getCurrentDate } from '@utils';
 import _ from 'lodash';
@@ -10,7 +10,8 @@ import { HANDLE_BUTTON } from '../_base/constants';
 function* saga() {
     // yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
     yield takeLatest(FETCH_DATA, fetchDataSaga);
-    yield takeLatest(FETCH_MAP, fetchMapSaga);
+    yield takeLatest(FETCH_MAP, fetchMapSaga, 'getRouteMap');
+    yield takeLatest(FETCH_MAP_DRIVER, fetchMapSaga, 'getRouteMapForDriver');
     yield takeLatest(REQUEST_ROUTE_START, requestRouteStartSaga);
     yield takeLatest(REQUEST_ROUTE_CONFIRM_1, requestRouteConfirm1Saga);
     yield takeLatest(REQUEST_ROUTE_CONFIRM_2, requestRouteConfirm2Saga);
@@ -66,14 +67,19 @@ function getData(filters) {
         .catch(error => console.log(error));
 }
 
-function* fetchMapSaga(action?) {
+function* fetchMapSaga(apiPath) {
     const state = yield select();
-    const responseData = yield call(getMap, state.routeTracking.route);
-    yield put({ type: UPDATE_MAP, data: responseData.data });
+    if (state.routeTracking?.route?.id) {
+        const url = Config.url + `/api/cashoptimization/route/${apiPath}?routeId=${state.routeTracking?.route.id}`;
+        const responseData = yield call(getMap, url, state.routeTracking?.route);
+        yield put({ type: UPDATE_MAP, data: responseData.data });
+    }
+    // const responseData = yield call(getMap, state.routeTracking.route);
+    // const responseData = yield call(getMap, action);
+    // yield put({ type: UPDATE_MAP, data: responseData.data });
 }
-
-function getMap(data) {
-    const url = Config.url + '/api/cashoptimization/route/getRouteMap?routeId=' + data.id;
+function getMap(url, data) {
+    // const url = data.id ? Config.url + '/api/cashoptimization/route/getRouteMap?routeId=' + data.id : Config.url + '/api/cashoptimization/route/getRouteMap?routeId=16';
 
     return axios.get(url)
         .catch(error => console.log(error));
@@ -86,11 +92,11 @@ function* requestRouteStartSaga(action?) {
     const api = 'routeStart';
     const responseData = yield call(requestRouteSubmit, api, state.routeTracking.route, action?.order);
     yield put({ type: HANDLE_BUTTON, keys: ['routeTracking', 'confirm', 'isLoading'], value: false });
-     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
-    
+
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm1Saga(action?) {
@@ -103,7 +109,7 @@ function* requestRouteConfirm1Saga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
-    
+
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm2Saga(action?) {
@@ -116,7 +122,7 @@ function* requestRouteConfirm2Saga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
-    
+
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm3Saga(action?) {
@@ -129,7 +135,7 @@ function* requestRouteConfirm3Saga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
-    
+
     yield put({ type: FETCH_DATA });
 }
 
@@ -144,7 +150,7 @@ function* requestRouteStartKCDSaga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
-    
+
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm2KCDSaga(action?) {
@@ -157,7 +163,7 @@ function* requestRouteConfirm2KCDSaga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
-    
+
     yield put({ type: FETCH_DATA });
 }
 function* requestRouteConfirm3KCDSaga(action?) {
@@ -170,7 +176,7 @@ function* requestRouteConfirm3KCDSaga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield spawn(addNoti, 'success', 'Bạn đã cập nhật thành công');
-    
+
     yield put({ type: FETCH_DATA });
 }
 

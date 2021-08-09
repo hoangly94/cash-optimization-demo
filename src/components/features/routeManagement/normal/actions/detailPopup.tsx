@@ -11,6 +11,7 @@ import * as Table from "~commons/table";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { getCurrentDate, getCurrentDateTime, getDateString, _Date } from '~/utils';
 import { REQUEST_EDITING_CANCEL } from '~/stores/pyc/registration/constants';
+import { FETCH_BALANCE_SPECIAL } from '_/stores/routeManagement/normal/constants';
 
 export const Element = (props: Popup.Props) => {
   const {
@@ -166,7 +167,7 @@ export const Element = (props: Popup.Props) => {
         }}
       >
         < Table.Element
-          {...orgsTableData(selector.categoryOrg?.map(orgsMapResponseToData(handleRowClick(dispatch))))}
+          {...routeTableData(selector.routeDetailOganizeTemp?.map(routeMapResponseToData(dispatch, handleRowClick(dispatch))))}
           backgroundColor={Base.BackgroundColor.WHITE}
         />
       </Block.Element>
@@ -481,7 +482,7 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
   ]
 })
 
-const orgsTableData = (queryResult?): Table.Props => ({
+const routeTableData = (queryResult?): Table.Props => ({
   $thead: [
     {
       style: {
@@ -519,7 +520,15 @@ const orgsTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Khoảng cách số PYC HT',
+          children: 'Khoảng cách',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Số PYC HT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mức độ ưu tiên',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -535,18 +544,57 @@ const orgsTableData = (queryResult?): Table.Props => ({
   $rows: queryResult ? queryResult : [],
 })
 
-const orgsMapResponseToData = (handleRowClick) => (item, index) => ({
+const routeMapResponseToData = (dispatch, handleRowClick) => (item, index) => ({
   isSelected: item.isSelected ?? false,
-  onClick: handleRowClick(item, 4),
+  onClick: handleRowClick(item),
   $cells: [
     {
       children: item.index || index + 1,
     },
     {
-      children: item.orgsName,
+      children: item.routeDetailOganizeStatus,
     },
     {
-      children: item.orgsAddress,
+      children: item.stopPointType,
+    },
+    {
+      children: item.departurePointName,
+    },
+    {
+      children: item.departurePointAddress,
+    },
+    {
+      children: item.destinationPointName,
+    },
+    {
+      children: item.destinationPointAddress,
+    },
+    {
+      children: item.kcDepartureToDestination,
+    },
+    {
+      children: item.cashOptimizationId,
+    },
+    {
+      children: item.cashOptimization?.priorityLevelName,
+    },
+    {
+      children: item.cashOptimization?.model,
+    },
+    {
+      children: <a
+        style={{
+          color: 'blue',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'balanceSpecial', 'isShown'],
+            value: true,
+          });
+          dispatch({ type: FETCH_BALANCE_SPECIAL , routeDetailOganizeId:item.id})
+        }} >Link</a>,
     },
   ]
 })

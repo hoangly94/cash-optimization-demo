@@ -588,7 +588,7 @@ const initState: State = {
             },
         },
         'routeTracking': {
-            'mapPopup': {
+            mapPopup: {
                 isShown: false,
             },
         },
