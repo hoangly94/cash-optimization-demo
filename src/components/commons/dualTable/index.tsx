@@ -94,7 +94,7 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const table1DataSelector = store && store.selector1Keys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selector1Keys as string[])) : [];
   const table2DataSelector = store && store.selector2Keys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.selector2Keys as string[])) : [];
-  
+
   const table1Props = {
     ...tableData1(titleCallback1, title1, table1DataSelector?.map(mapResponseToData(cellMapping1, handleRowClick(dispatch, store.row1ClickAction)))),
   }
@@ -123,6 +123,10 @@ export const Element = (props: Props) => {
     return (
       <Block.Element {...componentProps}>
         <Block.Element>
+          <Title.Element
+            text={title1}
+            tagType={Title.TagType.H3}
+          />
           <Block.Element
             width={Base.Width.FULL}
             style={{
@@ -206,6 +210,10 @@ export const Element = (props: Props) => {
             />
 
           </Block.Element>
+          <Title.Element
+            text={title2}
+            tagType={Title.TagType.H3}
+          />
           <Block.Element
             width={Base.Width.FULL}
             style={{

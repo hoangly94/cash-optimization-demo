@@ -343,7 +343,7 @@ function* fetchOrgsChildrenSaga(action?) {
 function* fetchPycSaga(action?) {
     const state = yield select();
     const responseData = yield call(getPyc, state.routeManagement.filters, state.auth, action);
-    yield put({ type: UPDATE_PYC, data: responseData.data });
+    yield put({ type: UPDATE_PYC, data: responseData.data, page: action?.page });
 }
 
 

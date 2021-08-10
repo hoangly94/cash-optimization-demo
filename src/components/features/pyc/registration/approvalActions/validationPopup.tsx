@@ -124,7 +124,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.orgsHolderName}
+              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -132,7 +132,7 @@ export const Element = (props: Props) => {
             <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.orgsHolderMobile}
+              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -160,7 +160,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.orgsHolderName}
+              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -168,7 +168,7 @@ export const Element = (props: Props) => {
             <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.orgsHolderMobile}
+              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -257,7 +257,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.orgsHolderName}
+              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -265,7 +265,7 @@ export const Element = (props: Props) => {
             <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.orgsHolderMobile}
+              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -317,7 +317,7 @@ export const Element = (props: Props) => {
             <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.orgsHolderName}
+              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -325,7 +325,7 @@ export const Element = (props: Props) => {
             <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.orgsHolderMobile}
+              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
               isDisabled={true}
             />
           </Block.Element>

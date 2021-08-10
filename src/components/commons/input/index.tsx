@@ -93,6 +93,9 @@ export const Element = (props: Props) => {
   if (ref?.current) {
     (ref as any).current.value = value || defaultValue;
   }
+  // console.log('======================');
+  // console.log(defaultValue);
+  // console.log(placeholder);
   const valueProp = (() => {
     const newValue = (value || defaultValue);
     if (newValue && valueMapper)

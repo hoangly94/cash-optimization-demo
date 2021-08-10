@@ -6,7 +6,6 @@ import { HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
 
 import Config from '@config';
-import { ItemChildrenType } from '_/components/commons/list';
 const initState: State = {
     history: [],
     pycModels: [],
@@ -68,7 +67,17 @@ const initState: State = {
             name: 'Nhận quỹ ĐVTLT',
             value: 'Nhận quỹ ĐVTLT',
         }
-    ]
+    ],
+    // routeTransportTypes: [
+    //     {
+    //         name: 'XE CHUYÊN DÙNG',
+    //         value: 'Xe chuyên dùng',
+    //     },
+    //     {
+    //         name: 'ĐI BỘ',
+    //         value: 'Đi bộ',
+    //     }
+    // ],
 }
 
 function getDefaultObjectTypes() {
@@ -130,7 +139,7 @@ export default (state: State = initState, action) => {
             return state
         case UPDATE_DATA:
             const data = action.data?.data ? action.data.data?.map(preprocessQueryResult(state)) : [];
-            console.log(data);
+
             return {
                 ...state,
                 isLoading: false,
@@ -463,8 +472,8 @@ export default (state: State = initState, action) => {
                 ...state,
                 [popupType]: {
                     ...state[popupType],
-                    tableContent1: moveNewData[0],
-                    tableContent2: moveNewData[1],
+                    tableContent1: moveNewData[0].map((item, index) => ({ ...item, index: index + 1})),
+                    tableContent2: moveNewData[1].map((item, index) => ({ ...item, index: index + 1})),
                 }
             }
         case RESET_FILTER:
@@ -563,10 +572,11 @@ export default (state: State = initState, action) => {
                 ...state,
                 searchVehiclePersPopup: {
                     ...state.searchVehiclePersPopup,
-                    transportType: {
-                        text: state.selectedItem?.transportType?.toUpperCase(),
-                        value: state.selectedItem?.transportType,
-                    },
+                    ...getDefaultSearchVehiclePersPopup(),
+                    // transportType: {
+                    //     text: state.selectedItem?.transportType?.toUpperCase(),
+                    //     value: state.selectedItem?.transportType,
+                    // },
                     vehicles: state.selectedItem?.routeDetailVehicle.map(item =>
                     ({
                         ...item,
@@ -611,20 +621,28 @@ export default (state: State = initState, action) => {
             }
         case UPDATE_PYC:
             const pycData = action.data?.data?.map(item => ({ ...item, key: item.id }));
+
             return {
                 ...state,
                 creatingPopup: {
                     ...action.data,
                     ...state.creatingPopup,
-                    tableContent1: pycData,
+                    tableContent1: pycData.map((item, index) => ({
+                        ...item,
+                        key: item.id,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
                 },
                 editingPopup: {
                     ...action.data,
                     ...state.editingPopup,
                     tableContent1: pycData?.filter(item1 =>
                         state.editingPopup.tableContent2?.filter(item2 => item2.id == item1.id).length == 0)
-                        .map(item => ({ ...item, key: item.id })).map(item => ({ ...item, key: item.key })),
-
+                        .map((item, index) => ({
+                            ...item,
+                            key: item.id,
+                            index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        })),
                 },
                 pyc: pycData,
             }
@@ -955,8 +973,8 @@ function getDefaultPopupActions() {
 function getDefaultSearchVehiclePersPopup() {
     return {
         transportType: {
-            text: '',
-            value: '',
+            text: 'XE CHUYÊN DÙNG',
+            value: 'Xe chuyên dùng',
         },
         vehicles: [],
         pers: [],

@@ -301,6 +301,7 @@ export type State = {
         routes?: any[],
         pycTypes?: any[],
     },
+    routeTransportTypes?: any[],
 }
 
 

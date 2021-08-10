@@ -1,7 +1,7 @@
 import { CHANGE_CODE_FILTER, State, UPDATE_DATA, UPDATE_MAP, UPDATE_TQUY } from './constants'
 import moment from 'moment';
-
 import Config from '@config';
+
 const initState: State = {
     filters: {
         id: '',

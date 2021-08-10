@@ -118,7 +118,7 @@ export const Element = (props: Props) => {
                   popupType: 1,
                 }
               }}
-              isDisabled={!userSelector.viewList.includes('5')}
+              isDisabled={!userSelector.viewList.includes('14')}
               onClick={()=>dispatch({type: REQUEST_CREATING_CANCEL})}
             />
             <Button.Element
@@ -132,7 +132,7 @@ export const Element = (props: Props) => {
                   popupType: 2,
                 }
               }}
-              isDisabled={!(userSelector.viewList.includes('7') && viewSelector?.routeStatus === 'Originating_R')}
+              isDisabled={!(userSelector.viewList.includes('15') && viewSelector?.routeStatus === 'Originating_R')}
               onClick={()=>dispatch({type: REQUEST_EDITING_CANCEL})}
             />
             <Button.Element
@@ -146,7 +146,7 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
-              isDisabled={!(userSelector.viewList.includes('7') && !(viewSelector?.routeStatus === 'Finished'))}
+              isDisabled={!(userSelector.viewList.includes('15D') && !(viewSelector?.routeStatus === 'Finished'))}
             />
             <Button.Element
               {...buttonProps}
@@ -161,6 +161,7 @@ export const Element = (props: Props) => {
                   popupType: 3,
                 }
               }}
+              isDisabled={!(userSelector.viewList.includes('12'))}
             />
           </Block.Element>
 
@@ -180,7 +181,7 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
-              isDisabled={!(userSelector.viewList.includes('7') && (viewSelector?.routeStatus === 'Adding'
+              isDisabled={!(userSelector.viewList.includes('16') && (viewSelector?.routeStatus === 'Adding'
                 && viewSelector.orgsCode == userSelector.orgsCode))}
             />
             <Button.Element
@@ -196,7 +197,7 @@ export const Element = (props: Props) => {
                   popupType: 5,
                 }
               }}
-              isDisabled={!(userSelector.viewList.includes('7') && (viewSelector?.routeStatus === 'Organizing'
+              isDisabled={!(userSelector.viewList.includes('19') && (viewSelector?.routeStatus === 'Organizing'
                 && viewSelector.orgsCode == userSelector.orgsCode))}
             />
             <Button.Element
@@ -217,6 +218,7 @@ export const Element = (props: Props) => {
                   popupType: 3,
                 }
               }}
+              isDisabled={!(userSelector.viewList.includes('13'))}
             />
           </Block.Element>
         </Block.Element>

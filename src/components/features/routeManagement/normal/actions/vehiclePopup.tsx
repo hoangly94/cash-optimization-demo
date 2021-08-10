@@ -15,6 +15,7 @@ export type Props = Base.Props;
 
 export const Element = (props: Popup.Props) => {
   const selector = useSelector(state => state['routeManagement'].vehiclePopup);
+  
   const dispatch = useDispatch();
   return (
     <Popup.Element
@@ -55,6 +56,8 @@ export const Element = (props: Popup.Props) => {
       </Block.Element>
       <DualTable.Element
         type={DualTable.Type.BLOCK}
+        title1='Danh sách xe sẵn sàng'
+        title2='Xe được chọn'
         titleCallback1={titleCallback}
         titleCallback2={titleCallback}
         cellMapping1={cellMapping(dispatch)}
@@ -70,6 +73,7 @@ export const Element = (props: Popup.Props) => {
           oneRightToLeft: {
             text: 'Add',
             isShown: false,
+            isDisabled: selector?.tableContent2?.length > 0,
             onClick: () => dispatch({type: REQUEST_VEHICLE}),
           },
           oneLeftToRight: {
@@ -177,7 +181,7 @@ const titleCallback = () => ([
   },
   {
     ...tableData_$rows_$cells_title,
-    children: 'Tên đơn bị quản lý xe',
+    children: 'Tên đơn vị quản lý xe',
     sort: {
       type: REQUEST_VEHICLE,
       data: 'orgs_name',

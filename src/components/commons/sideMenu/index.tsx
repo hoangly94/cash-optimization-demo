@@ -109,8 +109,15 @@ const mapPropsToLinkElemets = (location, props: Props) => ($link: ItemType, inde
         maxHeight: isChoosen ? '500px' : '0px',
       }
     };
-    const children = $link.$subs.filter((item:any) => props.roleCodeList?.includes(item.accessedRole)).map(mapPropsToLinkElemets(location, props));
-    if($link.$subs && _.isEmpty(children)){
+    const children = $link.$subs.filter((item: any) => {
+      if (item.accessedRoles)
+        for (const accessedRole of item.accessedRoles) {
+          if (props.roleCodeList?.includes(accessedRole))
+            return true;
+        }
+      return false;
+    }).map(mapPropsToLinkElemets(location, props));
+    if ($link.$subs && _.isEmpty(children)) {
       return <></>
     }
     return <Block.Element {...ItemWrapperProps}>

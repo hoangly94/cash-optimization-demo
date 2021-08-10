@@ -21,7 +21,7 @@ export const Element = (props: Props) => {
   const userSelector = useSelector(state => state['auth'].user);
   const type = 'component';
   const html = getHtml(selector, userSelector);
- 
+
   useEffect(() => {
     if (_.isEmpty(selector?.route)) {
       // if (!html)
@@ -35,6 +35,12 @@ export const Element = (props: Props) => {
     ),
     ...props,
   };
+  const handleSubmitButtonClick = () => {
+    const isValidForm = validateForm(dispatch, selector);
+    if (isValidForm) {
+      dispatch({ type: FETCH_DATA });
+    }
+  }
   return (
     <>
       <Block.Element {...componentWrapperProps}>
@@ -61,9 +67,7 @@ export const Element = (props: Props) => {
             borderRadius={Base.BorderRadius.PX_3}
             margin={Base.MarginRight.PX_8}
             backgroundColor={Base.BackgroundColor.GREEN}
-            store={{
-              action: { type: FETCH_DATA },
-            }}
+            onClick={handleSubmitButtonClick}
           />
         </Block.Element>
         {
@@ -106,17 +110,15 @@ const getHtml = (routeTracking, user) => {
   if (route.transportType != 'Xe chuyên dùng')
     return false;
   if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
-    if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
-      if (routeStatus.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
-        return html26_2(route, routeDetailOganize);
-      if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus.includes("Going_") || routeStatus.includes("Working_"))
-        return html26_1(route, routeDetailOganize);
-    }
+    if (routeStatus.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
+      return html26_2(route, routeDetailOganize);
+    if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus.includes("Going_") || routeStatus.includes("Working_"))
+      return html26_1(route, routeDetailOganize);
   }
   if (persCode === route.tqDltltCode) {
     if (routeStatus === 'Beginning')
       return html27_1(route);
-    if (routeStatus === routeDetailOganize)
+    if (routeStatus === 'Pickingup_SEC')
       return html27_2(route, routeDetailOganize);
     if (routeStatus === 'Pickingup_ATM')
       return html27_3(route, routeDetailOganize);
@@ -155,6 +157,8 @@ const getHtml = (routeTracking, user) => {
         return html25_4(route, routeDetailOganize);
       if (routeStatus.includes("Working_"))
         return html25_5(route, routeDetailOganize);
+      if (routeStatus === 'Finishing' || routeStatus === 'Finished')
+        return html25_6(route, routeDetailOganize);
     }
   }
 
@@ -262,7 +266,7 @@ const html24_1 = (route) => {
 
 const html24_2 = (route, routeDetailOganize) => {
   return (<>
-    <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc đơn áp tải' tagType={Title.TagType.H3} />
+    <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc đón áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -683,6 +687,13 @@ const html25_2 = (route, routeDetailOganize) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
         defaultValue={routeDetailOganize?.destinationPointAddress}
@@ -795,6 +806,13 @@ const html25_3 = (route, routeDetailOganize) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
         defaultValue={routeDetailOganize?.destinationPointAddress}
@@ -903,6 +921,13 @@ const html25_4 = (route, routeDetailOganize) => {
           }}
         />
       </Block.Element>
+    </Block.Element>
+    <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
@@ -1136,6 +1161,74 @@ const html25_5 = (route, routeDetailOganize) => {
   )
 }
 
+const html25_6 = (route, routeDetailOganize) => {
+  return (<>
+    <Title.Element text={'6.Kết thúc lộ trình'} tagType={Title.TagType.H3} />
+    <Block.Element {...col2}>
+      <Block.Element>
+        <Title.Element text='Số lộ trình' />
+        <Input.Element
+          defaultValue={route.id}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element>
+        <Button.Element
+          text='MAP OF ROUTE'
+          width={Base.Width.PX_200}
+          color={Base.Color.WHITE}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+
+          store={{
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeTracking', 'mapPopup', 'isShown'],
+              value: true,
+            }
+          }}
+        />
+      </Block.Element>
+    </Block.Element>
+    <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col1}>
+      <Title.Element text='Điểm cần đến' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.destinationPointAddress}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col1}>
+      <Title.Element text='Công việc cần thực hiện' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.stopPointType}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col2}>
+      <Block.Element>
+        <Title.Element text='Họ và tên thủ quỹ ĐVTLT' />
+        <Input.Element
+          defaultValue={route.tqDltltName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element>
+        <Title.Element text='SĐT thủ quỹ ĐVTLT' />
+        <Input.Element
+          defaultValue={route.categoryPers?.persMobile}
+          isDisabled={true}
+        />
+      </Block.Element>
+    </Block.Element>
+  </>
+  )
+}
 
 
 const html26_1 = (route, routeDetailOganize) => {
@@ -1435,6 +1528,13 @@ const html27_2 = (route, routeDetailOganize) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
         defaultValue={routeDetailOganize?.destinationPointAddress}
@@ -1547,6 +1647,13 @@ const html27_3 = (route, routeDetailOganize) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
         defaultValue={routeDetailOganize?.destinationPointAddress}
@@ -1655,6 +1762,13 @@ const html27_4 = (route, routeDetailOganize) => {
           }}
         />
       </Block.Element>
+    </Block.Element>
+    <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
@@ -1895,6 +2009,13 @@ const html27_6 = (route, routeDetailOganize) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
         defaultValue={routeDetailOganize?.destinationPointAddress}
@@ -1926,6 +2047,14 @@ const html27_6 = (route, routeDetailOganize) => {
     </Block.Element>
   </>
   )
+}
+
+const validateForm = (dispatch, selector) => {
+  if (!selector.filters?.id) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Vui lòng nhập số Lộ trình' } });
+    return false;
+  }
+  return true;
 }
 
 

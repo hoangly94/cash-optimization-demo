@@ -5,7 +5,7 @@ import { FETCH_AREAS, FETCH_CONFIG, FETCH_FUNCTIONS, FETCH_ORGS, FETCH_PERS, FET
 import { AuthRoute, RoleRoute } from '@hocs';
 import * as Base from '~/_settings';
 import * as Login from '~features/login';
-import * as Register from '~features/register';
+// import * as Register from '~features/register';
 import * as FirstChangePassword from '~features/firstChangePassword';
 import * as Main from '~commons/main';
 import * as Breadcrumbs from '~commons/breadcrumbs';
@@ -29,6 +29,7 @@ import * as PYCApproval from '~features/pyc/registration/approval';
 import * as ChangePassword from '~features/user/changePassword';
 import * as AssignRole from '~features/user/assignRole';
 import * as ResetPassword from '~features/user/resetPassword';
+import * as Register from '~features/user/register';
 import * as RouteManagementNormal from '~features/routeManagement/normal';
 import * as RouteManagementUrgent from '~features/routeManagement/normal/urgent';
 import * as RouteTrackingCar1 from '~features/routeTracking/car1';
@@ -156,8 +157,8 @@ const DashboardComponent = (userSelector) => () => {
                 <Switch>
                     <Route exact path="/">
                     </Route>
-                    <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRole='11B' roles={userSelector.viewList} />
-                    <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRole='11B' roles={userSelector.viewList} />
+                    <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRoles='11B' roles={userSelector.viewList} />
+                    <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRoles='11B' roles={userSelector.viewList} />
                 </Switch>
             </Block.Element>
         )
@@ -171,31 +172,32 @@ const DashboardComponent = (userSelector) => () => {
                     <Route exact path="/">
                     </Route>
 
-                    <RoleRoute path="/category/orgs" component={ORGS.Element} accessedRole='41' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/atm-cdm" component={ATM_CDM.Element} accessedRole='39' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/nhnn-tctd" component={NHNN_TCTD.Element} accessedRole='43' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/vehicle" component={Vehicle.Element} accessedRole='45' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/pers" component={Person.Element} accessedRole='49' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/title" component={Title.Element} accessedRole='51' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/currency" component={Currency.Element} accessedRole='47' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/priority" component={Priority.Element} accessedRole='53' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/region" component={Region.Element} accessedRole='55' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/area" component={Area.Element} accessedRole='57' roles={userSelector.viewList} />
-                    <RoleRoute path="/category/function" component={Function.Element} accessedRole='59' roles={userSelector.viewList} />
+                    <RoleRoute path="/category/orgs" component={ORGS.Element} accessedRoles={['41']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/atm-cdm" component={ATM_CDM.Element} accessedRoles={['39']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/nhnn-tctd" component={NHNN_TCTD.Element} accessedRoles={['43']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/vehicle" component={Vehicle.Element} accessedRoles={['45']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/pers" component={Person.Element} accessedRoles={['49']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/title" component={Title.Element} accessedRoles={['51']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/currency" component={Currency.Element} accessedRoles={['47']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/priority" component={Priority.Element} accessedRoles={['53']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/region" component={Region.Element} accessedRoles={['55']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/area" component={Area.Element} accessedRoles={['57']} roles={userSelector.viewList} />
+                    <RoleRoute path="/category/function" component={Function.Element} accessedRoles={['59']} roles={userSelector.viewList} />
 
-                    <RoleRoute path="/authority/registration" component={Registration.Element} accessedRole='31A' roles={userSelector.viewList} />
-                    <RoleRoute path="/authority/approval" component={Approval.Element} accessedRole='31B' roles={userSelector.viewList} />
+                    <RoleRoute path="/authority/registration" component={Registration.Element} accessedRoles={['31A']} roles={userSelector.viewList} />
+                    <RoleRoute path="/authority/approval" component={Approval.Element} accessedRoles={['31B']} roles={userSelector.viewList} />
 
-                    <RoleRoute path="/user/change-password" component={ChangePassword.Element} accessedRole='61' roles={userSelector.viewList} />
-                    <RoleRoute path="/user/assign-role" component={AssignRole.Element} accessedRole='62' roles={userSelector.viewList} />
-                    <RoleRoute path="/user/reset-password" component={ResetPassword.Element} accessedRole='63' roles={userSelector.viewList} />
+                    <RoleRoute path="/user/change-password" component={ChangePassword.Element} accessedRoles={['61']} roles={userSelector.viewList} />
+                    <RoleRoute path="/user/assign-role" component={AssignRole.Element} accessedRoles={['62']} roles={userSelector.viewList} />
+                    <RoleRoute path="/user/reset-password" component={ResetPassword.Element} accessedRoles={['63']} roles={userSelector.viewList} />
+                    <RoleRoute path="/user/register" component={Register.Element} accessedRoles={['63']} roles={userSelector.viewList} />
 
-                    <RoleRoute path="/pyc/registration" component={PYCRegistration.Element} accessedRole='1A' roles={userSelector.viewList} />
-                    <RoleRoute path="/pyc/approval" component={PYCApproval.Element} accessedRole='1B' roles={userSelector.viewList} />
-                    <RoleRoute path="/route-management/normal" component={RouteManagementNormal.Element} accessedRole='11A' roles={userSelector.viewList} />
-                    <RoleRoute path="/route-management/urgent" component={RouteManagementUrgent.Element} accessedRole='11B' roles={userSelector.viewList} />
-                    <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRole='11B' roles={userSelector.viewList} />
-                    <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRole='11B' roles={userSelector.viewList} />
+                    <RoleRoute path="/pyc/registration" component={PYCRegistration.Element} accessedRoles={['1A']} roles={userSelector.viewList} />
+                    <RoleRoute path="/pyc/approval" component={PYCApproval.Element} accessedRoles={['1B']} roles={userSelector.viewList} />
+                    <RoleRoute path="/route-management/normal" component={RouteManagementNormal.Element} accessedRoles={['11A']} roles={userSelector.viewList} />
+                    <RoleRoute path="/route-management/urgent" component={RouteManagementUrgent.Element} accessedRoles={['11B']} roles={userSelector.viewList} />
+                    <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRoles={['24', '25', '26', '27']} roles={userSelector.viewList} />
+                    <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRoles={['28', '29', '30']} roles={userSelector.viewList} />
                 </Switch>
             </Main.Element>
         </>
@@ -215,6 +217,18 @@ const breadcrumbsMapper = {
         'registration': { _url: '/pyc/registration', _name: 'Đăng ký', },
         'approval': { _url: '/pyc/approval', _name: 'Kiểm soát & Phê duyệt', },
     },
+    'route-management': {
+        _url: '',
+        _name: 'Quản lý Lộ trình',
+        'normal': { _url: '/route-management/normal', _name: 'Lộ trình Bình thường', },
+        'urgent': { _url: '/route-management/urgent', _name: 'Lộ trình Khẩn cấp', },
+    },
+    'route-tracking': {
+        _url: '',
+        _name: 'Theo dõi Lộ trình',
+        'car1': { _url: '/route-tracking/car1', _name: 'PTVC là xe chuyên dùng', },
+        'car2': { _url: '/route-tracking/car2', _name: 'PTVC KHÁC xe chuyên dùng', },
+    },
     'category': {
         _url: '',
         _name: 'Danh mục',
@@ -232,22 +246,11 @@ const breadcrumbsMapper = {
     },
     'user': {
         _url: '',
-        _name: 'User',
+        _name: 'Người dùng',
         'change-password': { _url: '/user/change-password', _name: 'Đổi mật khẩu', },
-        'assign-role': { _url: '/user/assign-role', _name: 'Cấp quyền', },
+        'assign-role': { _url: '/user/assign-role', _name: 'Phân quyền', },
         'reset-password': { _url: '/user/reset-password', _name: 'Đặt lại mật khẩu', },
-    },
-    'route-management': {
-        _url: '',
-        _name: 'Quản lý Lộ trình',
-        'normal': { _url: '/route-management/normal', _name: 'Lộ trình Bình thường', },
-        'urgent': { _url: '/route-management/urgent', _name: 'Lộ trình Khẩn cấp', },
-    },
-    'route-tracking': {
-        _url: '',
-        _name: 'Theo dõi Lộ trình',
-        'car1': { _url: '/route-tracking/car1', _name: 'PTVC là xe chuyên dùng', },
-        'car2': { _url: '/route-tracking/car2', _name: 'PTVC KHÁC xe chuyên dùng', },
+        'register': { _url: '/user/register', _name: 'Đăng ký', },
     },
 }
 
@@ -263,12 +266,12 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'Đăng ký Ủy quyền',
                         url: '/authority/registration',
-                        accessedRole: '31A',
+                        accessedRoles: ['31A'],
                     },
                     {
                         text: 'Kiểm soát Ủy quyền',
                         url: '/authority/approval',
-                        accessedRole: '31B',
+                        accessedRoles: ['31B'],
                     },
                 ]
             },
@@ -281,98 +284,12 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'Đăng ký ',
                         url: '/pyc/registration',
-                        accessedRole: '1A',
+                        accessedRoles: ['1A'],
                     },
                     {
                         text: 'Kiểm soát & Phê duyệt',
                         url: '/pyc/approval',
-                        accessedRole: '1B',
-                    },
-                ]
-            },
-            {
-                text: 'Danh mục',
-                $icon: {
-                    name: 'documentCheck',
-                },
-                $subs: [
-                    {
-                        text: 'Danh mục cụm',
-                        url: '/category/area',
-                        accessedRole: '57',
-                    },
-                    {
-                        text: 'Danh mục ATM/CDM',
-                        url: '/category/atm-cdm',
-                        accessedRole: '39',
-                    },
-                    {
-                        text: 'Danh mục tiền tệ',
-                        url: '/category/currency',
-                        accessedRole: '47',
-                    },
-                    {
-                        text: 'Danh mục chức năng',
-                        url: '/category/function',
-                        accessedRole: '59',
-                    },
-                    {
-                        text: 'Danh mục TCTD/NHNN',
-                        url: '/category/nhnn-tctd',
-                        accessedRole: '43',
-                    },
-                    {
-                        text: 'Danh mục đơn vị',
-                        url: '/category/orgs',
-                        accessedRole: '41',
-                    },
-                    {
-                        text: 'Danh mục nhân viên',
-                        url: '/category/pers',
-                        accessedRole: '49',
-                    },
-                    {
-                        text: 'Danh mục mức độ ưu tiên',
-                        url: '/category/priority',
-                        accessedRole: '53',
-                    },
-                    {
-                        text: 'Danh mục vùng',
-                        url: '/category/region',
-                        accessedRole: '55',
-                    },
-                    {
-                        text: 'Danh mục chức danh nhân viên',
-                        url: '/category/title',
-                        accessedRole: '51',
-                    },
-                    {
-                        text: 'Danh mục xe',
-                        url: '/category/vehicle',
-                        accessedRole: '45',
-                    },
-                ],
-            },
-            {
-                text: 'User',
-                $icon: {
-                    name: 'user',
-                },
-                $subs: [
-                    {
-                        text: 'Change password',
-                        url: '/user/change-password',
-                        accessedRole: '61',
-                    },
-                    {
-                        text: 'Assign role',
-                        url: '/user/assign-role',
-                        accessedRole: '62',
-                    },
-                    {
-                        text: 'Reset password',
-                        url: '/user/reset-password',
-                        accessedRole: '63',
+                        accessedRoles: ['1B'],
                     },
                 ]
             },
@@ -385,12 +302,12 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'Lộ trình Bình thường',
                         url: '/route-management/normal',
-                        accessedRole: '11A',
+                        accessedRoles: ['11A'],
                     },
                     {
                         text: 'Lộ trình Khẩn cấp',
                         url: '/route-management/urgent',
-                        accessedRole: '11B',
+                        accessedRoles: ['11B'],
                     },
                 ]
             },
@@ -403,12 +320,103 @@ const dashboardMenuProps: DashboardMenu.Props = {
                     {
                         text: 'PTVC là xe chuyên dùng',
                         url: '/route-tracking/car1',
-                        accessedRole: '11A',
+                        accessedRoles: ['24', '25', '26', '27'],
                     },
                     {
                         text: 'PTVC KHÁC xe chuyên dùng',
                         url: '/route-tracking/car2',
-                        accessedRole: '11B',
+                        accessedRoles: ['28', '29', '30'],
+                    },
+                ]
+            },
+            {
+                text: 'Danh mục',
+                $icon: {
+                    name: 'documentCheck',
+                },
+                $subs: [
+                    {
+                        text: 'Danh mục cụm',
+                        url: '/category/area',
+                        accessedRoles: ['57'],
+                    },
+                    {
+                        text: 'Danh mục ATM/CDM',
+                        url: '/category/atm-cdm',
+                        accessedRoles: ['39'],
+                    },
+                    {
+                        text: 'Danh mục tiền tệ',
+                        url: '/category/currency',
+                        accessedRoles: ['47'],
+                    },
+                    {
+                        text: 'Danh mục chức năng',
+                        url: '/category/function',
+                        accessedRoles: ['59'],
+                    },
+                    {
+                        text: 'Danh mục TCTD/NHNN',
+                        url: '/category/nhnn-tctd',
+                        accessedRoles: ['43'],
+                    },
+                    {
+                        text: 'Danh mục đơn vị',
+                        url: '/category/orgs',
+                        accessedRoles: ['41'],
+                    },
+                    {
+                        text: 'Danh mục nhân viên',
+                        url: '/category/pers',
+                        accessedRoles: ['49'],
+                    },
+                    {
+                        text: 'Danh mục mức độ ưu tiên',
+                        url: '/category/priority',
+                        accessedRoles: ['53'],
+                    },
+                    {
+                        text: 'Danh mục vùng',
+                        url: '/category/region',
+                        accessedRoles: ['55'],
+                    },
+                    {
+                        text: 'Danh mục chức danh nhân viên',
+                        url: '/category/title',
+                        accessedRoles: ['51'],
+                    },
+                    {
+                        text: 'Danh mục xe',
+                        url: '/category/vehicle',
+                        accessedRoles: ['45'],
+                    },
+                ],
+            },
+            {
+                text: 'Người dùng',
+                $icon: {
+                    name: 'user',
+                },
+                $subs: [
+                    {
+                        text: 'Đổi mật khẩu',
+                        url: '/user/change-password',
+                        accessedRoles: ['61'],
+                    },
+                    {
+                        text: 'Phân quyền',
+                        url: '/user/assign-role',
+                        accessedRoles: ['62'],
+                    },
+                    {
+                        text: 'Đặt lại mật khẩu',
+                        url: '/user/reset-password',
+                        accessedRoles: ['63'],
+                    },
+                    {
+                        text: 'Đăng ký',
+                        url: '/user/register',
+                        accessedRoles: ['63'],
                     },
                 ]
             },

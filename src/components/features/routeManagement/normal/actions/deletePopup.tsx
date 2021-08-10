@@ -317,7 +317,7 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên đơn bị quản lý xe',
+          children: 'Tên đơn vị quản lý xe',
         },
         {
           ...tableData_$rows_$cells_title,

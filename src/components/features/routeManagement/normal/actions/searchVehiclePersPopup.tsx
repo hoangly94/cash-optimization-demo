@@ -21,6 +21,7 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const selector = useSelector(state => state['routeManagement'].searchVehiclePersPopup);
+  console.log(selector);
   const dispatch = useDispatch();
   const vehicleTableProps: Table.Props = {
     ...vehicleTableData(selector.vehicles?.map(vehicleMapResponseToData())),
@@ -251,7 +252,7 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên đơn bị quản lý xe',
+          children: 'Tên đơn vị quản lý xe',
           sort: {
             type: REQUEST_VEHICLE,
             data: 'orgs_name',

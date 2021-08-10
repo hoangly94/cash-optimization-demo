@@ -167,7 +167,7 @@ export const Element = (props: Popup.Props) => {
         }}
       >
         < Table.Element
-          {...routeTableData(selector.routeDetailOganizeTemp?.map(routeMapResponseToData(dispatch, handleRowClick(dispatch))))}
+          {...routeTableData(selector.routeDetailOganize?.map(routeMapResponseToData(dispatch, handleRowClick(dispatch))))}
           backgroundColor={Base.BackgroundColor.WHITE}
         />
       </Block.Element>

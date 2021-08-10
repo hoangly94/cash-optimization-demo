@@ -28,7 +28,7 @@ export const Element = (props: Popup.Props) => {
       // closePopUpCallback={() => dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL })}
     >
 
-      <Title.Element text='Thông tin xe đính kèm lái xe được chọn tham gia lộ trình'
+      <Title.Element text='Thông tin tên và địa chỉ điểm đến theo XE được chọn tham gia lộ trình'
         width={Base.Width.PER_70}
         tagType={Title.TagType.H3}
       />
@@ -47,7 +47,7 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
 
-      <Title.Element text='Thông tin NHÂN VIÊN được chọn tham gia lộ trình'
+      <Title.Element text='Thông tin tên và địa chỉ điểm đến theo NHÂN VIÊN được chọn tham gia lộ trình'
         width={Base.Width.PER_70}
         tagType={Title.TagType.H3}
       />
@@ -85,7 +85,7 @@ export const Element = (props: Popup.Props) => {
         />
       </Block.Element>
 
-      <Title.Element text='Thông tin tên và địa chỉ đến theo ĐVTLT'
+      <Title.Element text='Thông tin tên và địa chỉ điểm đến theo ĐVTLT'
         width={Base.Width.PER_70}
         tagType={Title.TagType.H3}
       />

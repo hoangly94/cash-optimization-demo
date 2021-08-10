@@ -123,22 +123,22 @@ export const Element = (props: Props) => {
           alignItems={Base.AlignItems.STRETCH}
           margin={Base.MarginTop.PX_18}
         >
-          <Block.Element
+          {/* <Block.Element
             flex={Base.Flex.BETWEEN}
           >
-            {/* <Link.Element
+            <Link.Element
               text='Forgot Pass'
               url='/forgot'
-              margin={Base.MarginRight.PX_18} /> */}
+              margin={Base.MarginRight.PX_18} />
             <Link.Element
               text='Register'
               url='/register'
               margin={Base.MarginRight.PX_8}
             />
-          </Block.Element>
+          </Block.Element> */}
           <Button.Element
             text='Login'
-            width={Base.Width.PX_200}
+            width={Base.Width.FULL}
             color={Base.Color.WHITE}
             border={Base.Border.NONE}
             borderRadius={Base.BorderRadius.PX_3}

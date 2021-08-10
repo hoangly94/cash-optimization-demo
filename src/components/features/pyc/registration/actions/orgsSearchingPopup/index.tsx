@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_COMBOX, HANDLE_SPECIAL_ADD, CHANGE_EDITING_INPUT, REQUEST_EDITING, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_ORGSSEARCHING_CONTINUE, REQUEST_ORGSSEARCHING_CANCEL} from '~stores/pyc/registration/constants';
+import { SELECT_COMBOX, HANDLE_SPECIAL_ADD, CHANGE_EDITING_INPUT, REQUEST_EDITING, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_ORGSSEARCHING_CONTINUE, REQUEST_ORGSSEARCHING_CANCEL, SEARCHORGS_FETCH_NHNNTCTDS, SEARCHORGS_FETCH_ATMCDMS} from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -18,21 +18,23 @@ export const Element = (props: Popup.Props) => {
   const {
     setIsShown,
   } = props;
+  const selector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
+  const isShown = useSelector(state => state['base'].popups.pycRegistration?.orgsSearching?.isShown);
   useEffect(() => {
-    dispatch({ type: FETCH_ATMCDMS });
-    dispatch({ type: FETCH_NHNNTCTDS });
-  }, []);
+    if(isShown){
+      dispatch({ type: SEARCHORGS_FETCH_ATMCDMS });
+      dispatch({ type: SEARCHORGS_FETCH_NHNNTCTDS });
+    }
+  }, [isShown]);
   // useEffect(() => {
   //   dispatch({ type: FETCH_ORGSSEARCHING_DATA })
   // });
 
-  const selector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   const dispatch = useDispatch();
   const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
-      
       setConfirmationDialog({
         title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
         description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
@@ -176,7 +178,7 @@ export const Element = (props: Popup.Props) => {
           width={Base.Width.PX_400}
           store={{
             defaultSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'atmCdm'],
-            selectorKeys: ['root', 'atmCdms'],
+            selectorKeys: ['pycRegistration', 'rootAtmCdms'],
             reducerType: SELECT_COMBOX,
             reducerKeys: {
               text: 'atmCdmName',
@@ -198,7 +200,7 @@ export const Element = (props: Popup.Props) => {
           width={Base.Width.PX_400}
           store={{
             defaultSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'nhnnTctd'],
-            selectorKeys: ['root', 'nhnnTctds'],
+            selectorKeys: ['pycRegistration', 'rootNhnnTctds'],
             reducerType: SELECT_COMBOX,
             reducerKeys: {
               text: 'nnhnTctdName',

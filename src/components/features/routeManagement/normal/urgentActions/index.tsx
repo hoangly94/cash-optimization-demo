@@ -117,7 +117,7 @@ export const Element = (props: Props) => {
                   popupType: 2,
                 }
               }}
-              isDisabled={!userSelector.viewList.includes('6')}
+              isDisabled={!userSelector.viewList.includes('15')}
               onClick={() => {
                 dispatch({ type: REQUEST_EDITING_CANCEL });
               }}
@@ -136,7 +136,7 @@ export const Element = (props: Props) => {
                 }
               }}
               onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'NO', noti: true })}
-              isDisabled={!(userSelector.viewList.includes('7')
+              isDisabled={!(userSelector.viewList.includes('19')
                 && viewSelector.orgsCode == userSelector.orgsCode) || ['Originating_R', 'Adding', 'Organizing', 'Canceled_R', 'Finishing', 'Finished'].includes(viewSelector?.routeStatus)}
             />
             <Button.Element

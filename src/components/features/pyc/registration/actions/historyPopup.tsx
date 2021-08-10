@@ -8,6 +8,7 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
+import moment from 'moment';
 
 export type Props = Popup.Props;
 
@@ -346,7 +347,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.cashOptimizationOrgsDetailModel?.nnhnTctdName,
     },
     {
-      children: item.updateddate,
+      children: item.updateddate && moment(item.updateddate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     },
   ]
 })

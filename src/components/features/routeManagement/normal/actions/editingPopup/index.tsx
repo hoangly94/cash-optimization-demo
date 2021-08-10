@@ -29,7 +29,6 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
   const selectedContentData2 = selector.tableContent2?.filter(item => item.isSelected);
-  
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
@@ -56,8 +55,8 @@ export const Element = (props: Props) => {
     if (isValidForm) {
       if (popupType == 'normal') {
         setConfirmationDialog({
-          title: 'Bạn có muốn lưu thông tin và chuyển trạng thái sang Adding?',
-          description: 'Vui lòng nhấn YES để đồng ý và chuyển qua MH sắp xếp, nhấn NO để quay lại',
+          title: 'Bạn có muốn lưu thông tin và chuyển trạng thái= Adding(Tìm phương tiện và thành phần vận chuyển)?',
+          description: 'Vui lòng nhấn YES để đồng ý, nhấn NO để quay lại',
           onConfirmClick: () => {
             dispatch({ type: REQUEST_UPDATE_CONTINUE, popupType });
           },
@@ -247,6 +246,8 @@ export const Element = (props: Props) => {
       {html1}
       <DualTable.Element
         type={DualTable.Type.BLOCK}
+        title1='Danh sách các PYC đang chờ tham gia lộ trình'
+        title2='Danh sách các PYC được chọn tham gia lộ trình'
         titleCallback1={titleCallback}
         titleCallback2={titleCallback}
         cellMapping1={cellMapping(dispatch)}
@@ -261,12 +262,12 @@ export const Element = (props: Props) => {
         actionButtons={{
           oneRightToLeft: {
             text: 'Add',
-            isDisabled: false,
+            isDisabled: selector.tableContent2.length >= 10,
             isShown: false,
           },
           oneLeftToRight: {
             text: 'Remove',
-            isDisabled: popupType === 'urgent' && !['Approved','Processing'].includes(selectedContentData2[0]?.cashOptimizationStatus),
+            isDisabled: popupType === 'urgent' && !['Approved', 'Processing'].includes(selectedContentData2[0]?.cashOptimizationStatus),
             isShown: false,
           },
           allRightToLeft: {
@@ -362,7 +363,7 @@ const titleCallback = () => ([
   },
   {
     ...tableData_$rows_$cells_title,
-    children: 'Số PYC HT',
+    children: 'Số lộ trình',
     sort: {
       type: REQUEST_QUERY,
       data: 'id',
@@ -524,7 +525,7 @@ const titleCallback = () => ([
 
 const cellMapping = (dispatch) => (item, index) => ([
   {
-    children: index + 1,
+    children: item.index || index + 1,
   },
   {
     children: item.id,

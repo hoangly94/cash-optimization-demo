@@ -13,7 +13,7 @@ import * as Title from "~commons/title";
 import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchPersPopup from "./searchPersPopup";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
+import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 
 export type Props = Base.Props;
 
@@ -21,9 +21,17 @@ export const Element = (props: Props) => {
   useEffect(() => {
     // dispatch({ type: REQUEST_QUERY });
   })
-  const radioSelector = useSelector(state => state['registration'].filters.radio);
+  const selector = useSelector(state => state['registration'].filters);
   const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
+
+  const handleSubmitButtonClick = () => {
+    const isValidForm = validateForm(dispatch, selector);
+    if (isValidForm) {
+      dispatch({ type: REQUEST_QUERY });
+    }
+  }
+
   //create props
   const componentWrapperProps = {
     flex: Base.Flex.START,
@@ -72,88 +80,128 @@ export const Element = (props: Props) => {
             action: { type: CHANGE_RADIO_FILTER },
           }}
         />
-        <Datepicker.Element
-          {...filter1Props}
-          $input={{
-            placeholder: 'Từ ngày(dd/mm/yyyy)',
-            width: Base.Width.FULL,
-            store: {
-              selectorKeys: ['registration', 'filters', 'dateFrom'],
-              reducerType: INPUT_DATE_FROM,
-            },
-            isDisabled: radioSelector !== '1',
-            max: 10,
-          }}
-          $datepicker={{
-            store: {
-              selectorKeys: ['registration', 'filters', 'dateFrom'],
-              action: { type: INPUT_DATE_FROM },
-            },
-            isDisabled: radioSelector !== '1',
-          }}
-        />
-        <Datepicker.Element
-          {...filter1Props}
-          $input={{
-            placeholder: 'Đến ngày(dd/mm/yyyy)',
-            width: Base.Width.FULL,
-            store: {
-              selectorKeys: ['registration', 'filters', 'dateTo'],
-              reducerType: INPUT_DATE_TO,
-            },
-            isDisabled: radioSelector !== '1',
-            max: 10,
-          }}
-          $datepicker={{
-            store: {
-              selectorKeys: ['registration', 'filters', 'dateTo'],
-              action: { type: INPUT_DATE_TO },
-            },
-            isDisabled: radioSelector !== '1',
-          }}
-        />
-        <Button.Element
-          {...filter1Props}
-          border={Base.Border.SOLID}
-          textAlign={Base.TextAlign.LEFT}
-          text={userSelector.orgsName}
-          store={{
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Từ ngày'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Datepicker.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            $input={{
+              placeholder: 'Từ ngày(dd/mm/yyyy)',
+              width: Base.Width.FULL,
+              store: {
+                selectorKeys: ['registration', 'filters', 'dateFrom'],
+                reducerType: INPUT_DATE_FROM,
+              },
+              isDisabled: selector?.radio !== '1',
+              max: 10,
+            }}
+            $datepicker={{
+              store: {
+                selectorKeys: ['registration', 'filters', 'dateFrom'],
+                action: { type: INPUT_DATE_FROM },
+              },
+              isDisabled: selector?.radio !== '1',
+            }}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Từ ngày'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Datepicker.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            $input={{
+              placeholder: 'Từ ngày(dd/mm/yyyy)',
+              width: Base.Width.FULL,
+              store: {
+                selectorKeys: ['registration', 'filters', 'dateTo'],
+                reducerType: INPUT_DATE_TO,
+              },
+              isDisabled: selector?.radio !== '1',
+              max: 10,
+            }}
+            $datepicker={{
+              store: {
+                selectorKeys: ['registration', 'filters', 'dateTo'],
+                action: { type: INPUT_DATE_TO },
+              },
+              isDisabled: selector?.radio !== '1',
+            }}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='ĐVĐQ'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Button.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            border={Base.Border.SOLID}
+            textAlign={Base.TextAlign.LEFT}
+            text={userSelector.orgsName}
+            store={{
 
-            textSelectorKeys: ['registration', 'filters', 'orgs', 'text'],
-            action: {
-              type: HANDLE_POPUP,
-              keys: ['registration', 'searchOrgs', 'isShown'],
-              value: true,
-            }
-          }}
-          style={{
-            color: '#828282',
-          }}
-          isDisabled={radioSelector !== '1' || userSelector.orgsCode != 9}
-          onClick={() => {
-            dispatch({ type: RESET_SEARCHORGS_FILTER });
-            dispatch({ type: REQUEST_QUERY_ORGS });
-            dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
-          }}
-        />
-        <Combox.Element
-          {...filter1Props}
-          store={{
-            defaultSelectorKeys: ['registration', 'filters', 'status'],
-            selectorKeys: ['root', 'authorityStatuses'],
-            reducerType: SELECT_STATUS_FILTER,
-            reducerKeys: {
-              text: 'name',
-              value: 'value',
-            },
-            // defaultOptions: [{
-            //   text: 'Tất cả',
-            //   value: 0,
-            // }],
-          }}
-          isDisabled={radioSelector !== '1'}
-          isInputDisabled={radioSelector !== '1'}
-        />
+              textSelectorKeys: ['registration', 'filters', 'orgs', 'text'],
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['registration', 'searchOrgs', 'isShown'],
+                value: true,
+              }
+            }}
+            style={{
+              color: '#828282',
+            }}
+            isDisabled={selector?.radio !== '1' || userSelector.orgsCode != 9}
+            onClick={() => {
+              dispatch({ type: RESET_SEARCHORGS_FILTER });
+              dispatch({ type: REQUEST_QUERY_ORGS });
+              dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
+            }}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Trạng thái'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Combox.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            store={{
+              defaultSelectorKeys: ['registration', 'filters', 'status'],
+              selectorKeys: ['root', 'authorityStatuses'],
+              reducerType: SELECT_STATUS_FILTER,
+              reducerKeys: {
+                text: 'name',
+                value: 'value',
+              },
+              // defaultOptions: [{
+              //   text: 'Tất cả',
+              //   value: 0,
+              // }],
+            }}
+            isDisabled={selector?.radio !== '1'}
+            isInputDisabled={selector?.radio !== '1'}
+          />
+        </Block.Element>
       </Block.Element>
       <Block.Element {...componentWrapperProps}>
         <Radio.Element
@@ -171,15 +219,13 @@ export const Element = (props: Props) => {
             selectorKeys: ['registration', 'filters', 'id'],
             reducerType: CHANGE_CODE_FILTER,
           }}
-          isDisabled={radioSelector !== '2'}
+          isDisabled={selector?.radio !== '2'}
           max={200}
         />
 
         <Button.Element
           {...queryButtonProps}
-          store={{
-            action: { type: REQUEST_QUERY },
-          }}
+          onClick={handleSubmitButtonClick}
         />
         {/* <Button.Element {...resetButtonProps}></Button.Element> */}
       </Block.Element>
@@ -213,5 +259,14 @@ const buttonProps: Button.Props = {
   borderRadius: Base.BorderRadius.PX_3,
   margin: Base.MarginRight.PX_8,
 }
+
+const validateForm = (dispatch, selector) => {
+  if (selector.radio === 2 && !selector.id) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số UQ' } });
+    return false;
+  }
+  return true;
+}
+
 
 Element.displayName = 'SearchFilter';

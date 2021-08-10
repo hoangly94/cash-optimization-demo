@@ -13,15 +13,23 @@ import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchOrgsPopup2 from "./searchOrgsPopup2";
 import * as SearchPersPopup from "./searchPersPopup";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
+import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { RESET_SEARCHORGS_FILTER } from '_/stores/authority/searchOrgs/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
-  const radioSelector = useSelector(state => state['pycRegistration'].filters.radio);
+  const selector = useSelector(state => state['pycRegistration'].filters);
   const userSelector = useSelector(state => state['auth'].user);
+
+
+  const handleSubmitButtonClick = () => {
+    const isValidForm = validateForm(dispatch, selector);
+    if (isValidForm) {
+      dispatch({ type: REQUEST_QUERY });
+    }
+  }
 
   //create props
   const componentWrapperProps = {
@@ -52,6 +60,7 @@ export const Element = (props: Props) => {
     flex: Base.Flex.BETWEEN,
     margin: Base.MarginRight.PX_18,
   }
+
   return (
     <Block.Element>
       <Block.Element {...componentWrapperProps}>
@@ -63,138 +72,212 @@ export const Element = (props: Props) => {
             action: { type: CHANGE_RADIO_FILTER },
           }}
         />
-        <Datepicker.Element
-          {...filter1Props}
-          $input={{
-            placeholder: 'Từ ngày(dd/mm/yyyy)',
-            width: Base.Width.FULL,
-            store: {
-              selectorKeys: ['pycRegistration', 'filters', 'dateFrom'],
-              reducerType: INPUT_DATE_FROM,
-            },
-            isDisabled: radioSelector !== '1',
-            max: 10,
-          }}
-          $datepicker={{
-            store: {
-              selectorKeys: ['pycRegistration', 'filters', 'dateFrom'],
-              action: { type: INPUT_DATE_FROM },
-            },
-            isDisabled: radioSelector !== '1',
-          }}
-        />
-        <Datepicker.Element
-          {...filter1Props}
-          $input={{
-            placeholder: 'Đến ngày(dd/mm/yyyy)',
-            width: Base.Width.FULL,
-            store: {
-              selectorKeys: ['pycRegistration', 'filters', 'dateTo'],
-              reducerType: INPUT_DATE_TO,
-            },
-            isDisabled: radioSelector !== '1',
-            max: 10,
-          }}
-          $datepicker={{
-            store: {
-              selectorKeys: ['pycRegistration', 'filters', 'dateTo'],
-              action: { type: INPUT_DATE_TO },
-            },
-            isDisabled: radioSelector !== '1',
-          }}
-        />
-        <Combox.Element
-          {...filter1Props}
-          store={{
-            defaultSelectorKeys: ['pycRegistration', 'filters', 'orgsRole'],
-            selectorKeys: ['root', 'pycOrgsRoles'],
-            reducerType: SELECT_COMBOX_FILTER,
-            reducerKeys: {
-              text: 'name',
-              value: 'value',
-            },
-          }}
-          isDisabled={radioSelector !== '1'}
-          isInputDisabled={radioSelector !== '1'}
-        />
-        <Button.Element
-          {...filter1Props}
-          border={Base.Border.SOLID}
-          textAlign={Base.TextAlign.LEFT}
-          text={userSelector.orgsName}
-          store={{
-            textSelectorKeys: ['pycRegistration', 'filters', 'orgs', 'text'],
-            action: {
-              type: HANDLE_POPUP,
-              keys: ['pycRegistration', 'pycSearchOrgs', 'isShown'],
-              value: true,
-            }
-          }}
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Từ ngày'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Datepicker.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            $input={{
+              placeholder: 'Từ ngày(dd/mm/yyyy)',
+              width: Base.Width.FULL,
+              store: {
+                selectorKeys: ['pycRegistration', 'filters', 'dateFrom'],
+                reducerType: INPUT_DATE_FROM,
+              },
+              isDisabled: selector?.radio !== '1',
+              max: 10,
+            }}
+            $datepicker={{
+              store: {
+                selectorKeys: ['pycRegistration', 'filters', 'dateFrom'],
+                action: { type: INPUT_DATE_FROM },
+              },
+              isDisabled: selector?.radio !== '1',
+            }}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Đến ngày'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Datepicker.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            $input={{
+              placeholder: 'Đến ngày(dd/mm/yyyy)',
+              width: Base.Width.FULL,
+              store: {
+                selectorKeys: ['pycRegistration', 'filters', 'dateTo'],
+                reducerType: INPUT_DATE_TO,
+              },
+              isDisabled: selector?.radio !== '1',
+              max: 10,
+            }}
+            $datepicker={{
+              store: {
+                selectorKeys: ['pycRegistration', 'filters', 'dateTo'],
+                action: { type: INPUT_DATE_TO },
+              },
+              isDisabled: selector?.radio !== '1',
+            }}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Loại ĐV'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Combox.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            store={{
+              defaultSelectorKeys: ['pycRegistration', 'filters', 'orgsRole'],
+              selectorKeys: ['root', 'pycOrgsRoles'],
+              reducerType: SELECT_COMBOX_FILTER,
+              reducerKeys: {
+                text: 'name',
+                value: 'value',
+              },
+            }}
+            isDisabled={selector?.radio !== '1'}
+            isInputDisabled={selector?.radio !== '1'}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}
           style={{
-            color: '#828282',
             display: userSelector.orgsCode === 9 ? 'block' : 'none'
           }}
-          isDisabled={radioSelector !== '1'}
-          onClick={() => {
-            dispatch({ type: RESET_SEARCHORGS_FILTER });
-            // dispatch({ type: REQUEST_QUERY_ORGS });
-            dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
-          }}
-        />
-        <Combox.Element
-          {...filter1Props}
-          store={{
-            defaultSelectorKeys: ['pycRegistration', 'filters', 'orgs'],
-            selectorKeys: ['pycRegistration', 'orgsChildren'],
-            reducerType: SELECT_COMBOX_FILTER,
-            reducerKeys: {
-              text: 'orgsName',
-              value: 'orgsCode',
-            },
-          }}
-          isDisabled={radioSelector !== '1'}
-          isInputDisabled={radioSelector !== '1'}
+        >
+          <Title.Element
+            text='ĐVĐQ'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Button.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            border={Base.Border.SOLID}
+            textAlign={Base.TextAlign.LEFT}
+            text={userSelector.orgsName}
+            store={{
+              textSelectorKeys: ['pycRegistration', 'filters', 'orgs', 'text'],
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['pycRegistration', 'pycSearchOrgs', 'isShown'],
+                value: true,
+              }
+            }}
+            style={{
+              color: '#828282',
+            }}
+            isDisabled={selector?.radio !== '1'}
+            onClick={() => {
+              dispatch({ type: RESET_SEARCHORGS_FILTER });
+              // dispatch({ type: REQUEST_QUERY_ORGS });
+              dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
+            }}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}
           style={{
             display: userSelector.orgsCode === 9 ? 'none' : 'block'
           }}
-        />
-        <Combox.Element
-          {...filter1Props}
-          store={{
-            defaultSelectorKeys: ['pycRegistration', 'filters', 'objectType'],
-            selectorKeys: ['root', 'pycObjectTypes'],
-            reducerType: SELECT_COMBOX_FILTER,
-            reducerKeys: {
-              text: 'name',
-              value: 'value',
-            },
-            // defaultOptions: [{
-            //   text: 'Tất cả',
-            //   value: 0,
-            // }],
-          }}
-          isDisabled={radioSelector !== '1'}
-          isInputDisabled={radioSelector !== '1'}
-        />
-        <Combox.Element
-          {...filter1Props}
-          store={{
-            defaultSelectorKeys: ['pycRegistration', 'filters', 'status'],
-            selectorKeys: ['root', 'pycStatuses'],
-            reducerType: SELECT_COMBOX_FILTER,
-            reducerKeys: {
-              text: 'name',
-              value: 'value',
-            },
-            // defaultOptions: [{
-            //   text: 'Tất cả',
-            //   value: 0,
-            // }],
-          }}
-          isDisabled={radioSelector !== '1'}
-          isInputDisabled={radioSelector !== '1'}
-        />
-      </Block.Element>
+        >
+          <Title.Element
+            text='ĐVĐQ'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Combox.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            store={{
+              defaultSelectorKeys: ['pycRegistration', 'filters', 'orgs'],
+              selectorKeys: ['pycRegistration', 'orgsChildren'],
+              reducerType: SELECT_COMBOX_FILTER,
+              reducerKeys: {
+                text: 'orgsName',
+                value: 'orgsCode',
+              },
+            }}
+            isDisabled={selector?.radio !== '1'}
+            isInputDisabled={selector?.radio !== '1'}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Loại đối tượng'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Combox.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            store={{
+              defaultSelectorKeys: ['pycRegistration', 'filters', 'objectType'],
+              selectorKeys: ['root', 'pycObjectTypes'],
+              reducerType: SELECT_COMBOX_FILTER,
+              reducerKeys: {
+                text: 'name',
+                value: 'value',
+              },
+              // defaultOptions: [{
+              //   text: 'Tất cả',
+              //   value: 0,
+              // }],
+            }}
+            isDisabled={selector?.radio !== '1'}
+            isInputDisabled={selector?.radio !== '1'}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Trạng thái'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Combox.Element
+            {...filter1Props}
+            width={Base.Width.FULL}
+            store={{
+              defaultSelectorKeys: ['pycRegistration', 'filters', 'status'],
+              selectorKeys: ['root', 'pycStatuses'],
+              reducerType: SELECT_COMBOX_FILTER,
+              reducerKeys: {
+                text: 'name',
+                value: 'value',
+              },
+              // defaultOptions: [{
+              //   text: 'Tất cả',
+              //   value: 0,
+              // }],
+            }}
+            isDisabled={selector?.radio !== '1'}
+            isInputDisabled={selector?.radio !== '1'}
+          />
+        </Block.Element>
+      </Block.Element >
       <Block.Element {...componentWrapperProps}>
         <Radio.Element
           {...radioProps}
@@ -211,15 +294,13 @@ export const Element = (props: Props) => {
             selectorKeys: ['pycRegistration', 'filters', 'id'],
             reducerType: CHANGE_CODE_FILTER,
           }}
-          isDisabled={radioSelector !== '2'}
+          isDisabled={selector?.radio !== '2'}
           max={200}
         />
 
         <Button.Element
           {...queryButtonProps}
-          store={{
-            action: { type: REQUEST_QUERY },
-          }}
+          onClick={handleSubmitButtonClick}
         />
       </Block.Element>
 
@@ -252,5 +333,14 @@ const buttonProps: Button.Props = {
   borderRadius: Base.BorderRadius.PX_3,
   margin: Base.MarginRight.PX_8,
 }
+
+const validateForm = (dispatch, selector) => {
+  if (selector.radio === 2 && !selector.id) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số PYC HT' } });
+    return false;
+  }
+  return true;
+}
+
 
 Element.displayName = 'SearchFilter';

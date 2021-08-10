@@ -25,7 +25,7 @@ export const Element = (props: Props) => {
   })
   const radioSelector = useSelector(state => state['routeManagement'].filters.radio);
   const userSelector = useSelector(state => state['auth'].user);
-  
+
   //create props
   const componentWrapperProps = {
     flex: Base.Flex.START,
@@ -66,105 +66,157 @@ export const Element = (props: Props) => {
             action: { type: CHANGE_RADIO_FILTER },
           }}
         />
-        <Datepicker.Element
-          {...filter1Props}
-          $input={{
-            placeholder: 'Từ ngày(dd/mm/yyyy)',
-            width: Base.Width.FULL,
-            store: {
-              selectorKeys: ['routeManagement', 'filters', 'dateFrom'],
-              reducerType: INPUT_DATE_FROM,
-            },
-            isDisabled: radioSelector !== '1',
-            max: 10,
-          }}
-          $datepicker={{
-            store: {
-              selectorKeys: ['routeManagement', 'filters', 'dateFrom'],
-              action: { type: INPUT_DATE_FROM },
-            },
-            isDisabled: radioSelector !== '1',
-          }}
-        />
-        <Datepicker.Element
-          {...filter1Props}
-          $input={{
-            placeholder: 'Đến ngày(dd/mm/yyyy)',
-            width: Base.Width.FULL,
-            store: {
-              selectorKeys: ['routeManagement', 'filters', 'dateTo'],
-              reducerType: INPUT_DATE_TO,
-            },
-            isDisabled: radioSelector !== '1',
-            max: 10,
-          }}
-          $datepicker={{
-            store: {
-              selectorKeys: ['routeManagement', 'filters', 'dateTo'],
-              action: { type: INPUT_DATE_TO },
-            },
-            isDisabled: radioSelector !== '1',
-          }}
-        />
-        <Button.Element
-          {...filter1Props}
-          border={Base.Border.SOLID}
-          textAlign={Base.TextAlign.LEFT}
-          text='ĐVTLT'
-          store={{
-            textSelectorKeys: ['routeManagement', 'filters', 'orgs', 'text'],
-            action: {
-              type: HANDLE_POPUP,
-              keys: ['routeManagement', 'pycSearchOrgs', 'isShown'],
-              value: true,
-            }
-          }}
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Từ ngày'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Datepicker.Element
+            width={Base.Width.FULL}
+            $input={{
+              placeholder: 'Từ ngày(dd/mm/yyyy)',
+              width: Base.Width.FULL,
+              store: {
+                selectorKeys: ['routeManagement', 'filters', 'dateFrom'],
+                reducerType: INPUT_DATE_FROM,
+              },
+              isDisabled: radioSelector !== '1',
+              max: 10,
+            }}
+            $datepicker={{
+              store: {
+                selectorKeys: ['routeManagement', 'filters', 'dateFrom'],
+                action: { type: INPUT_DATE_FROM },
+              },
+              isDisabled: radioSelector !== '1',
+            }}
+          />
+        </Block.Element>
+
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Đến ngày'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Datepicker.Element
+            width={Base.Width.FULL}
+            $input={{
+              placeholder: 'Đến ngày(dd/mm/yyyy)',
+              width: Base.Width.FULL,
+              store: {
+                selectorKeys: ['routeManagement', 'filters', 'dateTo'],
+                reducerType: INPUT_DATE_TO,
+              },
+              isDisabled: radioSelector !== '1',
+              max: 10,
+            }}
+            $datepicker={{
+              store: {
+                selectorKeys: ['routeManagement', 'filters', 'dateTo'],
+                action: { type: INPUT_DATE_TO },
+              },
+              isDisabled: radioSelector !== '1',
+            }}
+          />
+        </Block.Element>
+
+        <Block.Element {...filter1Props}
           style={{
-            color: '#828282',
             display: userSelector.orgsCode === 9 ? 'block' : 'none'
           }}
-          isDisabled={radioSelector !== '1'}
-          onClick={() => {
-            dispatch({ type: RESET_SEARCHORGS_FILTER });
-            // dispatch({ type: REQUEST_QUERY_ORGS });
-            dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
-          }}
-        />
-        <Combox.Element
-          {...filter1Props}
-          store={{
-            defaultSelectorKeys: ['routeManagement', 'filters', 'orgs'],
-            selectorKeys: ['routeManagement', 'orgsChildren'],
-            reducerType: SELECT_COMBOX_FILTER,
-            reducerKeys: {
-              text: 'orgsName',
-              value: 'orgsCode',
-            },
-          }}
-          isDisabled={radioSelector !== '1'}
-          isInputDisabled={radioSelector !== '1'}
+        >
+          <Title.Element
+            text='ĐVTLT'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Button.Element
+            width={Base.Width.FULL}
+            border={Base.Border.SOLID}
+            textAlign={Base.TextAlign.LEFT}
+            text='ĐVTLT'
+            store={{
+              textSelectorKeys: ['routeManagement', 'filters', 'orgs', 'text'],
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['routeManagement', 'pycSearchOrgs', 'isShown'],
+                value: true,
+              }
+            }}
+            style={{
+              color: '#828282',
+            }}
+            isDisabled={radioSelector !== '1'}
+            onClick={() => {
+              dispatch({ type: RESET_SEARCHORGS_FILTER });
+              // dispatch({ type: REQUEST_QUERY_ORGS });
+              dispatch({ type: HANDLE_BUTTON, keys: ['searchOrgs', 'select', 'isDisabled'], value: true });
+            }}
+          />
+        </Block.Element>
+
+        <Block.Element {...filter1Props}
           style={{
             display: userSelector.orgsCode === 9 ? 'none' : 'block'
           }}
-        />
-        <Combox.Element
-          {...filter1Props}
-          store={{
-            defaultSelectorKeys: ['routeManagement', 'filters', 'status'],
-            selectorKeys: ['root', 'routeStatuses'],
-            reducerType: SELECT_COMBOX_FILTER,
-            reducerKeys: {
-              text: 'name',
-              value: 'value',
-            },
-            // defaultOptions: [{
-            //   text: 'Tất cả',
-            //   value: 0,
-            // }],
-          }}
-          isDisabled={radioSelector !== '1'}
-          isInputDisabled={radioSelector !== '1'}
-        />
+        >
+          <Title.Element
+            text='ĐVTLT'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Combox.Element
+            width={Base.Width.FULL}
+            store={{
+              defaultSelectorKeys: ['routeManagement', 'filters', 'orgs'],
+              selectorKeys: ['routeManagement', 'orgsChildren'],
+              reducerType: SELECT_COMBOX_FILTER,
+              reducerKeys: {
+                text: 'orgsName',
+                value: 'orgsCode',
+              },
+            }}
+            isDisabled={radioSelector !== '1'}
+            isInputDisabled={radioSelector !== '1'}
+          />
+        </Block.Element>
+        <Block.Element {...filter1Props}>
+          <Title.Element
+            text='Trạng thái'
+            margin={Base.MarginBottom.PX_5}
+            style={{
+              fontSize: '15px',
+            }}
+          />
+          <Combox.Element
+            width={Base.Width.FULL}
+            store={{
+              defaultSelectorKeys: ['routeManagement', 'filters', 'status'],
+              selectorKeys: ['root', 'routeStatuses'],
+              reducerType: SELECT_COMBOX_FILTER,
+              reducerKeys: {
+                text: 'name',
+                value: 'value',
+              },
+              // defaultOptions: [{
+              //   text: 'Tất cả',
+              //   value: 0,
+              // }],
+            }}
+            isDisabled={radioSelector !== '1'}
+            isInputDisabled={radioSelector !== '1'}
+          />
+        </Block.Element>
       </Block.Element>
       <Block.Element {...componentWrapperProps}>
         <Radio.Element

@@ -9,7 +9,7 @@ import * as Title from "~commons/title";
 import * as MapPopup from "./mapPopup";
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_CODE_FILTER, FETCH_DATA, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD } from '~stores/routeTracking/constants';
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { ADD_NOTI, HANDLE_POPUP } from '_/stores/_base/constants';
 import moment from 'moment';
 
 export type Props = Base.Props;
@@ -27,6 +27,12 @@ export const Element = (props: Props) => {
     ),
     ...props,
   };
+  const handleSubmitButtonClick = () => {
+    const isValidForm = validateForm(dispatch, selector);
+    if (isValidForm) {
+      dispatch({ type: FETCH_DATA });
+    }
+  }
   return (
     <>
       <Block.Element {...componentWrapperProps}>
@@ -53,9 +59,7 @@ export const Element = (props: Props) => {
             borderRadius={Base.BorderRadius.PX_3}
             margin={Base.MarginRight.PX_8}
             backgroundColor={Base.BackgroundColor.GREEN}
-            store={{
-              action: { type: FETCH_DATA },
-            }}
+            onClick={handleSubmitButtonClick}
           />
         </Block.Element>
         {
@@ -87,7 +91,7 @@ const getHtml = (routeTracking, user) => {
       return routeTracking.route?.routeDetailOganize?.filter(item => item.stopPointAction === 'Y')[0]
     return routeTracking.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0]
   })();
-  
+
   const route = {
     ...routeTracking.route,
     pers: {
@@ -101,6 +105,7 @@ const getHtml = (routeTracking, user) => {
   const routeStatus = route.routeStatus;
   if (route.transportType == 'Xe chuyên dùng')
     return;
+
   if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
     if (routeStatus.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
       return html29_2(route, routeDetailOganize);
@@ -408,6 +413,13 @@ const html28_3 = (route, routeDetailOganize) => {
           }}
         />
       </Block.Element>
+    </Block.Element>
+    <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
@@ -718,6 +730,13 @@ const html30_3 = (route, routeDetailOganize) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
+      <Title.Element text='Thời gian thực tế' />
+      <Input.Element
+        defaultValue={routeDetailOganize?.actualTime}
+        isDisabled={true}
+      />
+    </Block.Element>
+    <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
         defaultValue={routeDetailOganize?.destinationPointAddress}
@@ -765,13 +784,13 @@ const html29_1 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col1}>
+    {/* <Block.Element {...col1}>
       <Title.Element text='Thời gian bắt đầu dự kiến' />
       <Input.Element
         defaultValue={route.startTime && moment(route.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
-    </Block.Element>
+    </Block.Element> */}
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
@@ -947,8 +966,13 @@ const html29_2 = (route, routeDetailOganize) => {
   )
 }
 
-
-
+const validateForm = (dispatch, selector) => {
+  if (!selector.filters?.id) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Vui lòng nhập số Lộ trình' } });
+    return false;
+  }
+  return true;
+}
 
 
 

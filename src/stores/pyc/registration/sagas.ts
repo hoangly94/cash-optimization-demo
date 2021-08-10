@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, GET_PYC_EXCEL, GET_PYC_HISTORY_EXCEL, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_SPECIAL_DATA, } from './constants';
+import { DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, GET_PYC_EXCEL, GET_PYC_HISTORY_EXCEL, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, SEARCHORGS_FETCH_ATMCDMS, SEARCHORGS_FETCH_NHNNTCTDS, SEARCHORGS_UPDATE_ATMCDMS, SEARCHORGS_UPDATE_NHNNTCTDS, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_SPECIAL_DATA, } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
@@ -35,6 +35,9 @@ function* saga() {
     yield takeLatest(FETCH_ORGS_CHILDREN, fetchOrgsChildrenSaga);
     yield takeLatest(GET_PYC_EXCEL, getPycExcelSaga);
     yield takeLatest(GET_PYC_HISTORY_EXCEL, getPycHistoryExcelSaga);
+    
+    yield takeLatest(SEARCHORGS_FETCH_ATMCDMS, fetchAtmCdmsSaga);
+    yield takeLatest(SEARCHORGS_FETCH_NHNNTCTDS, fetchNhnnSaga);
 }
 
 
@@ -265,6 +268,44 @@ function* fetchHistorySaga(action?) {
     const state = yield select();
     const responseData = yield call(getHistory, state.pycRegistration.editingPopup, action);
     yield put({ type: UPDATE_HISTORY, data: responseData.data });
+}
+
+function* fetchAtmCdmsSaga(action?) {
+    const state = yield select();
+    const responseData = yield call(fetchAtmCdms, state.pycRegistration.editingPopup);
+    yield put({ type: SEARCHORGS_UPDATE_ATMCDMS, data: responseData.data });
+}
+function fetchAtmCdms(data) {
+    
+    const url = Config.url + '/api/cashoptimization/findCategoryATMCDM';
+    const postData = {
+        data: {
+            orgsId: data?.categoryOrgs?.id, 
+            atmStatus: null,
+            size:0,
+        }
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
+}
+
+
+function* fetchNhnnSaga(action?) {
+    const state = yield select();
+    const responseData = yield call(fetchNhnn, state.pycRegistration.editingPopup);
+    yield put({ type: SEARCHORGS_UPDATE_NHNNTCTDS, data: responseData.data });
+}
+function fetchNhnn(data) {
+    const url = Config.url + '/api/cashoptimization/findCategoryNHNNTCTD';
+    const postData = {
+        data: {
+            orgsId: data?.categoryOrgs?.id, 
+            nnhnTctdCode: 0,
+            size:0,
+        }
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
 }
 
 function* getPycHistoryExcelSaga(action?) {
