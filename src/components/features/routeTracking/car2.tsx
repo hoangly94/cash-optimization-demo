@@ -417,7 +417,7 @@ const html28_3 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={routeDetailOganize?.actualTime}
+        defaultValue={route?.actualTime}
         isDisabled={true}
       />
     </Block.Element>
@@ -732,7 +732,7 @@ const html30_3 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={routeDetailOganize?.actualTime}
+        defaultValue={route?.actualTime}
         isDisabled={true}
       />
     </Block.Element>

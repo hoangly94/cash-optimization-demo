@@ -911,12 +911,12 @@ const pycTypesCheckData = (type, value) => {
             return {
                 pycTypes: [
                     {
-                        name: 'NỘP HĐB TẠI TCTD/ NHNN',
-                        value: 'Nộp HĐB tại TCTD/ NHNN',
+                        name: 'NỘP HĐB TẠI TCTD/NHNN',
+                        value: 'Nộp HĐB tại TCTD/NHNN',
                     },
                     {
-                        name: 'RÚT HĐB TẠI TCTD/ NHNN',
-                        value: 'Rút HĐB tại TCTD/ NHNN',
+                        name: 'RÚT HĐB TẠI TCTD/NHNN',
+                        value: 'Rút HĐB tại TCTD/NHNN',
                     },
                 ],
                 pycModels: [
