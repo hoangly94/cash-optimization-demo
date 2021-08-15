@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_VEHICLE_INPUT, HANDLE_DUALTABLE_MOVE, REQUEST_QUERY, REQUEST_VEHICLE, REQUEST_VEHICLE_CANCEL, SELECT_COMBOX_FILTER, SELECT_DUALTABLE_CONTENT_ROW, SELECT_ROW, SELECT_VEHICLE } from '~stores/routeManagement/normal/constants';
+import { CHANGE_VEHICLE_INPUT, CHECK_VEHICLE, HANDLE_DUALTABLE_MOVE, REQUEST_QUERY, REQUEST_VEHICLE, REQUEST_VEHICLE_CANCEL, SELECT_COMBOX_FILTER, SELECT_DUALTABLE_CONTENT_ROW, SELECT_ROW, SELECT_VEHICLE } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Popup from "~commons/popup";
@@ -65,8 +65,8 @@ export const Element = (props: Popup.Props) => {
         store={{
           selector1Keys: ['routeManagement', 'vehiclePopup', 'tableContent1'],
           selector2Keys: ['routeManagement', 'vehiclePopup', 'tableContent2'],
-          row1ClickAction: { type: SELECT_DUALTABLE_CONTENT_ROW, popupType: 1, tableType: 1 },
-          row2ClickAction: { type: SELECT_DUALTABLE_CONTENT_ROW, popupType: 1, tableType: 2 },
+          row1ClickAction: { type: CHECK_VEHICLE, popupType: 1, tableType: 1 },
+          row2ClickAction: { type: CHECK_VEHICLE, popupType: 1, tableType: 2 },
           handleMoveActionType: HANDLE_DUALTABLE_MOVE,
         }}
         actionButtons={{

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { CHANGE_PERS_INPUT, HANDLE_DUALTABLE_MOVE, REQUEST_PERS, REQUEST_PERS_CANCEL, REQUEST_QUERY, REQUEST_VEHICLE, SELECT_COMBOX_FILTER, SELECT_DUALTABLE_CONTENT_ROW, SELECT_PERS, SELECT_ROW } from '~stores/routeManagement/normal/constants';
+import { CHANGE_PERS_INPUT, CHECK_PERS, HANDLE_DUALTABLE_MOVE, REQUEST_PERS, REQUEST_PERS_CANCEL, REQUEST_QUERY, REQUEST_VEHICLE, SELECT_COMBOX_FILTER, SELECT_DUALTABLE_CONTENT_ROW, SELECT_PERS, SELECT_ROW } from '~stores/routeManagement/normal/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Popup from "~commons/popup";
@@ -64,8 +64,8 @@ export const Element = (props: Popup.Props) => {
         store={{
           selector1Keys: ['routeManagement', 'persPopup', 'tableContent1'],
           selector2Keys: ['routeManagement', 'persPopup', 'tableContent2'],
-          row1ClickAction: { type: SELECT_DUALTABLE_CONTENT_ROW, popupType: 1, tableType: 1 },
-          row2ClickAction: { type: SELECT_DUALTABLE_CONTENT_ROW, popupType: 1, tableType: 2 },
+          row1ClickAction: { type: CHECK_PERS, popupType: 1, tableType: 1 },
+          row2ClickAction: { type: CHECK_PERS, popupType: 1, tableType: 2 },
           handleMoveActionType: HANDLE_DUALTABLE_MOVE,
         }}
         actionButtons={{

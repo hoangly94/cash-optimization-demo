@@ -140,7 +140,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Đối tượng điều quỹ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.objectType.text}
+          defaultValue={popupSelector?.objectType?.text}
           isDisabled={true}
         />
       </Block.Element>
@@ -160,7 +160,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Mức độ ưu tiên' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.priorityLevelName}
+          defaultValue={popupSelector?.priorityLevelName}
           isDisabled={true}
         />
       </Block.Element>
@@ -168,7 +168,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Mô hình điều quỹ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.model.text}
+          defaultValue={popupSelector?.model?.text}
           isDisabled={true}
         />
       </Block.Element>
@@ -176,7 +176,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Địa điểm nhận' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.placeReceive.text}
+          defaultValue={popupSelector?.placeReceive?.text}
           isDisabled={true}
         />
       </Block.Element>
@@ -268,7 +268,7 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['pycRegistration', 'editingPopup', 'rejectReason'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
-          isDisabled={!(popupSelector.reasonType.text == 'KHÁC')}
+          isDisabled={!(popupSelector?.reasonType?.text == 'KHÁC')}
         />
       </Block.Element>
 
@@ -328,7 +328,7 @@ const validateForm = (dispatch, selector) => {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn lý do Hủy' } });
     return false;
   }
-  if (selector.reasonType.text == 'KHÁC' && selector.rejectReason == '') {
+  if (selector?.reasonType?.text == 'KHÁC' && selector.rejectReason == '') {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa nhập lý do khác' } });
     return false;
   }

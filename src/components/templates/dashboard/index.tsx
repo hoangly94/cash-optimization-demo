@@ -34,6 +34,8 @@ import * as RouteManagementNormal from '~features/routeManagement/normal';
 import * as RouteManagementUrgent from '~features/routeManagement/normal/urgent';
 import * as RouteTrackingCar1 from '~features/routeTracking/car1';
 import * as RouteTrackingCar2 from '~features/routeTracking/car2';
+import * as ReportOrgs from '~features/report/orgs';
+import * as ReportSpecial from '~features/report/special';
 import * as Block from '~commons/block';
 import * as Logo from "~commons/logo";
 import * as Button from "~commons/button";
@@ -198,6 +200,9 @@ const DashboardComponent = (userSelector) => () => {
                     <RoleRoute path="/route-management/urgent" component={RouteManagementUrgent.Element} accessedRoles={['11B']} roles={userSelector.viewList} />
                     <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRoles={['24', '25', '26', '27']} roles={userSelector.viewList} />
                     <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRoles={['28', '29', '30']} roles={userSelector.viewList} />
+                    
+                    <RoleRoute path="/report/orgs" component={ReportOrgs.Element} accessedRoles={['37']} roles={userSelector.viewList} />
+                    <RoleRoute path="/report/special" component={ReportSpecial.Element} accessedRoles={['38']} roles={userSelector.viewList} />
                 </Switch>
             </Main.Element>
         </>
@@ -243,6 +248,12 @@ const breadcrumbsMapper = {
         'region': { _url: '/category/region', _name: 'Danh mục vùng', },
         'title': { _url: '/category/title', _name: 'Danh mục chức danh nhân viên', },
         'vehicle': { _url: '/category/vehicle', _name: 'Danh mục xe', },
+    },
+    'report': {
+        _url: '',
+        _name: 'Báo cáo',
+        'orgs': { _url: '/report/orgs', _name: 'Báo cáo số lần điều quỹ của nhân viên áp tải thuộc đơn vị', },
+        'special': { _url: '/report/special', _name: 'Báo cáo sổ theo dõi vận chuyển hàng đặc biệt', },
     },
     'user': {
         _url: '',
@@ -326,6 +337,24 @@ const dashboardMenuProps: DashboardMenu.Props = {
                         text: 'PTVC KHÁC xe chuyên dùng',
                         url: '/route-tracking/car2',
                         accessedRoles: ['28', '29', '30'],
+                    },
+                ]
+            },
+            {
+                text: 'Báo cáo',
+                $icon: {
+                    name: 'documentCheck',
+                },
+                $subs: [
+                    {
+                        text: 'Báo cáo số lần điều quỹ của nhân viên áp tải thuộc đơn vị',
+                        url: '/report/orgs',
+                        accessedRoles: ['37'],
+                    },
+                    {
+                        text: 'Báo cáo sổ theo dõi vận chuyển hàng đặc biệt',
+                        url: '/report/special',
+                        accessedRoles: ['38'],
                     },
                 ]
             },

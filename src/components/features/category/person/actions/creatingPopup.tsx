@@ -147,7 +147,6 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Ngày cấp' {...inputTitleProps} />
         <Datepicker.Element
           flexGrow={Base.FlexGrow.G1}
-          margin={Base.MarginRight.PX_18}
           $input={{
             placeholder: 'dd/mm/yyyy',
             width: Base.Width.FULL,

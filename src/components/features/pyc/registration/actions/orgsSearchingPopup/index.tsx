@@ -164,7 +164,7 @@ export const Element = (props: Popup.Props) => {
             keys: ['pycRegistration', 'orgsSearching', 'isShown'],
             value: false,
           })}
-          isDisabled={!(selector.objectType.text === 'KPP')}
+          isDisabled={!(selector?.objectType?.text === 'KPP')}
         />
       </Block.Element>
 
@@ -185,8 +185,8 @@ export const Element = (props: Popup.Props) => {
               value: 'atmCdmCode',
             },
           }}
-          isDisabled={!(selector.objectType.text === 'ATM')}
-          isInputDisabled={!(selector.objectType.text === 'ATM')}
+          isDisabled={!(selector?.objectType?.text === 'ATM')}
+          isInputDisabled={!(selector?.objectType?.text === 'ATM')}
         />
       </Block.Element>
 
@@ -207,8 +207,8 @@ export const Element = (props: Popup.Props) => {
               value: 'nnhnTctdCode',
             },
           }}
-          isDisabled={!(selector.objectType.text === 'TCTD/NHNN')}
-          isInputDisabled={!(selector.objectType.text === 'TCTD/NHNN')}
+          isDisabled={!(selector?.objectType?.text === 'TCTD/NHNN')}
+          isInputDisabled={!(selector?.objectType?.text === 'TCTD/NHNN')}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
@@ -283,15 +283,15 @@ const actionsProps: Block.Props = {
 
 
 const validateForm = (dispatch, selector) => {
-  if (selector.objectType.text === 'KPP' && !selector.orgsDestCode) {
+  if (selector?.objectType?.text === 'KPP' && !selector.orgsDestCode) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Tên ĐVĐQ' } });
     return false;
   }
-  if (selector.objectType.text === 'ATM' && !selector.atmCdm.value) {
+  if (selector?.objectType?.text === 'ATM' && !selector.atmCdm.value) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Tên ATM' } });
     return false;
   }
-  if (selector.objectType.text === 'TCTD/NHNN' && !selector.nhnnTctd.value) {
+  if (selector?.objectType?.text === 'TCTD/NHNN' && !selector.nhnnTctd.value) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn Tên NH đối tác KPP mở TK' } });
     return false;
   }

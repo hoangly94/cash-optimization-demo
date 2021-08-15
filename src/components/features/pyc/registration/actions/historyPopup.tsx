@@ -326,7 +326,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.model,
     },
     {
-      children: item.priorityLevelName,
+      children: item?.priorityLevelName,
     },
     {
       children: item.routeId || '',

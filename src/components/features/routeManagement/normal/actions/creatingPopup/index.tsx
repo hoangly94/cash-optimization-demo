@@ -77,7 +77,7 @@ export const Element = (props: Popup.Props) => {
       extractHtml={confirmationDialog}
     >
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số PYC HT' {...inputTitleProps} />
+        <Title.Element text='Số lộ trình' {...inputTitleProps} />
         <Input.Element
           valueType={Input.ValueType.NUMBER}
           placeholder=''
@@ -349,7 +349,7 @@ const titleCallback = () => ([
   // },
   // {
   //   ...tableData_$rows_$cells_title,
-  //   children: 'loại tiền',
+  //   children: 'Loại tiền',
   //   sort: {
   //     type: REQUEST_QUERY,
   //     data: 'authority_status',
@@ -357,7 +357,7 @@ const titleCallback = () => ([
   // },
   // {
   //   ...tableData_$rows_$cells_title,
-  //   children: 'loại vàng',
+  //   children: 'Loại vàng',
   //   sort: {
   //     type: REQUEST_QUERY,
   //     data: 'authority_status',
@@ -416,7 +416,7 @@ const cellMapping = (dispatch) => (item, index) => ([
     children: item.cashOptimizationStatus,
   },
   {
-    children: item.priorityLevelName,
+    children: item?.priorityLevelName,
   },
   {
     children: item.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,

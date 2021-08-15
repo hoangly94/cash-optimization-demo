@@ -11,7 +11,7 @@ import * as Combox from "~commons/combox";
 // import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import { _Date } from '~/utils';
-import { CHANGE_EDITING_INPUT, REQUEST_DELETE, SELECT_COMBOX, REQUEST_EDITING_CANCEL } from '~/stores/routeManagement/normal/constants';
+import { CHANGE_EDITING_INPUT, REQUEST_DELETE, SELECT_COMBOX, REQUEST_EDITING_CANCEL, FETCH_BALANCE_SPECIAL } from '~/stores/routeManagement/normal/constants';
 import { useConfirmationDialog } from '_/hooks';
 
 export const Element = (props: Popup.Props) => {
@@ -22,7 +22,7 @@ export const Element = (props: Popup.Props) => {
   const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
   // const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
-
+  
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
@@ -60,7 +60,7 @@ export const Element = (props: Popup.Props) => {
         }}
       />
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số PYC HT' {...inputTitleProps} />
+        <Title.Element text='Số lộ trình' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           defaultValue={selector.id}
@@ -89,7 +89,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Ngày tạo LT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getDate(selector.createddate)}
+          defaultValue={selector.createddate?.split('-').join('/')}
           isDisabled={true}
         />
       </Block.Element>
@@ -190,7 +190,7 @@ export const Element = (props: Popup.Props) => {
         }}
       >
         < Table.Element
-          {...orgsTableData(selector.categoryOrg?.map(orgsMapResponseToData(handleRowClick(dispatch))))}
+          {...routeTableData(selector.routeDetailOganize?.map(routeMapResponseToData(dispatch, handleRowClick(dispatch))))}
           backgroundColor={Base.BackgroundColor.WHITE}
         />
       </Block.Element>
@@ -309,15 +309,15 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Tên Chi nhánh quản lý xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mã Chi nhánh quản lý xe',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Họ và tên Lái xe',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Mã đơn vị quản lý xe',
-        },
-        {
-          ...tableData_$rows_$cells_title,
-          children: 'Tên đơn vị quản lý xe',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -329,7 +329,7 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Trạng thái xe',
+          children: 'Trạng thái',
         },
       ]
     },
@@ -345,22 +345,13 @@ const vehicleMapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.index || index + 1,
     },
     {
-      children: item.categoryVehicle?.categoryOrgs?.orgsName,
-    },
-    {
-      children: item.categoryVehicle?.categoryOrgs?.orgsAddress,
-    },
-    {
       children: item.vehicleCode,
     },
     {
-      children: item.categoryVehicle?.vehicleStatus,
+      children: item.categoryVehicle?.categoryOrgs?.orgsName,
     },
     {
       children: item.categoryVehicle?.categoryOrgs?.orgsCode,
-    },
-    {
-      children: item.categoryVehicle?.categoryOrgs?.orgsName,
     },
     {
       children: item.categoryVehicle?.driverName,
@@ -370,6 +361,9 @@ const vehicleMapResponseToData = (handleRowClick) => (item, index) => ({
     },
     {
       children: item.gps,
+    },
+    {
+      children: item.categoryVehicle?.vehicleStatus,
     },
   ]
 })
@@ -484,6 +478,14 @@ const pycTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Mức độ ưu tiên',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mô hình điều quỹ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Tên ĐVYCĐQ',
         },
         {
@@ -525,6 +527,12 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
       children: item.cashOptimization?.orgsRequestId,
     },
     {
+      children: item.cashOptimization?.priorityLevelName,
+    },
+    {
+      children: item.cashOptimization?.model,
+    },
+    {
       children: item.cashOptimization?.orgsName,
     },
     {
@@ -542,7 +550,7 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
   ]
 })
 
-const orgsTableData = (queryResult?): Table.Props => ({
+const routeTableData = (queryResult?): Table.Props => ({
   $thead: [
     {
       style: {
@@ -580,7 +588,15 @@ const orgsTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Khoảng cách số PYC HT',
+          children: 'Khoảng cách',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Số PYC HT',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Mức độ ưu tiên',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -596,18 +612,57 @@ const orgsTableData = (queryResult?): Table.Props => ({
   $rows: queryResult ? queryResult : [],
 })
 
-const orgsMapResponseToData = (handleRowClick) => (item, index) => ({
+const routeMapResponseToData = (dispatch, handleRowClick) => (item, index) => ({
   isSelected: item.isSelected ?? false,
-  onClick: handleRowClick(item, 4),
+  onClick: handleRowClick(item),
   $cells: [
     {
       children: item.index || index + 1,
     },
     {
-      children: item.orgsName,
+      children: item.routeDetailOganizeStatus,
     },
     {
-      children: item.orgsAddress,
+      children: item.stopPointType,
+    },
+    {
+      children: item.departurePointName,
+    },
+    {
+      children: item.departurePointAddress,
+    },
+    {
+      children: item.destinationPointName,
+    },
+    {
+      children: item.destinationPointAddress,
+    },
+    {
+      children: item.kcDepartureToDestination,
+    },
+    {
+      children: item.cashOptimizationId,
+    },
+    {
+      children: item.cashOptimization?.priorityLevelName,
+    },
+    {
+      children: item.cashOptimization?.model,
+    },
+    {
+      children: <a
+        style={{
+          color: 'blue',
+          cursor: 'pointer',
+        }}
+        onClick={() => {
+          dispatch({
+            type: HANDLE_POPUP,
+            keys: ['routeManagement', 'balanceSpecial', 'isShown'],
+            value: true,
+          });
+          dispatch({ type: FETCH_BALANCE_SPECIAL , routeDetailOganizeId:item.id})
+        }} >Link</a>,
     },
   ]
 })
@@ -617,7 +672,7 @@ const validateForm = (dispatch, selector) => {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn lý do Hủy' } });
     return false;
   }
-  if (selector.reasonType.text == 'KHÁC' && selector.rejectReason == '') {
+  if (selector?.reasonType?.text == 'KHÁC' && selector.rejectReason == '') {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa nhập lý do khác' } });
     return false;
   }

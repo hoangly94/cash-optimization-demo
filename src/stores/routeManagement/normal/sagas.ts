@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { SELECT_ROUTE_ROW, DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, FETCH_PYC, GET_EXCEL, GET_HISTORY_EXCEL, REQUEST_UPDATE_CONTINUE, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_PYC, UPDATE_SPECIAL_DATA, REQUEST_VEHICLE, REQUEST_PERS, UPDATE_VEHICLE_DATA, UPDATE_PERS_DATA, REQUEST_SEACHVEHICLEPERS_CONTINUE, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_SEARCH_DESTINATION, REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_CHECK_BALANCE_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, REQUEST_ORGANIZING_GET_KC, UPDATE_ORGANIZING, UPDATE_ORGANIZING_STOP_POINT, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_URGENT_UPDATE, UPDATE_ORGANIZING_INSERT, SELECT_DESTINATION_POINT, HANDLE_SPECIAL_DELETE, UPDATE_ORGANIZING_DISTANCE, FETCH_MAP, UPDATE_MAP, FETCH_BALANCE_SPECIAL, UPDATE_BALANCE_SPECIAL, REQUEST_CREATING_PYC_BS, REQUEST_ORGANIZE_URGENT_CHECKBYID, UPDATE_ORGANIZE_URGENT_CHECKBYID, FETCH_BALANCE_SPECIAL_TOTAL, UPDATE_BALANCE_SPECIAL_TOTAL, REQUEST_ORGANIZE_GET_HDB_DETAIL, UPDATE_ORGANIZE_GET_HDB_DETAIL, } from './constants';
+import { SELECT_ROUTE_ROW, DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, FETCH_PYC, GET_EXCEL, GET_HISTORY_EXCEL, REQUEST_UPDATE_CONTINUE, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_PYC, UPDATE_SPECIAL_DATA, REQUEST_VEHICLE, REQUEST_PERS, UPDATE_VEHICLE_DATA, UPDATE_PERS_DATA, REQUEST_SEACHVEHICLEPERS_CONTINUE, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_SEARCH_DESTINATION, REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_CHECK_BALANCE_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, REQUEST_ORGANIZING_GET_KC, UPDATE_ORGANIZING, UPDATE_ORGANIZING_STOP_POINT, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_URGENT_UPDATE, UPDATE_ORGANIZING_INSERT, SELECT_DESTINATION_POINT, HANDLE_SPECIAL_DELETE, UPDATE_ORGANIZING_DISTANCE, FETCH_MAP, UPDATE_MAP, FETCH_BALANCE_SPECIAL, UPDATE_BALANCE_SPECIAL, REQUEST_CREATING_PYC_BS, REQUEST_ORGANIZE_URGENT_CHECKBYID, UPDATE_ORGANIZE_URGENT_CHECKBYID, FETCH_BALANCE_SPECIAL_TOTAL, UPDATE_BALANCE_SPECIAL_TOTAL, REQUEST_ORGANIZE_GET_HDB_DETAIL, UPDATE_ORGANIZE_GET_HDB_DETAIL, CHECK_VEHICLE, CHECK_PERS, SELECT_DUALTABLE_CONTENT_ROW, } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
@@ -52,8 +52,10 @@ function* saga() {
 
     yield takeLatest(REQUEST_ORGANIZE_URGENT_CHECKBYID, requestOrganizeUrgentCheckByIdSaga);
 
+    yield takeLatest(CHECK_VEHICLE, checkVehicleSaga);
+    yield takeLatest(CHECK_PERS, checkPersSaga);
+    
     yield takeLatest(REQUEST_ORGANIZE_GET_HDB_DETAIL, requestOrganizeGetHdbDetailSaga);
-
 }
 
 
@@ -95,6 +97,45 @@ function* requestOrganizeGetHdbDetailSaga(action?) {
     }
     yield put({ type: UPDATE_ORGANIZE_GET_HDB_DETAIL, data: responseData.data, page: action?.page });
 }
+function* checkVehicleSaga(action?) {
+    const responseData = yield call(checkVehicle, action.data);
+
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        yield spawn(addNoti, 'warning', responseData?.data?.message);
+    }
+    yield put({ ...action, type: SELECT_DUALTABLE_CONTENT_ROW });
+}
+function checkVehicle(data) {
+    const url = Config.url + '/api/cashoptimization/route/checkVehicle';
+
+    const postData = {
+        data: {
+            vehicleCode: data.vehicleCode,
+        },
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
+}
+function* checkPersSaga(action?) {
+    const responseData = yield call(checkPers, action.data);
+
+    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+        yield spawn(addNoti, 'warning', responseData?.data?.message);
+    }
+    yield put({ ...action, type: SELECT_DUALTABLE_CONTENT_ROW });
+}
+function checkPers(data) {
+    const url = Config.url + '/api/cashoptimization/route/checkPers';
+
+    const postData = {
+        data: {
+            persCode: data.persCode,
+        },
+    }
+    return axios.post(url, postData)
+        .catch(error => console.log(error));
+}
+
 function requestOrganizeGetHdbDetail(data, action) {
     const url = Config.url + '/api/cashoptimization/route/route_organize_get_hdb_detail';
 
@@ -325,7 +366,7 @@ function requestOrganizingAddHdb(data, routeDetailHdbTemp) {
 function* fetchHistorySaga(action?) {
     const state = yield select();
     const responseData = yield call(getHistory, state.routeManagement.editingPopup, action);
-    yield put({ type: UPDATE_HISTORY, data: responseData.data });
+    yield put({ type: UPDATE_HISTORY, data: responseData.data, page: action?.page });
 }
 
 function* getHistoryExcelSaga(action?) {
@@ -551,10 +592,10 @@ function* requestOrganizingInsertSaga(action?) {
     };
     const responseData = yield call(requestOrganizingInsert, state.routeManagement.organizingPopup, routeDetailOganizeItem);
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'routeDetailOganizeInsert', 'isLoading'], value: false });
-    yield put({ type: REQUEST_ORGANIZING });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
+    yield put({ type: REQUEST_ORGANIZING });
     // const data = [
     //     ...organizingPopup?.routeDetailOganize ?? [],
     //     {
@@ -564,7 +605,7 @@ function* requestOrganizingInsertSaga(action?) {
     // ];
     // yield put({ type: UPDATE_ORGANIZING_INSERT, data });
 }
-function requestOrganizingInsert(data, routeDetailOganizeItem) {
+function  requestOrganizingInsert(data, routeDetailOganizeItem) {
     const url = Config.url + '/api/cashoptimization/route/organize_insert';
     const postData = {
         data: {

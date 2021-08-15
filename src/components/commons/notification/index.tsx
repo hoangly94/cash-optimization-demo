@@ -37,7 +37,7 @@ export const Element = (props: Props): React.ReactElement => {
   };
   
   const itemElements = selector.map((item, index) => {
-    const itemType = item.type == 'success' ? Item.Type.SUCCESS : Item.Type.ERROR;
+    const itemType = item.type == 'success' ? Item.Type.SUCCESS : item.type == 'error' ? Item.Type.ERROR: Item.Type.WARNING;
     return <Item.Element key={index} type={itemType} text={item.text}/>;
   });
 

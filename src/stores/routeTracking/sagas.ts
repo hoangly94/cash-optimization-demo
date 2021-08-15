@@ -23,18 +23,21 @@ function* saga() {
 }
 function* searchTquySaga(action?) {
     const state = yield select();
-    const responseData = yield call(searchTquy, action?.routeDetailOganize);
-    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+    const responseData1 = action?.routeDetailOganize?.destinationPointName ? yield call(searchTquy, action?.routeDetailOganize?.destinationPointName) : undefined;
+    if (!responseData1 || !responseData1.data || responseData1.data.resultCode != 0) {
     }
-    yield put({ type: UPDATE_TQUY, data: responseData.data });
+    const responseData2 = action?.route?.orgsName ? yield call(searchTquy, action?.route?.orgsName) : undefined;
+    if (!responseData2 || !responseData2.data || responseData2.data.resultCode != 0) {
+    }
+    yield put({ type: UPDATE_TQUY, data1: responseData1?.data, data2: responseData2?.data });
 }
 
-function searchTquy(routeDetailOganize) {
+function searchTquy(data) {
     const url = Config.url + '/api/cashoptimization/route/searchTQUY';
 
     const postData = {
         data: {
-            orgsName: routeDetailOganize?.destinationPointName,
+            orgsName: data,
         },
     }
     return axios.post(url, postData)
@@ -52,8 +55,10 @@ function* fetchDataSaga(action?) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
     const routeDetailOganize = responseData.data?.data?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
+
+    yield put({ type: SEARCH_TQUY, routeDetailOganize, route: responseData.data?.data });
     yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
-    yield put({ type: SEARCH_TQUY, routeDetailOganize });
+
 }
 
 function getData(filters) {

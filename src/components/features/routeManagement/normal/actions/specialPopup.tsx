@@ -96,11 +96,11 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'loại tiền',
+          children: 'Loại tiền',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'loại vàng',
+          children: 'Loại vàng',
         },
         {
           ...tableData_$rows_$cells_title,

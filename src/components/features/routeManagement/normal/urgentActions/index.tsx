@@ -328,7 +328,7 @@ export const Element = (props: Props) => {
         {...historyPopupComponentProps}
         $title={{
           tagType: Title.TagType.H2,
-          text: 'Số dư Hàng đặc biệt'
+          text: 'Số dư hàng đặc biệt'
         }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'balanceSpecial'],

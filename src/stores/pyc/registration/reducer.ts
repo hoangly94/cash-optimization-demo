@@ -721,7 +721,7 @@ const mapToNewData = (item) => {
         orgsCode: item.orgsCode,
         orgsName: item.orgsName,
         cashOptimizationStatus: item.cashOptimizationStatus,
-        priorityLevelName: item.priorityLevelName,
+        priorityLevelName: item?.priorityLevelName,
         routeId: item.routeId,
         routeStatus: item.routeStatus,
         updateddate: item.updateddate,
@@ -730,7 +730,7 @@ const mapToNewData = (item) => {
             value: item.objectType,
         },
         priorityLevelCode: {
-            text: item.priorityLevelName,
+            text: item?.priorityLevelName,
             value: item.priorityLevelCode,
         },
         model: {

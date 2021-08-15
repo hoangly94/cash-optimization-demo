@@ -37,7 +37,7 @@ export const Element = (props: Popup.Props) => {
         }}
       />
       <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Số PYC HT' {...inputTitleProps} />
+        <Title.Element text='Số lộ trình' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
           defaultValue={selector.id}

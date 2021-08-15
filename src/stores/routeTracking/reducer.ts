@@ -30,13 +30,15 @@ export default (state: State = initState, action) => {
                 mapHtml: action.data,
             }
         case UPDATE_TQUY:
-            const destinationTqList = action.data?.data;
+            const destinationTqList = action.data1?.data;
+            const tqList = action.data2?.data;
             return {
                 ...state,
                 route: {
                     ...state.route,
                     destinationTq: destinationTqList && destinationTqList[Math.floor(Math.random() * destinationTqList.length)],
                     destinationTqList,
+                    tqList,
                 },
             }
         default:

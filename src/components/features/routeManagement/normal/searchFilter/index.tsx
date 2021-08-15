@@ -132,7 +132,7 @@ export const Element = (props: Props) => {
           }}
         >
           <Title.Element
-            text='ĐVTLT'
+            text='Tên ĐVTLT'
             margin={Base.MarginBottom.PX_5}
             style={{
               fontSize: '15px',
@@ -142,7 +142,7 @@ export const Element = (props: Props) => {
             width={Base.Width.FULL}
             border={Base.Border.SOLID}
             textAlign={Base.TextAlign.LEFT}
-            text='ĐVTLT'
+            text='Tên ĐVTLT'
             store={{
               textSelectorKeys: ['routeManagement', 'filters', 'orgs', 'text'],
               action: {
@@ -192,7 +192,7 @@ export const Element = (props: Props) => {
         </Block.Element>
         <Block.Element {...filter1Props}>
           <Title.Element
-            text='Trạng thái'
+            text='Trạng thái LT'
             margin={Base.MarginBottom.PX_5}
             style={{
               fontSize: '15px',

@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { all, call, delay, put, spawn, takeEvery } from 'redux-saga/effects';
-import { ADD_NOTI, ADD_NOTI_ERROR, ADD_NOTI_SUCCESS, REMOVE_LAST_NOTI } from './constants';
+import { ADD_NOTI, ADD_NOTI_ERROR, ADD_NOTI_SUCCESS, ADD_NOTI_WARNING, REMOVE_LAST_NOTI } from './constants';
 
 function* saga() {
     yield takeEvery(ADD_NOTI, addNotiDirect);
@@ -14,6 +14,10 @@ export function* addNoti(type, message?: string) {
     if (type == 'error') {
         yield spawn(removeLastNoti);
         return yield put({ type: ADD_NOTI_ERROR, data: message });
+    }
+    if (type == 'warning') {
+        yield spawn(removeLastNoti);
+        return yield put({ type: ADD_NOTI_WARNING, data: message });
     }
 }
 
@@ -29,6 +33,10 @@ export function* addNotiDirect(data) {
     if (type == 'error') {
         yield spawn(removeLastNoti);
         yield put({ type: ADD_NOTI_ERROR, data: message });
+    }
+    if (type == 'warning') {
+        yield spawn(removeLastNoti);
+        yield put({ type: ADD_NOTI_WARNING, data: message });
     }
 }
 

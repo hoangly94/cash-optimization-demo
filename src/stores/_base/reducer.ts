@@ -1,4 +1,4 @@
-import { State, HANDLE_BUTTON, HANDLE_POPUP, ADD_NOTI_ERROR, ADD_NOTI_SUCCESS, REMOVE_LAST_NOTI, REQUEST_NEW_BREACURMBS } from './constants'
+import { State, HANDLE_BUTTON, HANDLE_POPUP, ADD_NOTI_ERROR, ADD_NOTI_SUCCESS, REMOVE_LAST_NOTI, REQUEST_NEW_BREACURMBS, ADD_NOTI_WARNING } from './constants'
 
 import Config from '@config';
 const initState: State = {
@@ -253,7 +253,7 @@ const initState: State = {
             },
             'specialDeleteEditing': {
                 isDisabled: true,
-            }, 
+            },
             'orgsSearching': {
                 isDisabled: true,
             },
@@ -270,8 +270,8 @@ const initState: State = {
                 isLoading: false,
             },
         },
-        routeTracking:{
-            confirm:{
+        routeTracking: {
+            confirm: {
                 isLoading: false,
             }
         }
@@ -649,6 +649,17 @@ export default (state: State = initState, action) => {
                     ...state.notis,
                     {
                         type: 'success',
+                        text: action.data,
+                    }
+                ],
+            };
+        case ADD_NOTI_WARNING:
+            return {
+                ...state,
+                notis: [
+                    ...state.notis,
+                    {
+                        type: 'warning',
                         text: action.data,
                     }
                 ],

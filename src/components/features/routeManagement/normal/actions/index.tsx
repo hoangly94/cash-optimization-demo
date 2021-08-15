@@ -146,7 +146,7 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
-              isDisabled={!(userSelector.viewList.includes('15D') && !(viewSelector?.routeStatus === 'Finished'))}
+              isDisabled={!(userSelector.viewList.includes('15D') && (['Organizing', 'Organizing_R','Adding', 'Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM'].includes(viewSelector?.routeStatus)))}
             />
             <Button.Element
               {...buttonProps}
@@ -394,7 +394,7 @@ export const Element = (props: Props) => {
         {...historyPopupComponentProps}
         $title={{
           tagType: Title.TagType.H2,
-          text: 'Số dư Hàng đặc biệt'
+          text: 'Số dư hàng đặc biệt'
         }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'balanceSpecial'],

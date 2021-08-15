@@ -174,7 +174,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Mức độ ưu tiên' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.priorityLevelName}
+          defaultValue={popupSelector?.priorityLevelName}
           isDisabled={true}
         />
       </Block.Element>

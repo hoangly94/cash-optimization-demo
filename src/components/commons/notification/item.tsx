@@ -10,6 +10,7 @@ import ExclamationCircle from '../svg/exclamationCircle';
 export enum Type {
   SUCCESS = 'notification-success',
   ERROR = 'notification-error',
+  WARNING = 'notification-warning',
 }
 
 export enum Size {
@@ -38,14 +39,14 @@ export const Element = (props: Props): React.ReactElement => {
     ),
     ...props,
   };
-  const iconElement = type === Type.SUCCESS ? 
-  <CheckCircle fill='white' margin={Base.MarginRight.PX_8}/> : 
-  <ExclamationCircle fill='white' margin={Base.MarginRight.PX_8}/>;
+  const iconElement = type === Type.SUCCESS ?
+    <CheckCircle fill='white' margin={Base.MarginRight.PX_8} /> :
+    <ExclamationCircle fill='white' margin={Base.MarginRight.PX_8} />;
 
   return (
     <Block.Element {...componentProps}>
       {iconElement}
-      {text || (type === Type.SUCCESS ? 'SUCCESS' : 'ERROR')}
+      {text || (type === Type.SUCCESS ? 'SUCCESS' : type === Type.ERROR ? 'ERROR' : 'WARNING')}
     </Block.Element>
   )
 }

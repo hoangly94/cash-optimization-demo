@@ -110,21 +110,21 @@ const getHtml = (routeTracking, user) => {
   if (route.transportType != 'Xe chuyên dùng')
     return false;
   if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
-    if (routeStatus.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
+    if (routeStatus?.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
       return html26_2(route, routeDetailOganize);
-    if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus.includes("Going_") || routeStatus.includes("Working_"))
+    if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus?.includes("Going_") || routeStatus?.includes("Working_"))
       return html26_1(route, routeDetailOganize);
   }
-  if (persCode === route.tqDltltCode) {
+  if (persCode === route.tqDltltCode || route?.tqList?.filter(item => item.persCode === persCode).length) {
     if (routeStatus === 'Beginning')
       return html27_1(route);
-    if (routeStatus === 'Pickingup_SEC')
+    if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
       return html27_2(route, routeDetailOganize);
     if (routeStatus === 'Pickingup_ATM')
       return html27_3(route, routeDetailOganize);
-    if (routeStatus.includes("Going_"))
+    if (routeStatus?.includes("Going_"))
       return html27_4(route, routeDetailOganize);
-    if (routeStatus.includes("Working_"))
+    if (routeStatus?.includes("Working_"))
       return html27_5(route, routeDetailOganize);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
       return html27_6(route, routeDetailOganize);
@@ -136,9 +136,9 @@ const getHtml = (routeTracking, user) => {
       return html24_2(route, routeDetailOganize);
     if (routeStatus === 'Pickingup_ATM')
       return html24_3(route, routeDetailOganize);
-    if (routeStatus.includes("Going_"))
+    if (routeStatus?.includes("Going_"))
       return html24_4(route, routeDetailOganize, 1);
-    if (routeStatus.includes("Working_"))
+    if (routeStatus?.includes("Working_"))
       return html24_4(route, routeDetailOganize, 2);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
       return html24_4(route, routeDetailOganize, 3);
@@ -153,9 +153,9 @@ const getHtml = (routeTracking, user) => {
         return html25_2(route, routeDetailOganize);
       if (routeStatus === 'Pickingup_ATM')
         return html25_3(route, routeDetailOganize);
-      if (routeStatus.includes("Going_"))
+      if (routeStatus?.includes("Going_"))
         return html25_4(route, routeDetailOganize);
-      if (routeStatus.includes("Working_"))
+      if (routeStatus?.includes("Working_"))
         return html25_5(route, routeDetailOganize);
       if (routeStatus === 'Finishing' || routeStatus === 'Finished')
         return html25_6(route, routeDetailOganize);
@@ -660,7 +660,7 @@ const html25_1 = (route) => {
 
 const html25_2 = (route, routeDetailOganize) => {
   return (<>
-    <Title.Element text='2. Di chuyển đến điểm dừng đón bảo về và áp tải' tagType={Title.TagType.H3} />
+    <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -689,7 +689,7 @@ const html25_2 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -808,7 +808,7 @@ const html25_3 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -896,7 +896,7 @@ const html25_3 = (route, routeDetailOganize) => {
 
 const html25_4 = (route, routeDetailOganize) => {
   return (<>
-    <Title.Element text='3. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
+    <Title.Element text='4. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -925,7 +925,7 @@ const html25_4 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -1034,7 +1034,7 @@ const html25_5 = (route, routeDetailOganize) => {
       <Block.Element>
         <Title.Element text='Mức độ ưu tiên' />
         <Input.Element
-          defaultValue={routeDetailOganize?.priorityLevelName}
+          defaultValue={routeDetailOganize?.cashOptimization?.priorityLevelName}
           isDisabled={true}
         />
       </Block.Element>
@@ -1192,7 +1192,7 @@ const html25_6 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -1501,7 +1501,7 @@ const html27_1 = (route) => {
 
 const html27_2 = (route, routeDetailOganize) => {
   return (<>
-    <Title.Element text='2. Di chuyển đến điểm dừng đón bảo về và áp tải' tagType={Title.TagType.H3} />
+    <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -1530,7 +1530,7 @@ const html27_2 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -1649,7 +1649,7 @@ const html27_3 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -1737,7 +1737,7 @@ const html27_3 = (route, routeDetailOganize) => {
 
 const html27_4 = (route, routeDetailOganize) => {
   return (<>
-    <Title.Element text='3. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
+    <Title.Element text='4. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Số lộ trình' />
@@ -1766,7 +1766,7 @@ const html27_4 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -2011,7 +2011,7 @@ const html27_6 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>

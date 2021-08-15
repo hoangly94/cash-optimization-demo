@@ -134,7 +134,7 @@ export const Element = (props: Props) => {
         </Block.Element>
         <Block.Element {...filter1Props}>
           <Title.Element
-            text='Loại ĐV'
+            text='Vai trò ĐV'
             margin={Base.MarginBottom.PX_5}
             style={{
               fontSize: '15px',
@@ -162,7 +162,7 @@ export const Element = (props: Props) => {
           }}
         >
           <Title.Element
-            text='ĐVĐQ'
+            text='Đơn vị'
             margin={Base.MarginBottom.PX_5}
             style={{
               fontSize: '15px',
@@ -223,7 +223,7 @@ export const Element = (props: Props) => {
         </Block.Element>
         <Block.Element {...filter1Props}>
           <Title.Element
-            text='Loại đối tượng'
+            text='Đối tượng ĐQ'
             margin={Base.MarginBottom.PX_5}
             style={{
               fontSize: '15px',

@@ -24,6 +24,8 @@ import pycSearchOrgsReducer from './pyc/searchOrgs/reducer';
 import pycSearchPersReducer from './pyc/searchPers/reducer';
 import routeManagementNormalReducer from './routeManagement/normal/reducer';
 import routeTrackingReducer from './routeTracking/reducer';
+import reportOrgsReducer from './report/orgs/reducer';
+import reportSpecialReducer from './report/special/reducer';
 
 import baseSaga from './_base/sagas';
 import authSaga from './auth/sagas';
@@ -47,6 +49,8 @@ import pycSearchOrgsSaga from './pyc/searchOrgs/sagas';
 import pycSearchPersSaga from './pyc/searchPers/sagas';
 import routeManagementSaga from './routeManagement/normal/sagas';
 import routeTrackingSaga from './routeTracking/sagas';
+import reportOrgsSaga from './report/orgs/sagas';
+import reportSpecialSaga from './report/special/sagas';
 
 const rootReducer = combineReducers({
     base: baseReducer,
@@ -71,6 +75,8 @@ const rootReducer = combineReducers({
     pycSearchPers: pycSearchPersReducer,
     routeManagement: routeManagementNormalReducer,
     routeTracking: routeTrackingReducer,
+    reportOrgs: reportOrgsReducer,
+    reportSpecial: reportSpecialReducer,
 })
 
 function* rootSaga() {
@@ -97,6 +103,8 @@ function* rootSaga() {
         pycSearchPersSaga(),
         routeManagementSaga(),
         routeTrackingSaga(),
+        reportOrgsSaga(),
+        reportSpecialSaga(),
     ]);
 }
 

@@ -163,7 +163,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.priorityLevelCode,
     },
     {
-      children: item.priorityLevelName,
+      children: item?.priorityLevelName,
     },
     {
       children: _Date.getCurrentDate(item.createddate),

@@ -211,13 +211,17 @@ export default (state: State = initState, action) => {
             }
         case UPDATE_HISTORY:
             const historyData = action.data?.data ? action.data.data?.map(preprocessQueryResult(state)) : [];
-
+            
             return {
                 ...state,
                 isLoading: false,
                 history: {
                     ...state.history,
-                    data: historyData,
+                    data: historyData.map((item, index) => ({
+                        ...item,
+                        key: item.id,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
                     total: action.data.total,
                 }
             }
@@ -472,8 +476,8 @@ export default (state: State = initState, action) => {
                 ...state,
                 [popupType]: {
                     ...state[popupType],
-                    tableContent1: moveNewData[0].map((item, index) => ({ ...item, index: index + 1})),
-                    tableContent2: moveNewData[1].map((item, index) => ({ ...item, index: index + 1})),
+                    tableContent1: moveNewData[0].map((item, index) => ({ ...item, index: index + 1 })),
+                    tableContent2: moveNewData[1].map((item, index) => ({ ...item, index: index + 1 })),
                 }
             }
         case RESET_FILTER:
@@ -602,7 +606,11 @@ export default (state: State = initState, action) => {
                 history: {
                     ...state.history,
                     detailPopup: newDataHistory,
-                    data: newQueryResultHistory,
+                    data: newQueryResultHistory.map((item, index) => ({
+                        ...item,
+                        key: item.id,
+                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                    })),
                 }
             }
         case UPDATE_ORGSSEARCHING_DISTANCE:

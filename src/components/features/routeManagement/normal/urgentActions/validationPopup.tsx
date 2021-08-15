@@ -618,7 +618,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Đối tượng điều quỹ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.objectType.text}
+          defaultValue={popupSelector?.objectType?.text}
           isDisabled={true}
         />
       </Block.Element>
@@ -638,7 +638,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Mức độ ưu tiên' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.priorityLevelName}
+          defaultValue={popupSelector?.priorityLevelName}
           isDisabled={true}
         />
       </Block.Element>
@@ -646,7 +646,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Mô hình điều quỹ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.model.text}
+          defaultValue={popupSelector?.model?.text}
           isDisabled={true}
         />
       </Block.Element>
@@ -654,7 +654,7 @@ export const Element = (props: Props) => {
         <Title.Element text='Địa điểm nhận' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.placeReceive.text}
+          defaultValue={popupSelector?.placeReceive?.text}
           isDisabled={true}
         />
       </Block.Element>

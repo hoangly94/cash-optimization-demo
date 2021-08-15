@@ -101,7 +101,7 @@ function requestCreating(url: string, data) {
     const postData = {
         data: {
             priorityLevelCode: data.priorityLevelCode,
-            priorityLevelName: data.priorityLevelName,
+            priorityLevelName: data?.priorityLevelName,
         },
     }
     return axios.post(url, { ...postData })
@@ -113,7 +113,7 @@ function requestEditing(url: string, data) {
         data: {
             id: parseInt(data.id),
             priorityLevelCode: data.priorityLevelCode,
-            priorityLevelName: data.priorityLevelName,
+            priorityLevelName: data?.priorityLevelName,
         },
     }
     return axios.post(url, { ...postData })

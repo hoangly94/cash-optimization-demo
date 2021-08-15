@@ -595,8 +595,8 @@ function requestDelete(url: string, data, auth) {
     const postData = {
         data: {
             id: data.id,
-            cashOptimizationReasonType: data.reasonType.text,
-            cashOptimizationReasonDesc: data.reasonType.text == 'KHÁC' ? data.rejectReason : data.reasonType.value,
+            cashOptimizationReasonType: data?.reasonType?.text,
+            cashOptimizationReasonDesc: data?.reasonType?.text == 'KHÁC' ? data.rejectReason : data.reasonType.value,
         },
     }
     return axios.post(url, { ...postData })

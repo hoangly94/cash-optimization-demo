@@ -27,7 +27,7 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const stopPointType = selector.stopPointType.value;
   const stopPointTypeAllowed = 'Điểm dừng nhận quỹ của ĐVTLT';
-
+  
   const prevSelectedOrder = (selector.selectedRouteDetailOganize?.order || 0) - 1;
   const preRouteDetailOganize = selector.routeDetailOganizeTemp?.filter(item => item.order === prevSelectedOrder)[0];
   useLayoutEffect(() => {
@@ -45,7 +45,7 @@ export const Element = (props: Props) => {
     <Popup.Element
       {...props}
       closePopUpCallback={() => {
-        dispatch({ type: REQUEST_ORGANIZING_BACK, confirm:'NO', noti:true });
+        dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'NO', noti: true });
         dispatch({ type: REQUEST_ORGANIZING_CANCEL });
       }}
       extractHtml={confirmationDialog}
@@ -369,6 +369,10 @@ export const Element = (props: Props) => {
               dispatch({ type: REQUEST_ORGANIZING_CANCEL });
               dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL })
             }}
+            isDisabled={selector?.routeDetailOganizeTemp.filter(item =>
+              selector.stopPointType?.text === item.stopPointType &&
+              item.routeDetailOganizeStatus === "ACT" && item.stopPointAction === 'Y' && (!selector.cashOptimizationId || selector.cashOptimizationId === item.cashOptimizationId)).length
+              || selector.departurePointAddress === 'NULL' || selector.destinationPointAddress === 'NULL'}
           />
           <Button.Element
             text='Delete'
@@ -552,7 +556,7 @@ export const Element = (props: Props) => {
                 value: false,
               }
             }}
-            onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'NO', noti:true })}
+            onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'NO', noti: true })}
           />
         </Block.Element>
       </Block.Element>

@@ -106,16 +106,16 @@ const getHtml = (routeTracking, user) => {
   if (route.transportType == 'Xe chuyên dùng')
     return;
 
-  if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
-    if (routeStatus.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
+  if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length) {
+    if (routeStatus?.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
       return html29_2(route, routeDetailOganize);
-    if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus.includes("Going_") || routeStatus.includes("Working_"))
+    if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus?.includes("Going_") || routeStatus?.includes("Working_"))
       return html29_1(route, routeDetailOganize);
   }
-  if (persCode === route.tqDltltCode) {
+  if (persCode === route.tqDltltCode || route?.tqList?.filter(item => item.persCode === persCode).length) {
     if (routeStatus === 'Beginning')
       return html30_1(route, routeDetailOganize);
-    if (routeStatus.includes("Working_"))
+    if (routeStatus?.includes("Working_"))
       return html30_2(route, routeDetailOganize);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
       return html30_3(route, routeDetailOganize);
@@ -126,7 +126,7 @@ const getHtml = (routeTracking, user) => {
     if (persTitle === 'ATAI') {
       if (routeStatus === 'Beginning')
         return html28_1(route, routeDetailOganize);
-      if (routeStatus.includes("Working_"))
+      if (routeStatus?.includes("Working_"))
         return html28_2(route, routeDetailOganize);
       if (routeStatus === 'Finishing' || routeStatus === 'Finished')
         return html28_3(route, routeDetailOganize);
@@ -275,14 +275,14 @@ const html28_2 = (route, routeDetailOganize) => {
       <Block.Element>
         <Title.Element text='Họ và tên thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.tqDltltName}
+          defaultValue={route.destinationTq?.persFullname}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.categoryPers?.persMobile}
+          defaultValue={route.destinationTq?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -417,7 +417,7 @@ const html28_3 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -605,14 +605,14 @@ const html30_2 = (route, routeDetailOganize) => {
       <Block.Element>
         <Title.Element text='Họ và tên thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.tqDltltName}
+          defaultValue={route.destinationTq?.persFullname}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT thủ quỹ tại điểm đến' />
         <Input.Element
-          defaultValue={route.categoryPers?.persMobile}
+          defaultValue={route.destinationTq?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -732,7 +732,7 @@ const html30_3 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={route?.actualTime}
+        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
