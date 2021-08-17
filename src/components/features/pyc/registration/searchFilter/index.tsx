@@ -335,7 +335,7 @@ const buttonProps: Button.Props = {
 }
 
 const validateForm = (dispatch, selector) => {
-  if (selector.radio === 2 && !selector.id) {
+  if (selector.radio == 2 && !selector.id) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số PYC HT' } });
     return false;
   }

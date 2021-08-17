@@ -202,6 +202,7 @@ export default (state: State = initState, action) => {
                 filters: {
                     ...state.filters,
                     radio: action.data.name,
+                    id: '',
                 },
             }
         case INPUT_DATE_FROM:

@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
-import { REQUEST_QUERY, FETCH_PERS, UPDATE_PERS, UPDATE_DATA, FETCH_ORGS_CHILDREN, UPDATE_ORGS_CHILDREN, EXPORT_EXCEL } from './constants';
+import { SELECT_COMBOX_FILTER, REQUEST_QUERY, FETCH_PERS, UPDATE_PERS, UPDATE_DATA, FETCH_ORGS_CHILDREN, UPDATE_ORGS_CHILDREN, EXPORT_EXCEL } from './constants';
 import Config from '@config';
 import { _Date, getCurrentDate } from '@utils';
 import _ from 'lodash';
@@ -33,13 +33,16 @@ function getData(filters, action) {
         sort = '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/report/reportHDB';
+    const orgsSearch = filters.orgsValue ? {
+        searchType: filters.orgsType?.value,
+        searchValue: filters.orgsValue,
+    } : null;
     const postData = {
         data: {
             fromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom) + ' 00:00:00',
             toDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo) + ' 23:59:59.00',
             orgCodeList: filters.orgCodeList?.map(item => item.value).join(',') ?? '',
-            searchType: filters.orgsType?.value,
-            searchValue: filters.orgsValue,
+            ...orgsSearch,
             sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,
@@ -61,7 +64,6 @@ function* fetchOrgsChildrenSaga(action?) {
         .catch(error => console.log(error));
 
     yield put({ type: UPDATE_ORGS_CHILDREN, data: responseData.data, user: state.auth.user });
-    yield put({ type: FETCH_PERS });
 }
 function* exportExcelSaga(action?) {
     const state = yield select();
@@ -71,13 +73,16 @@ function* exportExcelSaga(action?) {
         sort = '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/report/reportHDBExcel';
+    const orgsSearch = filters.orgsValue ? {
+        searchType: filters.orgsType?.value,
+        searchValue: filters.orgsValue,
+    } : null;
     const postData = {
         data: {
             fromDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateFrom) + ' 00:00:00',
             toDate: _Date.convertDateTimeDDMMYYYtoYYYYMMDD(filters.dateTo) + ' 23:59:59.00',
             orgCodeList: filters.orgCodeList?.map(item => item.value).join(',') ?? '',
-            searchType: filters.orgsType?.value,
-            searchValue: filters.orgsValue,
+            ...orgsSearch,
             sort: sort,
             page: page,
             size: Config.numberOfItemsPerPage,

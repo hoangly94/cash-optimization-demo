@@ -474,10 +474,10 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
       children: item.cashOptimization?.orgsHolderMobile,
     },
     {
-      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestCode || ''
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
     },
     {
-      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.tqDvdqName || ''
     },
   ]
 })

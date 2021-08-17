@@ -106,6 +106,7 @@ const getHtml = (routeTracking, user) => {
       atm,
     }
   };
+
   const routeStatus = route.routeStatus;
   if (route.transportType != 'Xe chuyên dùng')
     return false;

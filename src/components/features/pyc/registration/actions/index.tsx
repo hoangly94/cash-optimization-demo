@@ -136,7 +136,7 @@ export const Element = (props: Props) => {
               text={'Tìm ĐVĐQ'}
               backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
               store={{
-                // isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'orgsSearching'],
+                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'orgsSearching'],
                 action: {
                   type: HANDLE_POPUP,
                   keys: ['pycRegistration', 'orgsSearching', 'isShown'],

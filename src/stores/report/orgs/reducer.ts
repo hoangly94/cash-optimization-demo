@@ -56,7 +56,6 @@ export default (state: State = initState, action) => {
                 },
             }
         case RESET_FILTER:
-            console.log('-------------');
             return {
                 ...state,
                 filters: {
@@ -88,7 +87,6 @@ export default (state: State = initState, action) => {
                             value: action.user.orgsCode,
                             label: action.user.orgsName,
                         },
-                        ...orgsChildren,
                     ] ?? [],
                 },
                 orgsChildren: [
@@ -108,13 +106,16 @@ export default (state: State = initState, action) => {
                 },
             }
         case CHANGE_RADIO_FILTER:
-            return {
-                ...state,
-                filters: {
-                    ...state.filters,
-                    radio: action.data.name,
-                },
-            }
+            if (action?.user?.orgsCode === 9)
+                return {
+                    ...state,
+                    filters: {
+                        ...state.filters,
+                        radio: action.data.name,
+                        persCode: '',
+                    },
+                }
+            return state;
         case INPUT_DATE_FROM:
             return {
                 ...state,

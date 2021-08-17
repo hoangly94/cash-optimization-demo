@@ -261,7 +261,11 @@ const buttonProps: Button.Props = {
 }
 
 const validateForm = (dispatch, selector) => {
-  if (selector.radio === 2 && !selector.id) {
+  console.log('-------------');
+  console.log(selector.radio);
+  console.log(selector.id);
+  if (selector.radio == 2 && !selector.id) {
+    console.log('-------------`1');
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số UQ' } });
     return false;
   }

@@ -13,11 +13,11 @@ const initState: State = {
 
     orgsTypes: [
         {
-            text: 'Mã đơn vị',
+            text: 'Mã ĐVTLT',
             value: 'MADVTLT',
         },
         {
-            text: 'Tên đơn vị',
+            text: 'Tên ĐVTLT',
             value: 'TENDVTLT',
         },
     ],
@@ -98,7 +98,6 @@ export default (state: State = initState, action) => {
                             value: action.user.orgsCode,
                             label: action.user.orgsName,
                         },
-                        ...orgsChildren,
                     ] ?? [],
                 },
                 orgsChildren: [
@@ -123,6 +122,7 @@ export default (state: State = initState, action) => {
                 filters: {
                     ...state.filters,
                     radio: action.data.name,
+                    orgsValue: '',
                 },
             }
         case INPUT_DATE_FROM:
@@ -179,11 +179,12 @@ export default (state: State = initState, action) => {
 
 function getDefaultFilters() {
     return {
+        radio: '1',
         dateFrom: moment().format('DD/MM/YYYY'),
         dateTo: moment().format('DD/MM/YYYY'),
         orgCodeList: [],
         orgsType: {
-            text: 'Mã đơn vị',
+            text: 'Mã ĐVTLT',
             value: 'MADVTLT',
         },
         orgsValue: '',

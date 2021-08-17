@@ -65,6 +65,7 @@ function* fetchOrgsChildrenSaga(action?) {
     const postData = {
         data: {
             orgs_code: state.auth.user.orgsCode,
+            size: 0,
         }
     }
     const responseData = yield axios.post(url, postData)
@@ -78,7 +79,7 @@ function* fetchPersSaga(action?) {
     const url = Config.url + '/api/cashoptimization/route/report_aptai_find_pers';
     const postData = {
         data: {
-            orgCodeList: state.reportOrgs?.filters?.orgCodeList?.map(item => item.value).join(',') ?? '',
+            orgCodeList: (action?.orgCodeList || state.reportOrgs?.filters?.orgCodeList)?.map(item => item.value).join(',') ?? '',
         }
     }
     const responseData = yield axios.post(url, postData)

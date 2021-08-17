@@ -63,7 +63,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Số PYC HT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'id',
+            data: 'cashoptimizationid',
           }
         },
         {
@@ -71,7 +71,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Thời gian thực tế',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgs_code',
+            data: 'starttime',
           }
         },
         {
@@ -79,15 +79,15 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Địa điểm đi',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgs_name',
+            data: 'departurepointname',
           }
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Đia điểm đến',
+          children: 'Địa điểm đến',
           sort: {
             type: REQUEST_QUERY,
-            data: 'coo_orgs_dest_code',
+            data: 'destinationpointname',
           }
         },
         {
@@ -95,7 +95,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Loại yêu cầu',
           sort: {
             type: REQUEST_QUERY,
-            data: 'coo_orgs_dest_name',
+            data: 'type',
           }
         },
         {
@@ -103,7 +103,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Loại tiền',
           sort: {
             type: REQUEST_QUERY,
-            data: 'cash_optimization_status',
+            data: 'currencytype',
           }
         },
         {
@@ -111,7 +111,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Loại vàng',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'goldtype',
           }
         },
         {
@@ -119,15 +119,15 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Đặc điểm',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'attribute',
           }
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Số lượng',
+          children: 'Số tiền',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'quanlity',
           }
         },
         {
@@ -135,7 +135,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Tên ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'orgroutename',
           }
         },
         {
@@ -143,7 +143,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Phương tiện vận chuyển',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'vehicletype',
           }
         },
         {
@@ -151,7 +151,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Biển số xe',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'vehiclecode',
           }
         },
         {
@@ -159,7 +159,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Số lộ trình',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'routeid',
           }
         },
         {
@@ -167,7 +167,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Họ và tên áp tải',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'tenaptai',
           }
         },
         {
@@ -175,7 +175,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Họ và tên bảo vệ',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'tenbaove',
           }
         },
         {
@@ -183,7 +183,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Họ và tên lái xe',
           sort: {
             type: REQUEST_QUERY,
-            data: '',
+            data: 'tenlaixe',
           }
         },
       ],
@@ -203,7 +203,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.cashoptimizationid,
     },
     {
-      children: item.starttime,
+      children: item.starttime && moment(item.starttime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),
     },
     {
       children: item.departurepointname,

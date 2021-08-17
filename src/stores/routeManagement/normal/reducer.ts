@@ -211,7 +211,7 @@ export default (state: State = initState, action) => {
             }
         case UPDATE_HISTORY:
             const historyData = action.data?.data ? action.data.data?.map(preprocessQueryResult(state)) : [];
-            
+
             return {
                 ...state,
                 isLoading: false,
@@ -266,6 +266,7 @@ export default (state: State = initState, action) => {
                 filters: {
                     ...state.filters,
                     radio: action.data.name,
+                    id: '',
                 },
             }
         case INPUT_DATE_FROM:
@@ -426,7 +427,8 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 ...selectDuableTableRowData,
-                special: action.data.cashOptimizatioDetailModelList,
+                special: action.data?.cashOptimizatioDetailModelList,
+
             }
         case HANDLE_DUALTABLE_MOVE:
             const popupType = ['creatingPopup', 'editingPopup', 'vehiclePopup', 'persPopup'][state.popupType - 1];
@@ -518,6 +520,7 @@ export default (state: State = initState, action) => {
                     [key2]: action.data,
                     ...currencyTypeCheckData(key2, action.data.value),
                     // ...pycTypesCheckResetData(key2),
+                    rejectReason: '',
                 },
             }
         case SELECT_ROW:
@@ -811,6 +814,17 @@ export default (state: State = initState, action) => {
                 }
                 return data;
             })();
+            if (state.organizingPopup.stopPointType.text == 'Điểm dừng xử lý NV theo PYC')
+                return {
+                    ...state,
+                    organizingPopup: {
+                        ...state.organizingPopup,
+                        ...destinationPointData,
+                        routeDetailHdbTemp2: action.data?.cashOptimization?.cashOptimizatioDetailModelList,
+                    },
+                    special: action.data?.cashOptimization?.cashOptimizatioDetailModelList,
+
+                }
             return {
                 ...state,
                 organizingPopup: {
@@ -1180,8 +1194,6 @@ const preprocessQueryResult = (state) => (data, index) => ({
 
 const currencyTypeCheckData = (type, value) => {
     if (type === 'currencyType') {
-        console.log(value);
-        console.log(['ACB', 'XAU'].includes(value));
         if (['ACB', 'XAU'].includes(value)) {
             return {
                 isDisabledGoldTypes: false,

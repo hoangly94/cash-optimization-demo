@@ -57,12 +57,12 @@ function* fetchDataSaga(action?) {
     if (!responseData.data?.data) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
-
     yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'continue', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'delete', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'orgsSearching', 'isDisabled'], value: true });
 }
 
 function* getPycExcelSaga(action?) {

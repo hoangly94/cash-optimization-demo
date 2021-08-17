@@ -46,6 +46,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_ROW, data: item });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'edit', 'isDisabled'], value: false });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'detail', 'isDisabled'], value: false });
+  dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'orgsSearching', 'isDisabled'], value: false });
 }
 
 const tableData = (queryResult?): Table.Props => ({

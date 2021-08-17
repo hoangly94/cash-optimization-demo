@@ -251,9 +251,9 @@ const breadcrumbsMapper = {
     },
     'report': {
         _url: '',
-        _name: 'Báo cáo',
-        'orgs': { _url: '/report/orgs', _name: 'Báo cáo số lần điều quỹ của nhân viên áp tải thuộc đơn vị', },
-        'special': { _url: '/report/special', _name: 'Báo cáo sổ theo dõi vận chuyển hàng đặc biệt', },
+        _name: 'Báo cáo KPP',
+        'orgs': { _url: '/report/orgs', _name: 'BC Số lần điều quỹ NV Áp tải', },
+        'special': { _url: '/report/special', _name: 'BC Sổ theo dõi VC HĐB', },
     },
     'user': {
         _url: '',
@@ -341,18 +341,18 @@ const dashboardMenuProps: DashboardMenu.Props = {
                 ]
             },
             {
-                text: 'Báo cáo',
+                text: 'Báo cáo KPP',
                 $icon: {
                     name: 'documentCheck',
                 },
                 $subs: [
                     {
-                        text: 'Báo cáo số lần điều quỹ của nhân viên áp tải thuộc đơn vị',
+                        text: 'BC Số lần điều quỹ NV Áp tải',
                         url: '/report/orgs',
                         accessedRoles: ['37'],
                     },
                     {
-                        text: 'Báo cáo sổ theo dõi vận chuyển hàng đặc biệt',
+                        text: 'BC Sổ theo dõi VC HĐB',
                         url: '/report/special',
                         accessedRoles: ['38'],
                     },

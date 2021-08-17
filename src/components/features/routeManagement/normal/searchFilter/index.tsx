@@ -12,7 +12,7 @@ import * as Title from "~commons/title";
 import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchOrgsPopup2 from "./searchOrgsPopup2";
-import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
+import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { RESET_SEARCHORGS_FILTER } from '_/stores/authority/searchOrgs/constants';
 
 export type Props = Base.Props;
@@ -23,8 +23,15 @@ export const Element = (props: Props) => {
     // dispatch({ type: UPDATE_CONFIG })
     // dispatch({ type: REQUEST_QUERY });
   })
-  const radioSelector = useSelector(state => state['routeManagement'].filters.radio);
+  const selector = useSelector(state => state['routeManagement'].filters);
   const userSelector = useSelector(state => state['auth'].user);
+
+  const handleSubmitButtonClick = () => {
+    const isValidForm = validateForm(dispatch, selector);
+    if (isValidForm) {
+      dispatch({ type: REQUEST_QUERY });
+    }
+  }
 
   //create props
   const componentWrapperProps = {
@@ -83,7 +90,7 @@ export const Element = (props: Props) => {
                 selectorKeys: ['routeManagement', 'filters', 'dateFrom'],
                 reducerType: INPUT_DATE_FROM,
               },
-              isDisabled: radioSelector !== '1',
+              isDisabled: selector.radio !== '1',
               max: 10,
             }}
             $datepicker={{
@@ -91,7 +98,7 @@ export const Element = (props: Props) => {
                 selectorKeys: ['routeManagement', 'filters', 'dateFrom'],
                 action: { type: INPUT_DATE_FROM },
               },
-              isDisabled: radioSelector !== '1',
+              isDisabled: selector.radio !== '1',
             }}
           />
         </Block.Element>
@@ -113,7 +120,7 @@ export const Element = (props: Props) => {
                 selectorKeys: ['routeManagement', 'filters', 'dateTo'],
                 reducerType: INPUT_DATE_TO,
               },
-              isDisabled: radioSelector !== '1',
+              isDisabled: selector.radio !== '1',
               max: 10,
             }}
             $datepicker={{
@@ -121,7 +128,7 @@ export const Element = (props: Props) => {
                 selectorKeys: ['routeManagement', 'filters', 'dateTo'],
                 action: { type: INPUT_DATE_TO },
               },
-              isDisabled: radioSelector !== '1',
+              isDisabled: selector.radio !== '1',
             }}
           />
         </Block.Element>
@@ -154,7 +161,7 @@ export const Element = (props: Props) => {
             style={{
               color: '#828282',
             }}
-            isDisabled={radioSelector !== '1'}
+            isDisabled={selector.radio !== '1'}
             onClick={() => {
               dispatch({ type: RESET_SEARCHORGS_FILTER });
               // dispatch({ type: REQUEST_QUERY_ORGS });
@@ -186,8 +193,8 @@ export const Element = (props: Props) => {
                 value: 'orgsCode',
               },
             }}
-            isDisabled={radioSelector !== '1'}
-            isInputDisabled={radioSelector !== '1'}
+            isDisabled={selector.radio !== '1'}
+            isInputDisabled={selector.radio !== '1'}
           />
         </Block.Element>
         <Block.Element {...filter1Props}>
@@ -213,8 +220,8 @@ export const Element = (props: Props) => {
               //   value: 0,
               // }],
             }}
-            isDisabled={radioSelector !== '1'}
-            isInputDisabled={radioSelector !== '1'}
+            isDisabled={selector.radio !== '1'}
+            isInputDisabled={selector.radio !== '1'}
           />
         </Block.Element>
       </Block.Element>
@@ -234,7 +241,7 @@ export const Element = (props: Props) => {
             selectorKeys: ['routeManagement', 'filters', 'id'],
             reducerType: CHANGE_CODE_FILTER,
           }}
-          isDisabled={radioSelector !== '2'}
+          isDisabled={selector.radio !== '2'}
           max={200}
         />
 
@@ -243,6 +250,7 @@ export const Element = (props: Props) => {
           store={{
             action: { type: REQUEST_QUERY },
           }}
+          onClick={handleSubmitButtonClick}
         />
       </Block.Element>
 
@@ -267,6 +275,14 @@ export const Element = (props: Props) => {
       />
     </Block.Element >
   )
+}
+
+const validateForm = (dispatch, selector) => {
+  if (selector.radio == 2 && !selector.id) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số lộ trình' } });
+    return false;
+  }
+  return true;
 }
 
 const buttonProps: Button.Props = {

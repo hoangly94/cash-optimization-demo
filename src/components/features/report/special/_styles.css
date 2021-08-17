@@ -6,6 +6,12 @@
     padding: 28px 68px 28px 288px;
     min-width:800px;
 }
+.component{
+    margin:auto;
+    box-sizing:border-box;
+    padding: 28px 68px 28px 288px;
+    min-width:800px;
+}
 
 @media (max-width: 768px){
     .component{
@@ -14,4 +20,8 @@
         width:100%;
         padding: 0px 18px;
     }
+}
+
+.disabled > div{
+    background-color:#ececec !important;
 }

@@ -219,6 +219,7 @@ export default (state: State = initState, action) => {
                 filters: {
                     ...state.filters,
                     radio: action.data.name,
+                    id: '',
                 },
             }
         case INPUT_DATE_FROM:
@@ -475,6 +476,7 @@ export default (state: State = initState, action) => {
                     [key2]: action.data,
                     ...currencyTypeCheckData(key2, action.data.value),
                     ...pycTypesCheckResetData(key2),
+                    rejectReason: '',
                 },
             }
         case SELECT_COMBOX_FILTER:

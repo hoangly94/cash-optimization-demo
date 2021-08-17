@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { REQUEST_QUERY, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_COMBOX_FILTER } from '~stores/report/orgs/constants';
+import { REQUEST_QUERY, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_COMBOX_FILTER, FETCH_PERS } from '~stores/report/orgs/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
@@ -13,6 +13,8 @@ import * as Popup from "~commons/popup";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { RESET_FILTER } from '_/stores/report/orgs/constants';
 import MultiSelect from "react-multi-select-component";
+import classNames from 'classnames';
+import styles from '../_styles.css';
 
 export type Props = Base.Props;
 
@@ -20,7 +22,6 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const selector = useSelector(state => state['reportOrgs']);
   const userSelector = useSelector(state => state['auth'].user);
-  const [selected, setSelected] = React.useState([]);
   // useEffect
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector.filters);
@@ -67,7 +68,10 @@ export const Element = (props: Props) => {
           name='1'
           store={{
             selectorKeys: ['reportOrgs', 'filters', 'radio'],
-            action: { type: CHANGE_RADIO_FILTER },
+            action: { type: CHANGE_RADIO_FILTER, user: userSelector },
+          }}
+          style={{
+            display: userSelector?.orgsCode == 9 ? 'flex' : 'none',
           }}
         />
         <Block.Element {...filter1Props}>
@@ -118,7 +122,7 @@ export const Element = (props: Props) => {
                 selectorKeys: ['reportOrgs', 'filters', 'dateTo'],
                 reducerType: INPUT_DATE_TO,
               },
-              isDisabled: selector?.filters?.radio !== '1',
+              isDisabled: selector?.filters?.radio != '1',
               max: 10,
             }}
             $datepicker={{
@@ -126,7 +130,7 @@ export const Element = (props: Props) => {
                 selectorKeys: ['reportOrgs', 'filters', 'dateTo'],
                 action: { type: INPUT_DATE_TO },
               },
-              isDisabled: selector?.filters?.radio !== '1',
+              isDisabled: selector?.filters?.radio != '1',
             }}
           />
         </Block.Element>
@@ -138,20 +142,31 @@ export const Element = (props: Props) => {
               fontSize: '15px',
             }}
           />
-          <MultiSelect
-            options={selector?.orgsChildren ?? []}
-            value={selector?.filters?.orgCodeList}
-            onChange={item => {
-              dispatch({ type: SELECT_COMBOX_FILTER, keys: ["filters", "orgCodeList"], data: item });
-            }}
-            labelledBy="Chọn"
-            selectAllLabel='All'
-            overrideStrings={{
-              allItemsAreSelected: 'All'
-            }}
-            disabled={selector?.filters?.radio !== '1'}
-            
-          />
+          {
+            selector?.orgsChildren?.length > 1
+              ? <MultiSelect
+                options={selector?.orgsChildren ?? []}
+                value={selector?.filters?.orgCodeList}
+                onChange={item => {
+                  dispatch({ type: SELECT_COMBOX_FILTER, keys: ["filters", "orgCodeList"], data: item });
+                }}
+                labelledBy="Chọn"
+                selectAllLabel='All'
+                overrideStrings={{
+                  allItemsAreSelected: 'All'
+                }}
+                disabled={selector?.filters?.radio != 1}
+                className={"" + (selector?.filters?.radio != 1 && classNames(
+                  styles['disabled'])
+                )}
+              />
+              : <Input.Element
+                placeholder='Nhập giá trị...'
+                width={Base.Width.FULL}
+                defaultValue={selector?.orgsChildren?.length ? selector?.orgsChildren[0].label : ''}
+                isDisabled={true}
+              />
+          }
         </Block.Element>
         <Block.Element {...filter1Props}>
           <Title.Element
@@ -172,17 +187,32 @@ export const Element = (props: Props) => {
             overrideStrings={{
               allItemsAreSelected: 'All'
             }}
-            disabled={selector?.filters?.radio !== '1'}
+            disabled={selector?.filters?.radio != 1}
+            className={"" + (selector?.filters?.radio != 1 && classNames(
+              styles['disabled'])
+            )}
           />
         </Block.Element>
+        <Button.Element
+          {...queryButtonProps}
+          onClick={handleSubmitButtonClick}
+          style={{
+            marginTop: '30px',
+            display: userSelector?.orgsCode == 9 ? 'none' : 'block',
+          }}
+        />
       </Block.Element >
-      <Block.Element {...componentWrapperProps}>
+      <Block.Element {...componentWrapperProps}
+        style={{
+          display: userSelector?.orgsCode == 9 ? 'flex' : 'none',
+        }}
+      >
         <Radio.Element
           {...radioProps}
           name='2'
           store={{
             selectorKeys: ['reportOrgs', 'filters', 'radio'],
-            action: { type: CHANGE_RADIO_FILTER },
+            action: { type: CHANGE_RADIO_FILTER, user: userSelector },
           }}
         />
         <Input.Element
@@ -213,8 +243,8 @@ const buttonProps: Button.Props = {
 }
 
 const validateForm = (dispatch, selector) => {
-  if (selector.radio === 2 && !selector.id) {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số PYC HT' } });
+  if (selector.radio == 2 && !selector.persCode) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Mã nhân viên áp tải' } });
     return false;
   }
   return true;
