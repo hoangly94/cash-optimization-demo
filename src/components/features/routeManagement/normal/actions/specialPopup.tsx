@@ -96,6 +96,10 @@ const tableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Loại yêu cầu',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Loại tiền',
         },
         {
@@ -122,6 +126,9 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   $cells: [
     {
       children: item.index || index + 1,
+    },
+    {
+      children: item.type
     },
     {
       children: item.currencyType

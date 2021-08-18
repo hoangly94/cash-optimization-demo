@@ -245,7 +245,7 @@ const titleCallback = () => ([
   },
   {
     ...tableData_$rows_$cells_title,
-    children: 'Số lộ trình',
+    children: 'Số PYC HT',
     sort: {
       type: REQUEST_QUERY,
       data: 'id',
@@ -256,7 +256,7 @@ const titleCallback = () => ([
     children: 'Trạng thái PYC',
     sort: {
       type: REQUEST_QUERY,
-      data: 'id',
+      data: '',
     }
   },
   {
@@ -264,7 +264,7 @@ const titleCallback = () => ([
     children: 'Mức độ ưu tiên',
     sort: {
       type: REQUEST_QUERY,
-      data: 'co_orgs_name',
+      data: '',
     }
   },
   {
@@ -272,7 +272,7 @@ const titleCallback = () => ([
     children: 'Khoảng cách ĐVĐQ với ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'pers_fullname',
+      data: '',
     }
   },
   {
@@ -280,7 +280,7 @@ const titleCallback = () => ([
     children: 'Mô hình điều quỹ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'receiver_pers_fullname',
+      data: '',
     }
   },
   {
@@ -288,7 +288,7 @@ const titleCallback = () => ([
     children: 'Tên ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_from_date',
+      data: '',
     }
   },
   {
@@ -296,7 +296,7 @@ const titleCallback = () => ([
     children: 'Họ và tên thủ quỹ ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_to_date',
+      data: '',
     }
   },
   {
@@ -304,7 +304,7 @@ const titleCallback = () => ([
     children: 'SĐT Thủ quỹ ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
   {
@@ -312,7 +312,7 @@ const titleCallback = () => ([
     children: 'Tên ĐVĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
   {
@@ -320,7 +320,7 @@ const titleCallback = () => ([
     children: 'Họ và tên Thủ quỹ ĐVĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
   {
@@ -328,7 +328,23 @@ const titleCallback = () => ([
     children: 'SĐT thủ quỹ ĐVĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
+    }
+  },
+  {
+    ...tableData_$rows_$cells_title,
+    children: 'TÊN ATM',
+    sort: {
+      type: REQUEST_QUERY,
+      data: '',
+    }
+  },
+  {
+    ...tableData_$rows_$cells_title,
+    children: 'TÊN NH ĐỐI TÁC KPP MỞ TK',
+    sort: {
+      type: REQUEST_QUERY,
+      data: '',
     }
   },
   {
@@ -336,7 +352,7 @@ const titleCallback = () => ([
     children: 'Thông tin chi tiết HĐB',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
   // {
@@ -400,7 +416,7 @@ const titleCallback = () => ([
     children: 'Số PYC DV',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
 ]);
@@ -441,6 +457,12 @@ const cellMapping = (dispatch) => (item, index) => ([
   },
   {
     children: item.cashOptimizationOrgsDetailModel?.tqDvdqMobile,
+  },
+  {
+    children: item.cashOptimizationOrgsDetailModel?.atmCdmName,
+  },
+  {
+    children: item.cashOptimizationOrgsDetailModel?.nnhnTctdName,
   },
   {
     children: <a
@@ -487,10 +509,6 @@ const validateForm = (dispatch, selector) => {
   }
   return true;
 }
-
-
-
-
 
 export default Element;
 Element.displayName = 'CreatingPopup'

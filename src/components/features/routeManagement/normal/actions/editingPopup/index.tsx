@@ -363,10 +363,10 @@ const titleCallback = () => ([
   },
   {
     ...tableData_$rows_$cells_title,
-    children: 'Số lộ trình',
+    children: 'Số PYC HT',
     sort: {
       type: REQUEST_QUERY,
-      data: 'id',
+      data: '',
     }
   },
   {
@@ -374,7 +374,7 @@ const titleCallback = () => ([
     children: 'Trạng thái PYC',
     sort: {
       type: REQUEST_QUERY,
-      data: 'status',
+      data: '',
     }
   },
   {
@@ -382,7 +382,7 @@ const titleCallback = () => ([
     children: 'Mức độ ưu tiên',
     sort: {
       type: REQUEST_QUERY,
-      data: 'priority_level_name',
+      data: '',
     }
   },
   {
@@ -398,7 +398,7 @@ const titleCallback = () => ([
     children: 'Mô hình điều quỹ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'model',
+      data: '',
     }
   },
   {
@@ -406,7 +406,7 @@ const titleCallback = () => ([
     children: 'Tên ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'orgs_name',
+      data: '',
     }
   },
   {
@@ -414,7 +414,7 @@ const titleCallback = () => ([
     children: 'Họ và tên thủ quỹ ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'orgs_holder_name',
+      data: '',
     }
   },
   {
@@ -422,7 +422,7 @@ const titleCallback = () => ([
     children: 'SĐT Thủ quỹ ĐVYCĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'orgs_holder_mobile',
+      data: '',
     }
   },
   {
@@ -430,7 +430,7 @@ const titleCallback = () => ([
     children: 'Tên ĐVĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
   {
@@ -438,7 +438,7 @@ const titleCallback = () => ([
     children: 'Họ và tên Thủ quỹ ĐVĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
   {
@@ -446,7 +446,23 @@ const titleCallback = () => ([
     children: 'SĐT thủ quỹ ĐVĐQ',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
+    }
+  },
+  {
+    ...tableData_$rows_$cells_title,
+    children: 'TÊN ATM',
+    sort: {
+      type: REQUEST_QUERY,
+      data: '',
+    }
+  },
+  {
+    ...tableData_$rows_$cells_title,
+    children: 'TÊN NH ĐỐI TÁC KPP MỞ TK',
+    sort: {
+      type: REQUEST_QUERY,
+      data: '',
     }
   },
   {
@@ -454,7 +470,7 @@ const titleCallback = () => ([
     children: 'Thông tin chi tiết HĐB',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
   // {
@@ -518,7 +534,7 @@ const titleCallback = () => ([
     children: 'Số PYC DV',
     sort: {
       type: REQUEST_QUERY,
-      data: 'authority_status',
+      data: '',
     }
   },
 ]);
@@ -552,13 +568,19 @@ const cellMapping = (dispatch) => (item, index) => ([
     children: item.orgsHolderMobile,
   },
   {
-    children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
+    children: item?.cashOptimizationOrgsDetailModel?.orgsDestName,
   },
   {
-    children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.tqDvdqName,
+    children: item?.cashOptimizationOrgsDetailModel?.tqDvdqName,
   },
   {
-    children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.tqDvdqMobile,
+    children: item?.cashOptimizationOrgsDetailModel?.tqDvdqMobile,
+  },
+  {
+    children: item?.cashOptimizationOrgsDetailModel?.atmCdmName,
+  },
+  {
+    children: item?.cashOptimizationOrgsDetailModel?.nnhnTctdName,
   },
   {
     children: <a

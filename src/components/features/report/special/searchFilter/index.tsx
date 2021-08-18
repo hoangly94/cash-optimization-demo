@@ -143,7 +143,7 @@ export const Element = (props: Props) => {
             }}
           />
           {
-            selector?.filters?.orgCodeList
+            selector?.orgsChildren?.length > 1
               ? <MultiSelect
                 options={selector?.orgsChildren ?? []}
                 value={selector?.filters?.orgCodeList}

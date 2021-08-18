@@ -638,7 +638,7 @@ export default (state: State = initState, action) => {
                 creatingPopup: {
                     ...action.data,
                     ...state.creatingPopup,
-                    tableContent1: pycData.map((item, index) => ({
+                    tableContent1: pycData?.map((item, index) => ({
                         ...item,
                         key: item.id,
                         index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,

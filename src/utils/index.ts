@@ -121,7 +121,7 @@ export const getCurrentDate = (dateString?: string) => {
     var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
     var yyyy = date.getFullYear();
 
-    return dd + '-' + mm + '-' + yyyy;
+    return dd + '/' + mm + '/' + yyyy;
 };
 export const getCurrentDateTime = (dateString?: string) => {
     const date = dateString ? new Date(dateString) : new Date();

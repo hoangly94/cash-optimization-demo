@@ -104,7 +104,8 @@ export const Element = (props: Props) => {
           }}
           margin={Base.MarginBottom.PX_18}
         />
-        <Block.Element>
+        <Block.Element
+          margin={Base.MarginTop.PX_18}>
           <Block.Element>
             <Button.Element
               {...creatingButtonComponentProps}
