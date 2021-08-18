@@ -224,7 +224,7 @@ const cellMapping = (dispatch) => (item, index) => ([
     children: index + 1,
   },
   {
-    children: item.id,
+    children: item.persCode,
   },
   {
     children: item.persFullname,

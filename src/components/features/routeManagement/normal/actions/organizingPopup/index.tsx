@@ -346,10 +346,8 @@ export const Element = (props: Props) => {
           marginTop: '28px',
         }}
       />
-      <RouteTable.Element />
       <Block.Element
         {...actionsWrapperProps}
-        margin={Base.MarginTop.PX_38}
       >
         <Block.Element
           flex={Base.Flex.BETWEEN}
@@ -417,6 +415,9 @@ export const Element = (props: Props) => {
           />
         </Block.Element>
       </Block.Element>
+      <RouteTable.Element 
+        margin={Base.MarginTop.PX_28}
+        />
 
       <Block.Element
         {...actionsWrapperProps}

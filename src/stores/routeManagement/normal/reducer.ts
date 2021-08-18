@@ -544,6 +544,9 @@ export default (state: State = initState, action) => {
                     key: item.id,
                 })).sort((p, n) => +!p.order - +!(n.order) || p?.order - n?.order),
             };
+            newData.tableContent1 = newData.tableContent1?.filter(item1 =>
+                newData.tableContent2?.filter(item2 => item2.id == item1.id).length == 0);
+        
             return {
                 ...state,
                 selectedItem: newData,
@@ -632,7 +635,6 @@ export default (state: State = initState, action) => {
             }
         case UPDATE_PYC:
             const pycData = action.data?.data?.map(item => ({ ...item, key: item.id }));
-
             return {
                 ...state,
                 creatingPopup: {
