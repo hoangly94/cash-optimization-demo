@@ -158,6 +158,7 @@ export const Element = (props: Popup.Props) => {
                 keys: ['pycRegistration', 'orgsSearching', 'isShown'],
                 value: true,
               });
+              dispatch({ type: FETCH_ORGSSEARCHING_DISTANCE });
             }}
           />
           <Button.Element
@@ -197,7 +198,7 @@ const tableData_$rows_$cells_title = {
 const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_ROW, data: item, searchOrgsType: 2 });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycSearchOrgs', 'select', 'isDisabled'], value: false });
-  dispatch({ type: FETCH_ORGSSEARCHING_DISTANCE });
+  
 }
 
 

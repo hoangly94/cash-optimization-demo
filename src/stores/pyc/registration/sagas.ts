@@ -57,7 +57,7 @@ function* fetchDataSaga(action?) {
     if (!responseData.data?.data) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
-    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page:action?.page });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'continue', 'isDisabled'], value: true });
@@ -188,7 +188,7 @@ function* specialAddSaga() {
         type: state.pycRegistration[popupType].type,
         currencyType: state.pycRegistration[popupType].currencyType,
         goldType: state.pycRegistration[popupType].goldType,
-        quanlity: state.pycRegistration[popupType].quanlity?.toString().replaceAll(',', ''),
+        quanlity: +state.pycRegistration[popupType].quanlity?.toString().replaceAll(',', ''),
         attribute: state.pycRegistration[popupType].attribute,
     }
     const filterSameSpecialData = (newItem) => (item) => {
@@ -322,7 +322,7 @@ function* fetchOrgsChildrenSaga(action?) {
 function getHistory(data, action) {
     const {
         page = 0,
-        sort = '',
+        sort = data.sort ?? '',
     } = action ?? {};const url = Config.url + '/api/cashoptimization/pyc_history';
     const postData = {
         data: {
@@ -364,7 +364,7 @@ function getOrgsChildren(user) {
 function getData(filters, auth, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};const url = Config.url + '/api/cashoptimization/pycsearch';
     const data = filters.radio === '1'
         ? {
@@ -399,7 +399,7 @@ function getData(filters, auth, action) {
 function getPycExcel(filters, auth, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};const url = Config.url + '/api/cashoptimization/pyc_excel';
     const data = filters.radio === '1'
         ? {

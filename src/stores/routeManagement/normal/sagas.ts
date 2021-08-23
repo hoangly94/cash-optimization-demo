@@ -72,7 +72,7 @@ function* fetchDataSaga(action?) {
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'continue', 'isDisabled'], value: true });
@@ -154,13 +154,13 @@ function requestOrganizeGetHdbDetail(data, action) {
 function* fetchVehicleSaga(action?) {
     const state = yield select();
     const responseData = yield call(getVehicleData, state.routeManagement.vehiclePopup, state.routeManagement.selectedItem, action);
-    yield put({ type: UPDATE_VEHICLE_DATA, data: responseData.data });
+    yield put({ type: UPDATE_VEHICLE_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
 }
 
 function* fetchPersSaga(action?) {
     const state = yield select();
     const responseData = yield call(getPersData, state.routeManagement.persPopup, state.routeManagement.selectedItem, action);
-    yield put({ type: UPDATE_PERS_DATA, data: responseData.data });
+    yield put({ type: UPDATE_PERS_DATA, data: responseData.data, sort: action?.sort, page: action?.page  });
 }
 
 function* getExcelSaga(action?) {
@@ -303,7 +303,7 @@ function* specialAddSaga() {
         type: state.routeManagement.organizingPopup?.type,
         currencyType: state.routeManagement.organizingPopup?.currencyType,
         goldType: state.routeManagement.organizingPopup?.goldType,
-        quanlity: state.routeManagement.organizingPopup?.quanlity?.toString().replaceAll(',', ''),
+        quanlity: +state.routeManagement.organizingPopup?.quanlity?.toString().replaceAll(',', ''),
         attribute: state.routeManagement.organizingPopup?.attribute,
     }
     const filterSameSpecialData = (newItem) => (item) => {
@@ -325,7 +325,7 @@ function* specialAddSaga() {
                 type: organizingPopup?.type?.value,
                 currencyType: organizingPopup?.currencyType?.value,
                 goldType: organizingPopup?.goldType?.value,
-                quanlity: organizingPopup?.quanlity?.toString().replaceAll(',', ''),
+                quanlity: +organizingPopup?.quanlity?.toString().replaceAll(',', ''),
                 attribute: organizingPopup?.attribute?.value,
             },
         ];
@@ -341,9 +341,9 @@ function* specialAddSaga() {
 function* specialDeleteSaga() {
     const state = yield select();
     const organizingPopup = state.routeManagement.organizingPopup;
-    const routeDetailHdbTemp = organizingPopup.routeDetailHdbTemp;
+    const routeDetailHdbTemp2 = organizingPopup.routeDetailHdbTemp2;
 
-    const data = routeDetailHdbTemp.filter(item => !item['isSelected']);
+    const data = routeDetailHdbTemp2.filter(item => !item['isSelected']);
     const responseData = yield call(requestOrganizingAddHdb, organizingPopup, data);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -469,7 +469,7 @@ function* requestOrganizingCheckStopPointSaga(action?) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield put({ type: UPDATE_ORGANIZING_STOP_POINT, data: responseData.data });
-    yield put({ type: REQUEST_ORGANIZING });
+    // yield put({ type: REQUEST_ORGANIZING });
 }
 function requestOrganizingCheckStopPoint(data, action) {
     const url = Config.url + '/api/cashoptimization/route/route_organize_check_stop_point';
@@ -559,7 +559,7 @@ function* requestOrganizingCheckBalanceHdbSaga(action?) {
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
-    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
 }
 function requestOrganizingCheckBalanceHdb(data, action) {
     const url = Config.url + '/api/cashoptimization/route/organize_check_balance_hdb';
@@ -774,7 +774,7 @@ function requestOrganizingUpdate(url: string, data, auth, action?) {
 function getHistory(data, action) {
     const {
         page = 0,
-        sort = '',
+        sort = data.sort ?? '',
     } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/history';
     const postData = {
         data: {
@@ -816,7 +816,7 @@ function getOrgsChildren(user) {
 function getData(filters, auth, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/search';
     const data = filters.radio === '1'
         ? {
@@ -852,10 +852,11 @@ function requestOrganizeUrgentCheckById(data, action) {
         .catch(error => console.log(error));
 }
 
-function getVehicleData(filters, selectedItem, action) {
+function 
+getVehicleData(filters, selectedItem, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/searchVehicle';
 
     const postData = {
@@ -875,7 +876,7 @@ function getVehicleData(filters, selectedItem, action) {
 function getPersData(filters, selectedItem, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/searchPers';
 
     const postData = {
@@ -895,7 +896,7 @@ function getPersData(filters, selectedItem, action) {
 function getPyc(filters, auth, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/searchPyc';
     const postData = {
         data: {
@@ -911,7 +912,7 @@ function getPyc(filters, auth, action) {
 function getExcel(filters, auth, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/route/exportExcel';
     const data = filters.radio === '1'

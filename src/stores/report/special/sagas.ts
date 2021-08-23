@@ -24,13 +24,13 @@ function* fetchDataSaga(action?) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
 }
 
 function getData(filters, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/report/reportHDB';
     const orgsSearch = filters.orgsValue ? {
@@ -70,7 +70,7 @@ function* exportExcelSaga(action?) {
     const filters = state.reportSpecial.filters;
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/report/reportHDBExcel';
     const orgsSearch = filters.orgsValue ? {

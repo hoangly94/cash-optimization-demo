@@ -113,6 +113,10 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                filters:{
+                    ...state.filters,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
+                },
                 queryResult: {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
@@ -172,6 +176,10 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                filters:{
+                    ...state.filters,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
+                },
                 history: {
                     ...state.history,
                     data: historyData,
@@ -503,7 +511,7 @@ export default (state: State = initState, action) => {
                             type: popupTypeData.type?.value,
                             currencyType: popupTypeData.currencyType?.value,
                             goldType: popupTypeData.goldType?.value,
-                            quanlity: popupTypeData.quanlity?.toString().replaceAll(',', ''),
+                            quanlity: +popupTypeData.quanlity?.toString().replaceAll(',', ''),
                             attribute: popupTypeData.attribute?.value,
                         },
                     ],
@@ -570,8 +578,9 @@ export default (state: State = initState, action) => {
                         },
                     }
                 },
+                distanceOrgsToOrgsRequest: newData.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,
                 queryResult: {
-                    ...state.queryResult,
+                    ...state.queryResult, 
                     data: newQueryResult,
                 }
             }
@@ -598,8 +607,20 @@ export default (state: State = initState, action) => {
                 orgsSearchingPopup: {
                     ...state.orgsSearchingPopup,
                     ...getDefaultOrgsSearchingPopup(),
+                    ...{
+                        orgsDestName: state.selectedItem.cashOptimizationOrgsDetailModel?.orgsDestName || '',
+                        orgsName: state.selectedItem.cashOptimizationOrgsDetailModel?.orgsDestName || '',
+                        atmCdm: {
+                            text: state.selectedItem.cashOptimizationOrgsDetailModel?.atmCdmName || '',
+                            value: state.selectedItem.cashOptimizationOrgsDetailModel?.atmCdmCode || '',
+                        },
+                        nhnnTctd: {
+                            text: state.selectedItem.cashOptimizationOrgsDetailModel?.nnhnTctdName || '',
+                            value: state.selectedItem.cashOptimizationOrgsDetailModel?.nnhnTctdCode || '',
+                        },
+                    }
                 },
-                distanceOrgsToOrgsRequest: '',
+                distanceOrgsToOrgsRequest: state.selectedItem.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest || '',
             }
         case SEARCHORGS_UPDATE_ATMCDMS:
             return {

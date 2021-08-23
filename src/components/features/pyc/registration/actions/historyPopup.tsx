@@ -15,6 +15,7 @@ export type Props = Popup.Props;
 export const Element = (props: Popup.Props) => {
   const historySelector = useSelector(state => state['pycRegistration'].history);
   const dispatch = useDispatch();
+
   // const tableProps: Table.Props = {
   //   ...tableData(historySelector.data?.map(mapResponseToData)),
   //   // height: Base.Height.PX_300,
@@ -25,7 +26,7 @@ export const Element = (props: Popup.Props) => {
     ...tableData(historySelector?.data?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
     margin: Base.MarginBottom.PX_18,
-    style:{
+    style: {
       minWidth: '2500px',
     }
   }
@@ -75,10 +76,10 @@ export const Element = (props: Popup.Props) => {
               }
             }}
             onClick={() => dispatch({
-                type: HANDLE_POPUP,
-                keys: ['pycRegistration', 'detail', 'isShown'],
-                value: true,
-                popupType: 3,
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'historyDetail', 'isShown'],
+              value: true,
+              popupType: 3,
             })}
           />
           <Button.Element
@@ -99,6 +100,7 @@ export const Element = (props: Popup.Props) => {
                 value: false,
               }
             }}
+            onClick={() => dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'historyDetail', 'isDisabled'], value: true })}
           />
         </Block.Element>
       </Block.Element>
@@ -119,7 +121,7 @@ const actionsProps: Block.Props = {
 const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
-  
+
 const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_HISTORY_ROW, data: item });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'historyDetail', 'isDisabled'], value: false });
@@ -129,7 +131,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 const tableData = (queryResult?): Table.Props => ({
   $thead: [
     {
-      style:{
+      style: {
         backgroundColor: '#1e3f96',
       },
       color: Base.Color.WHITE,
@@ -284,7 +286,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
       ],
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 

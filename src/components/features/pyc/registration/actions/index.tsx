@@ -8,6 +8,7 @@ import * as Pagination from "~commons/pagination";
 import * as CreatingPopup from "./creatingPopup";
 import * as EditingPopup from "./editingPopup";
 import * as DetailPopup from "./detailPopup";
+import * as HistoryDetailPopup from "./historyDetailPopup";
 import * as DeletePopup from "./deletePopup";
 import * as OrgsSearchingPopup from "./orgsSearchingPopup";
 import * as HistoryPopup from "./historyPopup";
@@ -129,7 +130,9 @@ export const Element = (props: Props) => {
                   popupType: 2,
                 }
               }}
-              isDisabled={!userSelector.viewList.includes('6')}
+              isDisabled={!(userSelector.viewList.includes('6')
+                && ['Originating', 'Rejected_1', 'Rejected_2', 'Rejected_3'].includes(orgsSearchingPopupSelector?.cashOptimizationStatus)
+                && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode)}
             />
             <Button.Element
               {...buttonProps}
@@ -144,8 +147,8 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
-              isDisabled={!(userSelector.viewList.includes('7') && (orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching' 
-              && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode)) }
+              isDisabled={!(userSelector.viewList.includes('7') && (orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching'
+                && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode))}
             />
           </Block.Element>
 
@@ -191,7 +194,9 @@ export const Element = (props: Props) => {
                   popupType: 4,
                 }
               }}
-              isDisabled={!userSelector.viewList.includes('64')}
+              isDisabled={!(userSelector.viewList.includes('64')
+                && [ 'Originating', 'Searching', 'Approved', 'Processing', 'Starting', 'Inroute'].includes(orgsSearchingPopupSelector?.cashOptimizationStatus)
+                && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode)}
             />
           </Block.Element>
 
@@ -201,19 +206,19 @@ export const Element = (props: Props) => {
             <Button.Element
               {...printButtonComponentProps}
               text={'In lệnh DC HĐB'}
-              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'transfer', form: 'transfer'})}
-              isDisabled={!['Starting','Inroute','Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
+              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'transfer', form: 'transfer' })}
+              isDisabled={!['Starting', 'Inroute', 'Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
             />
             <Button.Element
               {...printButtonComponentProps}
               text={'In giấy YC ĐQ'}
-              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'require', form: 'require'})}
-              isDisabled={!['Starting','Inroute','Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
-             />
+              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'require', form: 'require' })}
+              isDisabled={!['Starting', 'Inroute', 'Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
+            />
             <Button.Element
               {...printButtonComponentProps}
               text={'Excel'}
-              onClick={()=>dispatch({type:GET_PYC_EXCEL})}
+              onClick={() => dispatch({ type: GET_PYC_EXCEL })}
             />
           </Block.Element>
         </Block.Element>
@@ -237,9 +242,9 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'edit'],
         }}
-        // useEffect={{
-        //   callback: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
-        // }}
+      // useEffect={{
+      //   callback: () => dispatch({ type: REQUEST_EDITING_CANCEL }),
+      // }}
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}
@@ -253,6 +258,17 @@ export const Element = (props: Props) => {
       // useEffect={{
       //   callback: () => dispatch({ type: FETCH_HISTORY }),
       // }}
+      />
+
+      <HistoryDetailPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'VIEW'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'historyDetail'],
+        }}
       />
       <DeletePopup.Element
         {...editingPopupComponentProps}
@@ -273,14 +289,14 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'history'],
         }}
-        
+
         useEffect={{
           callback: () => dispatch({ type: FETCH_HISTORY }),
         }}
       />
       <OrgsSearchingPopup.Element
         {...historyPopupComponentProps}
-        $title= {{
+        $title={{
           tagType: Title.TagType.H2,
           text: 'Tìm ĐVĐQ'
         }}

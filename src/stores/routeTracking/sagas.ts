@@ -23,7 +23,8 @@ function* saga() {
 }
 function* searchTquySaga(action?) {
     const state = yield select();
-    const responseData1 = action?.routeDetailOganize?.destinationPointName ? yield call(searchTquy, action?.routeDetailOganize?.destinationPointName) : undefined;
+
+    const responseData1 = action?.routeDetailOganize?.destinationPointName ? yield call(searchTquy, _.uniq(action.route?.routeDetailOganize?.map(item => item.destinationPointName)).join(',')) : undefined;
     if (!responseData1 || !responseData1.data || responseData1.data.resultCode != 0) {
     }
     const responseData2 = action?.route?.orgsName ? yield call(searchTquy, action?.route?.orgsName) : undefined;
@@ -57,7 +58,7 @@ function* fetchDataSaga(action?) {
     const routeDetailOganize = responseData.data?.data?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
 
     yield put({ type: SEARCH_TQUY, routeDetailOganize, route: responseData.data?.data });
-    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
 
 }
 

@@ -143,6 +143,10 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                filters:{
+                    ...state.filters,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
+                },
                 queryResult: {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
@@ -215,6 +219,10 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                filters:{
+                    ...state.filters,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
+                },
                 history: {
                     ...state.history,
                     data: historyData.map((item, index) => ({
@@ -546,7 +554,7 @@ export default (state: State = initState, action) => {
             };
             newData.tableContent1 = newData.tableContent1?.filter(item1 =>
                 newData.tableContent2?.filter(item2 => item2.id == item1.id).length == 0);
-        
+
             return {
                 ...state,
                 selectedItem: newData,
@@ -630,8 +638,20 @@ export default (state: State = initState, action) => {
                 orgsSearchingPopup: {
                     ...state.orgsSearchingPopup,
                     ...getDefaultOrgsSearchingPopup(),
+                    ...{
+                        orgsDestName: state.selectedItem.cashOptimizationOrgsDetailModel?.orgsDestName || '',
+                        orgsName: state.selectedItem.cashOptimizationOrgsDetailModel?.orgsDestName || '',
+                        atmCdm: {
+                            text: state.selectedItem.cashOptimizationOrgsDetailModel?.atmCdmName || '',
+                            value: state.selectedItem.cashOptimizationOrgsDetailModel?.atmCdmCode || '',
+                        },
+                        nhnnTctd: {
+                            text: state.selectedItem.cashOptimizationOrgsDetailModel?.nnhnTctdName || '',
+                            value: state.selectedItem.cashOptimizationOrgsDetailModel?.nnhnTctdCode || '',
+                        },
+                    }
                 },
-                distanceOrgsToOrgsRequest: '',
+                distanceOrgsToOrgsRequest: state.selectedItem.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest || '',
             }
         case UPDATE_PYC:
             const pycData = action.data?.data?.map(item => ({ ...item, key: item.id }));
@@ -667,7 +687,9 @@ export default (state: State = initState, action) => {
                     ...state.vehiclePopup,
                     tableContent1: action.data?.data?.filter(item1 =>
                         state.vehiclePopup?.tableContent2.filter(item2 => item2.id == item1.id).length == 0)
-                        .map(item => ({ ...item, key: item.id })),
+                        .map((item, index) => ({ ...item, key: item.id, index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1, })),
+                    currentPage: action?.page || 0,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
                 },
             }
         case UPDATE_PERS_DATA:
@@ -678,7 +700,9 @@ export default (state: State = initState, action) => {
                     ...state.persPopup,
                     tableContent1: action.data?.data?.filter(item1 =>
                         state.persPopup?.tableContent2.filter(item2 => item2.id == item1.id).length == 0)
-                        .map(item => ({ ...item, key: item.id })),
+                        .map((item, index) => ({ ...item, key: item.id, index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1, })),
+                    currentPage: action?.page || 0,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
                 },
             }
         case SELECT_VEHICLE:
@@ -747,6 +771,23 @@ export default (state: State = initState, action) => {
                 },
             }
         case UPDATE_ORGANIZING_STOP_POINT:
+            if (state.organizingPopup.stopPointType?.value === "Điểm dừng trả quỹ của ĐVTLT")
+                return {
+                    ...state,
+                    organizingPopup: {
+                        ...state.organizingPopup,
+                        ...action.data?.data,
+                        id: state.organizingPopup['id'],
+                        stopPointType: state.organizingPopup.stopPointType,
+                        routeDetailOganizeTemp: state.organizingPopup.routeDetailOganizeTemp,
+                        routeDetailHdbTemp2: action.data?.data?.balanceHdbModelList?.map(item => ({
+                            ...item,
+                            type: 'Trả quỹ ĐVTLT',
+                            currencyType: item.currencytype,
+                            goldType: item.goldtype,
+                        })),
+                    },
+                }
             return {
                 ...state,
                 organizingPopup: {
@@ -765,6 +806,7 @@ export default (state: State = initState, action) => {
                     routeDetailPers: state.organizingPopup['routeDetailPers'].map(item => ({ ...item, isSelected: false })),
                     routeCashOptimization: state.organizingPopup['routeCashOptimization'].map(item => ({ ...item, isSelected: false })),
                     categoryOrgs: state.organizingPopup['categoryOrgs'],
+                    cashOptimizationId: '',
                 };
                 if (action.tableType === 1) {
                     data.routeDetailVehicle = data.routeDetailVehicle?.map(mapToNewQueryResult(action.data));
@@ -775,7 +817,7 @@ export default (state: State = initState, action) => {
                         selectedData: action.data,
                         selectedAttr: {
                             vehicleCode: action.data.categoryVehicle?.vehicleCode,
-                        }
+                        },
                     }
                 }
                 if (action.tableType === 2) {
@@ -787,7 +829,7 @@ export default (state: State = initState, action) => {
                         selectedData: action.data,
                         selectedAttr: {
                             persCode: action.data.categoryPers?.persCode,
-                        }
+                        },
                     }
                 }
                 if (action.tableType === 3) {
@@ -811,7 +853,7 @@ export default (state: State = initState, action) => {
                         selectedData: action.data,
                         selectedAttr: {
                             orgsCode: action.data.orgsCode,
-                        }
+                        },
                     }
                 }
                 return data;
@@ -888,7 +930,7 @@ export default (state: State = initState, action) => {
                 organizingPopup: {
                     ...state.organizingPopup,
                     selectedSpecial: action.data,
-                    routeDetailHdbTemp: state.organizingPopup['routeDetailHdbTemp']?.map(mapToNewQueryResult(action.data))
+                    routeDetailHdbTemp2: state.organizingPopup['routeDetailHdbTemp2']?.map(mapToNewQueryResult(action.data))
                 }
             }
         case SELECT_ROUTE_ROW:

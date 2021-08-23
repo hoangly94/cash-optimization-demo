@@ -33,7 +33,7 @@ function* fetchDataSaga(action?) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page:action?.page });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['registration', 'continue', 'isDisabled'], value: true });
@@ -130,7 +130,7 @@ function* deleteDataSaga() {
 function getData(filters, auth, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {}; const url = Config.url + '/api/cashoptimization/authority/search';
     const data = filters.radio === '1'
         ? {

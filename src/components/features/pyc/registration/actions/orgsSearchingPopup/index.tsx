@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { SELECT_COMBOX, HANDLE_SPECIAL_ADD, CHANGE_EDITING_INPUT, REQUEST_EDITING, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_ORGSSEARCHING_CONTINUE, REQUEST_ORGSSEARCHING_CANCEL, SEARCHORGS_FETCH_NHNNTCTDS, SEARCHORGS_FETCH_ATMCDMS} from '~stores/pyc/registration/constants';
+import { SELECT_COMBOX, HANDLE_SPECIAL_ADD, CHANGE_EDITING_INPUT, REQUEST_EDITING, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_ORGSSEARCHING_CONTINUE, REQUEST_ORGSSEARCHING_CANCEL, SEARCHORGS_FETCH_NHNNTCTDS, SEARCHORGS_FETCH_ATMCDMS, FETCH_ORGSSEARCHING_DISTANCE } from '~stores/pyc/registration/constants';
 import * as Base from '~/_settings';
 import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
@@ -21,7 +21,8 @@ export const Element = (props: Popup.Props) => {
   const selector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   const isShown = useSelector(state => state['base'].popups.pycRegistration?.orgsSearching?.isShown);
   useEffect(() => {
-    if(isShown){
+    if (isShown) {
+      // dispatch({ type: FETCH_ORGSSEARCHING_DISTANCE });
       dispatch({ type: SEARCHORGS_FETCH_ATMCDMS });
       dispatch({ type: SEARCHORGS_FETCH_NHNNTCTDS });
     }
@@ -174,20 +175,38 @@ export const Element = (props: Popup.Props) => {
           {...inputTitleProps}
           width={Base.Width.PER_30}
         />
-        <Combox.Element
-          width={Base.Width.PX_400}
-          store={{
-            defaultSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'atmCdm'],
-            selectorKeys: ['pycRegistration', 'rootAtmCdms'],
-            reducerType: SELECT_COMBOX,
-            reducerKeys: {
-              text: 'atmCdmName',
-              value: 'atmCdmCode',
-            },
-          }}
-          isDisabled={!(selector?.objectType?.text === 'ATM')}
-          isInputDisabled={!(selector?.objectType?.text === 'ATM')}
-        />
+        {
+          selector?.objectType?.text === 'ATM'
+            ? 
+            <Combox.Element
+              width={Base.Width.PX_400}
+              store={{
+                defaultSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'atmCdm'],
+                selectorKeys: ['pycRegistration', 'rootAtmCdms'],
+                reducerType: SELECT_COMBOX,
+                reducerKeys: {
+                  text: 'atmCdmName',
+                  value: 'atmCdmCode',
+                },
+              }}
+              isDisabled={!(selector?.objectType?.text === 'ATM')}
+              isInputDisabled={!(selector?.objectType?.text === 'ATM')}
+            />
+            : <Combox.Element
+              width={Base.Width.PX_400}
+              store={{
+                defaultSelectorKeys: [],
+                selectorKeys: ['pycRegistration', 'rootAtmCdms'],
+                reducerType: '',
+                reducerKeys: {
+                  text: '',
+                  value: '',
+                },
+              }}
+              isDisabled={true}
+              isInputDisabled={true}
+            />
+        }
       </Block.Element>
 
       <Block.Element {...inputWrapperProps} flex={Base.Flex.START}>
@@ -196,20 +215,38 @@ export const Element = (props: Popup.Props) => {
           {...inputTitleProps}
           width={Base.Width.PER_30}
         />
-        <Combox.Element
-          width={Base.Width.PX_400}
-          store={{
-            defaultSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'nhnnTctd'],
-            selectorKeys: ['pycRegistration', 'rootNhnnTctds'],
-            reducerType: SELECT_COMBOX,
-            reducerKeys: {
-              text: 'nnhnTctdName',
-              value: 'nnhnTctdCode',
-            },
-          }}
-          isDisabled={!(selector?.objectType?.text === 'TCTD/NHNN')}
-          isInputDisabled={!(selector?.objectType?.text === 'TCTD/NHNN')}
-        />
+        {
+          selector?.objectType?.text === 'TCTD/NHNN'
+            ? <Combox.Element
+              width={Base.Width.PX_400}
+              store={{
+                defaultSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'nhnnTctd'],
+                selectorKeys: ['pycRegistration', 'rootNhnnTctds'],
+                reducerType: SELECT_COMBOX,
+                reducerKeys: {
+                  text: 'nnhnTctdName',
+                  value: 'nnhnTctdCode',
+                },
+              }}
+              isDisabled={!(selector?.objectType?.text === 'TCTD/NHNN')}
+              isInputDisabled={!(selector?.objectType?.text === 'TCTD/NHNN')}
+            />
+            : <Combox.Element
+              width={Base.Width.PX_400}
+              store={{
+                defaultSelectorKeys: [],
+                selectorKeys: ['pycRegistration', 'rootNhnnTctds'],
+                reducerType: '',
+                reducerKeys: {
+                  text: '',
+                  value: '',
+                },
+              }}
+              isDisabled={true}
+              isInputDisabled={true}
+            />
+        }
+
       </Block.Element>
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Khoảng cách ĐVĐQ với ĐVYCĐQ' {...inputTitleProps} />
@@ -251,7 +288,7 @@ export const Element = (props: Popup.Props) => {
                 value: false,
               }
             }}
-            onClick={()=> dispatch({ type: REQUEST_ORGSSEARCHING_CANCEL })}
+            onClick={() => dispatch({ type: REQUEST_ORGSSEARCHING_CANCEL })}
           />
         </Block.Element>
       </Block.Element>

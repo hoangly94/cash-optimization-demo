@@ -8,6 +8,7 @@ const glob = require('glob')
 module.exports = {
   name: "client",
   mode: 'production',
+  node: webpackConfig.node,
   entry: {
     // vendor: ["@babel/polyfill", "react"], // Third party libraries
     ...mapFilenamesToEntries('./src/entrypoints/*.tsx'),

@@ -8,6 +8,10 @@ import TerserPlugin from 'terser-webpack-plugin';
 // const commonPaths = require('./config/paths');
 
 export default {
+  node:{
+    // tls: 'empty',
+    // Buffer: true,
+  },
   optimization: {
     minimizer: [
       new OptimizeCSSAssetsPlugin({}),
@@ -153,6 +157,7 @@ export default {
       '@hooks': path.resolve(__dirname, 'src/hooks/index.tsx'),
       '~svg': path.resolve(__dirname, 'src/components/commons/svg/'),
     },
+    fallback: { "stream": false },
   },
   devServer: {
     contentBase: path.join(__dirname, "dist"),

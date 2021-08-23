@@ -215,7 +215,7 @@ const titleCallback = () => ([
 
 const cellMapping = (dispatch) => (item, index) => ([
   {
-    children: index + 1,
+    children: item.index || index + 1,
   },
   {
     children: item.vehicleStatus,

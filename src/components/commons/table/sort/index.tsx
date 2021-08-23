@@ -59,6 +59,7 @@ const handleClick = (dispatch, props, sortedRef) => () => {
     dispatch({
       ...props,
       sort: props.data ? props.data + getSortCondition(newSortType) : '',
+      page: 0,
     })
   }
 }

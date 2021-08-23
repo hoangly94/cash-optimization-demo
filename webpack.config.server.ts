@@ -6,6 +6,10 @@ import CopyPlugin from 'copy-webpack-plugin';
 module.exports = {
   name: "server",
   mode: 'production',
+  node: {
+    ...webpackConfig.node,
+    __dirname: false,
+  },
   entry: {
     server: ["./src/server.ts"]
   },
@@ -29,7 +33,4 @@ module.exports = {
   resolve: webpackConfig.resolve,
   externals: [NodeExternals()],
   target: 'node',
-  node: {
-    __dirname: false,
-  },
 };

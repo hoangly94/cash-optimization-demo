@@ -36,6 +36,7 @@ import * as RouteTrackingCar1 from '~features/routeTracking/car1';
 import * as RouteTrackingCar2 from '~features/routeTracking/car2';
 import * as ReportOrgs from '~features/report/orgs';
 import * as ReportSpecial from '~features/report/special';
+import NotificationMessages from '~features/notificationMessages';
 import * as Block from '~commons/block';
 import * as Logo from "~commons/logo";
 import * as Button from "~commons/button";
@@ -167,6 +168,7 @@ const DashboardComponent = (userSelector) => () => {
     }
     return (
         <>
+            <NotificationMessages/>
             <DashboardMenu.Element {...dashboardMenuProps} roleCodeList={userSelector.viewList} />
             <Main.Element {...mainProps}>
                 <Breadcrumbs.Element {...breadcrumbsProps} />

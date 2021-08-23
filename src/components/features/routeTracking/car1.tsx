@@ -94,7 +94,13 @@ const getHtml = (routeTracking, user) => {
   const atai = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'ATAI').map(item => ({ ...item, ...item.categoryPers }));
   const tquy = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'TQUY').map(item => ({ ...item, ...item.categoryPers }))[0];
   const atm = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'ATM').map(item => ({ ...item, ...item.categoryPers }))[0];
-  const routeDetailOganize = routeTracking.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
+  const routeDetailOganize = (() => {
+    const routeDetailOganize = routeTracking.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
+    if (_.isEmpty(routeDetailOganize) && routeTracking.route?.routeDetailOganize) {
+      return routeTracking.route?.routeDetailOganize[routeTracking.route?.routeDetailOganize?.length - 1];
+    }
+    return routeDetailOganize;
+  })();
 
   const route = {
     ...routeTracking.route,
@@ -106,15 +112,15 @@ const getHtml = (routeTracking, user) => {
       atm,
     }
   };
-
   const routeStatus = route.routeStatus;
   if (route.transportType != 'Xe chuyên dùng')
     return false;
   if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
-    if (routeStatus?.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
+    // if (routeStatus?.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
+    if (routeStatus?.includes("Working_"))
       return html26_2(route, routeDetailOganize);
     if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus?.includes("Going_") || routeStatus?.includes("Working_"))
-      return html26_1(route, routeDetailOganize);
+      return html26_1(route, routeDetailOganize, routeStatus);
   }
   if (persCode === route.tqDltltCode || route?.tqList?.filter(item => item.persCode === persCode).length) {
     if (routeStatus === 'Beginning')
@@ -138,11 +144,11 @@ const getHtml = (routeTracking, user) => {
     if (routeStatus === 'Pickingup_ATM')
       return html24_3(route, routeDetailOganize);
     if (routeStatus?.includes("Going_"))
-      return html24_4(route, routeDetailOganize, 1);
+      return html24_4(route, routeDetailOganize, 1, routeStatus);
     if (routeStatus?.includes("Working_"))
-      return html24_4(route, routeDetailOganize, 2);
+      return html24_4(route, routeDetailOganize, 2, routeStatus);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
-      return html24_4(route, routeDetailOganize, 3);
+      return html24_4(route, routeDetailOganize, 3, routeStatus);
   }
   if (pers?.length > 0) {
     const persTitle = pers[0]?.categoryPers?.persTitle;
@@ -216,20 +222,22 @@ const html24_1 = (route) => {
         isDisabled={true}
       />
     </Block.Element>
+
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={routeDetailOganize?.destinationPointAddress}
+        defaultValue={routeDetailOganize?.departurePointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
+        defaultValue='Chờ bắt đầu lộ trình'
         isDisabled={true}
       />
     </Block.Element>
+
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Họ và tên thủ quỹ ĐVTLT' />
@@ -323,38 +331,58 @@ const html24_2 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên bảo vệ' />
-        <Input.Element
-          defaultValue={route.pers?.bve?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT bảo vệ' />
-        <Input.Element
-          defaultValue={route.pers?.bve?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'BVE')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên bảo vệ' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT bảo vệ' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
+
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
+
     <Block.Element {...col1}>
       <Block.Element />
       <Button.Element
@@ -432,38 +460,57 @@ const html24_3 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên bảo vệ' />
-        <Input.Element
-          defaultValue={route.pers?.bve?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT bảo vệ' />
-        <Input.Element
-          defaultValue={route.pers?.bve?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
+
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'BVE')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên bảo vệ' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT bảo vệ' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Họ và tên NV tiếp quỹ ATM' />
@@ -499,7 +546,7 @@ const html24_3 = (route, routeDetailOganize) => {
   )
 }
 
-const html24_4 = (route, routeDetailOganize, type) => {
+const html24_4 = (route, routeDetailOganize, type, routeStatus) => {
   const title = (() => {
     if (type === 1)
       return '4. Di chuyển đến điểm dừng xử lý nghiệp vụ';
@@ -509,7 +556,7 @@ const html24_4 = (route, routeDetailOganize, type) => {
       return '6. Kết thúc lộ trình';
     return '';
   })();
-  const confirmHtml = type === 2 ? null :
+  const confirmHtml = type === 1 || routeStatus === 'Finished' ? null :
     <Block.Element {...col1}>
       <Block.Element />
       <Button.Element
@@ -553,7 +600,7 @@ const html24_4 = (route, routeDetailOganize, type) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
-      <Title.Element text='Điểm đến' />
+      <Title.Element text='Điểm cần đến' />
       <Input.Element
         defaultValue={routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
@@ -624,20 +671,23 @@ const html25_1 = (route) => {
         isDisabled={true}
       />
     </Block.Element>
+
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={routeDetailOganize?.destinationPointAddress}
+        defaultValue={routeDetailOganize?.departurePointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
+        defaultValue='Chờ bắt đầu lộ trình'
         isDisabled={true}
       />
     </Block.Element>
+
+
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
@@ -690,7 +740,7 @@ const html25_2 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+        defaultValue={route?.actualTime && moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -740,38 +790,57 @@ const html25_2 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên bảo vệ' />
-        <Input.Element
-          defaultValue={route.pers?.bve?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT bảo vệ' />
-        <Input.Element
-          defaultValue={route.pers?.bve?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
+
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'BVE')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên bảo vệ' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT bảo vệ' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
   </>
   )
 }
@@ -809,7 +878,7 @@ const html25_3 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+        defaultValue={route?.actualTime && moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -859,22 +928,31 @@ const html25_3 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Họ và tên NV tiếp quỹ ATM' />
@@ -926,7 +1004,7 @@ const html25_4 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+        defaultValue={route?.actualTime && moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -976,22 +1054,31 @@ const html25_4 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
   </>
   )
 }
@@ -1028,7 +1115,7 @@ const html25_5 = (route, routeDetailOganize) => {
       <Block.Element>
         <Title.Element text='Tên điểm đến' />
         <Input.Element
-          defaultValue={routeDetailOganize?.destinationPointAddress}
+          defaultValue={routeDetailOganize?.destinationPointName}
           isDisabled={true}
         />
       </Block.Element>
@@ -1095,22 +1182,31 @@ const html25_5 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Áp tải xác nhận' />
@@ -1156,6 +1252,7 @@ const html25_5 = (route, routeDetailOganize) => {
         onClick={() => {
           dispatch({ type: REQUEST_ROUTE_CONFIRM_2, order: routeDetailOganize?.order });
         }}
+        isDisabled={routeDetailOganize?.apName}
       />
     </Block.Element>
   </>
@@ -1193,7 +1290,7 @@ const html25_6 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+        defaultValue={route?.actualTime && moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -1232,7 +1329,7 @@ const html25_6 = (route, routeDetailOganize) => {
 }
 
 
-const html26_1 = (route, routeDetailOganize) => {
+const html26_1 = (route, routeDetailOganize, routeStatus) => {
 
   return (<>
     <Title.Element text='Group box 1' tagType={Title.TagType.H3} />
@@ -1245,24 +1342,24 @@ const html26_1 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col1}>
+    {/* <Block.Element {...col1}>
       <Title.Element text='Thời gian bắt đầu dự kiến' />
       <Input.Element
         defaultValue={route.startTime && moment(route.startTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
-    </Block.Element>
-    <Block.Element {...col1}>
+    </Block.Element> */}
+    {/* <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={routeDetailOganize?.destinationPointAddress}
+        defaultValue={routeStatus == 'Beginning' ? routeDetailOganize?.departurePointAddress : routeDetailOganize?.destinationPointAddress}
         isDisabled={true}
       />
-    </Block.Element>
+    </Block.Element> */}
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
+        defaultValue={routeStatus == 'Beginning' ? 'Chờ bắt đầu lộ trình' : routeDetailOganize?.stopPointType}
         isDisabled={true}
       />
     </Block.Element>
@@ -1278,6 +1375,22 @@ const html26_1 = (route, routeDetailOganize) => {
         <Title.Element text='SĐT lái xe' />
         <Input.Element
           defaultValue={route?.routeDetailVehicle[0]?.categoryVehicle?.categoryPers?.persMobile}
+          isDisabled={true}
+        />
+      </Block.Element>
+    </Block.Element>
+    <Block.Element {...col2}>
+      <Block.Element>
+        <Title.Element text='Họ và tên thủ quỹ ĐVTLT' />
+        <Input.Element
+          defaultValue={route.tqDltltName}
+          isDisabled={true}
+        />
+      </Block.Element>
+      <Block.Element>
+        <Title.Element text='SĐT thủ quỹ ĐVTLT' />
+        <Input.Element
+          defaultValue={route.categoryPers?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1299,9 +1412,9 @@ const html26_2 = (route, routeDetailOganize) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
-      <Title.Element text='Điểm đến' />
+      <Title.Element text='Tên điểm đến' />
       <Input.Element
-        defaultValue={routeDetailOganize?.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointName}
         isDisabled={true}
       />
     </Block.Element>
@@ -1360,22 +1473,31 @@ const html26_2 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Áp tải xác nhận' />
@@ -1421,6 +1543,7 @@ const html26_2 = (route, routeDetailOganize) => {
         onClick={() => {
           dispatch({ type: REQUEST_ROUTE_CONFIRM_3, order: routeDetailOganize?.order });
         }}
+        isDisabled={routeDetailOganize?.tqName}
       />
     </Block.Element>
   </>
@@ -1469,14 +1592,14 @@ const html27_1 = (route) => {
     <Block.Element {...col1}>
       <Title.Element text='Điểm cần đến' />
       <Input.Element
-        defaultValue={routeDetailOganize?.destinationPointAddress}
+        defaultValue={routeDetailOganize?.departurePointAddress}
         isDisabled={true}
       />
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
       <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
+        defaultValue='Chờ bắt đầu lộ trình'
         isDisabled={true}
       />
     </Block.Element>
@@ -1531,7 +1654,7 @@ const html27_2 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+        defaultValue={route?.actualTime && moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -1581,38 +1704,57 @@ const html27_2 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên bảo vệ' />
-        <Input.Element
-          defaultValue={route.pers?.bve?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT bảo vệ' />
-        <Input.Element
-          defaultValue={route.pers?.bve?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
+
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'BVE')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên bảo vệ' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT bảo vệ' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
   </>
   )
 }
@@ -1650,7 +1792,7 @@ const html27_3 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+        defaultValue={route?.actualTime && moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -1700,22 +1842,31 @@ const html27_3 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Họ và tên NV tiếp quỹ ATM' />
@@ -1767,7 +1918,7 @@ const html27_4 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+        defaultValue={route?.actualTime && moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>
@@ -1817,22 +1968,31 @@ const html27_4 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
   </>
   )
 }
@@ -1866,9 +2026,9 @@ const html27_5 = (route, routeDetailOganize) => {
       </Block.Element>
     </Block.Element>
     <Block.Element {...col1}>
-      <Title.Element text='Điểm đến' />
+      <Title.Element text='Tên điểm đến' />
       <Input.Element
-        defaultValue={routeDetailOganize?.destinationPointAddress}
+        defaultValue={routeDetailOganize?.destinationPointName}
         isDisabled={true}
       />
     </Block.Element>
@@ -1927,22 +2087,31 @@ const html27_5 = (route, routeDetailOganize) => {
         />
       </Block.Element>
     </Block.Element>
-    <Block.Element {...col2}>
-      <Block.Element>
-        <Title.Element text='Họ và tên áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persName}
-          isDisabled={true}
-        />
-      </Block.Element>
-      <Block.Element>
-        <Title.Element text='SĐT áp tải' />
-        <Input.Element
-          defaultValue={route.pers?.atai?.persMobile}
-          isDisabled={true}
-        />
-      </Block.Element>
-    </Block.Element>
+    {
+      (() => {
+        const items = [] as any;
+        for (const pers of route?.routeDetailPers) {
+          if (pers?.categoryPers?.persTitle == 'ATAI')
+            items.push(<Block.Element {...col2}>
+              <Block.Element>
+                <Title.Element text='Họ và tên áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persFullname}
+                  isDisabled={true}
+                />
+              </Block.Element>
+              <Block.Element>
+                <Title.Element text='SĐT áp tải' />
+                <Input.Element
+                  defaultValue={pers.categoryPers?.persMobile}
+                  isDisabled={true}
+                />
+              </Block.Element>
+            </Block.Element>)
+        }
+        return items;
+      })()
+    }
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Áp tải xác nhận' />
@@ -2012,7 +2181,7 @@ const html27_6 = (route, routeDetailOganize) => {
     <Block.Element {...col1}>
       <Title.Element text='Thời gian thực tế' />
       <Input.Element
-        defaultValue={moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
+        defaultValue={route?.actualTime && moment(route?.actualTime, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss')}
         isDisabled={true}
       />
     </Block.Element>

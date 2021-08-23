@@ -25,13 +25,13 @@ function* fetchDataSaga(action?) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data, page: action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
 }
 
 function getData(filters, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/route/report_aptai_query';
     const data = filters.radio === '1'
@@ -85,14 +85,14 @@ function* fetchPersSaga(action?) {
     const responseData = yield axios.post(url, postData)
         .catch(error => console.log(error));
 
-    yield put({ type: UPDATE_PERS, data: responseData.data });
+    yield put({ type: UPDATE_PERS, data: responseData.data, sort: action?.sort, page: action?.page });
 }
 function* exportExcelSaga(action?) {
     const state = yield select();
     const filters = state.reportOrgs.filters;
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/route/report_aptai_excel';
     const data = filters.radio === '1'

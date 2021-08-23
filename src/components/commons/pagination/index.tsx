@@ -10,6 +10,7 @@ import Chevron from '~svg/chevron';
 import * as SVG from '~commons/svg';
 import Config from '@config';
 import { _Array } from '@utils';
+import { useContext } from 'hoist-non-react-statics/node_modules/@types/react';
 
 export enum Type {
   DEFAULT = 'pagination',
@@ -28,6 +29,7 @@ export type Props = Block.Props & {
   store: Store,
   totalItems?: number,
   pageRange?: number,
+  defaultPage?: number,
   numberOfItemsPerPage?: number,
 }
 
@@ -40,6 +42,7 @@ export const Element = ({
   type = Type.DEFAULT,
   store,
   totalItems = 1,
+  defaultPage = 0,
   pageRange = 5,
   numberOfItemsPerPage = Config.numberOfItemsPerPage,
 }: Props): React.ReactElement => {
@@ -48,7 +51,13 @@ export const Element = ({
   const total = selector?.total || totalItems;
 
   // const currentPage = selector?.currentPage;
-  const [currentPage, setCurrentPage] = React.useState(0);
+  // const prevCurrentPage = useContext(defaultPage);
+  const [currentPage, setCurrentPage] = React.useState(selector?.currentPage ?? 0);
+  React.useEffect(() => {
+    if (selector?.currentPage != undefined)
+      setCurrentPage(selector?.currentPage);
+  }, [selector?.currentPage]);
+
   const maxPage = Math.ceil((total as number ?? 1) / numberOfItemsPerPage);
   //create props
   const componentProps = {
@@ -62,7 +71,7 @@ export const Element = ({
       styles['pagination-page-button'],
     ),
   };
-  
+
   const isFirst = currentPage > 0;
   const isLast = currentPage < maxPage - 1;
   const [firstPageInRange, pageSize] = (() => {
@@ -87,7 +96,7 @@ export const Element = ({
       {...pageButtonProps}
       text={'' + (pageNumber + 1)}
       {...style}
-      onClick={handlePageButtonClick(dispatch, store, pageNumber,currentPage, setCurrentPage)}
+      onClick={handlePageButtonClick(dispatch, store, pageNumber, currentPage, setCurrentPage)}
     />;
   });
 

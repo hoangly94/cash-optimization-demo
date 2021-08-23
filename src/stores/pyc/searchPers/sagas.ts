@@ -11,13 +11,13 @@ function* fetchDataSaga(action?) {
     const state = yield select();
     const responseData = yield call(getData, state.searchPers.filters, action);
 
-    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page:action?.page });
 }
 
 function getData(filters, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};const url = Config.url + '/api/cashoptimization/authority/searchPers';
     const dataValue = filters.type.value === 'id'
         ? { persCode: filters.value ? filters.value : 0 }

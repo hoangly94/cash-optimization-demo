@@ -34,7 +34,7 @@ function* fetchDataSaga(action?) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page:action?.page });
 }
 
 function* createDataSaga() {
@@ -67,7 +67,7 @@ function* editDataSaga() {
 function getHistory(action, data) {
     const {
         page = 0,
-        sort = '',
+        sort = data.sort ?? '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/historyCategoryVehicleByCode';
     const postData = {
@@ -106,7 +106,7 @@ function getPersData(data, action) {
 function getData(filters, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};
     const url = Config.url + '/api/cashoptimization/findCategoryVehicle';
     const vehicleCode = filters.vehicleCode;

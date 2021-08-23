@@ -18,13 +18,13 @@ function* fetchDataSaga(action?) {
         yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
     }
 
-    yield put({ type: UPDATE_DATA, data: responseData.data, page:action?.page });
+    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page:action?.page });
 }
 
 function getData(filters, action) {
     const {
         page = 0,
-        sort = '',
+        sort = filters.sort ?? '',
     } = action ?? {};const url = Config.url + '/api/cashoptimization/authority/searchOrgs';
 
     const locationDataValue = filters.locationType.value === 'area'

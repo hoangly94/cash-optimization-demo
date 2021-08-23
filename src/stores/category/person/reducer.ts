@@ -75,6 +75,10 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                filters:{
+                    ...state.filters,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
+                },
                 queryResult: {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
@@ -200,6 +204,10 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                filters:{
+                    ...state.filters,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
+                },
                 history: {
                     ...state.history,
                     data: historyDetailData,
@@ -211,6 +219,10 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
+                filters:{
+                    ...state.filters,
+                    sort: action.sort || (state.filters['sort'] ?? ''),
+                },
                 history: {
                     ...state.history,
                     data: historyData,
