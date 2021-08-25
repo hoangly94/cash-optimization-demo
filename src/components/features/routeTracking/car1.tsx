@@ -96,6 +96,8 @@ const getHtml = (routeTracking, user) => {
   const atm = routeTracking.route?.routeDetailPers?.filter(item => item.categoryPers?.persTitle == 'ATM').map(item => ({ ...item, ...item.categoryPers }))[0];
   const routeDetailOganize = (() => {
     const routeDetailOganize = routeTracking.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
+    if (routeTracking.route?.routeStatus === 'Beginning')
+      return routeTracking.route?.routeDetailOganize[0];
     if (_.isEmpty(routeDetailOganize) && routeTracking.route?.routeDetailOganize) {
       return routeTracking.route?.routeDetailOganize[routeTracking.route?.routeDetailOganize?.length - 1];
     }
@@ -115,9 +117,9 @@ const getHtml = (routeTracking, user) => {
   const routeStatus = route.routeStatus;
   if (route.transportType != 'Xe chuyên dùng')
     return false;
-  if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length > 0) {
+  if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length) {
     // if (routeStatus?.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
-    if (routeStatus?.includes("Working_"))
+    if (routeStatus?.includes("Working_") && routeTracking.route?.tqList?.filter(item => item.persCode === persCode)?.length)
       return html26_2(route, routeDetailOganize);
     if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus?.includes("Going_") || routeStatus?.includes("Working_"))
       return html26_1(route, routeDetailOganize, routeStatus);
@@ -556,7 +558,8 @@ const html24_4 = (route, routeDetailOganize, type, routeStatus) => {
       return '6. Kết thúc lộ trình';
     return '';
   })();
-  const confirmHtml = type === 1 || routeStatus === 'Finished' ? null :
+  // const confirmHtml = type === 1 || routeStatus === 'Finished' ? null :
+  const confirmHtml = type === 2 || routeStatus === 'Finished' ? null :
     <Block.Element {...col1}>
       <Block.Element />
       <Button.Element

@@ -313,10 +313,10 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.orgsName,
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.orgsDestCode || '',
+      children: item.cashOptimizationOrgsDetailHistModel?.orgsDestCode || '',
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.orgsDestName,
+      children: item.cashOptimizationOrgsDetailHistModel?.orgsDestName,
     },
     {
       children: item.cashOptimizationStatus,
@@ -337,16 +337,16 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.routeStatus,
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.atmCdmCode || '',
+      children: item.cashOptimizationOrgsDetailHistModel?.atmCdmCode || '',
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.atmCdmName,
+      children: item.cashOptimizationOrgsDetailHistModel?.atmCdmName,
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.nnhnTctdCode || '',
+      children: item.cashOptimizationOrgsDetailHistModel?.nnhnTctdCode || '',
     },
     {
-      children: item.cashOptimizationOrgsDetailModel?.nnhnTctdName,
+      children: item.cashOptimizationOrgsDetailHistModel?.nnhnTctdName,
     },
     {
       children: item.updateddate && moment(item.updateddate, 'YYYY-MM-DD HH:mm:ss').format('DD/MM/YYYY HH:mm:ss'),

@@ -33,9 +33,13 @@
         align-items: center;
         justify-content:space-between !important;
         width:50% !important;
+        box-sizing:border-box;
     }
     &>div:first-child{
-        margin-right:18px !important;
+        /* margin-p:18px !important; */
+    }
+    &>div:nth-child(2){
+        padding-left:18px !important;
     }
     &>div>*{
         width:200px;

@@ -164,7 +164,7 @@ export const Element = (props: Props) => {
               }
             }}
             style={{
-              color: '#828282',
+              color: '#2d2d2d',
             }}
             isDisabled={selector?.radio !== '1' || userSelector.orgsCode != 9}
             onClick={() => {

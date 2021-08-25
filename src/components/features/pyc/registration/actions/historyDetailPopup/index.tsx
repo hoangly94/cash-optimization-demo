@@ -7,7 +7,7 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
-import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
+import * as SearchDataTable from "./searchDataTable";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { getCurrentDate, getCurrentDateTime, getDateString, _Date } from '~/utils';
 import { REQUEST_EDITING_CANCEL } from '~/stores/pyc/registration/constants';
@@ -93,7 +93,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Số PYC HT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.id}
+          defaultValue={popupSelector?.cashOptimizationId}
           isDisabled={true}
         />
       </Block.Element>

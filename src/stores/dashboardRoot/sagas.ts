@@ -164,10 +164,14 @@ const callApi = (path, postData?) => {
 
 function* reportPrintSaga(action?) {
     const state = yield select();
-        const data = action?.reportName === 'authority' ?
+    const data = action?.reportName === 'authority' ?
         state.registration.selectedItem : state.pycRegistration.selectedItem;
-    const fileName = action?.reportName === 'authority' ?
-        'Giay_YC_DieuQuy' : 'Lenh_DC_HDB';
+    const fileName = action?.reportName === 'authority'
+        ? 'Giay_UQ_van_chuyen_HDB'
+        : (action?.reportName === 'transfer'
+            ? 'Lenh_DC_HDB'
+            : 'Giay_YC_DieuQuy'
+        );
     yield call(reportPrint, data, fileName, action?.reportName, action?.form);
 }
 
@@ -183,8 +187,8 @@ function reportPrint(data, fileName, reportName, form) {
     return Axios.post(Config.url + '/api/cashoptimization/report/print', postData, { responseType: 'arraybuffer' })
         .then((response) => {
             var blob = new Blob([response.data], { type: 'application/pdf' });
-            FileSaver.saveAs(blob, fileName+'.pdf');
-        });
+            FileSaver.saveAs(blob, fileName + '.pdf');
+        }).catch(error => console.log(error));
 }
 
 export default saga;

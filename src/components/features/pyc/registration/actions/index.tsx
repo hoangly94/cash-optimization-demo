@@ -26,7 +26,8 @@ export const Element = (props: Props) => {
   }, []);
   const orgsSearchingPopupSelector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   const userSelector = useSelector(state => state['auth'].user);
-  const selectedItemSelector = useSelector(state => state['registration'].selectedItem);
+  const selectedItemSelector = useSelector(state => state['pycRegistration'].selectedItem);
+  
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,

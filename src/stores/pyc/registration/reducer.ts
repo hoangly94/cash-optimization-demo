@@ -1,4 +1,4 @@
-import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, SEARCHORGS_SELECT_UPDATE, SEARCHORGS_UPDATE_ATMCDMS, SEARCHORGS_UPDATE_NHNNTCTDS, } from './constants'
+import { REQUEST_EDITING, CHANGE_CODE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_REGION_CREATING, SELECT_REGION_EDITING, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_STATUS_FILTER, INPUT_DATE_FROM_CREATING, INPUT_DATE_TO_CREATING, SEARCH_PERS, SELECT_DUALTABLE_CONTENT_ROW, HANDLE_DUALTABLE_MOVE, SET_POPUP_TYPE, INPUT_DATE_FROM_EDITING, INPUT_DATE_TO_EDITING, RESET_FILTER_APPROVAL, RESET_FILTER_REGISTRATION, SELECT_COMBOX, HANDLE_SPECIAL_ADD, SELECT_SPECIAL_ROW, HANDLE_SPECIAL_DELETE, SELECT_COMBOX_FILTER, UPDATE_SPECIAL_DATA, UPDATE_ORGS_CHILDREN, SELECT_HISTORY_ROW, UPDATE_ORGSSEARCHING_DISTANCE, REQUEST_ORGSSEARCHING_CANCEL, SEARCHORGS_SELECT_UPDATE, SEARCHORGS_UPDATE_ATMCDMS, SEARCHORGS_UPDATE_NHNNTCTDS, UPDATE_CONTINUE, } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/pyc/searchOrgs/constants'
 import { SELECT_ROW as SEARCHPERS_SELECT_ROW } from '~stores/pyc/searchPers/constants'
 import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
@@ -113,7 +113,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -176,7 +176,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -554,10 +554,30 @@ export default (state: State = initState, action) => {
                 ...newSpecialRowData,
             }
 
+        case UPDATE_CONTINUE:
+
+            return {
+                ...state,
+                orgsSearchingPopup: {
+                    ...state.editingPopup,
+                    ...{
+                        orgsName: state.editingPopup.cashOptimizationOrgsDetailModel?.orgsDestName || '',
+                        atmCdm: {
+                            text: state.editingPopup.cashOptimizationOrgsDetailModel?.atmCdmName || '',
+                            value: state.editingPopup.cashOptimizationOrgsDetailModel?.atmCdmCode || '',
+                        },
+                        nhnnTctd: {
+                            text: state.editingPopup.cashOptimizationOrgsDetailModel?.nnhnTctdName || '',
+                            value: state.editingPopup.cashOptimizationOrgsDetailModel?.nnhnTctdCode || '',
+                        },
+                    }
+                },
+            };
+
         case SELECT_ROW:
             const newQueryResult = state.queryResult.data.map(mapToNewQueryResult(action.data))
             const newData = mapToNewData(action.data);
-
+            console.log(newData)
             return {
                 ...state,
                 ...pycTypesCheckData('objectType', action.data.objectType),
@@ -580,7 +600,7 @@ export default (state: State = initState, action) => {
                 },
                 distanceOrgsToOrgsRequest: newData.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,
                 queryResult: {
-                    ...state.queryResult, 
+                    ...state.queryResult,
                     data: newQueryResult,
                 }
             }
@@ -732,6 +752,10 @@ const mapToNewData = (item) => {
         ...item,
         key: item.id ?? index,
     })) ?? [];
+    const cashOptimizationDetailHistModelList = item.cashOptimizationDetailHistModelList?.map((item, index) => ({
+        ...item,
+        key: item.id ?? index,
+    })) ?? [];
     return {
         ...getDefaultPopupActions(),
         ...item,
@@ -765,7 +789,7 @@ const mapToNewData = (item) => {
             value: item.placeReceive,
         },
         cashOptimizatioDetailModelList: cashOptimizatioDetailModelList,
-
+        cashOptimizationDetailHistModelList: cashOptimizationDetailHistModelList,
         orgsDestCode: item.cashOptimizationOrgsDetailModel?.orgsDestCode,
         orgsDestName: item.cashOptimizationOrgsDetailModel?.orgsDestName,
     }

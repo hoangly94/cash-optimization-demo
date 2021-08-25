@@ -123,7 +123,7 @@ export const Element = (props: Popup.Props) => {
             }
           }}
           style={{
-            color: '#828282',
+            color: '#2d2d2d',
           }}
           onClick={() => dispatch({
             type: HANDLE_POPUP,

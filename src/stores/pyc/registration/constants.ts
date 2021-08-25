@@ -87,6 +87,8 @@ export const SEARCHORGS_FETCH_NHNNTCTDS = root + 'SEARCHORGS_FETCH_NHNNTCTDS';
 export const SEARCHORGS_UPDATE_ATMCDMS = root + 'SEARCHORGS_UPDATE_ATMCDMS';
 export const SEARCHORGS_UPDATE_NHNNTCTDS = root + 'SEARCHORGS_UPDATE_NHNNTCTDS';
 
+export const UPDATE_CONTINUE = root + 'UPDATE_CONTINUE';
+
 export type State = {
     history: any,
 
@@ -222,6 +224,7 @@ export type State = {
                 value: string,
             },
         }[],
+        cashOptimizationOrgsDetailModel?:any,
         priorityLevelCode: {
             text: string,
             value: string,

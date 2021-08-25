@@ -10,12 +10,14 @@ import * as DetailPopup from "./detailPopup";
 import { HANDLE_POPUP } from '~/stores/_base/constants';
 import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '~/stores/category/area/constants';
 import { useDispatch, useSelector } from 'react-redux';
+import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const userSelector = useSelector(state => state['auth'].user);
+  const selectedItemSelector = useSelector(state => state['registration'].selectedItem);
   
   //create props
   const componentWrapperProps = {
@@ -131,6 +133,9 @@ export const Element = (props: Props) => {
           <Button.Element
             {...detailButtonComponentProps}
             text='Print'
+            onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'authority', form: 'authority'})}
+            isDisabled={selectedItemSelector.authorityStatus !== 'Approved_A'}
+          
           // store={{
           //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
           // }}

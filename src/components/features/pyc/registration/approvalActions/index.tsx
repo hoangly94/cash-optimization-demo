@@ -11,6 +11,7 @@ import * as HistoryPopup from "../actions/historyPopup";
 import { HANDLE_POPUP } from '~/stores/_base/constants';
 import { FETCH_HISTORY, GET_PYC_EXCEL, REQUEST_QUERY } from '~stores/pyc/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
+import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 
@@ -22,6 +23,7 @@ export const Element = (props: Props) => {
 
   const editingPopupSelector = useSelector(state => state['pycRegistration'].editingPopup);
   const userSelector = useSelector(state => state['auth'].user);
+  const selectedItemSelector = useSelector(state => state['pycRegistration'].selectedItem);
 
   //create props
   const componentWrapperProps = {
@@ -163,10 +165,14 @@ export const Element = (props: Props) => {
             <Button.Element
               {...printButtonComponentProps}
               text={'In lệnh DC HĐB'}
+              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'transfer', form: 'transfer' })}
+              isDisabled={!['Starting', 'Inroute', 'Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
             />
             <Button.Element
               {...printButtonComponentProps}
               text={'In giấy YC ĐQ'}
+              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'require', form: 'require' })}
+              isDisabled={!['Starting', 'Inroute', 'Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
             />
             <Button.Element
               {...printButtonComponentProps}

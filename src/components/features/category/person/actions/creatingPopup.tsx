@@ -12,6 +12,7 @@ import * as Datepicker from "~commons/datepicker";
 import { getCurrentDate, isMatchDateDD_MM_YYYY } from "@utils";
 import { comboxProps } from "./";
 import { ADD_NOTI, HANDLE_POPUP } from '~/stores/_base/constants';
+import moment from 'moment';
 
 export type Props = Popup.Props;
 
@@ -294,8 +295,8 @@ const validateForm = (popupSelector, dispatch) => {
 
     return false;
   }
-  if (!isMatchDateDD_MM_YYYY(popupSelector.persCmndCccdYear)) {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Ngày cấp CMND/CCCD sai định dạng' } });
+  if (!moment(popupSelector.persCmndCccdYear, 'DD/MM/YYYY', true).isValid()) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Vui lòng nhập ngày cấp theo cấu trúc DD/MM/YYYY' } });
 
     return false;
   }
