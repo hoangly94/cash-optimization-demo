@@ -23,11 +23,12 @@ function* saga() {
 }
 function* searchTquySaga(action?) {
     const state = yield select();
-
+    
     const responseData1 = action?.routeDetailOganize?.destinationPointName ? yield call(searchTquy, _.uniq(action.route?.routeDetailOganize?.map(item => item.destinationPointName)).join(',')) : undefined;
     if (!responseData1 || !responseData1.data || responseData1.data.resultCode != 0) {
     }
-    const responseData2 = action?.route?.orgsName ? yield call(searchTquy, action?.route?.orgsName) : undefined;
+    const destinationPointName = action.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0]?.destinationPointName;
+    const responseData2 = destinationPointName ? yield call(searchTquy, destinationPointName) : undefined;
     if (!responseData2 || !responseData2.data || responseData2.data.resultCode != 0) {
     }
     yield put({ type: UPDATE_TQUY, data1: responseData1?.data, data2: responseData2?.data });

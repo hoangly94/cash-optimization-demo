@@ -17,6 +17,7 @@
 }
 @media (max-width: 768px){
     .login{
-        width:auto !important;
+        width: 90% !important;
+        box-sizing: border-box;
     }
 }

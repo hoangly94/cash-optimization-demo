@@ -143,7 +143,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -219,7 +219,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -431,6 +431,7 @@ export default (state: State = initState, action) => {
                             [tableType]: state.persPopup[tableType].map(mapToNewQueryResult(action.data))
                         }
                     }
+                return {};
             })();
             return {
                 ...state,

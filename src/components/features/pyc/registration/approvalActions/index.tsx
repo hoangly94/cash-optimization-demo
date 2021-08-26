@@ -8,6 +8,7 @@ import * as Pagination from "~commons/pagination";
 import * as ValidationPopup from "./validationPopup";
 import * as DetailPopup from "../actions/detailPopup";
 import * as HistoryPopup from "../actions/historyPopup";
+import * as HistoryDetailPopup from "../actions/historyDetailPopup";
 import { HANDLE_POPUP } from '~/stores/_base/constants';
 import { FETCH_HISTORY, GET_PYC_EXCEL, REQUEST_QUERY } from '~stores/pyc/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
@@ -132,8 +133,9 @@ export const Element = (props: Props) => {
             margin={Base.MarginTop.PX_18}
           >
             <Button.Element
-              {...detailButtonComponentProps}
+              {...buttonProps}
               text={'View'}
+              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
               store={{
                 isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
                 action: {
@@ -268,6 +270,17 @@ export const Element = (props: Props) => {
 
         useEffect={{
           callback: () => dispatch({ type: FETCH_HISTORY }),
+        }}
+      />
+
+      <HistoryDetailPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'VIEW'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'pycRegistration', 'historyDetail'],
         }}
       />
     </>

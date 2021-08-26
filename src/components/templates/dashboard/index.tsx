@@ -156,12 +156,12 @@ const DashboardComponent = (userSelector) => () => {
                         href='/route-tracking/car2'
                     />
                 </Block.Element>
-
+                
                 <Switch>
                     <Route exact path="/">
                     </Route>
-                    <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRoles='11B' roles={userSelector.viewList} />
-                    <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRoles='11B' roles={userSelector.viewList} />
+                    <RoleRoute path="/route-tracking/car1" component={RouteTrackingCar1.Element} accessedRoles={['24', '25', '26', '27']} roles={userSelector.viewList} />
+                    <RoleRoute path="/route-tracking/car2" component={RouteTrackingCar2.Element} accessedRoles={['28', '29', '30']} roles={userSelector.viewList} />
                 </Switch>
             </Block.Element>
         )

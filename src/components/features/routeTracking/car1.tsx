@@ -120,31 +120,29 @@ const getHtml = (routeTracking, user) => {
   if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length) {
     // if (routeStatus?.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
     if (routeStatus?.includes("Working_") && routeTracking.route?.tqList?.filter(item => item.persCode === persCode)?.length)
-      return html26_2(route, routeDetailOganize);
-    if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus?.includes("Going_") || routeStatus?.includes("Working_"))
-      return html26_1(route, routeDetailOganize, routeStatus);
+      return html26_2(route, routeDetailOganize, routeStatus);
   }
   if (persCode === route.tqDltltCode || route?.tqList?.filter(item => item.persCode === persCode).length) {
     if (routeStatus === 'Beginning')
       return html27_1(route);
     if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-      return html27_2(route, routeDetailOganize);
+      return html27_2(route, routeDetailOganize, routeStatus);
     if (routeStatus === 'Pickingup_ATM')
-      return html27_3(route, routeDetailOganize);
+      return html27_3(route, routeDetailOganize, routeStatus);
     if (routeStatus?.includes("Going_"))
-      return html27_4(route, routeDetailOganize);
+      return html27_4(route, routeDetailOganize, routeStatus);
     if (routeStatus?.includes("Working_"))
-      return html27_5(route, routeDetailOganize);
+      return html27_5(route, routeDetailOganize, routeStatus);
     if (routeStatus === 'Finishing' || routeStatus === 'Finished')
-      return html27_6(route, routeDetailOganize);
+      return html27_6(route, routeDetailOganize, routeStatus);
   }
   if (perLXE.length > 0) {
     if (routeStatus === 'Beginning')
       return html24_1(route);
     if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-      return html24_2(route, routeDetailOganize);
+      return html24_2(route, routeDetailOganize, routeStatus);
     if (routeStatus === 'Pickingup_ATM')
-      return html24_3(route, routeDetailOganize);
+      return html24_3(route, routeDetailOganize, routeStatus);
     if (routeStatus?.includes("Going_"))
       return html24_4(route, routeDetailOganize, 1, routeStatus);
     if (routeStatus?.includes("Working_"))
@@ -159,18 +157,22 @@ const getHtml = (routeTracking, user) => {
       if (routeStatus === 'Beginning')
         return html25_1(route);
       if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
-        return html25_2(route, routeDetailOganize);
+        return html25_2(route, routeDetailOganize, routeStatus);
       if (routeStatus === 'Pickingup_ATM')
-        return html25_3(route, routeDetailOganize);
+        return html25_3(route, routeDetailOganize, routeStatus);
       if (routeStatus?.includes("Going_"))
-        return html25_4(route, routeDetailOganize);
+        return html25_4(route, routeDetailOganize, routeStatus);
       if (routeStatus?.includes("Working_"))
-        return html25_5(route, routeDetailOganize);
+        return html25_5(route, routeDetailOganize, routeStatus);
       if (routeStatus === 'Finishing' || routeStatus === 'Finished')
-        return html25_6(route, routeDetailOganize);
+        return html25_6(route, routeDetailOganize, routeStatus);
     }
   }
 
+  if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length) {
+    if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus?.includes("Going_") || routeStatus?.includes("Working_"))
+      return html26_1(route, routeDetailOganize, routeStatus);
+  }
   return false;
 }
 
@@ -275,7 +277,7 @@ const html24_1 = (route) => {
   )
 }
 
-const html24_2 = (route, routeDetailOganize) => {
+const html24_2 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc đón áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -312,10 +314,23 @@ const html24_2 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -404,7 +419,7 @@ const html24_2 = (route, routeDetailOganize) => {
   )
 }
 
-const html24_3 = (route, routeDetailOganize) => {
+const html24_3 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -441,10 +456,23 @@ const html24_3 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -517,14 +545,14 @@ const html24_3 = (route, routeDetailOganize) => {
       <Block.Element>
         <Title.Element text='Họ và tên NV tiếp quỹ ATM' />
         <Input.Element
-          defaultValue={route.pers?.bve?.persName}
+          defaultValue={route.pers?.atm?.persName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT NV tiếp quỹ ATM' />
         <Input.Element
-          defaultValue={route.pers?.bve?.persMobile}
+          defaultValue={route.pers?.atm?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -611,10 +639,23 @@ const html24_4 = (route, routeDetailOganize, type, routeStatus) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -712,7 +753,7 @@ const html25_1 = (route) => {
   )
 }
 
-const html25_2 = (route, routeDetailOganize) => {
+const html25_2 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -756,10 +797,23 @@ const html25_2 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -850,7 +904,7 @@ const html25_2 = (route, routeDetailOganize) => {
 
 
 
-const html25_3 = (route, routeDetailOganize) => {
+const html25_3 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -894,10 +948,23 @@ const html25_3 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -960,14 +1027,14 @@ const html25_3 = (route, routeDetailOganize) => {
       <Block.Element>
         <Title.Element text='Họ và tên NV tiếp quỹ ATM' />
         <Input.Element
-          defaultValue={route.pers?.bve?.persName}
+          defaultValue={route.pers?.atm?.persName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT NV tiếp quỹ ATM' />
         <Input.Element
-          defaultValue={route.pers?.bve?.persMobile}
+          defaultValue={route.pers?.atm?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -976,7 +1043,7 @@ const html25_3 = (route, routeDetailOganize) => {
   )
 }
 
-const html25_4 = (route, routeDetailOganize) => {
+const html25_4 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='4. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1020,10 +1087,23 @@ const html25_4 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -1086,7 +1166,7 @@ const html25_4 = (route, routeDetailOganize) => {
   )
 }
 
-const html25_5 = (route, routeDetailOganize) => {
+const html25_5 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='5. Giao nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1132,10 +1212,23 @@ const html25_5 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -1262,7 +1355,7 @@ const html25_5 = (route, routeDetailOganize) => {
   )
 }
 
-const html25_6 = (route, routeDetailOganize) => {
+const html25_6 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text={'6.Kết thúc lộ trình'} tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1306,10 +1399,23 @@ const html25_6 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -1359,13 +1465,37 @@ const html26_1 = (route, routeDetailOganize, routeStatus) => {
         isDisabled={true}
       />
     </Block.Element> */}
-    <Block.Element {...col1}>
-      <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeStatus == 'Beginning' ? 'Chờ bắt đầu lộ trình' : routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
-    </Block.Element>
+    {
+      routeStatus == 'Beginning'
+        ? <Block.Element {...col1}>
+          <Title.Element text='Công việc cần thực hiện' />
+          <Input.Element
+            defaultValue={routeStatus == 'Beginning' ? 'Chờ bắt đầu lộ trình' : routeDetailOganize?.stopPointType}
+            isDisabled={true}
+          />
+        </Block.Element>
+        : <Block.Element {...col1}>
+          <Title.Element text='Công việc cần thực hiện' />
+          <Block.Element
+          >
+            <Input.Element
+              defaultValue={
+                routeStatus.includes('Working_')
+                  ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+                  : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+              }
+              width={Base.Width.PER_50}
+              isDisabled={true}
+            />
+            <Input.Element
+              defaultValue={routeDetailOganize?.stopPointType}
+              width={Base.Width.PER_50}
+              isDisabled={true}
+            />
+          </Block.Element>
+        </Block.Element>
+    }
+
     <Block.Element {...col2}>
       <Block.Element>
         <Title.Element text='Họ và tên lái xe' />
@@ -1402,7 +1532,7 @@ const html26_1 = (route, routeDetailOganize, routeStatus) => {
   )
 }
 
-const html26_2 = (route, routeDetailOganize) => {
+const html26_2 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='Group box 2' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1423,10 +1553,23 @@ const html26_2 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -1626,7 +1769,7 @@ const html27_1 = (route) => {
   )
 }
 
-const html27_2 = (route, routeDetailOganize) => {
+const html27_2 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='2. Di chuyển đến điểm dừng đón bảo vệ hoặc áp tải' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1670,10 +1813,23 @@ const html27_2 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -1764,7 +1920,7 @@ const html27_2 = (route, routeDetailOganize) => {
 
 
 
-const html27_3 = (route, routeDetailOganize) => {
+const html27_3 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='3. Di chuyển đến điểm dừng đón NV tiếp quỹ ATM' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1808,10 +1964,23 @@ const html27_3 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -1874,14 +2043,14 @@ const html27_3 = (route, routeDetailOganize) => {
       <Block.Element>
         <Title.Element text='Họ và tên NV tiếp quỹ ATM' />
         <Input.Element
-          defaultValue={route.pers?.bve?.persName}
+          defaultValue={route.pers?.atm?.persName}
           isDisabled={true}
         />
       </Block.Element>
       <Block.Element>
         <Title.Element text='SĐT NV tiếp quỹ ATM' />
         <Input.Element
-          defaultValue={route.pers?.bve?.persMobile}
+          defaultValue={route.pers?.atm?.persMobile}
           isDisabled={true}
         />
       </Block.Element>
@@ -1890,7 +2059,7 @@ const html27_3 = (route, routeDetailOganize) => {
   )
 }
 
-const html27_4 = (route, routeDetailOganize) => {
+const html27_4 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='4. Di chuyển đến điểm dừng xử lý nghiệp vụ' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -1934,10 +2103,23 @@ const html27_4 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -2000,7 +2182,7 @@ const html27_4 = (route, routeDetailOganize) => {
   )
 }
 
-const html27_5 = (route, routeDetailOganize) => {
+const html27_5 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text='5. Giao nhận HĐB tại điểm dừng' tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -2037,10 +2219,23 @@ const html27_5 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>
@@ -2153,7 +2348,7 @@ const html27_5 = (route, routeDetailOganize) => {
 
 
 
-const html27_6 = (route, routeDetailOganize) => {
+const html27_6 = (route, routeDetailOganize, routeStatus) => {
   return (<>
     <Title.Element text={'6.Kết thúc lộ trình'} tagType={Title.TagType.H3} />
     <Block.Element {...col2}>
@@ -2197,10 +2392,23 @@ const html27_6 = (route, routeDetailOganize) => {
     </Block.Element>
     <Block.Element {...col1}>
       <Title.Element text='Công việc cần thực hiện' />
-      <Input.Element
-        defaultValue={routeDetailOganize?.stopPointType}
-        isDisabled={true}
-      />
+      <Block.Element
+      >
+        <Input.Element
+          defaultValue={
+            routeStatus.includes('Working_')
+              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+          }
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+        <Input.Element
+          defaultValue={routeDetailOganize?.stopPointType}
+          width={Base.Width.PER_50}
+          isDisabled={true}
+        />
+      </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
       <Block.Element>

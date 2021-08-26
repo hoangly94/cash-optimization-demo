@@ -11,7 +11,7 @@ import * as Combox from "~commons/combox";
 // import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import { _Date } from '~/utils';
-import { CHANGE_EDITING_INPUT, REQUEST_DELETE, SELECT_COMBOX, REQUEST_EDITING_CANCEL, FETCH_BALANCE_SPECIAL } from '~/stores/routeManagement/normal/constants';
+import { CHANGE_EDITING_INPUT, REQUEST_DELETE, SELECT_COMBOX, REQUEST_EDITING_CANCEL, FETCH_BALANCE_SPECIAL, SELECT_DUALTABLE_CONTENT_ROW } from '~/stores/routeManagement/normal/constants';
 import { useConfirmationDialog } from '_/hooks';
 
 export const Element = (props: Popup.Props) => {
@@ -288,7 +288,8 @@ const tableData_$rows_$cells_title = {
 }
 
 const handleRowClick = (dispatch) => (item, tableType) => (e) => {
-  // dispatch({ type: SELECT_ROW_DESTINATION_POINT, data: item, tableType });
+  if (tableType === 3)
+    dispatch({ type: SELECT_DUALTABLE_CONTENT_ROW, data: item?.cashOptimization, popupType: 2, tableType: 2 });
 }
 
 const vehicleTableData = (queryResult?): Table.Props => ({
@@ -309,11 +310,11 @@ const vehicleTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên Chi nhánh quản lý xe',
+          children: 'Mã đơn vị quản lý xe',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã Chi nhánh quản lý xe',
+          children: 'Tên đơn vị quản lý xe',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -348,10 +349,10 @@ const vehicleMapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.vehicleCode,
     },
     {
-      children: item.categoryVehicle?.categoryOrgs?.orgsName,
+      children: item.categoryVehicle?.categoryOrgs?.orgsCode,
     },
     {
-      children: item.categoryVehicle?.categoryOrgs?.orgsCode,
+      children: item.categoryVehicle?.categoryOrgs?.orgsName,
     },
     {
       children: item.categoryVehicle?.driverName,
@@ -398,11 +399,11 @@ const persTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Mã chi nhánh quản lý',
+          children: 'Mã ĐVQL NV',
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Tên chi nhánh quản lý',
+          children: 'Tên ĐVQL NV',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -482,6 +483,10 @@ const pycTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Khoảng cách ĐVĐQ với ĐVYCĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Mô hình điều quỹ',
         },
         {
@@ -502,7 +507,23 @@ const pycTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
+          children: 'Tên ATM',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Tên NH đối tác KPP mở TK',
+        },
+        {
+          ...tableData_$rows_$cells_title,
           children: 'Họ và tên thủ quỹ ĐVĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'SĐT thủ quỹ ĐVĐQ',
+        },
+        {
+          ...tableData_$rows_$cells_title,
+          children: 'Thông tin chi tiết HĐB',
         },
       ]
     },
@@ -530,6 +551,9 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
       children: item.cashOptimization?.priorityLevelName,
     },
     {
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,
+    },
+    {
       children: item.cashOptimization?.model,
     },
     {
@@ -542,10 +566,31 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
       children: item.cashOptimization?.orgsHolderMobile,
     },
     {
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.atmCdmName,
+    },
+    {
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.nnhnTctdName,
+    },
+    {
       children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
     },
     {
       children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.tqDvdqName || ''
+    },
+    {
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''
+    },
+    {
+      children: <a
+        style={{
+          color: 'blue',
+          cursor: 'pointer',
+        }}
+        onClick={() => dispatch({
+          type: HANDLE_POPUP,
+          keys: ['routeManagement', 'special', 'isShown'],
+          value: true,
+        })} >Link</a>,
     },
   ]
 })
@@ -588,7 +633,7 @@ const routeTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'Khoảng cách',
+          children: 'Khoảng cách từ điểm đi đến điểm đến ',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -661,7 +706,7 @@ const routeMapResponseToData = (dispatch, handleRowClick) => (item, index) => ({
             keys: ['routeManagement', 'balanceSpecial', 'isShown'],
             value: true,
           });
-          dispatch({ type: FETCH_BALANCE_SPECIAL , routeDetailOganizeId:item.id})
+          dispatch({ type: FETCH_BALANCE_SPECIAL, routeDetailOganizeId: item.id })
         }} >Link</a>,
     },
   ]

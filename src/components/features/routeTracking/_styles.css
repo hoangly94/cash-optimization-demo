@@ -18,6 +18,9 @@
     &>input{
         width:600px;
     }
+    &>div:nth-child(2){
+        width:600px;
+    }
 }
 .double-col{
     &{
@@ -53,6 +56,9 @@
     &>input{
         width:calc(100% - 200px) !important;
     }
+    &>div{
+        width:calc(100% - 200px) !important;
+    }
 }
 
 
@@ -86,6 +92,9 @@
             margin-bottom:8px !important;
             width:100% !important;
         }
+        &>div>input{
+            width:100% !important;
+        }
         &>input{
             width:100% !important;
         }
@@ -110,6 +119,9 @@
         }
         &>div>*{
             width:100%;
+        }
+        &>div:nth-child(2){
+            padding-left:0px !important;
         }
     }
 }

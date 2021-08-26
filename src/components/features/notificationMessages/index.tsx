@@ -10,7 +10,8 @@ import { CHANGE_CODE_FILTER, FETCH_DATA, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_
 import { ADD_NOTI, HANDLE_POPUP } from '_/stores/_base/constants';
 import moment from 'moment';
 
-// var amqp = require('amqplib/callback_api');
+global.Buffer = global.Buffer || require('buffer').Buffer;
+var amqp = require('amqplib/callback_api');
 
 export type Props = Base.Props;
 let dispatch;

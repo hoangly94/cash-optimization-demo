@@ -10,7 +10,7 @@ import { _Date, getCurrentDate, thousandSeparator } from '@utils';
 export type Props = Base.Props;
 
 export const Element = (props: Props) => {
-  const queryResult = useSelector(state => state['pycRegistration'].history?.detailPopup?.cashOptimizatioDetailModelList);
+  const queryResult = useSelector(state => state['pycRegistration'].history?.detailPopup?.cashOptimizationDetailHistModelList);
   console.log(queryResult);
   const dispatch = useDispatch();
   //create props
