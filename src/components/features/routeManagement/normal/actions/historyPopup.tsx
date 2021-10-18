@@ -21,7 +21,7 @@ export const Element = (props: Popup.Props) => {
     ...tableData(historySelector?.data?.map(mapResponseToData(handleRowClick(dispatch)))),
     backgroundColor: Base.BackgroundColor.WHITE,
     margin: Base.MarginBottom.PX_18,
-    style:{
+    style: {
       minWidth: '2500px',
     }
   }
@@ -71,10 +71,10 @@ export const Element = (props: Popup.Props) => {
               }
             }}
             onClick={() => dispatch({
-                type: HANDLE_POPUP,
-                keys: ['routeManagement', 'detail', 'isShown'],
-                value: true,
-                popupType: 3,
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'historyDetail', 'isShown'],
+              value: true,
+              popupType: 3,
             })}
           />
           <Button.Element
@@ -115,7 +115,7 @@ const actionsProps: Block.Props = {
 const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
-  
+
 const handleRowClick = (dispatch) => (item) => (e) => {
   dispatch({ type: SELECT_HISTORY_ROW, data: item });
   dispatch({ type: HANDLE_BUTTON, keys: ['routeManagement', 'historyDetail', 'isDisabled'], value: false });
@@ -125,7 +125,7 @@ const handleRowClick = (dispatch) => (item) => (e) => {
 const tableData = (queryResult?): Table.Props => ({
   $thead: [
     {
-      style:{
+      style: {
         backgroundColor: '#1e3f96',
       },
       color: Base.Color.WHITE,
@@ -155,7 +155,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Mã ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgsCode',
+            data: 'orgs_code',
           }
         },
         {
@@ -163,7 +163,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Tên ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgsname',
+            data: 'orgs_name',
           }
         },
         {
@@ -171,7 +171,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Trạng thái LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'routeStatus',
+            data: 'route_status',
           }
         },
         {
@@ -179,7 +179,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Version LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgs_code',
+            data: 'route_version',
           }
         },
         {
@@ -187,7 +187,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Tên thủ quỹ ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'tqDltltName',
+            data: 'tq_dltlt_name',
           }
         },
         {
@@ -195,7 +195,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Thời gian bắt đầu LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'startTime',
+            data: 'actual_time',
           }
         },
         {
@@ -208,7 +208,7 @@ const tableData = (queryResult?): Table.Props => ({
         },
       ],
     },
-     ],
+  ],
   $rows: queryResult ? queryResult : [],
 })
 
@@ -220,7 +220,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
       children: item.index || index + 1,
     },
     {
-      children:item.createddate &&  moment(item.createddate, 'DD-MM-YYYY').format('DD/MM/YYYY'),
+      children: item.createddate && moment(item.createddate, 'DD-MM-YYYY').format('DD/MM/YYYY'),
     },
     {
       children: item.routeId,

@@ -797,6 +797,7 @@ export default (state: State = initState, action) => {
                     id: state.organizingPopup['id'],
                     stopPointType: state.organizingPopup.stopPointType,
                     routeDetailOganizeTemp: state.organizingPopup.routeDetailOganizeTemp,
+                    routeDetailHdbTemp2:[],
                 },
             }
         case SELECT_ROW_DESTINATION_POINT:

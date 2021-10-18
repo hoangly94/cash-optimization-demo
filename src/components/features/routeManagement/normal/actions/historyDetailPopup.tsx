@@ -7,49 +7,26 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
-import * as Combox from "~commons/combox";
 // import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
-import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
-import { _Date } from '~/utils';
-import { CHANGE_EDITING_INPUT, REQUEST_DELETE, SELECT_COMBOX, REQUEST_EDITING_CANCEL, FETCH_BALANCE_SPECIAL, SELECT_DUALTABLE_CONTENT_ROW } from '~/stores/routeManagement/normal/constants';
-import { useConfirmationDialog } from '_/hooks';
+import { HANDLE_POPUP } from '~stores/_base/constants';
+import { getCurrentDate, getCurrentDateTime, getDateString, _Date } from '~/utils';
+import { REQUEST_EDITING_CANCEL } from '~/stores/pyc/registration/constants';
+import { FETCH_BALANCE_SPECIAL, SELECT_DUALTABLE_CONTENT_ROW } from '_/stores/routeManagement/normal/constants';
 
 export const Element = (props: Popup.Props) => {
   const {
     setIsShown,
   } = props;
-  const selector = useSelector(state => state['routeManagement'].editingPopup);
-  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
+
+  const [errorMsg, setErrorMsg] = useState('');
+  const selector = useSelector(state => state['routeManagement'].history?.detailPopup);
   // const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
-  
-  const handleSubmitButtonClick = () => {
-    const isValidForm = validateForm(dispatch, selector);
-    if (isValidForm) {
-      setConfirmationDialog({
-        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
-        description: 'Vui lòng nhấn YES để lưu thông tin, nhấn NO để quay lại',
-        onConfirmClick: () => {
-          dispatch({ type: REQUEST_DELETE });
-        },
-        onDismissClick: () => {
-          dispatch({
-            type: HANDLE_POPUP,
-            keys: ['routeManagement', 'delete', 'isShown'],
-            value: false,
-          })
-        },
-        isShown: true,
-      });
-      if (setIsShown)
-        setIsShown(false)
-    }
-  }
+
   return (
     <Popup.Element
       {...props}
       closePopUpCallback={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
-      extractHtml={confirmationDialog}
     >
       <Title.Element
         tagType={Title.TagType.H3}
@@ -63,7 +40,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Số lộ trình' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={selector.id}
+          defaultValue={selector?.id}
           isDisabled={true}
         />
       </Block.Element>
@@ -71,7 +48,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Trạng thái LT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={selector.routeStatus}
+          defaultValue={selector?.routeStatus}
           isDisabled={true}
         />
       </Block.Element>
@@ -80,7 +57,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Version LT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={selector.routeVersion}
+          defaultValue={selector?.routeVersion}
           isDisabled={true}
         />
       </Block.Element>
@@ -89,7 +66,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Ngày tạo LT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={selector.createddate?.split('-').join('/')}
+          defaultValue={_Date.getDate(selector?.createddate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -98,7 +75,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên ĐVTLT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={selector.orgsName}
+          defaultValue={selector?.orgsName}
           isDisabled={true}
         />
       </Block.Element>
@@ -107,7 +84,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên thủ quỹ ĐVTLT' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={selector.tqDltltName}
+          defaultValue={selector?.tqDltltName}
           isDisabled={true}
         />
       </Block.Element>
@@ -116,7 +93,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời gian bắt đầu lộ trình' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={selector.startTime}
+          defaultValue={selector?.startTime}
           isDisabled={true}
         />
       </Block.Element>
@@ -133,7 +110,7 @@ export const Element = (props: Popup.Props) => {
         }}
       >
         < Table.Element
-          {...pycTableData(selector.routeCashOptimization?.map(pycMapResponseToData(handleRowClick(dispatch), dispatch)))}
+          {...pycTableData(selector?.routeCashOptimization?.map(pycMapResponseToData(handleRowClick(dispatch), dispatch)))}
           backgroundColor={Base.BackgroundColor.WHITE}
           style={{
             minWidth: '1800px',
@@ -152,7 +129,7 @@ export const Element = (props: Popup.Props) => {
         }}
       >
         < Table.Element
-          {...vehicleTableData(selector.routeDetailVehicle?.map(vehicleMapResponseToData(handleRowClick(dispatch))))}
+          {...vehicleTableData(selector?.routeDetailVehicle?.map(vehicleMapResponseToData(handleRowClick(dispatch))))}
           backgroundColor={Base.BackgroundColor.WHITE}
           style={{
             minWidth: '1800px',
@@ -171,7 +148,7 @@ export const Element = (props: Popup.Props) => {
         }}
       >
         < Table.Element
-          {...persTableData(selector.routeDetailPers?.map(persMapResponseToData(handleRowClick(dispatch))))}
+          {...persTableData(selector?.routeDetailPers?.map(persMapResponseToData(handleRowClick(dispatch))))}
           backgroundColor={Base.BackgroundColor.WHITE}
           style={{
             minWidth: '1800px',
@@ -190,40 +167,8 @@ export const Element = (props: Popup.Props) => {
         }}
       >
         < Table.Element
-          {...routeTableData(selector.routeDetailOganize?.map(routeMapResponseToData(dispatch, handleRowClick(dispatch))))}
+          {...routeTableData(selector?.routeDetailOganize?.map(routeMapResponseToData(dispatch, handleRowClick(dispatch))))}
           backgroundColor={Base.BackgroundColor.WHITE}
-        />
-      </Block.Element>
-
-      <Block.Element {...inputWrapperProps} flex={Base.Flex.START}>
-        <Title.Element
-          text='Lý do Hủy'
-          {...inputTitleProps}
-          width={Base.Width.PER_30}
-        />
-        <Combox.Element
-          width={Base.Width.PX_300}
-          store={{
-            defaultSelectorKeys: ['routeManagement', 'editingPopup', 'reasonType'],
-            selectorKeys: ['root', 'reasonTypes'],
-            reducerType: SELECT_COMBOX,
-            reducerKeys: {
-              text: 'name',
-              value: 'value',
-            },
-          }}
-          searchable={false}
-        />
-      </Block.Element>
-      <Block.Element {...inputWrapperProps}>
-        <Title.Element text='Lý do khác' {...inputTitleProps} />
-        <Input.Element
-          {...inputProps}
-          store={{
-            selectorKeys: ['routeManagement', 'editingPopup', 'rejectReason'],
-            reducerType: CHANGE_EDITING_INPUT,
-          }}
-          isDisabled={!(selector.reasonType?.text == 'KHÁC')}
         />
       </Block.Element>
 
@@ -234,7 +179,7 @@ export const Element = (props: Popup.Props) => {
         <Block.Element >
         </Block.Element>
         <Block.Element {...actionsProps}>
-          <Button.Element
+          {/* <Button.Element
             text='Update'
             margin={Base.MarginRight.PX_8}
             width={Base.Width.PX_200}
@@ -242,18 +187,25 @@ export const Element = (props: Popup.Props) => {
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.GREEN}
             onClick={handleSubmitButtonClick}
-          />
+          /> */}
           <Button.Element
             text='Close'
             width={Base.Width.PX_200}
             color={Base.Color.WHITE}
             backgroundColor={Base.BackgroundColor.ULTIMATE_GRAY}
             // flexGrow={Base.FlexGrow.G1}
-            onClick={() => dispatch({
-              type: HANDLE_POPUP,
-              keys: ['routeManagement', 'delete', 'isShown'],
-              value: false,
-            })}
+            onClick={() => {
+              dispatch({
+                type: HANDLE_POPUP,
+                keys: ['routeManagement', 'historyDetail', 'isShown'],
+                value: false,
+              });
+              dispatch({
+                type: HANDLE_POPUP,
+                keys: ['routeManagement', 'history', 'isShown'],
+                value: true,
+              });
+            }}
 
           />
         </Block.Element>
@@ -712,17 +664,4 @@ const routeMapResponseToData = (dispatch, handleRowClick) => (item, index) => ({
     },
   ]
 })
-
-const validateForm = (dispatch, selector) => {
-  if (!selector.reasonType.value) {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn lý do Hủy' } });
-    return false;
-  }
-  if (selector?.reasonType?.text == 'KHÁC' && selector.rejectReason == '') {
-    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa nhập lý do khác' } });
-    return false;
-  }
-  return true;
-}
-
 Element.displayName = 'DetailPopup'

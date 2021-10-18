@@ -27,7 +27,7 @@ export const Element = (props: Props) => {
   const orgsSearchingPopupSelector = useSelector(state => state['pycRegistration'].orgsSearchingPopup);
   const userSelector = useSelector(state => state['auth'].user);
   const selectedItemSelector = useSelector(state => state['pycRegistration'].selectedItem);
-  
+
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -94,135 +94,124 @@ export const Element = (props: Props) => {
 
   return (
     <>
-      <Block.Element {...componentWrapperProps}>
-        <Pagination.Element
+      <Pagination.Element
+        store={{
+          totalSelectorKeys: ['pycRegistration', 'queryResult'],
+          action: {
+            type: REQUEST_QUERY,
+          }
+        }}
+        style={{
+          marginTop: '5px',
+        }}
+      />
+      <Block.Element
+        margin={Base.MarginTop.PX_18}
+        lineHeight={Base.LineHeight.L1}
+      >
+        <Button.Element
+          {...creatingButtonComponentProps}
           store={{
-            totalSelectorKeys: ['pycRegistration', 'queryResult'],
             action: {
-              type: REQUEST_QUERY,
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'create', 'isShown'],
+              value: true,
+              popupType: 1,
             }
           }}
-          style={{
-            marginTop: '5px',
+          isDisabled={!userSelector.viewList.includes('5')}
+        />
+        <Button.Element
+          {...editingButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'edit'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'edit', 'isShown'],
+              value: true,
+              popupType: 2,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('6')
+            && ['Originating', 'Rejected_1', 'Rejected_2', 'Rejected_3'].includes(orgsSearchingPopupSelector?.cashOptimizationStatus)
+            && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode)}
+        />
+        <Button.Element
+          {...buttonProps}
+          text={'Tìm ĐVĐQ'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'orgsSearching'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'orgsSearching', 'isShown'],
+              value: true,
+              popupType: 4,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('7') && (orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching'
+            && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode))}
+        />
+        <Button.Element
+          {...buttonProps}
+          text={'View'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'detail', 'isShown'],
+              value: true,
+              popupType: 3,
+            }
           }}
         />
-        <Block.Element>
-          <Block.Element>
-            <Button.Element
-              {...creatingButtonComponentProps}
-              store={{
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['pycRegistration', 'create', 'isShown'],
-                  value: true,
-                  popupType: 1,
-                }
-              }}
-              isDisabled={!userSelector.viewList.includes('5')}
-            />
-            <Button.Element
-              {...editingButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'edit'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['pycRegistration', 'edit', 'isShown'],
-                  value: true,
-                  popupType: 2,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('6')
-                && ['Originating', 'Rejected_1', 'Rejected_2', 'Rejected_3'].includes(orgsSearchingPopupSelector?.cashOptimizationStatus)
-                && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode)}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'Tìm ĐVĐQ'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'orgsSearching'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['pycRegistration', 'orgsSearching', 'isShown'],
-                  value: true,
-                  popupType: 4,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('7') && (orgsSearchingPopupSelector?.cashOptimizationStatus === 'Searching'
-                && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode))}
-            />
-          </Block.Element>
-
-          <Block.Element
-            margin={Base.MarginTop.PX_18}
-          >
-            <Button.Element
-              {...buttonProps}
-              text={'View'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['pycRegistration', 'detail', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'History'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['pycRegistration', 'history', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
-            />
-            <Button.Element
-              {...deleteButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['pycRegistration', 'delete', 'isShown'],
-                  value: true,
-                  popupType: 4,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('64')
-                && [ 'Originating', 'Searching', 'Approved', 'Processing', 'Starting', 'Inroute'].includes(orgsSearchingPopupSelector?.cashOptimizationStatus)
-                && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode)}
-            />
-          </Block.Element>
-
-          <Block.Element
-            margin={Base.MarginTop.PX_18}
-          >
-            <Button.Element
-              {...printButtonComponentProps}
-              text={'In lệnh DC HĐB'}
-              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'transfer', form: 'transfer' })}
-              isDisabled={!['Starting', 'Inroute', 'Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
-            />
-            <Button.Element
-              {...printButtonComponentProps}
-              text={'In giấy YC ĐQ'}
-              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'require', form: 'require' })}
-              isDisabled={!['Starting', 'Inroute', 'Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
-            />
-            <Button.Element
-              {...printButtonComponentProps}
-              text={'Excel'}
-              onClick={() => dispatch({ type: GET_PYC_EXCEL })}
-            />
-          </Block.Element>
-        </Block.Element>
+        <Button.Element
+          {...buttonProps}
+          text={'History'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'history', 'isShown'],
+              value: true,
+              popupType: 3,
+            }
+          }}
+        />
+        <Button.Element
+          {...deleteButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'pycRegistration', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['pycRegistration', 'delete', 'isShown'],
+              value: true,
+              popupType: 4,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('64')
+            && ['Originating', 'Searching', 'Approved', 'Processing', 'Starting', 'Inroute'].includes(orgsSearchingPopupSelector?.cashOptimizationStatus)
+            && orgsSearchingPopupSelector.orgsCode == userSelector.orgsCode)}
+        />
+        <Button.Element
+          {...printButtonComponentProps}
+          text={'In lệnh DC HĐB'}
+          onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'transfer', form: 'transfer' })}
+          isDisabled={!['Starting', 'Inroute', 'Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
+        />
+        <Button.Element
+          {...printButtonComponentProps}
+          text={'In giấy YC ĐQ'}
+          onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'require', form: 'require' })}
+          isDisabled={!['Starting', 'Inroute', 'Completed'].includes(selectedItemSelector?.cashOptimizationStatus)}
+        />
+        <Button.Element
+          {...printButtonComponentProps}
+          text={'Excel'}
+          onClick={() => dispatch({ type: GET_PYC_EXCEL })}
+        />
 
       </Block.Element >
       <CreatingPopup.Element

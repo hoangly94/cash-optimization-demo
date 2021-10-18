@@ -21,6 +21,7 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const selector = useSelector(state => state['pycRegistration'].editingPopup);
+  
   const dispatch = useDispatch();
 
   const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
@@ -257,7 +258,12 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['pycRegistration', 'editingPopup', 'quanlity'],
             reducerType: CHANGE_EDITING_INPUT,
           }}
-          valueMapper={thousandSeparator}
+          valueMapper={v=>{
+            if(v == 0)
+              return '';
+            const numParts = v?.toString().replaceAll(',', '');
+            return thousandSeparator(parseInt(numParts));
+          }}
           max={50}
         />
         <Combox.Element

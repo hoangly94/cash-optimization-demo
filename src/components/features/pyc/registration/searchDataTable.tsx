@@ -12,6 +12,7 @@ export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const queryResult = useSelector(state => state['pycRegistration'].queryResult.data);
+  const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
   //create props
   const componentWrapperProps = {
@@ -25,7 +26,7 @@ export const Element = (props: Props) => {
   };
 
   const tableProps: Table.Props = {
-    ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch)))),
+    ...tableData(queryResult?.map(mapResponseToData(handleRowClick(dispatch, userSelector)))),
     backgroundColor: Base.BackgroundColor.WHITE,
     style:{
       minWidth: '2500px',
@@ -42,8 +43,8 @@ const tableData_$rows_$cells_title = {
   whiteSpace: Base.WhiteSpace.NOWRAP_ELLIPSIS,
 }
 
-const handleRowClick = (dispatch) => (item) => (e) => {
-  dispatch({ type: SELECT_ROW, data: item });
+const handleRowClick = (dispatch, userSelector) => (item) => (e) => {
+  dispatch({ type: SELECT_ROW, data: item, user: userSelector });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'edit', 'isDisabled'], value: false });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'detail', 'isDisabled'], value: false });
   dispatch({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'orgsSearching', 'isDisabled'], value: false });
@@ -130,7 +131,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Đối tượng ĐQ',
           sort: {
             type: REQUEST_QUERY,
-            data: 'objectType',
+            data: 'object_type',
           }
         },
         {

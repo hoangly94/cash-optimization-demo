@@ -1,4 +1,4 @@
-import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, SELECT_ATMCDM_STATUS_CREATING, SELECT_ATMCDM_STATUS_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, SELECT_ATMCDM_STATUS_CREATING, SELECT_ATMCDM_STATUS_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL, UPDATE_MAP } from './constants'
 import * as Base from '~/_settings';
 import { getCurrentDate, _Date } from '@utils';
 
@@ -75,7 +75,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -188,7 +188,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -203,7 +203,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -212,6 +212,11 @@ export default (state: State = initState, action) => {
                     data: historyData,
                     total: action.data.total,
                 }
+            }
+        case UPDATE_MAP:
+            return {
+                ...state,
+                mapHtml: action.data,
             }
         default:
             return state

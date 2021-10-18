@@ -1,15 +1,17 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
-import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL } from './constants';
+import { FETCH_MAP, UPDATE_MAP, FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL } from './constants';
 import Config from '@config';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { addNoti } from '~stores/_base/sagas';
+import { action } from '@storybook/addon-actions';
 
 function* saga() {
     yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
     yield takeLatest(REQUEST_QUERY, fetchDataSaga);
     yield takeLatest(REQUEST_CREATING, createDataSaga);
     yield takeLatest(REQUEST_EDITING, editDataSaga);
+    yield takeLatest(FETCH_MAP, fetchMapSaga);
 }
 
 function* fetchHistorySaga(action?) {
@@ -23,6 +25,12 @@ function* fetchDataSaga(action?) {
     yield put({ type: FETCH_DATA });
     const state = yield select();
     const responseData = yield call(getData, state.orgs.filters, action);
+
+    if (state.orgs.filters.orgsCode && parseInt(state.orgs.filters.orgsCode) != state.orgs.filters.orgsCode) {
+        yield spawn(addNoti, 'error', 'Không tìm thấy kết quả');
+        return yield put({ type: UPDATE_DATA, data: { data: [] }, sort: action?.sort, page: action?.page });
+    }
+
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -134,6 +142,17 @@ function requestEditing(url: string, data) {
     }
     return axios.post(url, { ...postData })
         .catch(error => console.log(error));
+}
+
+
+function* fetchMapSaga(action?) {
+    const state = yield select();
+    const popupType = state.base.popups.orgs.create.isShown ? 'creatingPopup' : state.base.popups.orgs.edit.isShown ? 'editingPopup' : undefined;
+    if(popupType){
+        const url = Config.url + `/api/cashoptimization/route/getRouteMapForAddress?address=${state.orgs[popupType].orgsAddress}`;
+        const responseData = yield axios.get(url).catch(error => console.log(error));
+        yield put({ type: UPDATE_MAP, data: responseData.data });
+    }
 }
 
 

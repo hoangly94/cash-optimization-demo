@@ -11,6 +11,8 @@ import * as DetailPopup from "./detailPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, REQUEST_QUERY } from '~stores/authority/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { useConfirmationDialog } from '~/hooks';
 import { HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/authority/registration/constants';
 import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
 
@@ -23,6 +25,7 @@ export const Element = (props: Props) => {
   }, []);
   const userSelector = useSelector(state => state['auth'].user);
   const selectedItemSelector = useSelector(state => state['registration'].selectedItem);
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
 
   //create props
   const componentWrapperProps = {
@@ -96,82 +99,88 @@ export const Element = (props: Props) => {
 
   return (
     <>
-      <Block.Element {...componentWrapperProps}>
-        <Pagination.Element
+      <Pagination.Element
+        store={{
+          totalSelectorKeys: ['registration', 'queryResult'],
+          action: {
+            type: REQUEST_QUERY,
+          }
+        }}
+        style={{
+          marginTop: '5px',
+        }}
+      />
+      <Block.Element
+        margin={Base.MarginTop.PX_18}
+        lineHeight={Base.LineHeight.L1}
+      >
+        <Button.Element
+          {...creatingButtonComponentProps}
           store={{
-            totalSelectorKeys: ['registration', 'queryResult'],
             action: {
-              type: REQUEST_QUERY,
+              type: HANDLE_POPUP,
+              keys: ['registration', 'create', 'isShown'],
+              value: true,
+              popupType: 1,
             }
           }}
-          style={{
-            marginTop: '5px',
+          isDisabled={!userSelector.viewList.includes('34')}
+        />
+        <Button.Element
+          {...editingButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'edit'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['registration', 'edit', 'isShown'],
+              value: true,
+              popupType: 2,
+            }
+          }}
+          isDisabled={!userSelector.viewList.includes('35') || !['Originating_A', 'Rejected_A'].includes(selectedItemSelector?.authorityStatus)}
+          onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+        />
+        <Button.Element
+          {...detailButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['registration', 'detail', 'isShown'],
+              value: true,
+              popupType: 3,
+            }
           }}
         />
-        <Block.Element>
-          <Block.Element>
-            <Button.Element
-              {...creatingButtonComponentProps}
-              store={{
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['registration', 'create', 'isShown'],
-                  value: true,
-                  popupType: 1,
-                }
-              }}
-              isDisabled={!userSelector.viewList.includes('34')}
-            />
-            <Button.Element
-              {...editingButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'edit'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['registration', 'edit', 'isShown'],
-                  value: true,
-                  popupType: 2,
-                }
-              }}
-              isDisabled={!userSelector.viewList.includes('35') || !['Originating_A', 'Rejected_A'].includes(selectedItemSelector?.authorityStatus)}
-              onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
-            />
-            <Button.Element
-              {...detailButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['registration', 'detail', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
-            />
-          </Block.Element>
-          <Block.Element
-            margin={Base.MarginTop.PX_18}
-          >
-            <Button.Element
-              {...printButtonComponentProps}
-              // store={{
-              //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-              // }}
-              onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'authority', form: 'authority'})}
-              isDisabled={selectedItemSelector.authorityStatus !== 'Approved_A'}
-            />
-            <Button.Element
-              {...deleteButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-                action: { type: HANDLE_DELETE_ACTION }
-              }}
-              onClick={() => dispatch({ type: REQUEST_QUERY })}
-            />
-          </Block.Element>
-        </Block.Element>
-
-      </Block.Element >
+        <Button.Element
+          {...printButtonComponentProps}
+          // store={{
+          //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+          // }}
+          onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'authority', form: 'authority' })}
+          isDisabled={selectedItemSelector.authorityStatus !== 'Approved_A'}
+        />
+        <Button.Element
+          {...deleteButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+          }}
+          onClick={() =>
+            setConfirmationDialog({
+              title: 'Bạn muốn HỦY Số UQ?',
+              description: 'Nhấn YES để đồng ý hủy, nhấn NO để quay lại',
+              onConfirmClick: () => {
+                dispatch({ type: REQUEST_QUERY });
+                dispatch({ type: HANDLE_DELETE_ACTION });
+              },
+              onDismissClick: () => {
+              },
+              isShown: true,
+            })
+          }
+        />
+      </Block.Element>
+      {confirmationDialog}
       <CreatingPopup.Element
         {...creatingPopupComponentProps}
         store={{

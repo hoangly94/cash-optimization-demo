@@ -119,10 +119,12 @@ const getHtml = (routeTracking, user) => {
     return false;
   if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length) {
     // if (routeStatus?.includes("Working_") && routeDetailOganize?.destinationPointName === routeTracking.route?.destinationTq?.categoryOrgs?.orgsName)
-    if (routeStatus?.includes("Working_") && routeTracking.route?.tqList?.filter(item => item.persCode === persCode)?.length)
+    // if (routeStatus?.includes("Working_") && )
+    if (routeStatus?.includes("Working_"))
       return html26_2(route, routeDetailOganize, routeStatus);
   }
-  if (persCode === route.tqDltltCode || route?.tqList?.filter(item => item.persCode === persCode).length) {
+  // if ((user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY') || persCode === route.tqDltltCode || route?.destinationTq?.persCode === persCode) {
+  if ((user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY') || persCode === route.tqDltltCode || route?.destinationTq?.persCode === persCode) {
     if (routeStatus === 'Beginning')
       return html27_1(route);
     if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
@@ -169,7 +171,7 @@ const getHtml = (routeTracking, user) => {
     }
   }
 
-  if (routeTracking.route?.destinationTqList?.filter(item => item.persCode === persCode)?.length) {
+  if (routeTracking.route?.tqList?.filter(item => item.persCode === persCode)?.length) {
     if (['Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM', 'Finishing', 'Finished'].includes(routeStatus) || routeStatus?.includes("Going_") || routeStatus?.includes("Working_"))
       return html26_1(route, routeDetailOganize, routeStatus);
   }
@@ -641,20 +643,29 @@ const html24_4 = (route, routeDetailOganize, type, routeStatus) => {
       <Title.Element text='Công việc cần thực hiện' />
       <Block.Element
       >
-        <Input.Element
-          defaultValue={
-            routeStatus.includes('Working_')
-              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
-              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+        {(() => {
+          if (routeStatus === 'Finished') {
+            return <Input.Element
+              defaultValue={routeDetailOganize?.stopPointType}
+              width={Base.Width.FULL}
+              isDisabled={true}
+            />
           }
-          width={Base.Width.PER_50}
-          isDisabled={true}
-        />
-        <Input.Element
-          defaultValue={routeDetailOganize?.stopPointType}
-          width={Base.Width.PER_50}
-          isDisabled={true}
-        />
+          return <><Input.Element
+            defaultValue={
+              routeStatus.includes('Working_')
+                ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+                : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+            }
+            width={Base.Width.PER_50}
+            isDisabled={true}
+          />
+            <Input.Element
+              defaultValue={routeDetailOganize?.stopPointType}
+              width={Base.Width.PER_50}
+              isDisabled={true}
+            /></>
+        })()}
       </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
@@ -1401,20 +1412,29 @@ const html25_6 = (route, routeDetailOganize, routeStatus) => {
       <Title.Element text='Công việc cần thực hiện' />
       <Block.Element
       >
-        <Input.Element
-          defaultValue={
-            routeStatus.includes('Working_')
-              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
-              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+        {(() => {
+          if (routeStatus === 'Finished') {
+            return <><Input.Element
+              defaultValue={
+                routeStatus.includes('Working_')
+                  ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+                  : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+              }
+              width={Base.Width.PER_50}
+              isDisabled={true}
+            />
+              <Input.Element
+                defaultValue={routeDetailOganize?.stopPointType}
+                width={Base.Width.PER_50}
+                isDisabled={true}
+              /></>
           }
-          width={Base.Width.PER_50}
-          isDisabled={true}
-        />
-        <Input.Element
-          defaultValue={routeDetailOganize?.stopPointType}
-          width={Base.Width.PER_50}
-          isDisabled={true}
-        />
+          return <Input.Element
+            defaultValue={routeDetailOganize?.stopPointType}
+            width={Base.Width.FULL}
+            isDisabled={true}
+          />
+        })()}
       </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>
@@ -1478,20 +1498,29 @@ const html26_1 = (route, routeDetailOganize, routeStatus) => {
           <Title.Element text='Công việc cần thực hiện' />
           <Block.Element
           >
-            <Input.Element
-              defaultValue={
-                routeStatus.includes('Working_')
-                  ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
-                  : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+            {(() => {
+              if (routeStatus === 'Finished') {
+                return <Input.Element
+                  defaultValue={routeDetailOganize?.stopPointType}
+                  width={Base.Width.FULL}
+                  isDisabled={true}
+                />
               }
-              width={Base.Width.PER_50}
-              isDisabled={true}
-            />
-            <Input.Element
-              defaultValue={routeDetailOganize?.stopPointType}
-              width={Base.Width.PER_50}
-              isDisabled={true}
-            />
+              return <><Input.Element
+                defaultValue={
+                  routeStatus.includes('Working_')
+                    ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+                    : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+                }
+                width={Base.Width.PER_50}
+                isDisabled={true}
+              />
+                <Input.Element
+                  defaultValue={routeDetailOganize?.stopPointType}
+                  width={Base.Width.PER_50}
+                  isDisabled={true}
+                /></>
+            })()}
           </Block.Element>
         </Block.Element>
     }
@@ -2394,20 +2423,29 @@ const html27_6 = (route, routeDetailOganize, routeStatus) => {
       <Title.Element text='Công việc cần thực hiện' />
       <Block.Element
       >
-        <Input.Element
-          defaultValue={
-            routeStatus.includes('Working_')
-              ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
-              : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+        {(() => {
+          if (routeStatus === 'Finished') {
+            return <Input.Element
+              defaultValue={routeDetailOganize?.stopPointType}
+              width={Base.Width.FULL}
+              isDisabled={true}
+            />
           }
-          width={Base.Width.PER_50}
-          isDisabled={true}
-        />
-        <Input.Element
-          defaultValue={routeDetailOganize?.stopPointType}
-          width={Base.Width.PER_50}
-          isDisabled={true}
-        />
+          return <><Input.Element
+            defaultValue={
+              routeStatus.includes('Working_')
+                ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+                : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+            }
+            width={Base.Width.PER_50}
+            isDisabled={true}
+          />
+            <Input.Element
+              defaultValue={routeDetailOganize?.stopPointType}
+              width={Base.Width.PER_50}
+              isDisabled={true}
+            /></>
+        })()}
       </Block.Element>
     </Block.Element>
     <Block.Element {...col2}>

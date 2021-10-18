@@ -34,7 +34,12 @@ export const Element = (props: Props) => {
     }
   }
   return (
-    <Block.Element {...componentWrapperProps}>
+    <Block.Element {...componentWrapperProps}
+      style={{
+        maxHeight: '425px',
+        overflow: 'auto',
+      }}
+    >
       <Table.Element {...tableProps} />
     </Block.Element >
   )

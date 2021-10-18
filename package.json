@@ -22,7 +22,9 @@
     "@types/classnames": "^2.3.1",
     "Buffer": "^0.0.0",
     "amqplib": "^0.8.0",
+    "assert": "^2.0.0",
     "axios": "^0.19.0",
+    "browserify-zlib": "^0.2.0",
     "buffer": "^6.0.3",
     "classnames": "^2.3.1",
     "compression": "^1.7.4",
@@ -46,7 +48,11 @@
     "react-select": "^4.3.1",
     "redux": "^4.1.0",
     "redux-saga": "^1.1.3",
-    "tls": "^0.0.1"
+    "safer-buffer": "^2.1.2",
+    "stompjs": "^2.3.3",
+    "stream-browserify": "^3.0.0",
+    "tls": "^0.0.1",
+    "util": "^0.12.4"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",
@@ -135,7 +141,7 @@
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4",
     "typescript-plugin-css-modules": "^3.2.0",
-    "webpack": "^5.37.1",
+    "webpack": "^5.51.1",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2",
     "webpack-manifest-plugin": "^3.1.1",

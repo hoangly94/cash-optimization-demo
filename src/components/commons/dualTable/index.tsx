@@ -297,6 +297,10 @@ export const Element = (props: Props) => {
 const handleRowClick = (dispatch, action) => (item) => (e) => {
   dispatch({ ...action, data: item });
 }
+const handleRowDoubleClick = (dispatch, action) => (item) => (e) => {
+  console.log('===========');
+  dispatch({ ...action, data: item });
+}
 
 const tableData1 = (titleCallback, title1, queryResult?): Table.Props => ({
   $thead: [
@@ -334,6 +338,7 @@ const tableData2 = (titleCallback, title2, queryResult?): Table.Props => ({
 const mapResponseToData = (cellMapping, handleRowClick) => (item, index) => ({
   isSelected: item.isSelected ?? false,
   onClick: handleRowClick(item),
+  onDoubleClick: ()=>console.log('000000000'),
   $cells: cellMapping ? cellMapping(item, index) : [
     {
       children: item.name,

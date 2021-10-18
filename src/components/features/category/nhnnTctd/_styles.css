@@ -6,6 +6,11 @@
     padding: 28px 68px 28px 288px;
     min-width:800px;
 }
+.map iframe{
+    width:800px;
+    height: 500px;
+    box-sizing: border-box;
+}
 
 @media (max-width: 768px){
     .component{

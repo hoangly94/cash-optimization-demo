@@ -577,12 +577,17 @@ export default (state: State = initState, action) => {
         case SELECT_ROW:
             const newQueryResult = state.queryResult.data.map(mapToNewQueryResult(action.data))
             const newData = mapToNewData(action.data);
-            console.log(newData)
             return {
                 ...state,
                 ...pycTypesCheckData('objectType', action.data.objectType),
-                selectedItem: newData,
-                editingPopup: newData,
+                selectedItem: {
+                    ...newData,
+                    orgsHolderMobile: action.user?.username != newData.createdbyCode ? action.user?.phone : newData.orgsHolderMobile,
+                },
+                editingPopup: {
+                    ...newData,
+                    orgsHolderMobile: action.user?.username != newData.createdbyCode ? action.user?.phone : newData.orgsHolderMobile,
+                },
                 detailPopup: newData,
                 orgsSearchingPopup: {
                     ...newData,

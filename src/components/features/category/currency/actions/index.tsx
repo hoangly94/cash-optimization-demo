@@ -73,7 +73,6 @@ export const Element = (props: Props) => {
 
   return (
     <>
-      <Block.Element {...componentWrapperProps}>
         <Pagination.Element
           store={{
             totalSelectorKeys: ['currency', 'queryResult'],
@@ -85,7 +84,10 @@ export const Element = (props: Props) => {
             marginTop: '5px',
           }}
         />
-        <Block.Element>
+        <Block.Element
+        margin={Base.MarginTop.PX_18}
+        lineHeight={Base.LineHeight.L1}
+        >
           <Button.Element
             {...creatingButtonComponentProps}
             store={{
@@ -120,8 +122,6 @@ export const Element = (props: Props) => {
               }
             }}
           />
-        </Block.Element>
-
       </Block.Element >
       <CreatingPopup.Element
         {...creatingPopupComponentProps}

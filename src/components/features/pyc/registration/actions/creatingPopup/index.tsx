@@ -224,7 +224,12 @@ export const Element = (props: Popup.Props) => {
             selectorKeys: ['pycRegistration', 'creatingPopup', 'quanlity'],
             reducerType: CHANGE_CREATING_INPUT,
           }}
-          valueMapper={thousandSeparator}
+          valueMapper={v=>{
+            if(v == 0)
+              return '';
+            const numParts = v?.toString().replaceAll(',', '');
+            return thousandSeparator(parseInt(numParts));
+          }}
           max={50}
         />
         <Combox.Element

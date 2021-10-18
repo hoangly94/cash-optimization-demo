@@ -12,7 +12,7 @@ import * as Combox from "~commons/combox";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import { getCurrentDate, getCurrentDateTime } from '~/utils';
-import { useConfirmationDialog } from '_/hooks';
+import { useConfirmationDialog } from '~/hooks';
 
 export const Element = (props: Popup.Props) => {
   const {
@@ -258,6 +258,7 @@ export const Element = (props: Popup.Props) => {
               value: 'value',
             },
           }}
+          searchable={false}
         />
       </Block.Element>
       <Block.Element {...inputWrapperProps}>

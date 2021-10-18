@@ -104,15 +104,35 @@ export const Element = (props: Popup.Props) => {
 
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Địa chỉ ĐV' {...inputTitleProps} />
-        <Input.Element
-          placeholder='Địa chỉ ĐV'
-          {...inputProps}
-          store={{
-            selectorKeys: ['orgs', 'selectedItem', 'orgsAddress'],
-            reducerType: CHANGE_EDITING_INPUT,
-          }}
-          max={200}
-        />
+        <Block.Element
+          width={Base.Width.PER_70}
+          flex={Base.Flex.BETWEEN}
+        >
+          <Input.Element
+            placeholder='Địa chỉ ĐV'
+            width={Base.Width.PER_80}
+            store={{
+              selectorKeys: ['orgs', 'selectedItem', 'orgsAddress'],
+              reducerType: CHANGE_EDITING_INPUT,
+            }}
+            max={200}
+          />
+          <Button.Element
+            width={Base.Width.PX_200}
+            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+            color={Base.Color.WHITE}
+            border={Base.Border.SOLID}
+            textAlign={Base.TextAlign.CENTER}
+            text='Map'
+            store={{
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['orgs', 'mapPopup', 'isShown'],
+                value: true,
+              }
+            }}
+          />
+        </Block.Element>
       </Block.Element>
 
       <Block.Element {...inputWrapperProps}>

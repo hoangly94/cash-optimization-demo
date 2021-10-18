@@ -18,7 +18,7 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const userSelector = useSelector(state => state['auth'].user);
   const selectedItemSelector = useSelector(state => state['registration'].selectedItem);
-  
+
   //create props
   const componentWrapperProps = {
     margin: Base.MarginTop.PX_18,
@@ -50,8 +50,8 @@ export const Element = (props: Props) => {
 
   const validatePopupComponentProps: Popup.Props = {
     ...popupProps,
-    $content:{
-      width:Base.Width.PX_1200,
+    $content: {
+      width: Base.Width.PX_1200,
     },
     $title: {
       tagType: Title.TagType.H2,
@@ -60,8 +60,8 @@ export const Element = (props: Props) => {
   }
   const editingPopupComponentProps: Popup.Props = {
     ...popupProps,
-    $content:{
-      width:Base.Width.PX_1200,
+    $content: {
+      width: Base.Width.PX_1200,
     },
     $title: {
       tagType: Title.TagType.H2,
@@ -81,68 +81,59 @@ export const Element = (props: Props) => {
 
   return (
     <>
-      <Block.Element {...componentWrapperProps}>
-        <Pagination.Element
+      <Pagination.Element
+        store={{
+          totalSelectorKeys: ['registration', 'queryResult'],
+          action: {
+            type: REQUEST_QUERY,
+          }
+        }}
+        style={{
+          marginTop: '5px',
+        }}
+      />
+      <Block.Element
+        margin={Base.MarginTop.PX_18}
+        lineHeight={Base.LineHeight.L1}
+      >
+        <Button.Element
+          {...validateButtonComponentProps}
           store={{
-            totalSelectorKeys: ['registration', 'queryResult'],
+            isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'edit'],
             action: {
-              type: REQUEST_QUERY,
+              type: HANDLE_POPUP,
+              keys: ['registration', 'validate', 'isShown'],
+              value: true,
+              popupType: 2,
             }
           }}
-          style={{
-            marginTop: '5px',
+          isDisabled={!userSelector.viewList.includes('36')}
+        />
+        <Button.Element
+          {...detailButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['registration', 'detail', 'isShown'],
+              value: true,
+              popupType: 3,
+            }
           }}
         />
-        <Block.Element>
-          {/* <Button.Element
-            {...validateButtonComponentProps}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['registration', 'create', 'isShown'],
-                value: true,
-                popupType: 1,
-              }
-            }}
-          /> */}
-          <Button.Element
-            {...validateButtonComponentProps}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'edit'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['registration', 'validate', 'isShown'],
-                value: true,
-                popupType: 2,
-              }
-            }}
-            isDisabled={!userSelector.viewList.includes('36')}
-          />
-          <Button.Element
-            {...detailButtonComponentProps}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['registration', 'detail', 'isShown'],
-                value: true,
-                popupType: 3,
-              }
-            }}
-          />
-          <Button.Element
-            {...detailButtonComponentProps}
-            text='Print'
-            onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'authority', form: 'authority'})}
-            isDisabled={selectedItemSelector.authorityStatus !== 'Approved_A'}
-          
-          // store={{
-          //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-          // }}
-          // onClick={() => dispatch({ type: HANDLE_CONTINUE_ACTION })}
+        <Button.Element
+          {...detailButtonComponentProps}
+          text='Print'
+          onClick={() => dispatch({ type: REPORT_PRINT, reportName: 'authority', form: 'authority' })}
+          isDisabled={selectedItemSelector.authorityStatus !== 'Approved_A'}
 
-          />
-          {/* <Button.Element
+        // store={{
+        //   isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
+        // }}
+        // onClick={() => dispatch({ type: HANDLE_CONTINUE_ACTION })}
+
+        />
+        {/* <Button.Element
             {...deleteButtonComponentProps}
             store={{
               action: {
@@ -152,8 +143,6 @@ export const Element = (props: Props) => {
               }
             }}
           /> */}
-        </Block.Element>
-
       </Block.Element >
       <ValidatePopup.Element
         {...validatePopupComponentProps}
@@ -166,9 +155,9 @@ export const Element = (props: Props) => {
         store={{
           isShownSelectorKeys: ['base', 'popups', 'registration', 'detail'],
         }}
-        // useEffect={{
-        //   callback: () => dispatch({ type: FETCH_HISTORY }),
-        // }}
+      // useEffect={{
+      //   callback: () => dispatch({ type: FETCH_HISTORY }),
+      // }}
       />
     </>
   )

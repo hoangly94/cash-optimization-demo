@@ -13,6 +13,7 @@ import * as Combox from "~commons/combox";
 import * as Datepicker from "~commons/datepicker";
 import * as DualTable from "~commons/dualTable";
 import { getCurrentDate, isMatchDateTimeDD_MM_YYY } from "@utils";
+import { useConfirmationDialog } from '~/hooks';
 import { ADD_NOTI, HANDLE_POPUP } from '~/stores/_base/constants';
 import moment from 'moment';
 
@@ -24,15 +25,23 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const [errorMsg, setErrorMsg] = useState('');
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
   const popupSelector = useSelector(state => state['registration'].creatingPopup);
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(popupSelector, dispatch);
     if (isValidForm) {
-      // setErrorMsg('');
-      dispatch({ type: REQUEST_CREATING });
-      dispatch({ type: REQUEST_CREATING_CANCEL });
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
+        description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: REQUEST_CREATING });
+        },
+        onDismissClick: () => {
+        },
+        isShown: true,
+      });
       if (setIsShown)
         setIsShown(false)
     }
@@ -57,7 +66,8 @@ export const Element = (props: Popup.Props) => {
   const errorMsgDisplay = errorMsg ? { display: 'block' } : { display: 'none' };
 
   return (
-    <Popup.Element {...props}>
+    <Popup.Element {...props}
+      extractHtml={confirmationDialog}>
       <Title.Element
         tagType={Title.TagType.H3}
         text='Thông tin'
@@ -435,6 +445,10 @@ const validateForm = (selector, dispatch) => {
   }
   if (!selector.recvId) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa chọn người nhận UQ' } });
+    return false;
+  }
+  if (!selector.authorityContent2?.length) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Nội dung ủy quyền chưa được chọn' } });
     return false;
   }
 

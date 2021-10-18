@@ -1,4 +1,4 @@
-import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_TYPE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, SELECT_NHNNTCTD_TYPE_CREATING, SELECT_NHNNTCTD_TYPE_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_TYPE_FILTER, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_ORGS_FILTER, SELECT_NHNNTCTD_TYPE, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, SELECT_NHNNTCTD_TYPE_CREATING, SELECT_NHNNTCTD_TYPE_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL, UPDATE_MAP } from './constants'
 import * as Base from '~/_settings';
 import { _Date, getCurrentDate } from '@utils';
 
@@ -75,7 +75,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -188,7 +188,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -203,7 +203,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -220,6 +220,11 @@ export default (state: State = initState, action) => {
                     ...state.filters,
                     nnhnTctdCode: action.data.nnhnTctdCode,
                 },
+            }
+        case UPDATE_MAP:
+            return {
+                ...state,
+                mapHtml: action.data,
             }
         default:
             return state

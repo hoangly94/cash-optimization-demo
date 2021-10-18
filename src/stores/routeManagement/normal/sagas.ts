@@ -54,7 +54,7 @@ function* saga() {
 
     yield takeLatest(CHECK_VEHICLE, checkVehicleSaga);
     yield takeLatest(CHECK_PERS, checkPersSaga);
-    
+
     yield takeLatest(REQUEST_ORGANIZE_GET_HDB_DETAIL, requestOrganizeGetHdbDetailSaga);
 }
 
@@ -160,7 +160,7 @@ function* fetchVehicleSaga(action?) {
 function* fetchPersSaga(action?) {
     const state = yield select();
     const responseData = yield call(getPersData, state.routeManagement.persPopup, state.routeManagement.selectedItem, action);
-    yield put({ type: UPDATE_PERS_DATA, data: responseData.data, sort: action?.sort, page: action?.page  });
+    yield put({ type: UPDATE_PERS_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
 }
 
 function* getExcelSaga(action?) {
@@ -213,6 +213,7 @@ function* updateDataSaga() {
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
+    yield put({ type: REQUEST_QUERY });
 }
 
 function* updateContinueSaga(action?) {
@@ -235,7 +236,7 @@ function* updateContinueSaga(action?) {
         yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'], value: true });
     if (action.popupType === 'urgent')
         yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'organizingPopup', 'isShown'], value: true });
-
+    yield put({ type: REQUEST_QUERY });
 }
 
 function* fectchOrgsSearchingSaga() {
@@ -463,8 +464,9 @@ function requestOrganizing(data, action) {
 
 function* requestOrganizingCheckStopPointSaga(action?) {
     const state = yield select();
+    if(!state.routeManagement.organizingPopup?.stopPointType?.value)
+        return;
     const responseData = yield call(requestOrganizingCheckStopPoint, state.routeManagement.organizingPopup, action);
-
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -593,7 +595,7 @@ function* requestOrganizingInsertSaga(action?) {
     const responseData = yield call(requestOrganizingInsert, state.routeManagement.organizingPopup, routeDetailOganizeItem);
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'routeDetailOganizeInsert', 'isLoading'], value: false });
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
-        return yield spawn(addNoti, 'error', responseData?.data?.message);
+        yield spawn(addNoti, 'error', responseData?.data?.message);
     }
     yield put({ type: REQUEST_ORGANIZING });
     // const data = [
@@ -605,7 +607,7 @@ function* requestOrganizingInsertSaga(action?) {
     // ];
     // yield put({ type: UPDATE_ORGANIZING_INSERT, data });
 }
-function  requestOrganizingInsert(data, routeDetailOganizeItem) {
+function requestOrganizingInsert(data, routeDetailOganizeItem) {
     const url = Config.url + '/api/cashoptimization/route/organize_insert';
     const postData = {
         data: {
@@ -852,8 +854,8 @@ function requestOrganizeUrgentCheckById(data, action) {
         .catch(error => console.log(error));
 }
 
-function 
-getVehicleData(filters, selectedItem, action) {
+function
+    getVehicleData(filters, selectedItem, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',

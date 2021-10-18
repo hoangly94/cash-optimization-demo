@@ -14,6 +14,7 @@ import * as DualTable from "~commons/dualTable";
 import { getCurrentDate, isMatchDateTimeDD_MM_YYY } from "@utils";
 import { ADD_NOTI, HANDLE_POPUP } from '~/stores/_base/constants';
 import moment from 'moment';
+import { useConfirmationDialog } from '~/hooks';
 
 export type Props = Popup.Props;
 
@@ -24,6 +25,7 @@ export const Element = (props: Popup.Props) => {
 
   const [errorMsg, setErrorMsg] = useState('');
   const popupSelector = useSelector(state => state['registration'].editingPopup);
+  const [confirmationDialog, setConfirmationDialog] = useConfirmationDialog({});
 
   const dispatch = useDispatch();
 
@@ -31,7 +33,35 @@ export const Element = (props: Popup.Props) => {
     const isValidForm = validateForm(popupSelector, dispatch);
     if (isValidForm) {
       setErrorMsg('');
-      dispatch({ type: REQUEST_EDITING });
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
+        description: 'Nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: REQUEST_EDITING });
+        },
+        onDismissClick: () => {
+        },
+        isShown: true,
+      });
+      if (setIsShown)
+        setIsShown(false)
+    }
+  }
+
+  const handleContinueButtonClick = () => {
+    const isValidForm = validateForm(popupSelector, dispatch);
+    if (isValidForm) {
+      setErrorMsg('');
+      setConfirmationDialog({
+        title: 'Bạn muốn lưu thông tin đăng ký và chuyển trạng thái UQ sang trạng thái = Chờ phê duyệt?',
+        description: 'Nhấn YES để đồng ý, nhấn NO để quay lại',
+        onConfirmClick: () => {
+          dispatch({ type: HANDLE_CONTINUE_ACTION });
+        },
+        onDismissClick: () => {
+        },
+        isShown: true,
+      });
       if (setIsShown)
         setIsShown(false)
     }
@@ -55,7 +85,8 @@ export const Element = (props: Popup.Props) => {
   const errorMsgDisplay = errorMsg ? { display: 'block' } : { display: 'none' };
 
   return (
-    <Popup.Element {...props}>
+    <Popup.Element {...props}
+      extractHtml={confirmationDialog}>
       <Title.Element
         tagType={Title.TagType.H3}
         text='Thông tin'
@@ -377,9 +408,9 @@ export const Element = (props: Popup.Props) => {
             text='Continue'
             store={{
               isDisabledSelectorKeys: ['base', 'buttons', 'registration', 'detail'],
-              action:{ type: HANDLE_CONTINUE_ACTION }
+              // action:{ type: HANDLE_CONTINUE_ACTION }
             }}
-            onClick={() => dispatch({ type: REQUEST_QUERY })}
+            onClick={handleContinueButtonClick}
           />
           <Button.Element
             {...closeButtonProps}
@@ -437,6 +468,10 @@ const validateForm = (selector, dispatch) => {
   }
   if (moment(selector.dateTo, 'DD/MM/YYYY').isBefore(moment(selector.dateFrom, format).format('YYYY-MM-DD'))) {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'UQ từ ngày không được lớn hơn UQ đến ngày' } });
+    return false;
+  }
+  if (!selector.authorityContent2?.length) {
+    dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Nội dung ủy quyền chưa được chọn' } });
     return false;
   }
   return true;

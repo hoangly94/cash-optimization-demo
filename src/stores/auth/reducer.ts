@@ -126,6 +126,7 @@ export default (state: State = initState, action) => {
                     authorities: action.data.authorities,
                     roleCodeList: action.data.roleCodeList,
                     roleList: action.data.roleList,
+                    persTitle:action.data.persTitle,
                     active: false,
                     viewList: action.data.viewList.join(';').split(';').filter(item => item),
                 },

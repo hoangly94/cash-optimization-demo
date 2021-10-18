@@ -12,6 +12,8 @@ const initState: State = {
 export default (state: State = initState, action) => {
     switch (action.type) {
         case UPDATE_DATA:
+            console.log('----------');
+            console.log(action.data?.data);
             return {
                 ...state,
                 route: action.data?.data,
@@ -36,7 +38,8 @@ export default (state: State = initState, action) => {
                 ...state,
                 route: {
                     ...state.route,
-                    destinationTq: destinationTqList && destinationTqList[Math.floor(Math.random() * destinationTqList.length)],
+                    // destinationTq: tqList && tqList[Math.floor(Math.random() * tqList.length)],
+                    destinationTq: tqList,
                     destinationTqList,
                     tqList,
                 },

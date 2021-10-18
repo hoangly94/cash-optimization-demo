@@ -293,6 +293,9 @@ const initState: State = {
             'searchOrgs': {
                 isShown: false,
             },
+            'mapPopup': {
+                isShown: false,
+            },
         },
         'atmCdm': {
             'create': {
@@ -307,6 +310,9 @@ const initState: State = {
             'historyDetail': {
                 isDisabled: true,
             },
+            'mapPopup': {
+                isShown: false,
+            },
         },
         'nhnnTctd': {
             'create': {
@@ -320,6 +326,9 @@ const initState: State = {
             },
             'historyDetail': {
                 isDisabled: true,
+            },
+            'mapPopup': {
+                isShown: false,
             },
         },
         'vehicle': {

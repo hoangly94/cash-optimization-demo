@@ -15,6 +15,7 @@ import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_CURRENCIES } from '~/stores/dashboardRoot/constants';
 import { thousandSeparator } from '_/utils';
 import { useConfirmationDialog } from '_/hooks';
+import { NONAME } from 'dns';
 
 export type Props = Popup.Props & {
   popupType: string,
@@ -281,7 +282,12 @@ export const Element = (props: Props) => {
             reducerType: CHANGE_ORGANIZING_INPUT,
           }}
           isDisabled={stopPointType !== stopPointTypeAllowed}
-          valueMapper={thousandSeparator}
+          valueMapper={v=>{
+            if(v == 0)
+              return '';
+            const numParts = v?.toString().replaceAll(',', '');
+            return thousandSeparator(parseInt(numParts));
+          }}
           max={50}
         />
         <Combox.Element
@@ -367,7 +373,7 @@ export const Element = (props: Props) => {
               dispatch({ type: REQUEST_ORGANIZING_CANCEL });
               dispatch({ type: REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL })
             }}
-            isDisabled={selector?.routeDetailOganizeTemp.filter(item =>
+            isDisabled={!selector.stopPointType?.value || selector?.routeDetailOganizeTemp.filter(item =>
               selector.stopPointType?.text === item.stopPointType &&
               item.routeDetailOganizeStatus === "ACT" && item.stopPointAction === 'Y' && (!selector.cashOptimizationId || selector.cashOptimizationId === item.cashOptimizationId)).length
               || selector.departurePointAddress === 'NULL' || selector.destinationPointAddress === 'NULL'}
@@ -492,7 +498,10 @@ export const Element = (props: Props) => {
                 isShown: true,
               });
             }}
-            isDisabled={!(selector.routeStatus === 'Organizing')}
+            isDisabled={!(selector.routeStatus == 'Organizing')}
+            style={selector.routeStatus == 'Organizing' ? {} : {
+              display: 'none',
+            }}
           />
           <Button.Element
             text='Back'

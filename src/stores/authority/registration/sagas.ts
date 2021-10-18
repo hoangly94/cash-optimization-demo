@@ -1,6 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery } from 'redux-saga/effects';
-import { DONE_CREATING, FETCH_DATA, HANDLE_APPROVE_ACTION, HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION, HANDLE_REJECT_ACTION, REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, } from './constants';
+import { REQUEST_CREATING_CANCEL, DONE_CREATING, FETCH_DATA, HANDLE_APPROVE_ACTION, HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION, HANDLE_REJECT_ACTION, REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, } from './constants';
 import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
@@ -49,6 +49,7 @@ function* createDataSaga() {
     }
 
     yield put({ type: DONE_CREATING });
+    yield put({ type: REQUEST_CREATING_CANCEL });
     yield fetchDataSaga();
     yield spawn(addNoti, 'success', `Tạo thành công ID ${responseData?.data?.data.id}`);
     yield put({ type: HANDLE_POPUP, keys: ['registration', 'create', 'isShown'], value: false });

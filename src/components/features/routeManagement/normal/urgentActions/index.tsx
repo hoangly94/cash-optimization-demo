@@ -94,93 +94,85 @@ export const Element = (props: Props) => {
 
   return (
     <>
-      <Block.Element {...componentWrapperProps}>
-        <Pagination.Element
+      <Pagination.Element
+        store={{
+          totalSelectorKeys: ['routeManagement', 'queryResult'],
+          action: {
+            type: REQUEST_QUERY,
+          }
+        }}
+        margin={Base.MarginBottom.PX_18}
+      />
+      <Block.Element
+        margin={Base.MarginTop.PX_18}
+        lineHeight={Base.LineHeight.L1}
+      >
+        <Button.Element
+          {...creatingButtonComponentProps}
           store={{
-            totalSelectorKeys: ['routeManagement', 'queryResult'],
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'edit'],
             action: {
-              type: REQUEST_QUERY,
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'edit', 'isShown'],
+              value: true,
+              popupType: 2,
             }
           }}
-          margin={Base.MarginBottom.PX_18}
+          isDisabled={!userSelector.viewList.includes('15')}
+          onClick={() => {
+            dispatch({ type: REQUEST_EDITING_CANCEL });
+          }}
         />
-        <Block.Element
-          margin={Base.MarginTop.PX_18}>
-          <Block.Element>
-            <Button.Element
-              {...creatingButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'edit'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'edit', 'isShown'],
-                  value: true,
-                  popupType: 2,
-                }
-              }}
-              isDisabled={!userSelector.viewList.includes('15')}
-              onClick={() => {
-                dispatch({ type: REQUEST_EDITING_CANCEL });
-              }}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'Sắp xếp lộ trình'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'organizingPopup', 'isShown'],
-                  value: true,
-                  popupType: 5,
-                }
-              }}
-              onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'NO', noti: true })}
-              isDisabled={!(userSelector.viewList.includes('19')
-                && viewSelector.orgsCode == userSelector.orgsCode) || ['Originating_R', 'Adding', 'Organizing', 'Canceled_R', 'Finishing', 'Finished'].includes(viewSelector?.routeStatus)}
-            />
-            <Button.Element
-              {...printButtonComponentProps}
-              text={'Excel'}
-              onClick={() => dispatch({ type: GET_EXCEL })}
-            />
-          </Block.Element>
-
-          <Block.Element
-            margin={Base.MarginTop.PX_18}
-          >
-            <Button.Element
-              {...buttonProps}
-              text={'View'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'detail', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'History'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'history', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
-            />
-          </Block.Element>
-        </Block.Element>
-
+        <Button.Element
+          {...buttonProps}
+          text={'Sắp xếp lộ trình'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'organizingPopup', 'isShown'],
+              value: true,
+              popupType: 5,
+            }
+          }}
+          onClick={() => dispatch({ type: REQUEST_ORGANIZING_BACK, confirm: 'NO', noti: true })}
+          isDisabled={!(userSelector.viewList.includes('19')
+            && viewSelector.orgsCode == userSelector.orgsCode) || ['Originating_R', 'Adding', 'Organizing', 'Canceled_R', 'Finishing', 'Finished'].includes(viewSelector?.routeStatus)}
+        />
+        <Button.Element
+          {...printButtonComponentProps}
+          text={'Excel'}
+          onClick={() => dispatch({ type: GET_EXCEL })}
+        />
+        <Button.Element
+          {...buttonProps}
+          text={'View'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'detail', 'isShown'],
+              value: true,
+              popupType: 3,
+            }
+          }}
+        />
+        <Button.Element
+          {...buttonProps}
+          text={'History'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'history', 'isShown'],
+              value: true,
+              popupType: 3,
+            }
+          }}
+        />
       </Block.Element >
       <EditingPopup.Element
         {...creatingPopupComponentProps}

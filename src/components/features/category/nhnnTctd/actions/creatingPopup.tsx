@@ -103,17 +103,37 @@ export const Element = (props: Popup.Props) => {
 
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Địa chỉ TCTD/NHNN' {...inputTitleProps} />
-        <Input.Element
-          placeholder='Địa chỉ TCTD/NHNN'
-          {...inputProps}
-          store={{
-            selectorKeys: ['nhnnTctd', 'creatingPopup', 'nnhnTctdAddress'],
-            reducerType: CHANGE_CREATING_INPUT,
-          }}
-          max={200}
-        />
+        <Block.Element
+          width={Base.Width.PER_70}
+          flex={Base.Flex.BETWEEN}
+        >
+          <Input.Element
+            placeholder='Địa chỉ TCTD/NHNN'
+            width={Base.Width.PER_80}
+            store={{
+              selectorKeys: ['nhnnTctd', 'creatingPopup', 'nnhnTctdAddress'],
+              reducerType: CHANGE_CREATING_INPUT,
+            }}
+            max={200}
+          />
+          <Button.Element
+            width={Base.Width.PX_200}
+            backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+            color={Base.Color.WHITE}
+            border={Base.Border.SOLID}
+            textAlign={Base.TextAlign.CENTER}
+            text='Map'
+            store={{
+              action: {
+                type: HANDLE_POPUP,
+                keys: ['nhnnTctd', 'mapPopup', 'isShown'],
+                value: true,
+              }
+            }}
+          />
+        </Block.Element>
       </Block.Element>
-        
+
       <Block.Element {...inputWrapperProps}>
         <Title.Element text='Phân loại TCTD/NHNN' {...inputTitleProps} />
         <Combox.Element

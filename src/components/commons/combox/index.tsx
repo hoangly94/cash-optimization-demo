@@ -37,6 +37,7 @@ export type Props = Base.Props & {
   // disable?: boolean,
   isDisabled?: boolean,
   isInputDisabled?: boolean,
+  searchable?:boolean,
 }
 
 type Store = {
@@ -62,6 +63,7 @@ export const Element = (props: Props) => {
     store,
     isDisabled = false,
     isInputDisabled = false,
+    searchable = true,
   } = props;
   const dispatch = useDispatch();
   const forceRender = useForceRender();
@@ -72,7 +74,7 @@ export const Element = (props: Props) => {
   const inputTextRef = useRef((defaultText as any)?.text);
   const inputPlaceholderRef = useRef((defaultText as any)?.text);
   useEffect(() => {
-    if (inputTextRef.current || (defaultText as any)?.value  === '' || (defaultText as any)?.value || (defaultText as any)?.text === 'Tất cả') {
+    if (inputTextRef.current || (defaultText as any)?.value === '' || (defaultText as any)?.value || (defaultText as any)?.text === 'Tất cả') {
       inputTextRef.current = (defaultText as any)?.text;
       forceRender();
     }
@@ -95,7 +97,7 @@ export const Element = (props: Props) => {
     text: (defaultText as any)?.text ?? 'Default Text',
     style: {
       whiteSpace: 'nowrap',
-      paddingRight: '18px',
+      padding: '0px 18px 0px 8px',
     }
   };
 
@@ -129,20 +131,20 @@ export const Element = (props: Props) => {
   return (
     <Block.Element {...componentWrapperProps}>
       <Block.Element {...selectorWrapperProps}>
-        {/* <Text.Element {...textProps} /> */}
-        {/* {InputElement.current} */}
-        <Input.Element
+        {!searchable && <Text.Element {...textProps} />}
+        {searchable && <Input.Element
           isDisabled={isInputDisabled}
           defaultValue={inputTextRef.current}
           placeholder={inputPlaceholderRef.current}
-          onChange={handleInputOnChange(setOptionsFilter, inputTextRef)}
+          onChange={handleInputOnChange(options, setOptionsFilter, inputTextRef, props, dispatch)}
           style={{
             whiteSpace: 'nowrap',
             paddingRight: '18px',
             border: '0px',
             width: '100%',
           }}
-        />
+        />}
+        
         <Caret {...caretProps} />
       </Block.Element>
       <Block.Element {...optionsWrapperProps}>
@@ -159,7 +161,26 @@ const caretProps = {
   size: SVG.Size.S2,
   classNames: styles['caret'],
 };
-const handleInputOnChange = (setOptionsFilter, inputTextRef) => (e) => {
+const handleInputOnChange = (options, setOptionsFilter, inputTextRef, props: Props, dispatch) => (e) => {
+  const store = props.store;
+  const type = store.reducerType;
+  const keys = store.reducerKeys;
+  const matchedOptions = options?.filter(item =>
+    (item[store.reducerKeys.text] as any)?.toLowerCase() == e.target.value?.toLowerCase()
+  )
+  if (matchedOptions.length) {
+    const child = {
+      text: matchedOptions[0][keys.text],
+      value: matchedOptions[0][keys.value],
+    }
+    dispatch({ type: type, data: child, keys: props.store?.defaultSelectorKeys?.slice(1) });
+  }
+  else{
+    dispatch({ type: type, data: {
+      text: undefined,
+      value: undefined,
+    }, keys: props.store?.defaultSelectorKeys?.slice(1) });
+  }
   setOptionsFilter(e.target.value);
   inputTextRef.current = e.target.value;
 }

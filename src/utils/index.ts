@@ -168,7 +168,7 @@ export const convertDateDDMMYYYtoYYYYMMDD = (dateString?: string) => {
 export function thousandSeparator(v) {
     if (!v)
         return v;
-    var numParts = v?.toString().replaceAll(',', '')?.toString().split(".");
+    const numParts = v?.toString().replaceAll(',', '')?.toString().split(".");
     numParts[0] = numParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return numParts.join(".");
 }

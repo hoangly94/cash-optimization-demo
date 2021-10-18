@@ -178,6 +178,7 @@ function* deleteDataSaga() {
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'continue', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'delete', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_POPUP, keys: ['pycRegistration', 'delete', 'isShown'], value: false });
 }
 
 function* specialAddSaga() {

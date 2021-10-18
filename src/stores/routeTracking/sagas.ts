@@ -23,12 +23,24 @@ function* saga() {
 }
 function* searchTquySaga(action?) {
     const state = yield select();
-    
+
     const responseData1 = action?.routeDetailOganize?.destinationPointName ? yield call(searchTquy, _.uniq(action.route?.routeDetailOganize?.map(item => item.destinationPointName)).join(',')) : undefined;
     if (!responseData1 || !responseData1.data || responseData1.data.resultCode != 0) {
     }
-    const destinationPointName = action.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0]?.destinationPointName;
-    const responseData2 = destinationPointName ? yield call(searchTquy, destinationPointName) : undefined;
+    const destinationPoint = action.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
+    // const responseData2 = destinationPointName ? yield call(searchTquy, destinationPointName) : undefined;
+    console.log('================');
+    console.log(destinationPoint);
+    const responseData2 = yield destinationPoint && axios.post(Config.url + '/api/cashoptimization/route/searchTQUYDiemden',
+        {
+            data: {
+                stopPointType: destinationPoint?.stopPointType,
+                destinationOrgsName: destinationPoint?.destinationPointName,
+                cashOptimizationId: destinationPoint?.cashOptimizationId,
+                routeId: action.route?.id,
+            }
+        })
+        .catch(error => console.log(error));
     if (!responseData2 || !responseData2.data || responseData2.data.resultCode != 0) {
     }
     yield put({ type: UPDATE_TQUY, data1: responseData1?.data, data2: responseData2?.data });
@@ -58,8 +70,48 @@ function* fetchDataSaga(action?) {
     }
     const routeDetailOganize = responseData.data?.data?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
 
-    yield put({ type: SEARCH_TQUY, routeDetailOganize, route: responseData.data?.data });
-    yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
+    // yield put({ type: SEARCH_TQUY, routeDetailOganize, route: responseData.data?.data });
+
+    console.log('------------');
+    console.log(routeDetailOganize);
+    const route = responseData.data?.data;
+    const responseData1 = yield call(searchTquy, _.uniq(route?.routeDetailOganize?.map(item => item.destinationPointName)).join(','));
+    if (!responseData1 || !responseData1.data || responseData1.data.resultCode != 0) {
+    }
+    const destinationPoint = route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
+    // const responseData2 = destinationPointName ? yield call(searchTquy, destinationPointName) : undefined;
+
+    const responseData2 = yield destinationPoint && axios.post(Config.url + '/api/cashoptimization/route/searchTQUYDiemden',
+        {
+            data: {
+                stopPointType: destinationPoint?.stopPointType,
+                destinationOrgsName: destinationPoint?.destinationPointName,
+                cashOptimizationId: destinationPoint?.cashOptimizationId,
+                routeId: route?.id,
+            }
+        })
+        .catch(error => console.log(error));
+    if (!responseData2 || !responseData2.data || responseData2.data.resultCode != 0) {
+    }
+    const responseData3 = yield destinationPoint && axios.post(Config.url + '/api/cashoptimization/route/searchTQUY',
+        {
+            data: {
+                orgsName: destinationPoint?.destinationPointName,
+            },
+        })
+        .catch(error => console.log(error));
+    if (!responseData3 || !responseData3.data || responseData3.data.resultCode != 0) {
+    }
+    yield put({
+        type: UPDATE_DATA, data: {
+            data: {
+                ...responseData.data?.data,
+                tqList: responseData1?.data?.data,
+                destinationTq: responseData2?.data?.data,
+                destinationTqList: responseData3?.data?.data,
+            }
+        }, sort: action?.sort, page: action?.page
+    });
 
 }
 

@@ -4,13 +4,14 @@ import ForkTsCheckerWebpackPlugin from "fork-ts-checker-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
+import webpack from 'webpack';
 
 // const commonPaths = require('./config/paths');
 
 export default {
   node:{
-    // tls: 'empty',
-    // Buffer: true,
+    // Buffer: false,
+    // process: false,
   },
   optimization: {
     minimizer: [
@@ -33,6 +34,10 @@ export default {
       chunkFilename: 'css/[name].css',
       // filename: `${commonPaths.cssFolder}/[name].[contenthash].css`,
       // chunkFilename: `${commonPaths.cssFolder}/[name].[contenthash].css`,
+    }),
+    new webpack.ProvidePlugin({
+         Buffer: ['buffer', 'Buffer'],
+         process: 'process/browser',
     }),
   ],
   module: {
@@ -156,6 +161,9 @@ export default {
       '@hocs': path.resolve(__dirname, 'src/hocs/index.tsx'),
       '@hooks': path.resolve(__dirname, 'src/hooks/index.tsx'),
       '~svg': path.resolve(__dirname, 'src/components/commons/svg/'),
+      process: 'process/browser',
+      stream: "stream-browserify",
+      zlib: "browserify-zlib"
     },
     fallback: { "stream": false },
   },

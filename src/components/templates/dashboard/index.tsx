@@ -45,6 +45,7 @@ import Bars from '~svg/bars';
 import { FETCH_ROLES, FETCH_USER } from '~/stores/auth/constants';
 import { useCooke } from '~/hooks';
 import classNames from 'classnames';
+import Profile from '~commons/profile';
 
 export type Props = {
 }
@@ -172,6 +173,8 @@ const DashboardComponent = (userSelector) => () => {
             <DashboardMenu.Element {...dashboardMenuProps} roleCodeList={userSelector.viewList} />
             <Main.Element {...mainProps}>
                 <Breadcrumbs.Element {...breadcrumbsProps} />
+                <Profile/>
+
                 <Switch>
                     <Route exact path="/">
                     </Route>

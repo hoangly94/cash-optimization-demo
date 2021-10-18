@@ -62,6 +62,19 @@ export const Element = (props: Props) => {
     }
   }, useEffect?.params ?? [shown]);
 
+  React.useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.keyCode == 27){
+        handleClosePopupClick(dispatch, closePopUpCallback, store)(e);
+      }
+    };
+    window.addEventListener('keydown', handleEsc);
+
+    return () => {
+      window.removeEventListener('keydown', handleEsc);
+    };
+  }, [closePopUpCallback]);
+
   //create props
   const componentWrapperProps = {
     classNames: Classnames(
@@ -78,7 +91,7 @@ export const Element = (props: Props) => {
       styles['popup-background'],
     ),
     backgroundColor: Base.BackgroundColor.BLACK,
-    onClick: handleClosePopupClick(dispatch, closePopUpCallback, store),
+    // onClick: handleClosePopupClick(dispatch, closePopUpCallback, store),
     ...$background,
   };
   const contentProps = {
@@ -89,8 +102,8 @@ export const Element = (props: Props) => {
     ...$content,
     classNames: Classnames(
       styles['popup-content'],
-    ) + ' '+ $content?.classNames,
-    
+    ) + ' ' + $content?.classNames,
+
   };
 
   const titleProps = {

@@ -25,6 +25,8 @@ export const FETCH_HISTORY_DETAIL = root + 'FETCH_HISTORY_DETAIL';
 export const UPDATE_HISTORY_DETAIL = root + 'UPDATE_HISTORY_DETAIL';
 export const CHANGE_ORGS_CODE_FILTER = root + 'CHANGE_ORGS_CODE_FILTER';
 export const SEARCHORGS_SELECT_UPDATE = root + 'SEARCHORGS_SELECT_UPDATE';
+export const FETCH_MAP = root + 'FETCH_MAP';
+export const UPDATE_MAP = root + 'UPDATE_MAP';
 
 export type State = {
     history: any,

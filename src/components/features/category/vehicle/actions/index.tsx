@@ -73,55 +73,55 @@ export const Element = (props: Props) => {
 
   return (
     <>
-      <Block.Element {...componentWrapperProps}>
-        <Pagination.Element
+      <Pagination.Element
+        store={{
+          totalSelectorKeys: ['vehicle', 'queryResult'],
+          action: {
+            type: REQUEST_QUERY,
+          }
+        }}
+        style={{
+          marginTop: '5px',
+        }}
+      />
+      <Block.Element
+        margin={Base.MarginTop.PX_18}
+        lineHeight={Base.LineHeight.L1}
+      >
+        <Button.Element
+          {...creatingButtonComponentProps}
           store={{
-            totalSelectorKeys: ['vehicle', 'queryResult'],
             action: {
-              type: REQUEST_QUERY,
+              type: HANDLE_POPUP,
+              keys: ['vehicle', 'create', 'isShown'],
+              value: true,
             }
           }}
-          style={{
-            marginTop: '5px',
+          onClick={() => dispatch({ type: REQUEST_CREATING_CANCEL })}
+        />
+        <Button.Element
+          {...editingButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'vehicle', 'edit'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['vehicle', 'edit', 'isShown'],
+              value: true,
+            }
+          }}
+          onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+        />
+        <Button.Element
+          {...historyButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'vehicle', 'edit'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['vehicle', 'history', 'isShown'],
+              value: true,
+            }
           }}
         />
-        <Block.Element>
-          <Button.Element
-            {...creatingButtonComponentProps}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['vehicle', 'create', 'isShown'],
-                value: true,
-              }
-            }}
-            onClick={() => dispatch({ type: REQUEST_CREATING_CANCEL})}
-          />
-          <Button.Element
-            {...editingButtonComponentProps}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'vehicle', 'edit'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['vehicle', 'edit', 'isShown'],
-                value: true,
-              }
-            }}
-            onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
-          />
-          <Button.Element
-            {...historyButtonComponentProps}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'vehicle', 'edit'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['vehicle', 'history', 'isShown'],
-                value: true,
-              }
-            }}
-          />
-        </Block.Element>
-
       </Block.Element >
       <CreatingPopup.Element
         {...creatingPopupComponentProps}
@@ -141,12 +141,12 @@ export const Element = (props: Props) => {
           isShownSelectorKeys: ['base', 'popups', 'vehicle', 'history'],
         }}
         useEffect={{
-          callback: () => dispatch({ type: FETCH_HISTORY}),
+          callback: () => dispatch({ type: FETCH_HISTORY }),
         }}
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}
-        $title= {{
+        $title={{
           tagType: Title.TagType.H2,
           text: 'Detail'
         }}

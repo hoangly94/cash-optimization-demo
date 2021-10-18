@@ -37,6 +37,11 @@ export const Element = (props: Popup.Props) => {
       keys: ['pycRegistration', 'historyDetail', 'isShown'],
       value: false,
     });
+    dispatch({
+      type: HANDLE_POPUP,
+      keys: ['pycRegistration', 'history', 'isShown'],
+      value: true,
+    });
   };
 
   const approveButtonProps: Button.Props = {
@@ -212,7 +217,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.orgsDestName}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.orgsDestName}
           isDisabled={true}
         />
       </Block.Element>
@@ -220,7 +225,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên ATM' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.atmCdmName}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.atmCdmName}
           isDisabled={true}
         />
       </Block.Element>
@@ -228,7 +233,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên NH đối tác KPP mở TK' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.nnhnTctdName}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.nnhnTctdName}
           isDisabled={true}
         />
       </Block.Element>
@@ -271,7 +276,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên Thủ quỹ ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.tqDvdqName || ''}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.tqDvdqName || ''}
           isDisabled={true}
         />
       </Block.Element>
@@ -279,7 +284,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.tqDvdqMobile || ''}
           isDisabled={true}
         />
       </Block.Element>
@@ -288,7 +293,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.tqDvdqCheckName}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.tqDvdqCheckName}
           isDisabled={true}
         />
       </Block.Element>
@@ -296,7 +301,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector?.cashOptimizationOrgsDetailModel?.tqDvdqCheckDate)}
+          defaultValue={_Date.getDateTime(popupSelector?.cashOptimizationOrgsDetailHistModel?.tqDvdqCheckDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -304,7 +309,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Lý do từ chối kiểm soát của TQ ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.tqDvdqCheckReason}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.tqDvdqCheckReason}
           isDisabled={true}
         />
       </Block.Element>
@@ -312,7 +317,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên CPD ĐVĐQ phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.cpdDvdqName}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.cpdDvdqName}
           isDisabled={true}
         />
       </Block.Element>
@@ -320,7 +325,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm CPD ĐVĐQ phê duyệt' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector?.cashOptimizationOrgsDetailModel?.cpdDvdqDate)}
+          defaultValue={_Date.getDateTime(popupSelector?.cashOptimizationOrgsDetailHistModel?.cpdDvdqDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -328,7 +333,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Lý do từ chối phê duyệt của CPD ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.cpdDvdqReason}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.cpdDvdqReason}
           isDisabled={true}
         />
       </Block.Element>
@@ -398,7 +403,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelName}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.tqDvdqCheckCancelName}
           isDisabled={true}
         />
       </Block.Element>
@@ -406,7 +411,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm TQ ĐVĐQ kiểm soát hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={_Date.getDateTime(popupSelector?.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelDate)}
+          defaultValue={_Date.getDateTime(popupSelector?.cashOptimizationOrgsDetailHistModel?.tqDvdqCheckCancelDate)}
           isDisabled={true}
         />
       </Block.Element>
@@ -414,7 +419,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Lý do từ chối kiểm soát hủy của TQ ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.tqDvdqCheckCancelReason}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.tqDvdqCheckCancelReason}
           isDisabled={true}
         />
       </Block.Element>
@@ -423,7 +428,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Tên CPD ĐVĐQ phê duyệt hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.cpdDvdqCancelName}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.cpdDvdqCancelName}
           isDisabled={true}
         />
       </Block.Element>
@@ -431,7 +436,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Thời điểm CPD ĐVĐQ phê duyệt hủy PYC' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.cpdDvdqCancelDate}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.cpdDvdqCancelDate}
           isDisabled={true}
         />
       </Block.Element>
@@ -439,7 +444,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Lý do từ chối phê duyệt hủy của CPD ĐVĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector?.cashOptimizationOrgsDetailModel?.cpdDvdqCancelReason}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.cpdDvdqCancelReason}
           isDisabled={true}
         />
       </Block.Element>

@@ -28,14 +28,32 @@ function* fetchRolesSaga() {
 
 function* fetchUserSaga() {
     // yield put({ type: FETCH_USER });
-    const responseData = yield call(getUser, Config.url + '/api/cashoptimization/user/getInfoAccount');
-    
-    if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
+    const responseData1 = yield call(getUser, Config.url + '/api/cashoptimization/user/getInfoAccount');
+
+    if (!responseData1 || !responseData1.data || responseData1.data.resultCode != 0) {
         // yield document.cookie = `accessToken=;`;  
         // yield window.location.href='/login';  
-        return ;
+        return;
     }
-    yield put({ type: UPDATE_USER, data: responseData?.data?.data });
+    const responseData2 = yield axios.post(Config.url + '/api/cashoptimization/findCategoryPers',
+        {
+            data: {
+                orgsId: 0,
+                page: 0,
+                persCode: responseData1?.data?.data?.persCode,
+                size: 1,
+            },
+        })
+        .catch(error => console.log(error));
+    if (!responseData2 || !responseData2.data || responseData2.data.resultCode != 0) {
+        return;
+    }
+    yield put({
+        type: UPDATE_USER, data: {
+            persTitle: responseData2?.data?.data[0]?.persTitle,
+            ...responseData1?.data?.data,
+        }
+    });
 
     // const state = yield select();
     // const responseData2 = yield call(getUser2, Config.url + '/api/cashoptimization/user/getUserByUsername', state.auth.user);

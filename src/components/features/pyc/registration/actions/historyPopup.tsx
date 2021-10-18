@@ -209,7 +209,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Đối tượng ĐQ',
           sort: {
             type: FETCH_HISTORY,
-            data: 'objectType',
+            data: 'object_type',
           }
         },
         {

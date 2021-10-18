@@ -1,4 +1,4 @@
-import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_HISTORY, FETCH_DATA, UPDATE_DATA, SELECT_AREA_FILTER, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_AREA_CREATING, SELECT_AREA_EDITING, SELECT_ORGS_PARENT_CREATING, SELECT_ORGS_PARENT_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, CHANGE_ORGS_CODE_FILTER, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL, SEARCHORGS_SELECT_UPDATE } from './constants'
+import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_HISTORY, FETCH_DATA, UPDATE_DATA, SELECT_AREA_FILTER, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_AREA_CREATING, SELECT_AREA_EDITING, SELECT_ORGS_PARENT_CREATING, SELECT_ORGS_PARENT_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, CHANGE_ORGS_CODE_FILTER, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL, SEARCHORGS_SELECT_UPDATE, UPDATE_MAP } from './constants'
 import { SELECT_ROW as SEARCHORGS_SELECT_ROW } from '~stores/authority/searchOrgs/constants'
 import * as Base from '~/_settings';
 import { getCurrentDate, _Date } from '@utils';
@@ -76,7 +76,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -189,7 +189,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -212,7 +212,7 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 isLoading: false,
-                filters:{
+                filters: {
                     ...state.filters,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -251,6 +251,11 @@ export default (state: State = initState, action) => {
                         ...state['selectedOrgs'],
                     }
                 },
+            }
+        case UPDATE_MAP:
+            return {
+                ...state,
+                mapHtml: action.data,
             }
         default:
             return state

@@ -10,6 +10,7 @@ import * as EditingPopup from "./editingPopup";
 import * as HistoryPopup from "./historyPopup";
 import * as DetailPopup from "./detailPopup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
+import * as MapPopup from "./mapPopup";
 
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, REQUEST_QUERY } from '~/stores/category/orgs/constants';
@@ -75,54 +76,55 @@ export const Element = (props: Props) => {
 
   return (
     <>
-      <Block.Element {...componentWrapperProps}>
-        <Pagination.Element
+      <Pagination.Element
+        store={{
+          totalSelectorKeys: ['orgs', 'queryResult'],
+          action: {
+            type: REQUEST_QUERY,
+          }
+        }}
+        style={{
+          marginTop: '5px',
+        }}
+      />
+      <Block.Element
+        margin={Base.MarginTop.PX_18}
+        lineHeight={Base.LineHeight.L1}
+      >
+        <Button.Element
+          {...creatingButtonComponentProps}
           store={{
-            totalSelectorKeys: ['orgs', 'queryResult'],
             action: {
-              type: REQUEST_QUERY,
+              type: HANDLE_POPUP,
+              keys: ['orgs', 'create', 'isShown'],
+              value: true,
             }
           }}
-          style={{
-            marginTop: '5px',
+          onClick={() => dispatch({ type: REQUEST_CREATING_CANCEL })}
+        />
+        <Button.Element
+          {...editingButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'orgs', 'edit'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['orgs', 'edit', 'isShown'],
+              value: true,
+            }
+          }}
+          onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+        />
+        <Button.Element
+          {...historyButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'orgs', 'edit'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['orgs', 'history', 'isShown'],
+              value: true,
+            }
           }}
         />
-        <Block.Element>
-          <Button.Element
-            {...creatingButtonComponentProps}
-            store={{
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['orgs', 'create', 'isShown'],
-                value: true,
-              }
-            }}
-            onClick={() => dispatch({ type: REQUEST_CREATING_CANCEL })}
-          />
-          <Button.Element
-            {...editingButtonComponentProps}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'orgs', 'edit'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['orgs', 'edit', 'isShown'],
-                value: true,
-              }
-            }}
-            onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
-          />
-          <Button.Element
-            {...historyButtonComponentProps}
-            store={{
-              isDisabledSelectorKeys: ['base', 'buttons', 'orgs', 'edit'],
-              action: {
-                type: HANDLE_POPUP,
-                keys: ['orgs', 'history', 'isShown'],
-                value: true,
-              }
-            }}
-          />
-        </Block.Element >
       </Block.Element>
 
       <CreatingPopup.Element
@@ -143,12 +145,12 @@ export const Element = (props: Props) => {
           isShownSelectorKeys: ['base', 'popups', 'orgs', 'history'],
         }}
         useEffect={{
-          callback: () => dispatch({ type: FETCH_HISTORY}),
+          callback: () => dispatch({ type: FETCH_HISTORY }),
         }}
       />
       <DetailPopup.Element
         {...historyPopupComponentProps}
-        $title= {{
+        $title={{
           tagType: Title.TagType.H2,
           text: 'Detail'
         }}
@@ -166,6 +168,11 @@ export const Element = (props: Props) => {
         }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'orgs', 'searchOrgs'],
+        }}
+      />
+      <MapPopup.Element
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'orgs', 'mapPopup'],
         }}
       />
     </>

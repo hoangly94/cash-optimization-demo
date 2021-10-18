@@ -13,6 +13,7 @@ import * as SpecialPopup from "./specialPopup";
 import * as BalanceSpecialPopup from "./balanceSpecialPopup ";
 import * as OrgsSearchingPopup from "./orgsSearchingPopup";
 import * as HistoryPopup from "./historyPopup";
+import * as HistoryDetailPopup from "./historyDetailPopup";
 import * as SearchVehiclePersPopup from "./searchVehiclePersPopup";
 import * as VehiclePopup from "./vehiclePopup";
 import * as PersPopup from "./persPopup";
@@ -96,136 +97,128 @@ export const Element = (props: Props) => {
 
   return (
     <>
-      <Block.Element {...componentWrapperProps}>
-        <Pagination.Element
+      <Pagination.Element
+        store={{
+          totalSelectorKeys: ['routeManagement', 'queryResult'],
+          action: {
+            type: REQUEST_QUERY,
+          }
+        }}
+        margin={Base.MarginBottom.PX_18}
+      />
+      <Block.Element
+        margin={Base.MarginTop.PX_18}
+        lineHeight={Base.LineHeight.L1}
+      >
+        <Button.Element
+          {...creatingButtonComponentProps}
           store={{
-            totalSelectorKeys: ['routeManagement', 'queryResult'],
             action: {
-              type: REQUEST_QUERY,
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'create', 'isShown'],
+              value: true,
+              popupType: 1,
             }
           }}
-          margin={Base.MarginBottom.PX_18}
+          isDisabled={!userSelector.viewList.includes('14')}
+          onClick={() => dispatch({ type: REQUEST_CREATING_CANCEL })}
         />
-        <Block.Element
-          margin={Base.MarginTop.PX_18}
-        >
-          <Block.Element>
-            <Button.Element
-              {...creatingButtonComponentProps}
-              store={{
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'create', 'isShown'],
-                  value: true,
-                  popupType: 1,
-                }
-              }}
-              isDisabled={!userSelector.viewList.includes('14')}
-              onClick={()=>dispatch({type: REQUEST_CREATING_CANCEL})}
-            />
-            <Button.Element
-              {...editingButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'edit'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'edit', 'isShown'],
-                  value: true,
-                  popupType: 2,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('15') && viewSelector?.routeStatus === 'Originating_R')}
-              onClick={()=>dispatch({type: REQUEST_EDITING_CANCEL})}
-            />
-            <Button.Element
-              {...deleteButtonComponentProps}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'delete', 'isShown'],
-                  value: true,
-                  popupType: 4,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('15D') && (['Organizing', 'Organizing_R','Adding', 'Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM'].includes(viewSelector?.routeStatus)))}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'View'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'detail', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('12'))}
-            />
-          </Block.Element>
-
-          <Block.Element
-            margin={Base.MarginTop.PX_18}
-          >
-            <Button.Element
-              {...buttonProps}
-              text={'Tìm PT_TP VẬN CHUYỂN'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'],
-                  value: true,
-                  popupType: 4,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('16') && (viewSelector?.routeStatus === 'Adding'
-                && viewSelector.orgsCode == userSelector.orgsCode))}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'Sắp xếp lộ trình'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'organizingPopup', 'isShown'],
-                  value: true,
-                  popupType: 5,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('19') && (viewSelector?.routeStatus === 'Organizing'
-                && viewSelector.orgsCode == userSelector.orgsCode))}
-            />
-            <Button.Element
-              {...printButtonComponentProps}
-              text={'Excel'}
-              onClick={() => dispatch({ type: GET_EXCEL })}
-            />
-            <Button.Element
-              {...buttonProps}
-              text={'History'}
-              backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
-              store={{
-                isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
-                action: {
-                  type: HANDLE_POPUP,
-                  keys: ['routeManagement', 'history', 'isShown'],
-                  value: true,
-                  popupType: 3,
-                }
-              }}
-              isDisabled={!(userSelector.viewList.includes('13'))}
-            />
-          </Block.Element>
-        </Block.Element>
-
+        <Button.Element
+          {...editingButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'edit'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'edit', 'isShown'],
+              value: true,
+              popupType: 2,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('15') && viewSelector?.routeStatus === 'Originating_R')}
+          onClick={() => dispatch({ type: REQUEST_EDITING_CANCEL })}
+        />
+        <Button.Element
+          {...deleteButtonComponentProps}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'delete', 'isShown'],
+              value: true,
+              popupType: 4,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('15D') && (['Organizing', 'Organizing_R', 'Adding', 'Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM'].includes(viewSelector?.routeStatus)))}
+        />
+        <Button.Element
+          {...buttonProps}
+          text={'View'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'detail', 'isShown'],
+              value: true,
+              popupType: 3,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('12'))}
+        />
+        <Button.Element
+          {...buttonProps}
+          text={'Tìm PT_TP VẬN CHUYỂN'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'searchVehiclePersPopup', 'isShown'],
+              value: true,
+              popupType: 4,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('16') && (viewSelector?.routeStatus === 'Adding'
+            && viewSelector.orgsCode == userSelector.orgsCode))}
+        />
+        <Button.Element
+          {...buttonProps}
+          text={'Sắp xếp lộ trình'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'organizingPopup', 'isShown'],
+              value: true,
+              popupType: 5,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('19') && (viewSelector?.routeStatus === 'Organizing'
+            && viewSelector.orgsCode == userSelector.orgsCode))}
+        />
+        <Button.Element
+          {...printButtonComponentProps}
+          text={'Excel'}
+          onClick={() => dispatch({ type: GET_EXCEL })}
+        />
+        <Button.Element
+          {...buttonProps}
+          text={'History'}
+          backgroundColor={Base.BackgroundColor.CLASSIC_BLUE}
+          store={{
+            isDisabledSelectorKeys: ['base', 'buttons', 'routeManagement', 'detail'],
+            action: {
+              type: HANDLE_POPUP,
+              keys: ['routeManagement', 'history', 'isShown'],
+              value: true,
+              popupType: 3,
+            }
+          }}
+          isDisabled={!(userSelector.viewList.includes('13'))}
+        />
       </Block.Element >
+
       <CreatingPopup.Element
         {...creatingPopupComponentProps}
         store={{
@@ -259,6 +252,19 @@ export const Element = (props: Props) => {
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'detail'],
         }}
       />
+
+      <HistoryDetailPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'VIEW'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'historyDetail'],
+        }}
+      />
+
+
       <DeletePopup.Element
         {...editingPopupComponentProps}
         $title={{

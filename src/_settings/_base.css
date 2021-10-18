@@ -442,19 +442,19 @@ body {
 }
   .lineheight{
   &-s1{
-    line-height: 1;
+    line-height: 0.5;
   }
   &-s{
-    line-height: 1.2;
+    line-height: 1;
   }
   &-m{
     line-height: 1.5;
   }
   &-l{
-    line-height: 1.8;
+    line-height: 2;
   }
   &-l1{
-    line-height: 2;
+    line-height: 3;
   }
 }
 

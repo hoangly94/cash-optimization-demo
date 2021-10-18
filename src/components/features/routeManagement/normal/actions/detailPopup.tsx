@@ -445,7 +445,7 @@ const pycTableData = (queryResult?): Table.Props => ({
         },
         {
           ...tableData_$rows_$cells_title,
-          children: 'SĐT thủ quỹ thủ quỹ ĐVYCĐQ',
+          children: 'SĐT thủ quỹ ĐVYCĐQ',
         },
         {
           ...tableData_$rows_$cells_title,
@@ -512,13 +512,13 @@ const pycMapResponseToData = (handleRowClick, dispatch) => (item, index) => ({
       children: item.cashOptimization?.orgsHolderMobile,
     },
     {
+      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
+    },
+    {
       children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.atmCdmName,
     },
     {
       children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.nnhnTctdName,
-    },
-    {
-      children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.orgsDestName,
     },
     {
       children: item.cashOptimization?.cashOptimizationOrgsDetailModel?.tqDvdqName || ''

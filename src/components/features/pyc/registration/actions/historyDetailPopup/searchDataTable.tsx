@@ -11,7 +11,6 @@ export type Props = Base.Props;
 
 export const Element = (props: Props) => {
   const queryResult = useSelector(state => state['pycRegistration'].history?.detailPopup?.cashOptimizationDetailHistModelList);
-  console.log(queryResult);
   const dispatch = useDispatch();
   //create props
   const componentWrapperProps = {

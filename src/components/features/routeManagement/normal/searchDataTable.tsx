@@ -81,7 +81,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Mã ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgsCode',
+            data: 'orgs_code',
           }
         },
         {
@@ -89,7 +89,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Tên ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgsname',
+            data: 'orgs_name',
           }
         },
         {
@@ -97,7 +97,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Trạng thái LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'routeStatus',
+            data: 'route_status',
           }
         },
         {
@@ -105,7 +105,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Version LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'orgs_code',
+            data: 'route_version',
           }
         },
         {
@@ -113,7 +113,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Tên thủ quỹ ĐVTLT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'tqDltltName',
+            data: 'tq_dltlt_name',
           }
         },
         {
@@ -121,7 +121,7 @@ const tableData = (queryResult?): Table.Props => ({
           children: 'Thời gian bắt đầu LT',
           sort: {
             type: REQUEST_QUERY,
-            data: 'startTime',
+            data: 'actual_time',
           }
         },
         {

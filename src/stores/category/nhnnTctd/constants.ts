@@ -23,6 +23,8 @@ export const SELECT_ROW = root + 'SELECT_ROW';
 export const SELECT_HISTORY_ROW = root + 'SELECT_HISTORY_ROW';
 export const FETCH_HISTORY_DETAIL = root + 'FETCH_HISTORY_DETAIL';
 export const UPDATE_HISTORY_DETAIL = root + 'UPDATE_HISTORY_DETAIL';
+export const FETCH_MAP = root + 'FETCH_MAP';
+export const UPDATE_MAP = root + 'UPDATE_MAP';
 
 export type State = {
     history: any,

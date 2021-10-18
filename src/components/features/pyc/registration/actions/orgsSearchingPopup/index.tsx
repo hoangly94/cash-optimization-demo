@@ -148,7 +148,7 @@ export const Element = (props: Popup.Props) => {
           width={Base.Width.PER_70}
           border={Base.Border.SOLID}
           textAlign={Base.TextAlign.LEFT}
-          text='ĐVĐQ'
+          text='Tên ĐVĐQ'
           store={{
             textSelectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'orgsDestName'],
             action: {
