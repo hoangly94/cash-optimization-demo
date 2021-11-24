@@ -1,7 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
 import { DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, GET_PYC_EXCEL, GET_PYC_HISTORY_EXCEL, HANDLE_CONTINUE_ACTION, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, SEARCHORGS_FETCH_ATMCDMS, SEARCHORGS_FETCH_NHNNTCTDS, SEARCHORGS_UPDATE_ATMCDMS, SEARCHORGS_UPDATE_NHNNTCTDS, UPDATE_CONTINUE, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_SPECIAL_DATA, } from './constants';
-import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { _Date, getCurrentDate } from '@utils';
@@ -73,7 +72,7 @@ function* getPycExcelSaga(action?) {
 
 function* createDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/pyc_add', state.pycRegistration.creatingPopup, state.auth);
+    const responseData = yield call(requestCreating, process.env.PATH + '/api/cashoptimization/pyc_add', state.pycRegistration.creatingPopup, state.auth);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -87,7 +86,7 @@ function* createDataSaga() {
 
 function* updateDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/pyc_update', state.pycRegistration.editingPopup, state.auth);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/pyc_update', state.pycRegistration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -104,13 +103,12 @@ function* updateDataSaga() {
 
 function* continueSaga() {
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/pyc_continue', state.pycRegistration.editingPopup, state.auth);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/pyc_continue', state.pycRegistration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
-    yield fetchDataSaga();
     yield spawn(addNoti, 'success');
     yield put({ type: UPDATE_CONTINUE});
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'edit', 'isDisabled'], value: true });
@@ -120,19 +118,19 @@ function* continueSaga() {
     yield put({ type: HANDLE_BUTTON, keys: ['pycRegistration', 'orgsSearching', 'isDisabled'], value: false });
     yield put({ type: HANDLE_POPUP, keys: ['pycRegistration', 'edit', 'isShown'], value: false });
     yield put({ type: HANDLE_POPUP, keys: ['pycRegistration', 'orgsSearching', 'isShown'], value: true });
-
+    yield fetchDataSaga();
 }
 
 function* fectchOrgsSearchingSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_find', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth);
+    const responseData = yield call(requestOrgsSearching, process.env.PATH + '/api/cashoptimization/pyc_orgs_find', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth);
 
     yield put({ type: UPDATE_ORGSSEARCHING_DISTANCE, data: responseData.data });
 }
 
 function* orgsSearchingUpdateSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_update', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth);
+    const responseData = yield call(requestOrgsSearching, process.env.PATH + '/api/cashoptimization/pyc_orgs_update', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -149,7 +147,7 @@ function* orgsSearchingUpdateSaga() {
 
 function* orgsSearchingContinueSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_continue', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth, 'continue');
+    const responseData = yield call(requestOrgsSearching, process.env.PATH + '/api/cashoptimization/pyc_orgs_continue', state.pycRegistration, state.pycRegistration.orgsSearchingPopup, state.auth, 'continue');
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -166,7 +164,7 @@ function* orgsSearchingContinueSaga() {
 
 function* deleteDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestDelete, Config.url + '/api/cashoptimization/pyc_delete', state.pycRegistration.editingPopup, state.auth);
+    const responseData = yield call(requestDelete, process.env.PATH + '/api/cashoptimization/pyc_delete', state.pycRegistration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -212,7 +210,7 @@ function* specialAddSaga() {
 
 function* validateSaga(statusType, validateType, urlType) {
     const state = yield select();
-    const url = Config.url + (function () {
+    const url = (process.env.PATH || '') + (function () {
         if (statusType === 1) {
             if (validateType === 1) {
                 if (urlType === 1)
@@ -279,7 +277,7 @@ function* fetchAtmCdmsSaga(action?) {
 }
 function fetchAtmCdms(data) {
     
-    const url = Config.url + '/api/cashoptimization/findCategoryATMCDM';
+    const url = process.env.PATH + '/api/cashoptimization/findCategoryATMCDM';
     const postData = {
         data: {
             orgsId: data?.categoryOrgs?.id, 
@@ -298,7 +296,7 @@ function* fetchNhnnSaga(action?) {
     yield put({ type: SEARCHORGS_UPDATE_NHNNTCTDS, data: responseData.data });
 }
 function fetchNhnn(data) {
-    const url = Config.url + '/api/cashoptimization/findCategoryNHNNTCTD';
+    const url = process.env.PATH + '/api/cashoptimization/findCategoryNHNNTCTD';
     const postData = {
         data: {
             orgsId: data?.categoryOrgs?.id, 
@@ -325,13 +323,13 @@ function getHistory(data, action) {
     const {
         page = 0,
         sort = data.sort ?? '',
-    } = action ?? {};const url = Config.url + '/api/cashoptimization/pyc_history';
+    } = action ?? {};const url = process.env.PATH + '/api/cashoptimization/pyc_history';
     const postData = {
         data: {
             cash_optimization_id: data.id,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         }
     }
     return axios.post(url, postData)
@@ -339,7 +337,7 @@ function getHistory(data, action) {
 }
 
 function getPycHistoryExcel(data) {
-    const url = Config.url + '/api/cashoptimization/pyc_history_excel';
+    const url = process.env.PATH + '/api/cashoptimization/pyc_history_excel';
     const postData = {
         data: {
             cash_optimization_id: data.id,
@@ -353,7 +351,7 @@ function getPycHistoryExcel(data) {
 }
 
 function getOrgsChildren(user) {
-    const url = Config.url + '/api/cashoptimization/findChildOrgsByCode';
+    const url = process.env.PATH + '/api/cashoptimization/findChildOrgsByCode';
     const postData = {
         data: {
             orgs_code: user.orgsCode,
@@ -367,7 +365,7 @@ function getData(filters, auth, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {};const url = Config.url + '/api/cashoptimization/pycsearch';
+    } = action ?? {};const url = process.env.PATH + '/api/cashoptimization/pycsearch';
     const data = filters.radio === '1'
         ? {
             pers_code: auth.user?.code,
@@ -391,7 +389,7 @@ function getData(filters, auth, action) {
             ...data,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)
@@ -402,7 +400,7 @@ function getPycExcel(filters, auth, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {};const url = Config.url + '/api/cashoptimization/pyc_excel';
+    } = action ?? {};const url = process.env.PATH + '/api/cashoptimization/pyc_excel';
     const data = filters.radio === '1'
         ? {
             pers_code: auth.user?.code,
@@ -426,7 +424,7 @@ function getPycExcel(filters, auth, action) {
             ...data,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData, { responseType: 'arraybuffer' })

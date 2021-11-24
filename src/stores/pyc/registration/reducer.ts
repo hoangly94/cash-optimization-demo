@@ -6,7 +6,6 @@ import { UPDATE_CONFIG } from '~stores/dashboardRoot/constants';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
 
-import Config from '@config';
 const initState: State = {
     history: [],
     pycTypes: [],
@@ -82,6 +81,8 @@ export default (state: State = initState, action) => {
                     ...getDefaultPopupActions(),
                     orgsHolderMobile: action.mobile,
                 },
+                
+                pycTypes: [],
             }
         case DONE_CREATING:
             return {
@@ -121,7 +122,7 @@ export default (state: State = initState, action) => {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
                         ...item,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     currentPage: action.page || 0,
                     total: action.data.total,
@@ -570,6 +571,7 @@ export default (state: State = initState, action) => {
                             text: state.editingPopup.cashOptimizationOrgsDetailModel?.nnhnTctdName || '',
                             value: state.editingPopup.cashOptimizationOrgsDetailModel?.nnhnTctdCode || '',
                         },
+                        orgsDestName: state.editingPopup.cashOptimizationOrgsDetailModel?.orgsDestName || state.editingPopup.orgsName
                     }
                 },
             };
@@ -580,13 +582,19 @@ export default (state: State = initState, action) => {
             return {
                 ...state,
                 ...pycTypesCheckData('objectType', action.data.objectType),
+                // creatingPopup: {
+                //     ...state.creatingPopup,
+                //     orgsHolderMobile: newData.orgsHolderMobile,
+                // },
                 selectedItem: {
                     ...newData,
                     orgsHolderMobile: action.user?.username != newData.createdbyCode ? action.user?.phone : newData.orgsHolderMobile,
+                    orgsHolderMobile2: newData.orgsHolderMobile,
                 },
                 editingPopup: {
                     ...newData,
                     orgsHolderMobile: action.user?.username != newData.createdbyCode ? action.user?.phone : newData.orgsHolderMobile,
+                    orgsHolderMobile2: newData.orgsHolderMobile,
                 },
                 detailPopup: newData,
                 orgsSearchingPopup: {
@@ -601,6 +609,7 @@ export default (state: State = initState, action) => {
                             text: newData.cashOptimizationOrgsDetailModel?.nnhnTctdName || '',
                             value: newData.cashOptimizationOrgsDetailModel?.nnhnTctdCode || '',
                         },
+                        orgsDestName: newData.cashOptimizationOrgsDetailModel?.orgsDestName || newData.orgsName
                     }
                 },
                 distanceOrgsToOrgsRequest: newData.cashOptimizationOrgsDetailModel?.distanceOrgsToOrgsRequest,

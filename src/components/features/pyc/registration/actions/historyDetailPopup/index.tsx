@@ -206,10 +206,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='Khoảng cách ĐVĐQ với ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          store={{
-            selectorKeys: ['pycRegistration', 'orgsSearchingPopup', 'distanceOrgsToOrgsRequest'],
-            reducerType: '',
-          }}
+          defaultValue={popupSelector?.cashOptimizationOrgsDetailHistModel?.distanceOrgsToOrgsRequest}
           isDisabled={true}
         />
       </Block.Element>

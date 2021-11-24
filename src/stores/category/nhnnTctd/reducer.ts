@@ -2,7 +2,6 @@ import { REQUEST_CREATING, REQUEST_EDITING, CHANGE_TYPE_FILTER, REQUEST_QUERY, F
 import * as Base from '~/_settings';
 import { _Date, getCurrentDate } from '@utils';
 
-import Config from '@config';
 const initState: State = {
     history: [],
     detailPopup: [],
@@ -83,7 +82,7 @@ export default (state: State = initState, action) => {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
                         ...item,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     currentPage: action.page || 0,
                     total: action.data.total,

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import styles from './_styles.css'
 import * as Base from '~/_settings';
 
 export type Props = Base.Props & {
@@ -16,7 +15,7 @@ export const Element = (props: Props): React.ReactElement => {
 
   //create props
   const blockProps = {
-    ...Base.mapProps(props, styles, []),
+    ...Base.mapProps(props),
     onClick: onClick,
   };
 

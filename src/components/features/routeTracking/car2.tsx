@@ -9,7 +9,7 @@ import * as Title from "~commons/title";
 import * as MapPopup from "./mapPopup";
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_CODE_FILTER, FETCH_DATA, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD } from '~stores/routeTracking/constants';
-import { ADD_NOTI, HANDLE_POPUP } from '_/stores/_base/constants';
+import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
 import _ from "lodash";
 
@@ -479,7 +479,8 @@ const html28_3 = (route, routeDetailOganize, routeStatus) => {
       {(() => {
         if (routeStatus === 'Finished') {
           return <Input.Element
-            defaultValue={routeDetailOganize?.stopPointType}
+            // defaultValue={routeDetailOganize?.stopPointType}
+            defaultValue='Lộ trình đã kết thúc'
             width={Base.Width.FULL}
             isDisabled={true}
           />
@@ -849,7 +850,8 @@ const html30_3 = (route, routeDetailOganize, routeStatus) => {
       {(() => {
         if (routeStatus === 'Finished') {
           return <Input.Element
-            defaultValue={routeDetailOganize?.stopPointType}
+            // defaultValue={routeDetailOganize?.stopPointType}
+            defaultValue='Lộ trình đã kết thúc'
             width={Base.Width.FULL}
             isDisabled={true}
           />
@@ -936,7 +938,8 @@ const html29_1 = (route, routeDetailOganize, routeStatus) => {
           {(() => {
             if (routeStatus === 'Finished') {
               return <Input.Element
-                defaultValue={routeDetailOganize?.stopPointType}
+                // defaultValue={routeDetailOganize?.stopPointType}
+                defaultValue='Lộ trình đã kết thúc'
                 width={Base.Width.FULL}
                 isDisabled={true}
               />

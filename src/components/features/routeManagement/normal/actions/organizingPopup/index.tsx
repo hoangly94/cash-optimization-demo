@@ -8,14 +8,12 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
-import * as Table from "~commons/table";
 import * as SpecialTable from "./specialTable";
 import * as RouteTable from "./routeTable";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_CURRENCIES } from '~/stores/dashboardRoot/constants';
-import { thousandSeparator } from '_/utils';
-import { useConfirmationDialog } from '_/hooks';
-import { NONAME } from 'dns';
+import { thousandSeparator } from '@utils';
+import { useConfirmationDialog } from '@hooks';
 
 export type Props = Popup.Props & {
   popupType: string,

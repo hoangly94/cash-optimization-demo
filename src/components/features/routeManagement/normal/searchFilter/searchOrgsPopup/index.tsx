@@ -12,7 +12,7 @@ import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { INPUT_ORGS_VALUE_FILTER, REQUEST_QUERY, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER, SELECT_ROW } from '~stores/routeManagement/searchOrgs/constants';
 import * as RegionAreaFilter from './regionAreaFilter';
-import { SEARCHORGS_SELECT_UPDATE } from '_/stores/routeManagement/normal/constants';
+import { SEARCHORGS_SELECT_UPDATE } from '~stores/routeManagement/normal/constants';
 
 export type Props = Popup.Props;
 

@@ -1,6 +1,5 @@
 import { State, HANDLE_BUTTON, HANDLE_POPUP, ADD_NOTI_ERROR, ADD_NOTI_SUCCESS, REMOVE_LAST_NOTI, REQUEST_NEW_BREACURMBS, ADD_NOTI_WARNING } from './constants'
 
-import Config from '@config';
 const initState: State = {
     buttons: {
         'orgs': {

@@ -1,7 +1,6 @@
 import { State, UPDATE_DATA, SELECT_ROW, SELECT_REGION_TYPE_FILTER, SELECT_AREA_TYPE_FILTER, INPUT_ORGS_VALUE_FILTER, SELECT_LOCATION_TYPE_FILTER, SELECT_ORGS_TYPE_FILTER } from './constants'
 import { _Date, getCurrentDate } from '@utils';
 
-import Config from '@config';
 const initState: State = {
     filters: {
         ...getDefaultFilters(),
@@ -53,7 +52,7 @@ export default (state: State = initState, action) => {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
                         ...item,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     currentPage: action.page || 0,
                     total: action.data.total,

@@ -1,7 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
 import { SELECT_COMBOX_FILTER, REQUEST_QUERY, FETCH_PERS, UPDATE_PERS, UPDATE_DATA, FETCH_ORGS_CHILDREN, UPDATE_ORGS_CHILDREN, EXPORT_EXCEL } from './constants';
-import Config from '@config';
 import { _Date, getCurrentDate } from '@utils';
 import _ from 'lodash';
 import { addNoti } from '../../_base/sagas';
@@ -32,7 +31,7 @@ function getData(filters, action) {
         page = 0,
         sort = filters.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/report/reportHDB';
+    const url = process.env.PATH + '/api/cashoptimization/report/reportHDB';
     const orgsSearch = filters.orgsValue ? {
         searchType: filters.orgsType?.value,
         searchValue: filters.orgsValue,
@@ -45,7 +44,7 @@ function getData(filters, action) {
             ...orgsSearch,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)
@@ -54,7 +53,7 @@ function getData(filters, action) {
 
 function* fetchOrgsChildrenSaga(action?) {
     const state = yield select();
-    const url = Config.url + '/api/cashoptimization/findChildOrgsByCode';
+    const url = process.env.PATH + '/api/cashoptimization/findChildOrgsByCode';
     const postData = {
         data: {
             orgs_code: state.auth.user.orgsCode,
@@ -72,7 +71,7 @@ function* exportExcelSaga(action?) {
         page = 0,
         sort = filters.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/report/reportHDBExcel';
+    const url = process.env.PATH + '/api/cashoptimization/report/reportHDBExcel';
     const orgsSearch = filters.orgsValue ? {
         searchType: filters.orgsType?.value,
         searchValue: filters.orgsValue,
@@ -85,7 +84,7 @@ function* exportExcelSaga(action?) {
             ...orgsSearch,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
 

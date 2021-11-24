@@ -5,7 +5,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Button from "~commons/button";
 import { FETCH_MAP } from '~/stores/category/orgs/constants';
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { HANDLE_POPUP } from '~stores/_base/constants';
 import classNames from 'classnames';
 import styles from '../_styles.css';
 

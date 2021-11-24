@@ -1,7 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
 import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL } from './constants';
-import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 
@@ -34,7 +33,7 @@ function* fetchDataSaga(action?) {
 
 function* createDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createCategoryRegion', state.region.creatingPopup);
+    const responseData = yield call(requestCreating, process.env.PATH + '/api/cashoptimization/createCategoryRegion', state.region.creatingPopup);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -49,7 +48,7 @@ function* createDataSaga() {
 function* editDataSaga() {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/updateCategoryRegion', state.region.selectedItem);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/updateCategoryRegion', state.region.selectedItem);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -65,13 +64,13 @@ function getHistory(action, data) {
         page = 0,
         sort = data.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/historyCategoryRegionByCode';
+    const url = process.env.PATH + '/api/cashoptimization/historyCategoryRegionByCode';
     const postData = {
         data: {
             sort: sort,
             page: page,
             regionCode: data?.regionCode,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         }
     }
     return axios.post(url, postData)
@@ -83,14 +82,14 @@ function getData(filters, action) {
         page = 0,
         sort = filters.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/findCategoryRegion';
+    const url = process.env.PATH + '/api/cashoptimization/findCategoryRegion';
     const regionCode = filters.regionCode;
     const postData = {
         data: {
             regionName: regionCode ? regionCode : null,
             sort,
             page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)

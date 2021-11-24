@@ -1,7 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery } from 'redux-saga/effects';
 import { REQUEST_CREATING_CANCEL, DONE_CREATING, FETCH_DATA, HANDLE_APPROVE_ACTION, HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION, HANDLE_REJECT_ACTION, REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, } from './constants';
-import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { _Date } from '~/utils';
@@ -42,7 +41,7 @@ function* fetchDataSaga(action?) {
 
 function* createDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/authority/create', state.registration.creatingPopup, state.auth);
+    const responseData = yield call(requestCreating, process.env.PATH + '/api/cashoptimization/authority/create', state.registration.creatingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData.data.message);
@@ -61,7 +60,7 @@ function* createDataSaga() {
 
 function* updateDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/authority/update', state.registration.editingPopup, state.auth);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/authority/update', state.registration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData.data.message);
@@ -78,7 +77,7 @@ function* updateDataSaga() {
 
 function* continueSaga() {
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/authority/continue', state.registration.editingPopup, state.auth);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/authority/continue', state.registration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData.data.message);
@@ -96,8 +95,8 @@ function* handleApprovalSaga(type) {
     const state = yield select();
 
     const responseData = type == 1
-        ? yield call(requestApproval, Config.url + '/api/cashoptimization/authority/approve', state.registration.editingPopup, state.auth)
-        : yield call(requestApproval, Config.url + '/api/cashoptimization/authority/reject', state.registration.editingPopup, state.auth);
+        ? yield call(requestApproval, process.env.PATH + '/api/cashoptimization/authority/approve', state.registration.editingPopup, state.auth)
+        : yield call(requestApproval, process.env.PATH + '/api/cashoptimization/authority/reject', state.registration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -114,7 +113,7 @@ function* handleApprovalSaga(type) {
 
 function* deleteDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestDelete, Config.url + '/api/cashoptimization/authority/delete', state.registration.editingPopup, state.auth);
+    const responseData = yield call(requestDelete, process.env.PATH + '/api/cashoptimization/authority/delete', state.registration.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData.data.message);
@@ -132,7 +131,7 @@ function getData(filters, auth, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/authority/search';
+    } = action ?? {}; const url = process.env.PATH + '/api/cashoptimization/authority/search';
     const data = filters.radio === '1'
         ? {
             orgsId: auth.user.orgsCode == 9 ? filters.orgs.value : auth.user.orgsId,
@@ -152,7 +151,7 @@ function getData(filters, auth, action) {
             ...data,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)

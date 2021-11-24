@@ -16,6 +16,7 @@ import * as PersPopup from "../actions/persPopup";
 import * as OrganizingPopup from "../actions/organizingPopup";
 import * as DestinationPointPopup from "../actions/destinationPointPopup";
 import * as BalanceSpecialPopup from "../actions/balanceSpecialPopup ";
+import * as HistoryDetailPopup from "../actions/historyDetailPopup";
 import * as MapPopup from "../actions/mapPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_QUERY, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, GET_EXCEL, FETCH_PYC, REQUEST_SEACHVEHICLEPERS_CANCEL, REQUEST_ORGANIZING_CANCEL, REQUEST_ORGANIZING, REQUEST_ORGANIZING_DESTINATION_POINT_CANCEL, REQUEST_ORGANIZE_URGENT_CHECKBYID, REQUEST_ORGANIZING_BACK } from '~stores/routeManagement/normal/constants';
@@ -325,6 +326,17 @@ export const Element = (props: Props) => {
         }}
         store={{
           isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'balanceSpecial'],
+        }}
+      />
+
+      <HistoryDetailPopup.Element
+        {...historyPopupComponentProps}
+        $title={{
+          tagType: Title.TagType.H2,
+          text: 'VIEW'
+        }}
+        store={{
+          isShownSelectorKeys: ['base', 'popups', 'routeManagement', 'historyDetail'],
         }}
       />
     </>

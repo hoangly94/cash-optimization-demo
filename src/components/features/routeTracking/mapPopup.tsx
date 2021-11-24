@@ -4,11 +4,10 @@ import * as Base from '~/_settings';
 import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Button from "~commons/button";
-import { FETCH_MAP, FETCH_MAP_DRIVER } from '_/stores/routeTracking/constants';
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { FETCH_MAP, FETCH_MAP_DRIVER } from '~stores/routeTracking/constants';
+import { HANDLE_POPUP } from '~stores/_base/constants';
 import classNames from 'classnames';
 import styles from './_styles.css';
-import { useForceRender } from '_/hooks';
 
 export type Props = Base.Props;
 

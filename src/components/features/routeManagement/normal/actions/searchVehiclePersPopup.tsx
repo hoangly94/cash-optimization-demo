@@ -96,6 +96,7 @@ export const Element = (props: Popup.Props) => {
         margin={Base.MarginBottom.PX_38}
         style={{
           overflow: 'auto',
+          maxHeight: '265px',
         }}
       >
         < Table.Element {...vehicleTableProps} />
@@ -127,6 +128,7 @@ export const Element = (props: Popup.Props) => {
         margin={Base.MarginBottom.PX_38}
         style={{
           overflow: 'auto',
+          maxHeight: '265px',
         }}
       >
         < Table.Element {...persTableProps} />

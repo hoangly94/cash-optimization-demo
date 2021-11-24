@@ -5,7 +5,6 @@ import { getCurrentDate, getCurrentDateTime, _Date } from '@utils';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
 
-import Config from '@config';
 const initState: State = {
     history: [],
     pycModels: [],
@@ -151,7 +150,7 @@ export default (state: State = initState, action) => {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
                         ...item,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     currentPage: action.page || 0,
                     total: action.data.total,
@@ -228,7 +227,7 @@ export default (state: State = initState, action) => {
                     data: historyData.map((item, index) => ({
                         ...item,
                         key: item.id,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     total: action.data.total,
                 }
@@ -446,7 +445,7 @@ export default (state: State = initState, action) => {
                     return [
                         state[popupType]['tableContent1'].filter(item => !item.isSelected),
                         [
-                            ...state[popupType]['tableContent2'],
+                            ...(state[popupType]['tableContent2'] || []),
                             ...state[popupType]['tableContent1']
                                 .filter(item => item.isSelected)
                                 .map(item => ({ ...item, isSelected: false })),
@@ -456,7 +455,7 @@ export default (state: State = initState, action) => {
                 if (action.moveType === 'ONE_RIGHT_TO_LEFT') {
                     return [
                         [
-                            ...state[popupType]['tableContent1'],
+                            ...(state[popupType]['tableContent1'] || []),
                             ...state[popupType]['tableContent2']
                                 .filter(item => item.isSelected)
                                 .map(item => ({ ...item, isSelected: false })),
@@ -624,7 +623,7 @@ export default (state: State = initState, action) => {
                     data: newQueryResultHistory.map((item, index) => ({
                         ...item,
                         key: item.id,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                 }
             }
@@ -664,7 +663,7 @@ export default (state: State = initState, action) => {
                     tableContent1: pycData?.map((item, index) => ({
                         ...item,
                         key: item.id,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                 },
                 editingPopup: {
@@ -675,7 +674,7 @@ export default (state: State = initState, action) => {
                         .map((item, index) => ({
                             ...item,
                             key: item.id,
-                            index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                            index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                         })),
                 },
                 pyc: pycData,
@@ -688,7 +687,7 @@ export default (state: State = initState, action) => {
                     ...state.vehiclePopup,
                     tableContent1: action.data?.data?.filter(item1 =>
                         state.vehiclePopup?.tableContent2.filter(item2 => item2.id == item1.id).length == 0)
-                        .map((item, index) => ({ ...item, key: item.id, index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1, })),
+                        .map((item, index) => ({ ...item, key: item.id, index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1, })),
                     currentPage: action?.page || 0,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },
@@ -701,7 +700,7 @@ export default (state: State = initState, action) => {
                     ...state.persPopup,
                     tableContent1: action.data?.data?.filter(item1 =>
                         state.persPopup?.tableContent2.filter(item2 => item2.id == item1.id).length == 0)
-                        .map((item, index) => ({ ...item, key: item.id, index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1, })),
+                        .map((item, index) => ({ ...item, key: item.id, index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1, })),
                     currentPage: action?.page || 0,
                     sort: action.sort || (state.filters['sort'] ?? ''),
                 },

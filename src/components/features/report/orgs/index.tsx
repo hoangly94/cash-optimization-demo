@@ -16,7 +16,6 @@ export const Element = (props: Props) => {
   const type = 'component';
   const userSelector = useSelector(state => state['auth'].user);
   useLayoutEffect(() => {
-    dispatch({ type: FETCH_ORGS_CHILDREN });
     dispatch({ type: RESET_FILTER, user: userSelector });
     // dispatch({ type: REQUEST_QUERY });
   });

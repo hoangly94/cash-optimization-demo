@@ -24,7 +24,7 @@ export const Element = (props: Props) => {
 
   const [errorMsg, setErrorMsg] = useState('');
   const popupSelector = useSelector(state => state['pycRegistration'].editingPopup);
-  const userSelector = useSelector(state => state['auth'].user);
+  // const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
 
   const handleSubmitButtonClick = (type) => () => {

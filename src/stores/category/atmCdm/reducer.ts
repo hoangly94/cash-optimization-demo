@@ -1,8 +1,6 @@
 import { REQUEST_CREATING, REQUEST_EDITING, REQUEST_QUERY, FETCH_DATA, UPDATE_DATA, SELECT_UNITNAME, SELECT_ATMCDMSTATUS, State, REQUEST_RESET, CHANGE_CREATING_INPUT, CHANGE_EDITING_INPUT, SELECT_ORGS_CODE_CREATING, SELECT_ORGS_CODE_EDITING, SELECT_ATMCDM_STATUS_CREATING, SELECT_ATMCDM_STATUS_EDITING, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL, DONE_CREATING, SELECT_ROW, UPDATE_HISTORY, SELECT_HISTORY_ROW, UPDATE_HISTORY_DETAIL, UPDATE_MAP } from './constants'
-import * as Base from '~/_settings';
-import { getCurrentDate, _Date } from '@utils';
+import {_Date } from '@utils';
 
-import Config from '@config';
 const initState: State = {
     history: [],
     detailPopup: [],
@@ -83,7 +81,7 @@ export default (state: State = initState, action) => {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
                         ...item,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     currentPage: action.page || 0,
                     total: action.data.total,

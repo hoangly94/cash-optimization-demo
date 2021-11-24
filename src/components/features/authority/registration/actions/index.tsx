@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useConfirmationDialog } from '~/hooks';
 import { HANDLE_CONTINUE_ACTION, HANDLE_DELETE_ACTION } from '~stores/authority/registration/constants';
-import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
+import { REPORT_PRINT } from '~stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 

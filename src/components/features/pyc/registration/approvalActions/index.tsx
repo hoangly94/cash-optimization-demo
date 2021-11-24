@@ -12,7 +12,7 @@ import * as HistoryDetailPopup from "../actions/historyDetailPopup";
 import { HANDLE_POPUP } from '~/stores/_base/constants';
 import { FETCH_HISTORY, GET_PYC_EXCEL, REQUEST_QUERY } from '~stores/pyc/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
+import { REPORT_PRINT } from '~stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 

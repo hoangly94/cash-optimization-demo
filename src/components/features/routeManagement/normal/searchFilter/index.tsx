@@ -13,7 +13,7 @@ import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchOrgsPopup2 from "./searchOrgsPopup2";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
-import { RESET_SEARCHORGS_FILTER } from '_/stores/authority/searchOrgs/constants';
+import { RESET_SEARCHORGS_FILTER } from '~stores/authority/searchOrgs/constants';
 
 export type Props = Base.Props;
 

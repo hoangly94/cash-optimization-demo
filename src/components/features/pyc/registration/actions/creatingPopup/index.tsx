@@ -8,12 +8,10 @@ import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
-import * as Datepicker from "~commons/datepicker";
-import * as DualTable from "~commons/dualTable";
-import { getCurrentDate, thousandSeparator } from "@utils";
+import { thousandSeparator } from "@utils";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import * as SearchDataTable from './searchDataTable';
-import { useConfirmationDialog } from '_/hooks';
+import { useConfirmationDialog } from '@hooks';
 
 export type Props = Popup.Props;
 

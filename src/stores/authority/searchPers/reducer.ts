@@ -1,7 +1,6 @@
 import { State, SELECT_TYPE_FILTER, INPUT_VALUE_FILTER, UPDATE_DATA, SELECT_ROW, REQUEST_PERS_CANCEL } from './constants'
-import { _Date, getCurrentDate } from '@utils';
+import { _Date } from '@utils';
 
-import Config from '@config';
 const initState: State = {
     filters: {
         ...getDefaultFilters(),
@@ -57,7 +56,7 @@ export default (state: State = initState, action) => {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
                         ...item,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     currentPage: action.page || 0,
                     total: action.data.total,

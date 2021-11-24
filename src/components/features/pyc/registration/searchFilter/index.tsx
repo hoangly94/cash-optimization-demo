@@ -9,12 +9,10 @@ import * as Input from "~commons/input";
 import * as Radio from "~commons/radio";
 import * as Datepicker from "~commons/datepicker";
 import * as Title from "~commons/title";
-import * as Popup from "~commons/popup";
 import * as SearchOrgsPopup from "./searchOrgsPopup";
 import * as SearchOrgsPopup2 from "./searchOrgsPopup2";
-import * as SearchPersPopup from "./searchPersPopup";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
-import { RESET_SEARCHORGS_FILTER } from '_/stores/authority/searchOrgs/constants';
+import { RESET_SEARCHORGS_FILTER } from '~stores/authority/searchOrgs/constants';
 
 export type Props = Base.Props;
 

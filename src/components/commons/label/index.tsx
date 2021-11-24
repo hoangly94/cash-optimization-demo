@@ -1,5 +1,4 @@
 import * as React from 'react'
-import styles from './_styles.css'
 import * as Base from '~/_settings';
 
 export enum Type {
@@ -28,7 +27,7 @@ export const Element = (props: Props) => {
   } = props;
 
   //create props
-  const componentProps = Base.mapProps(props, styles, [type, size]);
+  const componentProps = Base.mapProps(props);
   return (
     <div {...componentProps}>
       {text}

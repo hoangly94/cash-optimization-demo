@@ -5,12 +5,9 @@ import * as Base from '~/_settings';
 import { useDispatch, useSelector } from 'react-redux';
 import * as Block from '~commons/block';
 import * as Button from '~commons/button';
-import * as Item from './item';
 import Chevron from '~svg/chevron';
 import * as SVG from '~commons/svg';
-import Config from '@config';
 import { _Array } from '@utils';
-import { useContext } from 'hoist-non-react-statics/node_modules/@types/react';
 
 export enum Type {
   DEFAULT = 'pagination',
@@ -44,7 +41,7 @@ export const Element = ({
   totalItems = 1,
   defaultPage = 0,
   pageRange = 5,
-  numberOfItemsPerPage = Config.numberOfItemsPerPage,
+  numberOfItemsPerPage = +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
 }: Props): React.ReactElement => {
   const dispatch = useDispatch();
   const selector = store && store.totalSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], store.totalSelectorKeys ?? [])) : null;

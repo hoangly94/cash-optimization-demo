@@ -25,6 +25,9 @@
     & tbody > tr > td{
         width:100%;
     } */
+    &>div>div{
+        max-height: 600px;
+    }
     & thead > tr > td{
         background-color: rgb(30, 63, 150);
         position: sticky;

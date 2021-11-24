@@ -10,7 +10,7 @@ import * as MapPopup from "./mapPopup";
 import _ from "lodash";
 import { useDispatch, useSelector } from 'react-redux';
 import { CHANGE_CODE_FILTER, FETCH_DATA, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_START } from '~stores/routeTracking/constants';
-import { ADD_NOTI, HANDLE_POPUP } from '_/stores/_base/constants';
+import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
 
 export type Props = Base.Props;
@@ -123,8 +123,14 @@ const getHtml = (routeTracking, user) => {
     if (routeStatus?.includes("Working_"))
       return html26_2(route, routeDetailOganize, routeStatus);
   }
+  // console.log('====================');
+  // console.log(user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY');
+  // console.log(persCode === route.tqDltltCode);
+  // console.log(route?.destinationTq?.persCode === persCode);
+
   // if ((user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY') || persCode === route.tqDltltCode || route?.destinationTq?.persCode === persCode) {
-  if ((user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY') || persCode === route.tqDltltCode || route?.destinationTq?.persCode === persCode) {
+  // if ((user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY') || persCode === route.tqDltltCode || route?.destinationTq?.persCode === persCode) {
+  if ((user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY') || persCode === route.tqDltltCode) {
     if (routeStatus === 'Beginning')
       return html27_1(route);
     if (routeStatus === 'Pickingup_SEC' || routeStatus === 'Pickingup_ESC')
@@ -646,7 +652,8 @@ const html24_4 = (route, routeDetailOganize, type, routeStatus) => {
         {(() => {
           if (routeStatus === 'Finished') {
             return <Input.Element
-              defaultValue={routeDetailOganize?.stopPointType}
+              // defaultValue={routeDetailOganize?.stopPointType}
+              defaultValue='Lộ trình đã kết thúc'
               width={Base.Width.FULL}
               isDisabled={true}
             />
@@ -1414,26 +1421,27 @@ const html25_6 = (route, routeDetailOganize, routeStatus) => {
       >
         {(() => {
           if (routeStatus === 'Finished') {
-            return <><Input.Element
-              defaultValue={
-                routeStatus.includes('Working_')
-                  ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
-                  : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
-              }
+            return <Input.Element
+              // defaultValue={routeDetailOganize?.stopPointType}
+              defaultValue='Lộ trình đã kết thúc'
               width={Base.Width.PER_50}
               isDisabled={true}
             />
-              <Input.Element
-                defaultValue={routeDetailOganize?.stopPointType}
-                width={Base.Width.PER_50}
-                isDisabled={true}
-              /></>
           }
-          return <Input.Element
-            defaultValue={routeDetailOganize?.stopPointType}
-            width={Base.Width.FULL}
+          return <><Input.Element
+            defaultValue={
+              routeStatus.includes('Working_')
+                ? 'Giao nhận HĐB tại điểm dừng thứ ' + routeDetailOganize?.order
+                : 'Di chuyển đến điểm dừng thứ ' + routeDetailOganize?.order
+            }
+            width={Base.Width.PER_50}
             isDisabled={true}
-          />
+          /><Input.Element
+              defaultValue={routeDetailOganize?.stopPointType}
+              width={Base.Width.FULL}
+              isDisabled={true}
+            />
+          </>
         })()}
       </Block.Element>
     </Block.Element>
@@ -1501,7 +1509,8 @@ const html26_1 = (route, routeDetailOganize, routeStatus) => {
             {(() => {
               if (routeStatus === 'Finished') {
                 return <Input.Element
-                  defaultValue={routeDetailOganize?.stopPointType}
+                  // defaultValue={routeDetailOganize?.stopPointType}
+                  defaultValue='Lộ trình đã kết thúc'
                   width={Base.Width.FULL}
                   isDisabled={true}
                 />
@@ -2426,7 +2435,8 @@ const html27_6 = (route, routeDetailOganize, routeStatus) => {
         {(() => {
           if (routeStatus === 'Finished') {
             return <Input.Element
-              defaultValue={routeDetailOganize?.stopPointType}
+              // defaultValue={routeDetailOganize?.stopPointType}
+              defaultValue='Lộ trình đã kết thúc'
               width={Base.Width.FULL}
               isDisabled={true}
             />

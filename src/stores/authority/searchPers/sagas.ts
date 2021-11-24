@@ -1,8 +1,7 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
 import { REQUEST_QUERY, UPDATE_DATA, } from './constants';
-import Config from '@config';
-import { addNoti } from '_/stores/_base/sagas';
+import { addNoti } from '~stores/_base/sagas';
 
 function* saga() {
     // yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
@@ -24,7 +23,7 @@ function getData(filters, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/authority/searchPers';
+    } = action ?? {}; const url = process.env.PATH + '/api/cashoptimization/authority/searchPers';
     const dataValue = filters.type.value === 'id'
         ? { persCode: filters.value ? filters.value : 0 }
         : (filters.type.value === 'name')
@@ -35,7 +34,7 @@ function getData(filters, action) {
             ...dataValue,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)

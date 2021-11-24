@@ -15,7 +15,7 @@ import * as HistoryPopup from "./historyPopup";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { FETCH_HISTORY, REQUEST_QUERY, HANDLE_CONTINUE_ACTION, GET_PYC_EXCEL, REQUEST_CREATING_CANCEL, REQUEST_EDITING_CANCEL } from '~stores/pyc/registration/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
+import { REPORT_PRINT } from '~stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 

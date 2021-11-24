@@ -1,10 +1,8 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
 import { FETCH_MAP, UPDATE_MAP, FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL } from './constants';
-import Config from '@config';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { addNoti } from '~stores/_base/sagas';
-import { action } from '@storybook/addon-actions';
 
 function* saga() {
     yield takeLatest(FETCH_HISTORY, fetchHistorySaga);
@@ -43,7 +41,7 @@ function* fetchDataSaga(action?) {
 
 function* createDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createCategoryOrgs', state.orgs.creatingPopup);
+    const responseData = yield call(requestCreating, process.env.PATH + '/api/cashoptimization/createCategoryOrgs', state.orgs.creatingPopup);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -58,7 +56,7 @@ function* createDataSaga() {
 function* editDataSaga() {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/updateCategoryOrgs', state.orgs.selectedItem);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/updateCategoryOrgs', state.orgs.selectedItem);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -75,13 +73,13 @@ function getHistory(action, data) {
         page = 0,
         sort = data.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/historyCategoryOrgsByCode';
+    const url = process.env.PATH + '/api/cashoptimization/historyCategoryOrgsByCode';
     const postData = {
         data: {
             sort: sort,
             page: page,
             orgsCode: data?.orgsCode,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         }
     }
     return axios.post(url, postData)
@@ -92,7 +90,7 @@ function getData(filters, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/findCategoryOrgs';
+    } = action ?? {}; const url = process.env.PATH + '/api/cashoptimization/findCategoryOrgs';
     const orgsCode = parseInt(filters.orgsCode);
     const postData = {
         data: {
@@ -100,7 +98,7 @@ function getData(filters, action) {
             orgsCode: orgsCode ? orgsCode : 0,
             sort,
             page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)
@@ -149,7 +147,7 @@ function* fetchMapSaga(action?) {
     const state = yield select();
     const popupType = state.base.popups.orgs.create.isShown ? 'creatingPopup' : state.base.popups.orgs.edit.isShown ? 'editingPopup' : undefined;
     if(popupType){
-        const url = Config.url + `/api/cashoptimization/route/getRouteMapForAddress?address=${state.orgs[popupType].orgsAddress}`;
+        const url = process.env.PATH + `/api/cashoptimization/route/getRouteMapForAddress?address=${state.orgs[popupType].orgsAddress}`;
         const responseData = yield axios.get(url).catch(error => console.log(error));
         yield put({ type: UPDATE_MAP, data: responseData.data });
     }

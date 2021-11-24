@@ -11,7 +11,7 @@ import * as Table from "~commons/table";
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { getCurrentDate, getCurrentDateTime, getDateString, _Date } from '~/utils';
 import { REQUEST_EDITING_CANCEL } from '~/stores/pyc/registration/constants';
-import { FETCH_BALANCE_SPECIAL, SELECT_DUALTABLE_CONTENT_ROW } from '_/stores/routeManagement/normal/constants';
+import { FETCH_BALANCE_SPECIAL, SELECT_DUALTABLE_CONTENT_ROW } from '~stores/routeManagement/normal/constants';
 
 export const Element = (props: Popup.Props) => {
   const {

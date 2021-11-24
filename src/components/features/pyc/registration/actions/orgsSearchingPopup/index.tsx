@@ -9,8 +9,7 @@ import * as Title from "~commons/title";
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
-import { FETCH_ATMCDMS, FETCH_NHNNTCTDS } from '~stores/dashboardRoot/constants';
-import { useConfirmationDialog } from '_/hooks';
+import { useConfirmationDialog } from '@hooks';
 
 export type Props = Popup.Props;
 

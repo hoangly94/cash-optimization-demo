@@ -5,8 +5,8 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Button from "~commons/button";
 import ReactSrcDocIframe from 'react-srcdoc-iframe';
-import { FETCH_MAP } from '_/stores/routeManagement/normal/constants';
-import { HANDLE_POPUP } from '_/stores/_base/constants';
+import { FETCH_MAP } from '~stores/routeManagement/normal/constants';
+import { HANDLE_POPUP } from '~stores/_base/constants';
 import styles from '../_styles.css'
 import classNames from 'classnames';
 

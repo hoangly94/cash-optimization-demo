@@ -9,9 +9,8 @@ import * as Input from "~commons/input";
 import * as Datepicker from "~commons/datepicker";
 import * as Title from "~commons/title";
 import * as Radio from "~commons/radio";
-import * as Popup from "~commons/popup";
 import MultiSelect from "react-multi-select-component";
-import { ADD_NOTI } from '_/stores/_base/constants';
+import { ADD_NOTI } from '~stores/_base/constants';
 import styles from '../_styles.css';
 import classNames from 'classnames';
 

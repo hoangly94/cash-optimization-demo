@@ -1,7 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
 import { FETCH_MAP, UPDATE_MAP, FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL } from './constants';
-import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 
@@ -36,7 +35,7 @@ function* fetchDataSaga(action?) {
 
 function* createDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createATMCDM', state.atmCdm.creatingPopup);
+    const responseData = yield call(requestCreating, process.env.PATH + '/api/cashoptimization/createATMCDM', state.atmCdm.creatingPopup);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -51,7 +50,7 @@ function* createDataSaga() {
 function* editDataSaga() {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/updateATMCDM', state.atmCdm.selectedItem);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/updateATMCDM', state.atmCdm.selectedItem);
     
     if(!responseData || !responseData.data || responseData.data.resultCode != 0){
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -67,13 +66,13 @@ function getHistory(action, data) {
         page = 0,
         sort = data.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/historyCategoryATMCDMByCode';
+    const url = process.env.PATH + '/api/cashoptimization/historyCategoryATMCDMByCode';
     const postData = {
         data: {
             sort: sort,
             page: page,
             atmCdmCode: data?.atmCdmCode,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         }
     }
     return axios.post(url, postData)
@@ -85,14 +84,14 @@ function getData(filters, action) {
         page = 0,
         sort = filters.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/findCategoryATMCDM';
+    const url = process.env.PATH + '/api/cashoptimization/findCategoryATMCDM';
     const postData = {
         data: {
             atmStatus: filters.atmCdmStatus?.value ? filters.atmCdmStatus.value : null,
             orgsId: filters.orgs?.value ? filters.orgs.value : 0,
             sort,
             page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)
@@ -134,7 +133,7 @@ function* fetchMapSaga(action?) {
     const state = yield select();
     const popupType = state.base.popups.atmCdm.create.isShown ? 'creatingPopup' : state.base.popups.atmCdm.edit.isShown ? 'editingPopup' : undefined;
     if(popupType){
-        const url = Config.url + `/api/cashoptimization/route/getRouteMapForAddress?address=${state.atmCdm[popupType].atmAddress}`;
+        const url = process.env.PATH + `/api/cashoptimization/route/getRouteMapForAddress?address=${state.atmCdm[popupType].atmAddress}`;
         const responseData = yield axios.get(url).catch(error => console.log(error));
         yield put({ type: UPDATE_MAP, data: responseData.data });
     }

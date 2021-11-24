@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { REQUEST_QUERY, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_COMBOX_FILTER, FETCH_PERS } from '~stores/report/orgs/constants';
+import { REQUEST_QUERY, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_COMBOX_FILTER, FETCH_PERS, FETCH_ORGS_CHILDREN } from '~stores/report/orgs/constants';
 import * as Base from '~/_settings';
 import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
@@ -11,7 +11,7 @@ import * as Datepicker from "~commons/datepicker";
 import * as Title from "~commons/title";
 import * as Popup from "~commons/popup";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
-import { RESET_FILTER } from '_/stores/report/orgs/constants';
+import { RESET_FILTER } from '~stores/report/orgs/constants';
 import MultiSelect from "react-multi-select-component";
 import classNames from 'classnames';
 import styles from '../_styles.css';
@@ -22,7 +22,13 @@ export const Element = (props: Props) => {
   const dispatch = useDispatch();
   const selector = useSelector(state => state['reportOrgs']);
   const userSelector = useSelector(state => state['auth'].user);
-  // useEffect
+  
+  useEffect(() => {
+    console.log(selector?.filters?.orgCodeList);
+    dispatch({ type: FETCH_ORGS_CHILDREN });
+  }, [selector?.filters?.orgCodeList])
+
+
   const handleSubmitButtonClick = () => {
     const isValidForm = validateForm(dispatch, selector.filters);
     if (isValidForm) {
@@ -149,6 +155,7 @@ export const Element = (props: Props) => {
                 value={selector?.filters?.orgCodeList}
                 onChange={item => {
                   dispatch({ type: SELECT_COMBOX_FILTER, keys: ["filters", "orgCodeList"], data: item });
+                  dispatch({ type: FETCH_ORGS_CHILDREN });
                 }}
                 labelledBy="Chọn"
                 selectAllLabel='All'

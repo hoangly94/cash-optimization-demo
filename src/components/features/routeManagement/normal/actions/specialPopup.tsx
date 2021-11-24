@@ -5,9 +5,8 @@ import * as Button from "~commons/button";
 import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
-import * as Pagination from "~commons/pagination";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
-import { thousandSeparator } from '_/utils';
+import { thousandSeparator } from '@utils';
 
 export type Props = Popup.Props & {
   selector?: any,

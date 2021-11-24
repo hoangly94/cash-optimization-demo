@@ -11,9 +11,9 @@ import * as Block from "~commons/block";
 import * as Dropdown from "~commons/dropdown";
 import { comboxProps } from "./";
 import * as Combox from "~commons/combox";
-import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
-import { REQUEST_QUERY as REQUEST_QUERY_ORGS, RESET_SEARCHORGS_FILTER } from '_/stores/authority/searchOrgs/constants';
-import { thousandSeparator } from '_/utils';
+import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
+import { REQUEST_QUERY as REQUEST_QUERY_ORGS, RESET_SEARCHORGS_FILTER } from '~stores/authority/searchOrgs/constants';
+import { thousandSeparator } from '@utils';
 
 export type Props = Popup.Props;
 

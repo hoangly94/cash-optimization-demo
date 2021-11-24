@@ -1,7 +1,6 @@
 import { State, SELECT_TYPE_FILTER, INPUT_VALUE_FILTER, UPDATE_DATA, SELECT_ROW } from './constants'
 import { getCurrentDate, _Date } from '@utils';
 
-import Config from '@config';
 const initState: State = {
     filters: {
         ...getDefaultFilters(),
@@ -13,7 +12,6 @@ const initState: State = {
         total: 0,
     },
 }
-
 export default (state: State = initState, action) => {
     switch (action.type) {
         case INPUT_VALUE_FILTER:
@@ -34,6 +32,7 @@ export default (state: State = initState, action) => {
             }
         case UPDATE_DATA:
             const data = action.data?.data ? action.data.data?.map(preprocessQueryResult) : [];
+            
             return {
                 ...state,
                 isLoading: false,
@@ -45,7 +44,7 @@ export default (state: State = initState, action) => {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
                         ...item,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     currentPage: action.page || 0,
                     total: action.data.total,

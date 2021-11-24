@@ -6,8 +6,7 @@ import * as Popup from "~commons/popup";
 import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
-import { FETCH_BALANCE_SPECIAL } from '_/stores/routeManagement/normal/constants';
-import { thousandSeparator } from '_/utils';
+import { thousandSeparator } from '@utils';
 
 export type Props = Popup.Props & {
   selector?: any,

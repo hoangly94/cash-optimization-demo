@@ -2,7 +2,6 @@ import axios from '~utils/axios';
 import Axios from 'axios';
 import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 import { FETCH_CONFIG, UPDATE_CONFIG, FETCH_AREAS, FETCH_ORGS, UPDATE_AREAS, UPDATE_ORGS, FETCH_FUNCTIONS, FETCH_PERS, UPDATE_PERS, UPDATE_FUNCTIONS, FETCH_REGIONS, UPDATE_REGIONS, UPDATE_TITLES, FETCH_TITLES, FETCH_CURRENCIES, FETCH_PRIORITIES, UPDATE_CURRENCIES, UPDATE_PRIORITIES, FETCH_ATMCDMS, FETCH_NHNNTCTDS, UPDATE_ATMCDMS, UPDATE_NHNNTCTDS, REPORT_PRINT } from './constants';
-import Config from '@config';
 import FileSaver from 'file-saver';
 
 function* saga() {
@@ -157,7 +156,7 @@ function* fetchPriorities() {
 }
 
 const callApi = (path, postData?) => {
-    return axios.post(Config.url + path, postData)
+    return axios.post(process.env.PATH + path, postData)
         .catch(error => console.log(error));
 }
 
@@ -184,7 +183,7 @@ function reportPrint(data, fileName, reportName, form) {
             type: "pdf",
         }
     }
-    return Axios.post(Config.url + '/api/cashoptimization/report/print', postData, { responseType: 'arraybuffer' })
+    return Axios.post(process.env.PATH + '/api/cashoptimization/report/print', postData, { responseType: 'arraybuffer' })
         .then((response) => {
             var blob = new Blob([response.data], { type: 'application/pdf' });
             FileSaver.saveAs(blob, fileName + '.pdf');

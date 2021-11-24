@@ -1,6 +1,5 @@
 import { State, UPDATE_CONFIG, UPDATE_AREAS, UPDATE_ATMCDMS, UPDATE_ORGS, UPDATE_REGIONS, UPDATE_FUNCTIONS, UPDATE_PERS, UPDATE_TITLES, UPDATE_CURRENCIES, UPDATE_PRIORITIES, UPDATE_NHNNTCTDS } from './constants'
 
-import Config from '@config';
 const initState: State = {
     regions: [],
     areas: [],

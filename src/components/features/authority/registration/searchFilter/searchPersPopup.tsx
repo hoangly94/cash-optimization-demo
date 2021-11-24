@@ -11,7 +11,7 @@ import * as Pagination from "~commons/pagination";
 import { _Date, getCurrentDate } from "@utils";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
 import { INPUT_VALUE_FILTER, REQUEST_PERS_CANCEL, REQUEST_QUERY, SELECT_ROW, SELECT_TYPE_FILTER } from '~/stores/authority/searchPers/constants';
-import { SEARCHPERS_SELECT_UPDATE } from '_/stores/authority/registration/constants';
+import { SEARCHPERS_SELECT_UPDATE } from '~stores/authority/registration/constants';
 
 export type Props = Popup.Props;
 

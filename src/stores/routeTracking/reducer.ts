@@ -1,6 +1,5 @@
 import { CHANGE_CODE_FILTER, State, UPDATE_DATA, UPDATE_MAP, UPDATE_TQUY } from './constants'
 import moment from 'moment';
-import Config from '@config';
 
 const initState: State = {
     filters: {
@@ -12,8 +11,6 @@ const initState: State = {
 export default (state: State = initState, action) => {
     switch (action.type) {
         case UPDATE_DATA:
-            console.log('----------');
-            console.log(action.data?.data);
             return {
                 ...state,
                 route: action.data?.data,

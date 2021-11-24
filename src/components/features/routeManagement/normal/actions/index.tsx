@@ -148,7 +148,7 @@ export const Element = (props: Props) => {
               popupType: 4,
             }
           }}
-          isDisabled={!(userSelector.viewList.includes('15D') && (['Organizing', 'Organizing_R', 'Adding', 'Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM'].includes(viewSelector?.routeStatus)))}
+          isDisabled={!(userSelector.viewList.includes('15D') && (['Organizing', 'Originating_R', 'Adding', 'Beginning', 'Pickingup_SEC', 'Pickingup_ESC', 'Pickingup_ATM'].includes(viewSelector?.routeStatus)))}
         />
         <Button.Element
           {...buttonProps}

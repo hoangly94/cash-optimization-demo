@@ -10,7 +10,7 @@ import * as DetailPopup from "./detailPopup";
 import { HANDLE_POPUP } from '~/stores/_base/constants';
 import { FETCH_HISTORY, FETCH_HISTORY_DETAIL, REQUEST_QUERY } from '~/stores/category/area/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { REPORT_PRINT } from '_/stores/dashboardRoot/constants';
+import { REPORT_PRINT } from '~stores/dashboardRoot/constants';
 
 export type Props = Base.Props;
 

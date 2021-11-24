@@ -10,8 +10,8 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as SearchDataTable from "../actions/editingPopup/searchDataTable";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
-import { getCurrentDate, getCurrentDateTime, _Date } from '~/utils';
-import { useConfirmationDialog } from '_/hooks';
+import { getCurrentDateTime, _Date } from '~/utils';
+import { useConfirmationDialog } from '@hooks';
 
 export type Props = Popup.Props & {
   popupType: string,
@@ -132,7 +132,8 @@ export const Element = (props: Props) => {
             <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+              // defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+              defaultValue={popupSelector.orgsHolderMobile2 || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -168,7 +169,8 @@ export const Element = (props: Props) => {
             <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+              // defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+              defaultValue={popupSelector.orgsHolderMobile2 || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -265,7 +267,8 @@ export const Element = (props: Props) => {
             <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+              // defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+              defaultValue={popupSelector.orgsHolderMobile2 || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -325,7 +328,8 @@ export const Element = (props: Props) => {
             <Title.Element text='SĐT Thủ quỹ ĐVĐQ' {...inputTitleProps} />
             <Input.Element
               {...inputProps}
-              defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+              // defaultValue={popupSelector.cashOptimizationOrgsDetailModel?.tqDvdqMobile || ''}
+              defaultValue={popupSelector.orgsHolderMobile2e || ''}
               isDisabled={true}
             />
           </Block.Element>
@@ -691,7 +695,7 @@ export const Element = (props: Props) => {
         <Title.Element text='SĐT Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.orgsHolderMobile}
+          defaultValue={popupSelector.orgsHolderMobile2}
           isDisabled={true}
         />
       </Block.Element>

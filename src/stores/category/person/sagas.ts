@@ -1,7 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn } from 'redux-saga/effects';
 import { FETCH_DATA, REQUEST_QUERY, UPDATE_DATA, REQUEST_CREATING, DONE_CREATING, REQUEST_EDITING, FETCH_HISTORY, UPDATE_HISTORY, FETCH_HISTORY_DETAIL, UPDATE_HISTORY_DETAIL } from './constants';
-import Config from '@config';
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_POPUP } from '~stores/_base/constants';
 import { convertDateDDMMYYYtoYYYYMMDD, convertDataToYYYY_MM_DD } from '~/utils';
@@ -41,7 +40,7 @@ function* fetchDataSaga(action?) {
 
 function* createDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/createCategoryPers', state.person.creatingPopup);
+    const responseData = yield call(requestCreating, process.env.PATH + '/api/cashoptimization/createCategoryPers', state.person.creatingPopup);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -56,7 +55,7 @@ function* createDataSaga() {
 function* editDataSaga() {
     yield put({ type: FETCH_DATA });
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/updateCategoryPers', state.person.selectedItem);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/updateCategoryPers', state.person.selectedItem);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -72,13 +71,13 @@ function getHistory(action, data) {
         page = 0,
         sort = data.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/historyCategoryPersByCode';
+    const url = process.env.PATH + '/api/cashoptimization/historyCategoryPersByCode';
     const postData = {
         data: {
             sort: sort,
             page: page,
             persCode: data?.persCode,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         }
     }
     return axios.post(url, postData)
@@ -90,14 +89,14 @@ function getData(filters, action) {
         page = 0,
         sort = filters.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/findCategoryPers';
+    const url = process.env.PATH + '/api/cashoptimization/findCategoryPers';
     const postData = {
         data: {
             orgsId: filters.orgsId?.value ? parseInt(filters.orgsId.value) : 0,
             persCode: filters.persCode ? '' + filters.persCode : 0,
             sort,
             page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)

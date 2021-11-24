@@ -7,7 +7,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import Dotenv from 'dotenv-webpack';
 
 export default {
-  mode: 'development',
+  mode: 'production',
   output: {
     path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
@@ -140,14 +140,5 @@ export default {
       "stream": false,
     },
   },
-  devtool: 'eval-source-map',
-  devServer: {
-    contentBase: path.join(__dirname, "dist"),
-    publicPath: '/',
-    historyApiFallback: true,
-    compress: true,
-    port: 3000,
-    watchContentBase: true,
-    open: true,
-  },
+  devtool: 'source-map',
 };

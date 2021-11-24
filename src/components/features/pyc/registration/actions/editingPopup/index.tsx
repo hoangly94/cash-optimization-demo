@@ -10,8 +10,8 @@ import * as Block from "~commons/block";
 import * as Combox from "~commons/combox";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import * as SearchDataTable from './searchDataTable';
-import { thousandSeparator } from '_/utils';
-import { useConfirmationDialog } from '_/hooks';
+import { thousandSeparator } from '@utils';
+import { useConfirmationDialog } from '@hooks';
 
 export type Props = Popup.Props;
 

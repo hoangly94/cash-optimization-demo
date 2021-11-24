@@ -199,7 +199,7 @@ const mapResponseToData = (handleRowClick) => (item, index) => ({
   onClick: handleRowClick(item),
   $cells: [
     {
-      children: item.index || index + 1,
+      children: item.stt,
     },
     {
       children: item.cashoptimizationid,

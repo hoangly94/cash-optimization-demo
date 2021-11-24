@@ -20,6 +20,7 @@ export const Element = (props: Popup.Props) => {
   } = props;
 
   const [errorMsg, setErrorMsg] = useState('');
+  const detailPopupSelector = useSelector(state => state['pycRegistration'].detailPopup);
   const popupSelector = useSelector(state => state['pycRegistration'].editingPopup);
   const userSelector = useSelector(state => state['auth'].user);
   const dispatch = useDispatch();
@@ -132,7 +133,7 @@ export const Element = (props: Popup.Props) => {
         <Title.Element text='SĐT Thủ quỹ ĐVYCĐQ' {...inputTitleProps} />
         <Input.Element
           {...inputProps}
-          defaultValue={popupSelector.orgsHolderMobile}
+          defaultValue={detailPopupSelector.orgsHolderMobile}
           isDisabled={true}
         />
       </Block.Element>

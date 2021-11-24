@@ -1,7 +1,7 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
 import { SELECT_ROUTE_ROW, DONE_CREATING, FETCH_DATA, FETCH_HISTORY, FETCH_ORGSSEARCHING_DISTANCE, FETCH_ORGS_CHILDREN, FETCH_PYC, GET_EXCEL, GET_HISTORY_EXCEL, REQUEST_UPDATE_CONTINUE, HANDLE_ORGSSEARCHING_CONTINUE, HANDLE_ORGSSEARCHING_UPDATE, HANDLE_REJECT_ACTION, HANDLE_SPECIAL_ADD, HANDLE_VALIDATE_APPROVE1, HANDLE_VALIDATE_APPROVE2, HANDLE_VALIDATE_APPROVE3, HANDLE_VALIDATE_CANCEL_APPROVE1, HANDLE_VALIDATE_CANCEL_APPROVE2, HANDLE_VALIDATE_CANCEL_APPROVE3, HANDLE_VALIDATE_CANCEL_REJECT1, HANDLE_VALIDATE_CANCEL_REJECT2, HANDLE_VALIDATE_CANCEL_REJECT3, HANDLE_VALIDATE_REJECT1, HANDLE_VALIDATE_REJECT2, HANDLE_VALIDATE_REJECT3, REQUEST_CREATING, REQUEST_DELETE, REQUEST_EDITING, REQUEST_QUERY, UPDATE_DATA, UPDATE_HISTORY, UPDATE_ORGSSEARCHING_DISTANCE, UPDATE_ORGS_CHILDREN, UPDATE_PYC, UPDATE_SPECIAL_DATA, REQUEST_VEHICLE, REQUEST_PERS, UPDATE_VEHICLE_DATA, UPDATE_PERS_DATA, REQUEST_SEACHVEHICLEPERS_CONTINUE, REQUEST_SEACHVEHICLEPERS_UPDATE, REQUEST_SEACHVEHICLEPERS_BACK, REQUEST_ORGANIZING, REQUEST_ORGANIZING_CHECK_STOP_POINT, REQUEST_ORGANIZING_SEARCH_DESTINATION, REQUEST_ORGANIZING_SEARCH_DESTINATION_SELECT, REQUEST_ORGANIZING_ADD_HDB, REQUEST_ORGANIZING_INSERT, REQUEST_ORGANIZING_CHECK_BALANCE_HDB, REQUEST_ORGANIZING_UPDATE_ORDER, REQUEST_ORGANIZING_GET_KC, UPDATE_ORGANIZING, UPDATE_ORGANIZING_STOP_POINT, REQUEST_ORGANIZING_UPDATE, REQUEST_ORGANIZING_CONTINUE, REQUEST_ORGANIZING_BACK, REQUEST_ORGANIZING_URGENT_UPDATE, UPDATE_ORGANIZING_INSERT, SELECT_DESTINATION_POINT, HANDLE_SPECIAL_DELETE, UPDATE_ORGANIZING_DISTANCE, FETCH_MAP, UPDATE_MAP, FETCH_BALANCE_SPECIAL, UPDATE_BALANCE_SPECIAL, REQUEST_CREATING_PYC_BS, REQUEST_ORGANIZE_URGENT_CHECKBYID, UPDATE_ORGANIZE_URGENT_CHECKBYID, FETCH_BALANCE_SPECIAL_TOTAL, UPDATE_BALANCE_SPECIAL_TOTAL, REQUEST_ORGANIZE_GET_HDB_DETAIL, UPDATE_ORGANIZE_GET_HDB_DETAIL, CHECK_VEHICLE, CHECK_PERS, SELECT_DUALTABLE_CONTENT_ROW, } from './constants';
-import Config from '@config';
+
 import { addNoti } from '~stores/_base/sagas';
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import { _Date, getCurrentDate } from '@utils';
@@ -106,7 +106,7 @@ function* checkVehicleSaga(action?) {
     yield put({ ...action, type: SELECT_DUALTABLE_CONTENT_ROW });
 }
 function checkVehicle(data) {
-    const url = Config.url + '/api/cashoptimization/route/checkVehicle';
+    const url = process.env.PATH + '/api/cashoptimization/route/checkVehicle';
 
     const postData = {
         data: {
@@ -125,7 +125,7 @@ function* checkPersSaga(action?) {
     yield put({ ...action, type: SELECT_DUALTABLE_CONTENT_ROW });
 }
 function checkPers(data) {
-    const url = Config.url + '/api/cashoptimization/route/checkPers';
+    const url = process.env.PATH + '/api/cashoptimization/route/checkPers';
 
     const postData = {
         data: {
@@ -137,7 +137,7 @@ function checkPers(data) {
 }
 
 function requestOrganizeGetHdbDetail(data, action) {
-    const url = Config.url + '/api/cashoptimization/route/route_organize_get_hdb_detail';
+    const url = process.env.PATH + '/api/cashoptimization/route/route_organize_get_hdb_detail';
 
     const postData = {
         data: {
@@ -171,7 +171,7 @@ function* getExcelSaga(action?) {
 
 function* createDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestCreating, Config.url + '/api/cashoptimization/route/create', state.routeManagement.creatingPopup, state.auth);
+    const responseData = yield call(requestCreating, process.env.PATH + '/api/cashoptimization/route/create', state.routeManagement.creatingPopup, state.auth);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -185,7 +185,7 @@ function* createDataSaga() {
 
 function* createPYCBSDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/route/dkPycBs', state.routeManagement.editingPopup, state.auth);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/route/dkPycBs', state.routeManagement.editingPopup, state.auth);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -201,7 +201,7 @@ function* createPYCBSDataSaga() {
 
 function* updateDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/route/update', state.routeManagement.editingPopup, state.auth);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/route/update', state.routeManagement.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -218,7 +218,7 @@ function* updateDataSaga() {
 
 function* updateContinueSaga(action?) {
     const state = yield select();
-    const responseData = yield call(requestEditing, Config.url + '/api/cashoptimization/route/continue', state.routeManagement.editingPopup, state.auth);
+    const responseData = yield call(requestEditing, process.env.PATH + '/api/cashoptimization/route/continue', state.routeManagement.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -241,14 +241,14 @@ function* updateContinueSaga(action?) {
 
 function* fectchOrgsSearchingSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_find', state.routeManagement, state.routeManagement.orgsSearchingPopup, state.auth);
+    const responseData = yield call(requestOrgsSearching, process.env.PATH + '/api/cashoptimization/pyc_orgs_find', state.routeManagement, state.routeManagement.orgsSearchingPopup, state.auth);
 
     yield put({ type: UPDATE_ORGSSEARCHING_DISTANCE, data: responseData.data });
 }
 
 function* orgsSearchingUpdateSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_update', state.routeManagement, state.routeManagement.orgsSearchingPopup, state.auth);
+    const responseData = yield call(requestOrgsSearching, process.env.PATH + '/api/cashoptimization/pyc_orgs_update', state.routeManagement, state.routeManagement.orgsSearchingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -265,7 +265,7 @@ function* orgsSearchingUpdateSaga() {
 
 function* orgsSearchingContinueSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrgsSearching, Config.url + '/api/cashoptimization/pyc_orgs_continue', state.routeManagement, state.routeManagement.orgsSearchingPopup, state.auth, 'continue');
+    const responseData = yield call(requestOrgsSearching, process.env.PATH + '/api/cashoptimization/pyc_orgs_continue', state.routeManagement, state.routeManagement.orgsSearchingPopup, state.auth, 'continue');
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -282,18 +282,19 @@ function* orgsSearchingContinueSaga() {
 
 function* deleteDataSaga() {
     const state = yield select();
-    const responseData = yield call(requestDelete, Config.url + '/api/cashoptimization/route/delete', state.routeManagement.editingPopup, state.auth);
+    const responseData = yield call(requestDelete, process.env.PATH + '/api/cashoptimization/route/delete', state.routeManagement.editingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
 
-    yield fetchDataSaga();
     yield spawn(addNoti, 'success');
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'edit', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'detail', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'continue', 'isDisabled'], value: true });
     yield put({ type: HANDLE_BUTTON, keys: ['routeManagement', 'delete', 'isDisabled'], value: true });
+    yield put({ type: HANDLE_POPUP, keys: ['routeManagement', 'delete', 'isShown'], value: false });
+    yield fetchDataSaga();
 }
 
 function* specialAddSaga() {
@@ -353,7 +354,7 @@ function* specialDeleteSaga() {
     yield put({ type: REQUEST_ORGANIZING });
 }
 function requestOrganizingAddHdb(data, routeDetailHdbTemp) {
-    const url = Config.url + '/api/cashoptimization/route/organize_add_hdb';
+    const url = process.env.PATH + '/api/cashoptimization/route/organize_add_hdb';
     const postData = {
         data: {
             routeId: data.id,
@@ -391,7 +392,7 @@ function* fetchPycSaga(action?) {
 
 function* searchVehiclePersUpdateSaga() {
     const state = yield select();
-    const responseData = yield call(requestSearchVehiclePersUpdate, Config.url + '/api/cashoptimization/route/findVehicleAndPersForRouteUpdate', state.routeManagement.searchVehiclePersPopup, state.auth);
+    const responseData = yield call(requestSearchVehiclePersUpdate, process.env.PATH + '/api/cashoptimization/route/findVehicleAndPersForRouteUpdate', state.routeManagement.searchVehiclePersPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -407,7 +408,7 @@ function* searchVehiclePersUpdateSaga() {
 }
 function* searchVehiclePersContinueSaga() {
     const state = yield select();
-    const responseData = yield call(requestSearchVehiclePersUpdate, Config.url + '/api/cashoptimization/route/findVehicleAndPersForRouteContinue', state.routeManagement.searchVehiclePersPopup, state.auth);
+    const responseData = yield call(requestSearchVehiclePersUpdate, process.env.PATH + '/api/cashoptimization/route/findVehicleAndPersForRouteContinue', state.routeManagement.searchVehiclePersPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -423,7 +424,7 @@ function* searchVehiclePersContinueSaga() {
 }
 function* searchVehiclePersBackSaga() {
     const state = yield select();
-    const responseData = yield call(requestSearchVehiclePersUpdate, Config.url + '/api/cashoptimization/route/findVehicleAndPersForRouteBack', state.routeManagement.searchVehiclePersPopup, state.auth);
+    const responseData = yield call(requestSearchVehiclePersUpdate, process.env.PATH + '/api/cashoptimization/route/findVehicleAndPersForRouteBack', state.routeManagement.searchVehiclePersPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -452,7 +453,7 @@ function* requestOrganizingSaga(action?) {
 
 }
 function requestOrganizing(data, action) {
-    const url = Config.url + '/api/cashoptimization/route/oganize_find_by_id';
+    const url = process.env.PATH + '/api/cashoptimization/route/oganize_find_by_id';
     const postData = {
         data: {
             routeId: data.id,
@@ -474,7 +475,7 @@ function* requestOrganizingCheckStopPointSaga(action?) {
     // yield put({ type: REQUEST_ORGANIZING });
 }
 function requestOrganizingCheckStopPoint(data, action) {
-    const url = Config.url + '/api/cashoptimization/route/route_organize_check_stop_point';
+    const url = process.env.PATH + '/api/cashoptimization/route/route_organize_check_stop_point';
     const postData = {
         data: {
             routeId: data.id,
@@ -495,7 +496,7 @@ function* requestOrganizingSearchDestinationSaga(action?) {
     yield put({ type: UPDATE_ORGANIZING, data: responseData.data, page: action?.page });
 }
 function requestOrganizingSearchDestination(data, action) {
-    const url = Config.url + '/api/cashoptimization/route/oganize_search_destination';
+    const url = process.env.PATH + '/api/cashoptimization/route/oganize_search_destination';
     const postData = {
         data: {
             routeId: data.id,
@@ -515,7 +516,7 @@ function* requestOrganizingSearchDestinationSelectSaga(action?) {
     yield put({ type: SELECT_DESTINATION_POINT });
 }
 function requestOrganizingSearchDestinationSelect(data, action) {
-    const url = Config.url + '/api/cashoptimization/route/oganize_search_destination_select';
+    const url = process.env.PATH + '/api/cashoptimization/route/oganize_search_destination_select';
 
     const selectedData = (() => {
         if (data.selectedItem.tableType === 1) {
@@ -564,7 +565,7 @@ function* requestOrganizingCheckBalanceHdbSaga(action?) {
     yield put({ type: UPDATE_DATA, data: responseData.data, sort: action?.sort, page: action?.page });
 }
 function requestOrganizingCheckBalanceHdb(data, action) {
-    const url = Config.url + '/api/cashoptimization/route/organize_check_balance_hdb';
+    const url = process.env.PATH + '/api/cashoptimization/route/organize_check_balance_hdb';
     const postData = {
         data: {
             routeId: data.id,
@@ -608,7 +609,7 @@ function* requestOrganizingInsertSaga(action?) {
     // yield put({ type: UPDATE_ORGANIZING_INSERT, data });
 }
 function requestOrganizingInsert(data, routeDetailOganizeItem) {
-    const url = Config.url + '/api/cashoptimization/route/organize_insert';
+    const url = process.env.PATH + '/api/cashoptimization/route/organize_insert';
     const postData = {
         data: {
             routeId: data.id,
@@ -658,7 +659,7 @@ function* requestOrganizingUpdateOrderSaga(action) {
     yield put({ type: REQUEST_ORGANIZING, data });
 }
 function requestOrganizingUpdateOrder(data, routeDetailOganize, buttonType) {
-    const url = Config.url + '/api/cashoptimization/route/organize_update_order';
+    const url = process.env.PATH + '/api/cashoptimization/route/organize_update_order';
     const selectedRouteDetailOganizeTemp = data?.routeDetailOganizeTemp?.filter(item => item['isSelected'])[0];
     const postData = {
         data: {
@@ -684,7 +685,7 @@ function* requestOrganizingGetKcSaga(action?) {
     yield put({ type: UPDATE_ORGANIZING_DISTANCE, data: responseData.data });
 }
 function requestOrganizingGetKc(data, action) {
-    const url = Config.url + '/api/cashoptimization/route/organize_get_kc';
+    const url = process.env.PATH + '/api/cashoptimization/route/organize_get_kc';
     const postData = {
         data: {
             departureAddress: data.departurePointAddress,
@@ -697,7 +698,7 @@ function requestOrganizingGetKc(data, action) {
 
 function* requestOrganizingUpdateSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrganizingUpdate, Config.url + '/api/cashoptimization/route/organize_update', state.routeManagement.organizingPopup, state.auth);
+    const responseData = yield call(requestOrganizingUpdate, process.env.PATH + '/api/cashoptimization/route/organize_update', state.routeManagement.organizingPopup, state.auth);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -712,7 +713,7 @@ function* requestOrganizingUpdateSaga() {
 
 function* requestOrganizingContinueSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrganizingUpdate, Config.url + '/api/cashoptimization/route/organize_continue', state.routeManagement.organizingPopup, state.auth);
+    const responseData = yield call(requestOrganizingUpdate, process.env.PATH + '/api/cashoptimization/route/organize_continue', state.routeManagement.organizingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -729,7 +730,7 @@ function* requestOrganizingContinueSaga() {
 
 function* requestOrganizingBackSaga(action?) {
     const state = yield select();
-    const responseData = yield call(requestOrganizingUpdate, Config.url + '/api/cashoptimization/route/organize_back', state.routeManagement.organizingPopup, state.auth, action);
+    const responseData = yield call(requestOrganizingUpdate, process.env.PATH + '/api/cashoptimization/route/organize_back', state.routeManagement.organizingPopup, state.auth, action);
 
     if (action?.noti) return;
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
@@ -747,7 +748,7 @@ function* requestOrganizingBackSaga(action?) {
 
 function* requestOrganizingUrgentUpdateSaga() {
     const state = yield select();
-    const responseData = yield call(requestOrganizingUpdate, Config.url + '/api/cashoptimization/route/organize_urgent_update', state.routeManagement.organizingPopup, state.auth);
+    const responseData = yield call(requestOrganizingUpdate, process.env.PATH + '/api/cashoptimization/route/organize_urgent_update', state.routeManagement.organizingPopup, state.auth);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
@@ -777,13 +778,13 @@ function getHistory(data, action) {
     const {
         page = 0,
         sort = data.sort ?? '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/history';
+    } = action ?? {}; const url = process.env.PATH + '/api/cashoptimization/route/history';
     const postData = {
         data: {
             routeId: data.id,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         }
     }
     return axios.post(url, postData)
@@ -791,7 +792,7 @@ function getHistory(data, action) {
 }
 
 function getHistoryExcel(data) {
-    const url = Config.url + '/api/cashoptimization/route/exportExcelHistory';
+    const url = process.env.PATH + '/api/cashoptimization/route/exportExcelHistory';
     const postData = {
         data: {
             routeId: data.id,
@@ -805,7 +806,7 @@ function getHistoryExcel(data) {
 }
 
 function getOrgsChildren(user) {
-    const url = Config.url + '/api/cashoptimization/findChildOrgsByCode';
+    const url = process.env.PATH + '/api/cashoptimization/findChildOrgsByCode';
     const postData = {
         data: {
             orgs_code: user.orgsCode,
@@ -819,7 +820,7 @@ function getData(filters, auth, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/search';
+    } = action ?? {}; const url = process.env.PATH + '/api/cashoptimization/route/search';
     const data = filters.radio === '1'
         ? {
             orgsCode: filters.orgs?.value,
@@ -835,7 +836,7 @@ function getData(filters, auth, action) {
             ...data,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)
@@ -843,7 +844,7 @@ function getData(filters, auth, action) {
 }
 
 function requestOrganizeUrgentCheckById(data, action) {
-    const url = Config.url + '/api/cashoptimization/route/organize_urgent_checkById';
+    const url = process.env.PATH + '/api/cashoptimization/route/organize_urgent_checkById';
 
     const postData = {
         data: {
@@ -859,7 +860,7 @@ function
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/searchVehicle';
+    } = action ?? {}; const url = process.env.PATH + '/api/cashoptimization/route/searchVehicle';
 
     const postData = {
         data: {
@@ -868,7 +869,7 @@ function
             searchValue: filters.searchValue,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)
@@ -879,7 +880,7 @@ function getPersData(filters, selectedItem, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/searchPers';
+    } = action ?? {}; const url = process.env.PATH + '/api/cashoptimization/route/searchPers';
 
     const postData = {
         data: {
@@ -888,7 +889,7 @@ function getPersData(filters, selectedItem, action) {
             searchValue: filters.searchValue,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)
@@ -899,13 +900,13 @@ function getPyc(filters, auth, action) {
     const {
         page = 0,
         sort = filters.sort ?? '',
-    } = action ?? {}; const url = Config.url + '/api/cashoptimization/route/searchPyc';
+    } = action ?? {}; const url = process.env.PATH + '/api/cashoptimization/route/searchPyc';
     const postData = {
         data: {
             orgsCode: auth.user.orgsCode,
             page: page,
             sort: sort,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData)
@@ -916,7 +917,7 @@ function getExcel(filters, auth, action) {
         page = 0,
         sort = filters.sort ?? '',
     } = action ?? {};
-    const url = Config.url + '/api/cashoptimization/route/exportExcel';
+    const url = process.env.PATH + '/api/cashoptimization/route/exportExcel';
     const data = filters.radio === '1'
         ? {
             orgsCode: filters.orgs?.value,
@@ -932,7 +933,7 @@ function getExcel(filters, auth, action) {
             ...data,
             sort: sort,
             page: page,
-            size: Config.numberOfItemsPerPage,
+            size: +(process.env.NUMBER_ITEMS_PER_PAGE || 0),
         },
     }
     return axios.post(url, postData, { responseType: 'arraybuffer' })
@@ -1050,7 +1051,7 @@ function* fetchMapSaga(action?) {
 }
 
 function getMap(data) {
-    const url = Config.url + '/api/cashoptimization/route/getRouteMap?routeId=' + data.id;
+    const url = process.env.PATH + '/api/cashoptimization/route/getRouteMap?routeId=' + data.id;
 
     return axios.get(url)
         .catch(error => console.log(error));
@@ -1067,7 +1068,7 @@ function* fetchBalanceSpecialTotalSaga(action?) {
 }
 
 function getBalanceSpecial(data, routeDetailOganizeId) {
-    const url = Config.url + '/api/cashoptimization/route/organize_check_balance_hdb';
+    const url = process.env.PATH + '/api/cashoptimization/route/organize_check_balance_hdb';
     const routeDetailOganize = data.routeDetailOganizeTemp;
     const postData = {
         data: {
@@ -1080,7 +1081,7 @@ function getBalanceSpecial(data, routeDetailOganizeId) {
 }
 
 function getBalanceSpecialTotal(data) {
-    const url = Config.url + '/api/cashoptimization/route/organize_check_hdb_v1';
+    const url = process.env.PATH + '/api/cashoptimization/route/organize_check_hdb_v1';
     const postData = {
         data: {
             routeId: data.id,

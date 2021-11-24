@@ -1,7 +1,6 @@
 import axios from '~utils/axios';
 import { select, all, call, put, take, takeLatest, spawn, takeEvery, delay } from 'redux-saga/effects';
 import { FETCH_DATA, FETCH_MAP, FETCH_MAP_DRIVER, REQUEST_ROUTE_CONFIRM_1, REQUEST_ROUTE_CONFIRM_1_KCD, REQUEST_ROUTE_CONFIRM_2, REQUEST_ROUTE_CONFIRM_2_KCD, REQUEST_ROUTE_CONFIRM_3, REQUEST_ROUTE_CONFIRM_3_KCD, REQUEST_ROUTE_START, REQUEST_ROUTE_START_KCD, SEARCH_TQUY, UPDATE_DATA, UPDATE_MAP, UPDATE_TQUY } from './constants';
-import Config from '@config';
 import { _Date, getCurrentDate } from '@utils';
 import _ from 'lodash';
 import { addNoti } from '../_base/sagas';
@@ -29,9 +28,7 @@ function* searchTquySaga(action?) {
     }
     const destinationPoint = action.route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
     // const responseData2 = destinationPointName ? yield call(searchTquy, destinationPointName) : undefined;
-    console.log('================');
-    console.log(destinationPoint);
-    const responseData2 = yield destinationPoint && axios.post(Config.url + '/api/cashoptimization/route/searchTQUYDiemden',
+    const responseData2 = yield destinationPoint && axios.post(process.env.PATH + '/api/cashoptimization/route/searchTQUYDiemden',
         {
             data: {
                 stopPointType: destinationPoint?.stopPointType,
@@ -47,7 +44,7 @@ function* searchTquySaga(action?) {
 }
 
 function searchTquy(data) {
-    const url = Config.url + '/api/cashoptimization/route/searchTQUY';
+    const url = process.env.PATH + '/api/cashoptimization/route/searchTQUY';
 
     const postData = {
         data: {
@@ -81,7 +78,7 @@ function* fetchDataSaga(action?) {
     const destinationPoint = route?.routeDetailOganize?.filter(item => item.routeDetailOganizeStatus === 'PRO')[0];
     // const responseData2 = destinationPointName ? yield call(searchTquy, destinationPointName) : undefined;
 
-    const responseData2 = yield destinationPoint && axios.post(Config.url + '/api/cashoptimization/route/searchTQUYDiemden',
+    const responseData2 = yield destinationPoint && axios.post(process.env.PATH + '/api/cashoptimization/route/searchTQUYDiemden',
         {
             data: {
                 stopPointType: destinationPoint?.stopPointType,
@@ -93,7 +90,7 @@ function* fetchDataSaga(action?) {
         .catch(error => console.log(error));
     if (!responseData2 || !responseData2.data || responseData2.data.resultCode != 0) {
     }
-    const responseData3 = yield destinationPoint && axios.post(Config.url + '/api/cashoptimization/route/searchTQUY',
+    const responseData3 = yield destinationPoint && axios.post(process.env.PATH + '/api/cashoptimization/route/searchTQUY',
         {
             data: {
                 orgsName: destinationPoint?.destinationPointName,
@@ -116,7 +113,7 @@ function* fetchDataSaga(action?) {
 }
 
 function getData(filters) {
-    const url = Config.url + '/api/cashoptimization/route/searchById';
+    const url = process.env.PATH + '/api/cashoptimization/route/searchById';
     const postData = {
         data: {
             routeId: filters.id,
@@ -129,17 +126,12 @@ function getData(filters) {
 function* fetchMapSaga(apiPath) {
     const state = yield select();
     if (state.routeTracking?.route?.id) {
-        const url = Config.url + `/api/cashoptimization/route/${apiPath}?routeId=${state.routeTracking?.route.id}`;
+        const url = process.env.PATH + `/api/cashoptimization/route/${apiPath}?routeId=${state.routeTracking?.route.id}`;
         const responseData = yield call(getMap, url, state.routeTracking?.route);
         yield put({ type: UPDATE_MAP, data: responseData.data });
     }
-    // const responseData = yield call(getMap, state.routeTracking.route);
-    // const responseData = yield call(getMap, action);
-    // yield put({ type: UPDATE_MAP, data: responseData.data });
 }
 function getMap(url, data) {
-    // const url = data.id ? Config.url + '/api/cashoptimization/route/getRouteMap?routeId=' + data.id : Config.url + '/api/cashoptimization/route/getRouteMap?routeId=16';
-
     return axios.get(url)
         .catch(error => console.log(error));
 }
@@ -240,7 +232,7 @@ function* requestRouteConfirm3KCDSaga(action?) {
 }
 
 function requestRouteSubmit(api, data, order) {
-    const url = Config.url + '/api/cashoptimization/route/' + api;
+    const url = process.env.PATH + '/api/cashoptimization/route/' + api;
     const postData = {
         data: {
             routeId: data.id,

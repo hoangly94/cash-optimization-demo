@@ -35,6 +35,7 @@ export const Element = (props: Props): React.ReactElement => {
     $links,
     roleCodeList,
   } = props;
+  const [choosenPath, setChoosenPath] = useState(null);
   const location = useLocation();
   // const isActive = $links ? $links?.filter($link => hasActiveChildren(location, $link)).length > 0 : false;
   //create props
@@ -47,14 +48,14 @@ export const Element = (props: Props): React.ReactElement => {
 
   return (
     <Nav.Element {...componentProps}>
-      {$links?.map(mapPropsToLinkElemets(location, props))}
+      {$links?.map(mapPropsToLinkElemets(location, props, choosenPath, setChoosenPath))}
     </Nav.Element>
   )
 }
 
-const mapPropsToLinkElemets = (location, props: Props) => ($link: ItemType, index: number) => {
+const mapPropsToLinkElemets = (location, props: Props, choosenPath, setChoosenPath) => ($link: ItemType, index: number) => {
   const isActive = hasActiveChildren(location, $link);
-  const [isChoosen, setIsChoosen] = useState(isActive);
+  const isChoosen = choosenPath === $link;
   const subProps = $link.$subs
     ? {
       $caret: {
@@ -69,14 +70,17 @@ const mapPropsToLinkElemets = (location, props: Props) => ($link: ItemType, inde
 
   const onClick = $link.$subs ? {
     onClick: () => {
-      setIsChoosen(!isChoosen)
+      if(choosenPath === $link)
+        setChoosenPath(null);
+      else
+        setChoosenPath($link);
     }
   } : {};
 
   const ItemWrapperProps = {
     key: index,
     classNames: Classnames(
-      isActive ? styles['active'] : null,
+      isChoosen ? styles['active'] : null,
     ),
   };
 
@@ -105,7 +109,7 @@ const mapPropsToLinkElemets = (location, props: Props) => ($link: ItemType, inde
       ),
       style: {
         overflow: 'hidden',
-        transition: 'max-height 0.5s',
+        transition: isChoosen ? 'max-height 0.5s' :  'max-height 0.3s',
         maxHeight: isChoosen ? '500px' : '0px',
       }
     };
@@ -116,7 +120,7 @@ const mapPropsToLinkElemets = (location, props: Props) => ($link: ItemType, inde
             return true;
         }
       return false;
-    }).map(mapPropsToLinkElemets(location, props));
+    }).map(mapPropsToLinkElemets(location, props, choosenPath, setChoosenPath));
     if ($link.$subs && _.isEmpty(children)) {
       return <></>
     }

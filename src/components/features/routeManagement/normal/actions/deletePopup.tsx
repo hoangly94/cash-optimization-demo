@@ -12,7 +12,7 @@ import * as Combox from "~commons/combox";
 import { ADD_NOTI, HANDLE_POPUP } from '~stores/_base/constants';
 import { _Date } from '~/utils';
 import { CHANGE_EDITING_INPUT, REQUEST_DELETE, SELECT_COMBOX, REQUEST_EDITING_CANCEL, FETCH_BALANCE_SPECIAL, SELECT_DUALTABLE_CONTENT_ROW } from '~/stores/routeManagement/normal/constants';
-import { useConfirmationDialog } from '_/hooks';
+import { useConfirmationDialog } from '@hooks';
 
 export const Element = (props: Popup.Props) => {
   const {
@@ -27,8 +27,8 @@ export const Element = (props: Popup.Props) => {
     const isValidForm = validateForm(dispatch, selector);
     if (isValidForm) {
       setConfirmationDialog({
-        title: 'Bạn muốn lưu thông tin đăng ký vào hệ thống?',
-        description: 'Vui lòng nhấn YES để lưu thông tin, nhấn NO để quay lại',
+        title: 'Bạn muốn HỦY lộ trình ?',
+        description: 'Nhấn YES để đồng ý hủy, nhấn NO để quay lại',
         onConfirmClick: () => {
           dispatch({ type: REQUEST_DELETE });
         },

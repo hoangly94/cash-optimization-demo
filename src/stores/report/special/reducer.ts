@@ -1,7 +1,6 @@
 import { SELECT_COMBOX, SELECT_ORGS_TYPE_FILTER, INPUT_ORGS_VALUE_FILTER, FETCH_PERS, UPDATE_PERS, UPDATE_ORGS_CHILDREN, CHANGE_CODE_FILTER, CHANGE_RADIO_FILTER, INPUT_DATE_FROM, INPUT_DATE_TO, SELECT_COMBOX_FILTER, State, RESET_FILTER, UPDATE_DATA } from './constants'
 import moment from 'moment';
-import Config from '@config';
-import { _Date } from '_/utils';
+import { _Date } from '@utils';
 
 const initState: State = {
     filters: {
@@ -42,7 +41,7 @@ export default (state: State = initState, action) => {
                     ...state.queryResult,
                     data: data.map((item, index) => ({
                         ...item,
-                        index: (action.page || 0) * Config.numberOfItemsPerPage + index + 1,
+                        index: (action.page || 0) * +(process.env.NUMBER_ITEMS_PER_PAGE || 0) + index + 1,
                     })),
                     currentPage: action.page || 0,
                     total: action.data.total,

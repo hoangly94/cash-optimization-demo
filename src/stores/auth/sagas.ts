@@ -1,10 +1,8 @@
 import { select, call, put, takeLatest, spawn } from 'redux-saga/effects';
 import { FETCH_ROLES, FETCH_USER, REQUEST_ASSIGN_ROLE, REQUEST_ASSIGN_ROLE_QUERY, REQUEST_CHANGE_PASSWORD, REQUEST_LOGIN, REQUEST_REGISTER, REQUEST_RESET_PASSWORD, UPDATE_ASSIGN_ROLE, UPDATE_LOGIN, UPDATE_ROLES, UPDATE_USER, UPDATE_USER_ROLE } from './constants';
 import { addNoti } from '~stores/_base/sagas';
-import Config from '@config';
 // import axios from '~utils/axios';
 import axios from '~utils/axios';
-import { push } from 'react-router-redux';
 import { useCooke } from '@hooks';
 
 function* saga() {
@@ -19,7 +17,7 @@ function* saga() {
 }
 
 function* fetchRolesSaga() {
-    const responseData = yield call(getUser, Config.url + '/api/cashoptimization/role/getAllRole');
+    const responseData = yield call(getUser, process.env.PATH + '/api/cashoptimization/role/getAllRole');
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return;
     }
@@ -27,15 +25,11 @@ function* fetchRolesSaga() {
 }
 
 function* fetchUserSaga() {
-    // yield put({ type: FETCH_USER });
-    const responseData1 = yield call(getUser, Config.url + '/api/cashoptimization/user/getInfoAccount');
-
+    const responseData1 = yield call(getUser, process.env.PATH + '/api/cashoptimization/user/getInfoAccount');
     if (!responseData1 || !responseData1.data || responseData1.data.resultCode != 0) {
-        // yield document.cookie = `accessToken=;`;  
-        // yield window.location.href='/login';  
         return;
     }
-    const responseData2 = yield axios.post(Config.url + '/api/cashoptimization/findCategoryPers',
+    const responseData2 = yield axios.post(process.env.PATH + '/api/cashoptimization/findCategoryPers',
         {
             data: {
                 orgsId: 0,
@@ -56,13 +50,13 @@ function* fetchUserSaga() {
     });
 
     // const state = yield select();
-    // const responseData2 = yield call(getUser2, Config.url + '/api/cashoptimization/user/getUserByUsername', state.auth.user);
+    // const responseData2 = yield call(getUser2, process.env.PATH + '/api/cashoptimization/user/getUserByUsername', state.auth.user);
     // if (!responseData2 || !responseData2.data || responseData2.data.resultCode != 0) {
     //     return yield spawn(addNoti, 'error', responseData2?.data?.message);
     // }
     // yield put({ type: UPDATE_USER, data: responseData2.data.data });
 
-    // const responseData3 = yield call(getUser3, Config.url + '/api/cashoptimization/role/getRoleById', state.auth.user);
+    // const responseData3 = yield call(getUser3, process.env.PATH + '/api/cashoptimization/role/getRoleById', state.auth.user);
     // if (!responseData3 || !responseData3.data || responseData3.data.resultCode != 0) {
     //     return yield spawn(addNoti, 'error', responseData3?.data?.message);
     // }
@@ -71,7 +65,7 @@ function* fetchUserSaga() {
 
 function* queryAssignRoleSaga() {
     const state = yield select();
-    const responseData = yield call(getUser2, Config.url + '/api/cashoptimization/user/getUserByUsername', state.auth.assignRole);
+    const responseData = yield call(getUser2, process.env.PATH + '/api/cashoptimization/user/getUserByUsername', state.auth.assignRole);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -80,7 +74,7 @@ function* queryAssignRoleSaga() {
 
 function* requestAssignRoleSaga() {
     const state = yield select();
-    const responseData = yield call(requestAssignRole, Config.url + '/api/cashoptimization/user/assignRoles', state.auth.assignRole);
+    const responseData = yield call(requestAssignRole, process.env.PATH + '/api/cashoptimization/user/assignRoles', state.auth.assignRole);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData.data.message);
@@ -91,7 +85,7 @@ function* requestAssignRoleSaga() {
 
 function* loginSaga() {
     const state = yield select();
-    const responseData = yield call(requestLogin, Config.url + '/api/authentication/user/login', state.auth.login);
+    const responseData = yield call(requestLogin, process.env.PATH + '/api/authentication/user/login', state.auth.login);
 
     const d = new Date();
     d.setTime(d.getTime() + (responseData?.data?.data?.expires_in) || 0);
@@ -114,7 +108,7 @@ function* loginSaga() {
 
 function* changePasswordSaga() {
     const state = yield select();
-    const responseData = yield call(requestChangePassword, Config.url + '/api/authentication/user/changePassword', state.auth.changePassword);
+    const responseData = yield call(requestChangePassword, process.env.PATH + '/api/authentication/user/changePassword', state.auth.changePassword);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData.data.message);
@@ -126,7 +120,7 @@ function* changePasswordSaga() {
 
 function* resetPasswordSaga() {
     const state = yield select();
-    const responseData = yield call(requestResetPassword, Config.url + '/api/authentication/user/resetPassword', state.auth.forgot);
+    const responseData = yield call(requestResetPassword, process.env.PATH + '/api/authentication/user/resetPassword', state.auth.forgot);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData?.data?.message);
     }
@@ -135,7 +129,7 @@ function* resetPasswordSaga() {
 
 function* registerSaga() {
     const state = yield select();
-    const responseData = yield call(requestRegister, Config.url + '/api/cashoptimization/user/create', state.auth.register);
+    const responseData = yield call(requestRegister, process.env.PATH + '/api/cashoptimization/user/create', state.auth.register);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
         return yield spawn(addNoti, 'error', responseData.data.message);

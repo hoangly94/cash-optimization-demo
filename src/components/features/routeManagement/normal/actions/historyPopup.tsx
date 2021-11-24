@@ -8,8 +8,8 @@ import * as Block from "~commons/block";
 import * as Table from "~commons/table";
 import * as Pagination from "~commons/pagination";
 import { HANDLE_BUTTON, HANDLE_POPUP } from '~/stores/_base/constants';
-import { REQUEST_QUERY } from '_/stores/routeManagement/normal/constants';
-import { _Date } from '_/utils';
+import { REQUEST_QUERY } from '~stores/routeManagement/normal/constants';
+import { _Date } from '@utils';
 import moment from 'moment';
 
 export type Props = Popup.Props;

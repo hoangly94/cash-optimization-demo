@@ -7,13 +7,11 @@ import * as Popup from "~commons/popup";
 import * as Input from "~commons/input";
 import * as Title from "~commons/title";
 import * as Block from "~commons/block";
-import * as Combox from "~commons/combox";
 import * as DualTable from "~commons/dualTable";
 import * as Datepicker from "~commons/datepicker";
 import { ADD_NOTI, HANDLE_BUTTON, HANDLE_POPUP } from '~stores/_base/constants';
 import moment from 'moment';
-import { useEffect } from '@storybook/addons';
-import { useConfirmationDialog } from '_/hooks';
+import { useConfirmationDialog } from '@hooks';
 
 export type Props = Popup.Props & {
   popupType: string,
@@ -625,6 +623,12 @@ const validateForm = (dispatch, selector) => {
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Sai Thời gian bắt đầu lộ trình (dd/mm/yyyy hh:mm:ss)' } });
     return false;
   }
+
+  // if(moment(selector.startTime, 'DD/MM/YYYY HH:mm:ss') < moment()){
+  //   dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'KHÔNG ĐƯỢC chọn thời gian trong quá khứ' } });
+  //   return false;
+  // }
+  
   return true;
 }
 
