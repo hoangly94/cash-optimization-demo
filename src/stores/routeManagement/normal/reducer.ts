@@ -554,7 +554,6 @@ export default (state: State = initState, action) => {
             };
             newData.tableContent1 = newData.tableContent1?.filter(item1 =>
                 newData.tableContent2?.filter(item2 => item2.id == item1.id).length == 0);
-
             return {
                 ...state,
                 selectedItem: newData,
@@ -578,19 +577,22 @@ export default (state: State = initState, action) => {
                     ...newData,
                     vehicles: newData.routeDetailVehicle.map(item => ({ ...item, key: item.id })),
                     pers: newData.routeDetailPers.map(item => ({ ...item, key: item.id })),
+                    transportType: {
+                        text: newData?.transportType?.toUpperCase(),
+                        value: newData?.transportType,
+                    },
                 },
                 organizingPopup: {
                     ...getDefaultOrganizingPopup(),
                     ...newData,
                 },
             }
-
         case REQUEST_SEACHVEHICLEPERS_CANCEL:
             return {
                 ...state,
                 searchVehiclePersPopup: {
                     ...state.searchVehiclePersPopup,
-                    ...getDefaultSearchVehiclePersPopup(),
+                    // ...getDefaultSearchVehiclePersPopup(),
                     // transportType: {
                     //     text: state.selectedItem?.transportType?.toUpperCase(),
                     //     value: state.selectedItem?.transportType,
@@ -796,7 +798,7 @@ export default (state: State = initState, action) => {
                     id: state.organizingPopup['id'],
                     stopPointType: state.organizingPopup.stopPointType,
                     routeDetailOganizeTemp: state.organizingPopup.routeDetailOganizeTemp,
-                    routeDetailHdbTemp2:[],
+                    routeDetailHdbTemp2: [],
                 },
             }
         case SELECT_ROW_DESTINATION_POINT:

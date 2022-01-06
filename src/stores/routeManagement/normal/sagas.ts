@@ -98,6 +98,8 @@ function* requestOrganizeGetHdbDetailSaga(action?) {
     yield put({ type: UPDATE_ORGANIZE_GET_HDB_DETAIL, data: responseData.data, page: action?.page });
 }
 function* checkVehicleSaga(action?) {
+    if (action.data?.categoryPers?.persStatus === 'AVAILABLE')
+        return;
     const responseData = yield call(checkVehicle, action.data);
 
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
@@ -465,7 +467,7 @@ function requestOrganizing(data, action) {
 
 function* requestOrganizingCheckStopPointSaga(action?) {
     const state = yield select();
-    if(!state.routeManagement.organizingPopup?.stopPointType?.value)
+    if (!state.routeManagement.organizingPopup?.stopPointType?.value)
         return;
     const responseData = yield call(requestOrganizingCheckStopPoint, state.routeManagement.organizingPopup, action);
     if (!responseData || !responseData.data || responseData.data.resultCode != 0) {
@@ -980,15 +982,17 @@ function requestSearchVehiclePersUpdate(url: string, data, auth) {
         data: {
             id: data.id,
             transportType: data.transportType?.value,
-            routeDetailVehicle: data.vehicles?.map(item => ({
-                vehicleCode: item.vehicleCode,
-            })) ?? [],
             routeDetailPers: data.pers?.map(item => ({
                 persCode: item.persCode,
                 persName: item.persFullname,
             })) ?? [],
         },
     }
+
+    if (data.transportType?.value === 'XE CHUYÊN DÙNG')
+        postData.data['routeDetailVehicle'] = data.vehicles?.map(item => ({
+            vehicleCode: item.vehicleCode,
+        })) ?? [];
     return axios.post(url, { ...postData })
         .catch(error => console.log(error));
 }

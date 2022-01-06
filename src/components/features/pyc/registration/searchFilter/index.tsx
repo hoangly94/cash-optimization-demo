@@ -197,7 +197,7 @@ export const Element = (props: Props) => {
           }}
         >
           <Title.Element
-            text='ĐVĐQ'
+            text='Đơn vị'
             margin={Base.MarginBottom.PX_5}
             style={{
               fontSize: '15px',

@@ -123,10 +123,6 @@ const getHtml = (routeTracking, user) => {
     if (routeStatus?.includes("Working_"))
       return html26_2(route, routeDetailOganize, routeStatus);
   }
-  // console.log('====================');
-  // console.log(user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY');
-  // console.log(persCode === route.tqDltltCode);
-  // console.log(route?.destinationTq?.persCode === persCode);
 
   // if ((user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY') || persCode === route.tqDltltCode || route?.destinationTq?.persCode === persCode) {
   // if ((user.orgsName == routeTracking.route?.orgsName && user.persTitle == 'TQUY') || persCode === route.tqDltltCode || route?.destinationTq?.persCode === persCode) {

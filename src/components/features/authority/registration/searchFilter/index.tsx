@@ -112,7 +112,7 @@ export const Element = (props: Props) => {
         </Block.Element>
         <Block.Element {...filter1Props}>
           <Title.Element
-            text='Từ ngày'
+            text='Đến ngày'
             margin={Base.MarginBottom.PX_5}
             style={{
               fontSize: '15px',
@@ -122,7 +122,7 @@ export const Element = (props: Props) => {
             {...filter1Props}
             width={Base.Width.FULL}
             $input={{
-              placeholder: 'Từ ngày(dd/mm/yyyy)',
+              placeholder: 'Đến ngày(dd/mm/yyyy)',
               width: Base.Width.FULL,
               store: {
                 selectorKeys: ['registration', 'filters', 'dateTo'],
@@ -261,11 +261,7 @@ const buttonProps: Button.Props = {
 }
 
 const validateForm = (dispatch, selector) => {
-  console.log('-------------');
-  console.log(selector.radio);
-  console.log(selector.id);
   if (selector.radio == 2 && !selector.id) {
-    console.log('-------------`1');
     dispatch({ type: ADD_NOTI, noti: { type: 'error', message: 'Chưa điền Số UQ' } });
     return false;
   }

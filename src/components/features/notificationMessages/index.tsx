@@ -19,64 +19,7 @@ export type Props = Base.Props;
 let dispatch;
 export default (props: Props) => {
   dispatch = useDispatch();
-  // const selector = useSelector(state => state['routeTracking']);
-  // useEffect(() => {
-  //   amqp.connect('amqp://34.126.185.230:8672', function (error0, connection) {
-  //     if (error0) {
-  //       throw error0;
-  //     }
 
-  //     console.log("==============START================");
-  //     connection.createChannel(function (error1, channel) {
-  //       if (error1) {
-  //         throw error1;
-  //       }
-  //       var queue = 'hello';
-
-  //       channel.assertQueue(queue, {
-  //         durable: false
-  //       });
-  //       console.log("==============================");
-  //       console.log("==============================");
-  //       console.log("==============================");
-  //       console.log("==============================");
-  //       console.log("==============================");
-  //       console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", queue);
-  //       channel.consume(queue, function (msg) {
-  //         console.log("==============================1");
-  //         console.log("==============================1");
-  //         console.log("==============================1"); 
-  //         console.log("==============================1");
-  //         console.log("==============================1");
-  //         console.log(" [x] Received %s", msg.content.toString());
-  //       }, {
-  //         noAck: true
-  //       });
-  //     });
-  //   });
-
-  // }, []);
-
-
-  useEffect(() => {
-
-    // const ws = new WebSocket('ws://34.126.185.230:8672/ws')
-
-    // const headers = {
-    //   'username': 'service-cashoptimization',
-    //   'password': 'service-cashoptimization',
-    //   'app-id-notify': 'service-notify',
-    // }
-    // const stompClient = Stomp.over(ws)
-
-    // stompClient.connect('service-cashoptimization', 'service-cashoptimization', onConnect, onError, "vhost")
-    // stompClient.connect(headers, function (frame) {
-    //   console.log('Connected')
-    //   //  const subscription = stompClient.subscribe('/queue/service-notify', function(message){
-    //   //      console.log(message)
-    //   //  })
-    // })
-  }, []);
 
   function onConnect() {
     console.log('Connected')

@@ -113,6 +113,10 @@ export default {
       },
     ],
   },
+  performance: {
+    hints: false
+  },
+  stats: 'errors-only',
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.jsx', ".css"],
     alias: {
@@ -149,5 +153,5 @@ export default {
     port: 3000,
     watchContentBase: true,
     open: true,
-  },
+  }
 };

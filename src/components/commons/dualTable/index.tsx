@@ -298,7 +298,6 @@ const handleRowClick = (dispatch, action) => (item) => (e) => {
   dispatch({ ...action, data: item });
 }
 const handleRowDoubleClick = (dispatch, action) => (item) => (e) => {
-  console.log('===========');
   dispatch({ ...action, data: item });
 }
 

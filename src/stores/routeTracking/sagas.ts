@@ -69,8 +69,6 @@ function* fetchDataSaga(action?) {
 
     // yield put({ type: SEARCH_TQUY, routeDetailOganize, route: responseData.data?.data });
 
-    console.log('------------');
-    console.log(routeDetailOganize);
     const route = responseData.data?.data;
     const responseData1 = yield call(searchTquy, _.uniq(route?.routeDetailOganize?.map(item => item.destinationPointName)).join(','));
     if (!responseData1 || !responseData1.data || responseData1.data.resultCode != 0) {

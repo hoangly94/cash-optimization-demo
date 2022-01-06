@@ -67,6 +67,7 @@ export const Element = (props: Popup.Props) => {
               value: 'value',
             },
           }}
+          searchable={false}
         />
       </Block.Element>
 

@@ -75,16 +75,8 @@ export const Element = (props: Props) => {
     ? new Date(dateSelector)
     : (activeDay ? new Date(activeDay) : new Date()));
 
-  // const isDisabled = store && store.isDisabledSelectorKeys ? useSelector(state => _Array.getArrayValueByKey(state as [], [...store.isDisabledSelectorKeys as string[], 'isDisabled'])) : false;
   const display = !$datepicker.isDisabled && !clickData.isOutside ? { display: 'block' } : { display: 'none' };
 
-  // console.log('----------------------');
-  // if(_Date.isMatchDateTimeDD_MM_YYY(dateSelector)){
-  //   console.log('=============');
-  // }
-  // console.log(currentDate);
-  // console.log(dateSelector.length);
-  // console.log(activeDay);
   const componentProps = {
     ...props,
     refs: ref,
